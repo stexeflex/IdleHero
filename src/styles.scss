@@ -4,7 +4,7 @@
 @use "bootstrap-icons";
 
 * {
-  font-family: "Inter Tight";
+  font-family: "Segoe UI", "Segoe UI Emoji", "Segoe UI Symbol";
 
   /* Improve font rendering */
   -webkit-font-smoothing: antialiased;
@@ -23,6 +23,9 @@ body {
   /* Set full height and width */
   height: 100%;
   width: 100%;
+
+  background: $clr-bg;
+  color: $clr-text-primary;
 }
 
 *,
@@ -30,4 +33,14 @@ body {
 *::after {
   /* Include box sizing for all elements */
   box-sizing: border-box;
+}
+
+h1 {
+  font-family: "Cinzel Decorative", serif;
+  @include disable-text-selection();
+}
+
+h2 {
+  font-family: "MedievalSharp", cursive;
+  @include disable-text-selection();
 }

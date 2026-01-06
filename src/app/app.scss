@@ -1,0 +1,43 @@
+@use "sass:color";
+@use "index" as *;
+
+.container {
+  @include relative-container();
+  display: grid;
+
+  grid:
+    "header header header" auto
+    "game attributes inventory" 1fr
+    / 2fr 1fr 1fr;
+
+  gap: $gap;
+  padding: $gap;
+}
+
+.header,
+.game-area,
+.attributes-area,
+.inventory-area {
+  @include panel();
+  @include panel-shadow();
+}
+
+.header {
+  grid-area: header;
+
+  // Center Text
+  display: flex;
+  justify-content: center;
+}
+
+.game-area {
+  grid-area: game;
+}
+
+.attributes-area {
+  grid-area: attributes;
+}
+
+.inventory-area {
+  grid-area: inventory;
+}

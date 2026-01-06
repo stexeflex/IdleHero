@@ -1,0 +1,11 @@
+@use "sass:color";
+@use "index" as *;
+
+.container {
+  @include relative-container();
+}
+
+.header {
+  @include flexbox();
+  @include divider();
+}
