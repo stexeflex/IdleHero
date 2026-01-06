@@ -4,5 +4,21 @@
   "printWidth": 100,
   "trailingComma": "none",
   "bracketSameLine": true,
-  "singleAttributePerLine": false
+  "bracketSpacing": true,
+  "singleAttributePerLine": false,
+  "embeddedLanguageFormatting": "auto",
+  "overrides": [
+    {
+      "files": "*.html",
+      "options": {
+        "parser": "angular"
+      }
+    },
+    {
+      "files": ".prettierrc",
+      "options": {
+        "parser": "json"
+      }
+    }
+  ]
 }
