@@ -44,3 +44,20 @@ h2 {
   font-family: "MedievalSharp", cursive;
   @include disable-text-selection();
 }
+
+button {
+  @include disable-text-selection();
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed !important;
+  }
+}
+
+.ih-button {
+  @include button-style();
+  @include button-text-font();
+  @include button-sizing();
+  @include button-hover-active();
+  @include button-focus-visible-outline();
+}

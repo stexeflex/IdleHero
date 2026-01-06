@@ -1,0 +1,24 @@
+<div class="sheet">
+  <!-- PORTRAIT -->
+  <div class="sheet__portrait">
+    <i class="bi bi-file-image" style="font-size: 10em"></i>
+  </div>
+
+  <!-- INFO -->
+  <div class="sheet__info">
+    <app-info></app-info>
+  </div>
+
+  <!-- EXPERIENCE BAR -->
+  <div class="sheet__experience-bar">
+    <app-experience-bar
+      [currentLevel]="playerService.Level().Current"
+      [currentExp]="playerService.Level().Experience"
+      [expToNextLevel]="playerService.Level().ExperienceToNextLevel"></app-experience-bar>
+  </div>
+
+  <!-- STATS -->
+  <div class="sheet__stats">
+    <app-stats></app-stats>
+  </div>
+</div>

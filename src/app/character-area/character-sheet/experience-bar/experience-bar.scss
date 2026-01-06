@@ -1,0 +1,22 @@
+@use "sass:color";
+@use "index" as *;
+
+.experience-labels {
+  @include flexbox(row, space-between, center);
+  color: $clr-text-primary;
+  margin: 0 0.7rem 0.2rem 0.7rem;
+}
+
+.experience-bar-bg {
+  background: $clr-bg;
+  @include panel-shadow();
+  height: 14px;
+  border-radius: $border-radius;
+}
+
+.experience-bar-fill {
+  height: 100%;
+  background: $grad-exp-bar;
+  border-radius: $border-radius;
+  transition: width 0.3s cubic-bezier(0.4, 1, 0.6, 1);
+}

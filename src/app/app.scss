@@ -7,8 +7,8 @@
 
   grid:
     "header header header" auto
-    "game attributes inventory" 1fr
-    / 2fr 1fr 1fr;
+    "game character inventory" 1fr
+    / 1fr 1fr 1fr;
 
   gap: $gap;
   padding: $gap;
@@ -16,7 +16,7 @@
 
 .header,
 .game-area,
-.attributes-area,
+.character-area,
 .inventory-area {
   @include panel();
   @include panel-shadow();
@@ -34,8 +34,8 @@
   grid-area: game;
 }
 
-.attributes-area {
-  grid-area: attributes;
+.character-area {
+  grid-area: character;
 }
 
 .inventory-area {

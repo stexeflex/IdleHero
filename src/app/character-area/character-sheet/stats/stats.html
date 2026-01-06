@@ -1,0 +1,38 @@
+<div class="container">
+  <div class="category">
+    <div class="grid-header">
+      <h2>Attributes</h2>
+    </div>
+    <div class="grid">
+      @for (attribute of Attributes; track attribute.label) {
+        <div class="grid__label">{{ attribute.label }}</div>
+        <div class="grid__value">
+          <button
+            class="attribute-modifier-button"
+            (click)="decreaseAttribute(attribute.label)"
+            [disabled]="!CanDecreaseSkillPoints(attribute.label)">
+            -
+          </button>
+          <div class="attribute-value">{{ attribute.value }}</div>
+          <button
+            class="attribute-modifier-button"
+            (click)="increaseAttribute(attribute.label)"
+            [disabled]="!CanIncreaseSkillPoints()">
+            +
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+  <div class="category">
+    <div class="grid-header">
+      <h2>Stats</h2>
+    </div>
+    <div class="grid">
+      @for (stat of Stats; track stat.label) {
+        <div class="grid__label">{{ stat.label }}</div>
+        <div class="grid__value">{{ stat.value }}</div>
+      }
+    </div>
+  </div>
+</div>

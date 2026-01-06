@@ -1,3 +1,4 @@
+@use "sass:color";
 @use "variables" as *;
 @use "colors" as *;
 
@@ -125,7 +126,10 @@
   padding: $padding;
 }
 
-@mixin button-hover-active($bg-color: $clr-accent, $bg-color-active: darken($bg-color, 10%)) {
+@mixin button-hover-active(
+  $bg-color: color.scale($clr-accent, $lightness: -30%),
+  $bg-color-active: color.scale($clr-accent, $lightness: -50%)
+) {
   transition: background-color 0.3s;
 
   &:hover {

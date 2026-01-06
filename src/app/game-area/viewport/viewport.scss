@@ -1,0 +1,72 @@
+@use "sass:color";
+@use "index" as *;
+
+.container {
+  display: grid;
+  grid:
+    "stage boss-health _" 1fr
+    "boss boss boss" 2fr
+    "player player player" 1fr
+    / 1fr 1fr 1fr;
+
+  gap: $gap;
+
+  height: 100%;
+}
+
+.stage {
+  grid-area: stage;
+}
+
+.boss-health {
+  grid-area: boss-health;
+
+  // @include flexbox($align: flex-start);
+}
+
+.health-bar {
+  width: 100%;
+  background-color: color.scale(red, $lightness: -80%);
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.health-fill {
+  height: 2rem;
+  background-color: color.scale(red, $lightness: 20%);
+  transition: width 0.5s;
+}
+
+.health-text {
+  font-weight: bold;
+  color: white;
+  text-shadow: 1px 1px 2px black;
+}
+
+.boss {
+  grid-area: boss;
+
+  @include flexbox();
+}
+
+.player {
+  grid-area: player;
+
+  @include flexbox($align: flex-end);
+}
+
+.icon {
+  @include disable-text-selection();
+  font-size: 6rem;
+
+  &:hover {
+    cursor: pointer;
+    margin-bottom: 1rem;
+    transform: scale(1.2);
+    transition:
+      transform 0.2s,
+      margin-bottom 0.2s;
+  }
+}

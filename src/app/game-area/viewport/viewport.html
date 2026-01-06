@@ -1,0 +1,17 @@
+<div class="container">
+  <div class="stage">{{ stageService.CurrentStage() }}</div>
+  <div class="boss-health">
+    <div class="health-bar">
+      <div
+        class="health-fill"
+        [style.width.%]="(bossService.CurrentHealth() / bossService.MaxHealth()) * 100"></div>
+    </div>
+    <div class="health-text">{{ bossService.CurrentHealth() }} / {{ bossService.MaxHealth() }}</div>
+  </div>
+  <div class="boss">
+    <span class="icon">🐉</span>
+  </div>
+  <div class="player">
+    <span class="icon">🧙‍♂️</span>
+  </div>
+</div>

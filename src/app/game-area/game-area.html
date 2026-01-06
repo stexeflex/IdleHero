@@ -2,4 +2,19 @@
   <div class="header">
     <h2>Game</h2>
   </div>
+  <div class="viewport">
+    <app-viewport></app-viewport>
+  </div>
+  <div class="actions">
+    <button class="ih-button" (click)="toggleGame()">
+      @if (gameService.InProgress()) {
+        Pause
+      } @else {
+        Start
+      }
+    </button>
+    <button class="ih-button" [disabled]="!gameService.InProgress()" (click)="prestige()">
+      Prestige
+    </button>
+  </div>
 </div>

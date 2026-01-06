@@ -1,0 +1,21 @@
+<!-- Header -->
+<div class="header">
+  <div class="header__name">{{ playerService.Name() }}</div>
+  <div class="header__level">
+    <div class="level__label">Level:</div>
+    <div class="level__value">
+      {{ playerService.Level().Current }}
+    </div>
+  </div>
+  <div class="header__class">{{ playerService.Class() }}</div>
+</div>
+
+<!-- Summary -->
+<div class="summary">
+  @for (summaryStat of SummaryStats; track summaryStat.label) {
+    <div class="summary__item">
+      <div class="item__label">{{ summaryStat.label }}</div>
+      <div class="item__value">{{ summaryStat.value }}</div>
+    </div>
+  }
+</div>
