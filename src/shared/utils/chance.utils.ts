@@ -3,8 +3,4 @@ export class ChanceUtils {
     const roll = Math.random();
     return roll <= chance;
   }
-
-  public static fail(chance: number): boolean {
-    return !this.success(chance);
-  }
 }

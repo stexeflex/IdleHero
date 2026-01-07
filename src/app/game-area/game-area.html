@@ -6,15 +6,12 @@
     <app-viewport></app-viewport>
   </div>
   <div class="actions">
-    <button class="ih-button" (click)="toggleGame()">
-      @if (gameService.InProgress()) {
-        Pause
-      } @else {
-        Start
-      }
-    </button>
-    <button class="ih-button" [disabled]="!gameService.InProgress()" (click)="prestige()">
-      Prestige
-    </button>
+    @if (gameService.InProgress()) {
+      <button class="ih-button" [disabled]="!gameService.InProgress()" (click)="prestige()">
+        Prestige
+      </button>
+    } @else {
+      <button class="ih-button" (click)="startGame()">Start</button>
+    }
   </div>
 </div>

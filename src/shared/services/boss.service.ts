@@ -1,16 +1,15 @@
 import { Injectable, signal } from '@angular/core';
 
+import { BossHealth } from '../models';
+
 @Injectable({
   providedIn: 'root'
 })
 export class BossService {
-  private MAX_HEALTH_DEFAULT = 5;
-  private HEALTH_GROWTH_RATE = 1.25;
-
-  private _maxHealth = signal(this.MAX_HEALTH_DEFAULT);
+  private _maxHealth = signal(BossHealth.HEALTH_BASE);
   public MaxHealth = this._maxHealth.asReadonly();
 
-  private _currentHealth = signal(this.MAX_HEALTH_DEFAULT);
+  private _currentHealth = signal(BossHealth.HEALTH_BASE);
   public CurrentHealth = this._currentHealth.asReadonly();
 
   public get IsDefeated(): boolean {
@@ -21,13 +20,13 @@ export class BossService {
     this._currentHealth.update((health) => Math.max(0, health - damage));
   }
 
-  public NextLevel() {
-    this._maxHealth.update((maxHealth) => Math.floor(maxHealth * this.HEALTH_GROWTH_RATE));
+  public SetBossForStage(stage: number) {
+    this._maxHealth.update(() => BossHealth.CalculateForStage(stage));
     this._currentHealth.set(this.MaxHealth());
   }
 
   public Reset() {
-    this._maxHealth.set(this.MAX_HEALTH_DEFAULT);
-    this._currentHealth.set(this.MaxHealth());
+    this._maxHealth.set(BossHealth.HEALTH_BASE);
+    this._currentHealth.set(BossHealth.HEALTH_BASE);
   }
 }

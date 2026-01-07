@@ -22,9 +22,18 @@ export class Stats {
 
   get Attributes(): { label: string; value: number }[] {
     return [
-      { label: 'Strength', value: this.playerService.Strength() },
-      { label: 'Intelligence', value: this.playerService.Intelligence() },
-      { label: 'Dexterity', value: this.playerService.Dexterity() }
+      {
+        label: 'Strength',
+        value: this.playerService.Strength()
+      },
+      {
+        label: 'Intelligence',
+        value: this.playerService.Intelligence()
+      },
+      {
+        label: 'Dexterity',
+        value: this.playerService.Dexterity()
+      }
     ];
   }
 
@@ -41,6 +50,14 @@ export class Stats {
       {
         label: 'Critical Hit Damage',
         value: this.percentPipe.transform(this.playerService.CriticalHitDamage(), '1.0-0')
+      },
+      {
+        label: 'Multi Hit Chance',
+        value: this.percentPipe.transform(this.playerService.MultiHitChance(), '1.0-0')
+      },
+      {
+        label: 'Multi Hit Damage',
+        value: this.percentPipe.transform(this.playerService.MultiHitDamage(), '1.0-0')
       }
     ];
   }

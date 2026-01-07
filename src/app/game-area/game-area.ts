@@ -11,12 +11,8 @@ import { Viewport } from './viewport/viewport';
 export class GameArea {
   constructor(protected gameService: GameService) {}
 
-  toggleGame() {
-    if (this.gameService.InProgress()) {
-      this.gameService.Pause();
-    } else {
-      this.gameService.Start();
-    }
+  startGame() {
+    this.gameService.Start();
   }
 
   prestige() {
