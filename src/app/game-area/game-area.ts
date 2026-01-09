@@ -9,6 +9,8 @@ import { Viewport } from './viewport/viewport';
   styleUrl: './game-area.scss'
 })
 export class GameArea {
+  protected CanStartGame: boolean = true;
+
   constructor(protected gameService: GameService) {}
 
   startGame() {
@@ -17,5 +19,11 @@ export class GameArea {
 
   prestige() {
     this.gameService.Prestige();
+    this.CanStartGame = false;
+
+    // Delay before the player can start a new game
+    setTimeout(() => {
+      this.CanStartGame = true;
+    }, 5000);
   }
 }

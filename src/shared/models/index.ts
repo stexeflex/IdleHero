@@ -1,6 +1,7 @@
 export * from './attack-power';
 export * from './attack-result';
 export * from './attack-speed';
+export * from './battle-log-message';
 export * from './boss-health';
 export * from './critical-hit-chance';
 export * from './critical-hit-damage';

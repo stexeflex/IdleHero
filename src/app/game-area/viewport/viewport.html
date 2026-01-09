@@ -23,6 +23,14 @@
     }
   </div>
 
+  <!-- Buffs -->
+  <div class="buffs"></div>
+
+  <!-- Battle Log -->
+  <div #battleLogContainer class="battle-log" [class.battle-log--scroll]="showLog">
+    <app-battle-log></app-battle-log>
+  </div>
+
   <!-- Player -->
   <div class="player">
     <span class="icon">🧙‍♂️</span>

@@ -4,12 +4,11 @@
 .container {
   display: grid;
   grid:
-    "stage stage stage" auto
-    "boss-health boss-health boss-health" auto
-    "buffs boss damage" 2fr
-    "buffs player damage" 1fr
-    "exp exp exp" auto
-    / auto 1fr auto;
+    "stage boss-health boss-health boss-health" auto
+    "battlelog battlelog boss buffs" 2fr
+    "battlelog battlelog player buffs" 1fr
+    "exp exp exp exp" auto
+    / auto auto 1fr auto;
 
   gap: $gap;
 
@@ -18,11 +17,14 @@
 
 .stage {
   grid-area: stage;
+  min-height: 110px;
+  min-width: 110px;
 }
 
 .boss-health {
   grid-area: boss-health;
-  margin-left: 100px;
+  min-height: 110px;
+  align-content: center;
 }
 
 .boss {
@@ -51,8 +53,23 @@
   }
 }
 
-.damage-area {
-  grid-area: damage;
+.battle-log {
+  grid-area: battlelog;
+  @include overflow($display: flex, $max-height: 62vh, $max-width: 200px);
+
+  // Automatically scroll to bottom
+  flex-direction: column-reverse;
+
+  // Left-hand side scrollbars
+  direction: rtl;
+
+  width: 180px;
+}
+
+.battle-log--scroll {
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
 }
 
 .experience-bar {

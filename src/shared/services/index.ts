@@ -1,3 +1,4 @@
+export * from './battle-log.service';
 export * from './boss.service';
 export * from './game.service';
 export * from './hero.service';

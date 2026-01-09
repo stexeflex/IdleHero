@@ -1,0 +1,79 @@
+@use "sass:color";
+@use "index" as *;
+
+:host {
+  direction: ltr;
+}
+
+.container {
+  align-self: flex-start;
+}
+
+.message-container {
+  @include disable-text-selection();
+  @include flexbox($justify: stretch, $align: stretch);
+
+  text-align: center;
+}
+
+.separator,
+.message-container {
+  margin: calc($gap / 2) 0;
+}
+
+.icon {
+  white-space: nowrap;
+  align-self: center;
+  min-width: 35px;
+}
+
+.message-area {
+  width: 100%;
+  height: 100%;
+}
+
+.separator,
+.message,
+.submessage {
+  font-size: 1rem;
+  line-height: 1rem;
+}
+
+.info,
+.crit,
+.multi,
+.crit-multi,
+.boss-defeat,
+.level-up {
+  font-weight: bold;
+  text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;
+}
+
+.info {
+  color: #44dd44;
+}
+
+.other {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.crit {
+  color: #eee000;
+}
+
+.crit-multi {
+  color: #ff8800;
+}
+
+.boss-defeat {
+  color: #ff4444;
+}
+
+.level-up {
+  color: #44bbff;
+}

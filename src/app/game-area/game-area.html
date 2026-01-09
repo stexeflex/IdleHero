@@ -7,8 +7,10 @@
   </div>
   <div class="actions">
     @if (gameService.InProgress()) {
-      <button class="ih-button" [disabled]="!gameService.InProgress()" (click)="prestige()">
-        Prestige
+      <button class="ih-button" (click)="prestige()">Prestige</button>
+    } @else if (!CanStartGame) {
+      <button class="ih-button" disabled>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
       </button>
     } @else {
       <button class="ih-button" (click)="startGame()">Start</button>

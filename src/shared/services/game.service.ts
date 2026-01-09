@@ -1,6 +1,7 @@
 import { AttackResult, ExperienceGainResult, StageRewards } from '../models';
 import { Injectable, signal } from '@angular/core';
 
+import { BattleLogService } from './battle-log.service';
 import { BossService } from './boss.service';
 import { LevelService } from './level.service';
 import { StageService } from './stage.service';
@@ -15,7 +16,8 @@ export class GameService {
     private stageService: StageService,
     private statsService: StatsService,
     private levelService: LevelService,
-    private bossService: BossService
+    private bossService: BossService,
+    private battleLogService: BattleLogService
   ) {}
 
   private _gameInProgress = signal(false);
@@ -28,12 +30,17 @@ export class GameService {
 
   /* Start the game loop */
   public Start() {
+    this.battleLogService.ClearLogs();
+    this.battleLogService.StartGame();
+
     this._gameInProgress.set(true);
     this.BattleLoop();
   }
 
   /* Prestige the game */
   public Prestige() {
+    this.battleLogService.Prestige();
+
     this._gameInProgress.set(false);
     this.bossService.Reset();
     this.stageService.Reset();
@@ -45,24 +52,33 @@ export class GameService {
       await TimeoutUtils.wait(this.AttackDelay);
 
       if (!this.InProgress()) {
-        return;
+        break;
       }
 
       /* Attack */
       await this.AttackPhase();
 
       if (!this.InProgress()) {
-        return;
+        break;
       }
 
       /* Boss Defeated */
       if (this.bossService.IsDefeated) {
-        console.log('Boss Defeated!');
+        this.battleLogService.BossDefeated();
 
         /* Boss Respawn Delay */
         await TimeoutUtils.wait(500);
 
+        if (!this.InProgress()) {
+          break;
+        }
+
         await this.RewardPhase();
+
+        if (!this.InProgress()) {
+          break;
+        }
+
         this.NextStage();
       }
     }
@@ -71,29 +87,22 @@ export class GameService {
   private async AttackPhase() {
     /* Perform Attack */
     const attackResult: AttackResult = this.statsService.Attack();
-
-    /* Log Attack Type */
-    if (attackResult.IsCritical && attackResult.IsMultiHit) {
-      console.log('Critical Multi Hit!');
-    } else if (attackResult.IsCritical) {
-      console.log('Critical Hit!');
-    } else if (attackResult.IsMultiHit) {
-      console.log('Multi Hit!');
-    }
+    this.battleLogService.AttackLog(attackResult);
 
     /* Deal Damage */
-    console.log('Dealing Damage:', attackResult.Damage);
     this.bossService.TakeDamage(attackResult.Damage);
   }
 
   private async RewardPhase() {
     const rewards: StageRewards = this.stageService.GetRewards();
-    console.log('Gained Experience:', rewards.Experience);
-    console.log('Gained Gold:', rewards.Gold);
 
     let experienceGainResult: ExperienceGainResult = await this.levelService.GainExperience(
       rewards.Experience
     );
+
+    if (!this.InProgress()) {
+      return;
+    }
 
     if (experienceGainResult.LeveledUp) {
       this.PlayerLevelUp();
@@ -102,6 +111,10 @@ export class GameService {
         experienceGainResult = await this.levelService.GainExperience(
           experienceGainResult.ExperienceOverflow
         );
+
+        if (!this.InProgress()) {
+          return;
+        }
 
         if (!experienceGainResult.LeveledUp) {
           break;
@@ -113,7 +126,7 @@ export class GameService {
   }
 
   private PlayerLevelUp() {
-    console.log('Level Up!');
+    this.battleLogService.LevelUp();
     this.statsService.LevelUp();
   }
 

@@ -1,0 +1,33 @@
+<div class="container">
+  @for (entry of Messages; track entry) {
+    @if (entry.Type == "Separator") {
+      <!-- <p class="separator">{{ entry.Message }}</p> -->
+      <hr class="separator" />
+    } @else {
+      <div class="message-container">
+        <div class="icon">{{ GetMessageIcon(entry.Type) }}</div>
+        <div class="message-area">
+          <p
+            class="message"
+            [class.info]="entry.Type == 'Info'"
+            [class.other]="entry.Type == 'Other'"
+            [class.damage]="entry.Type == 'Damage'"
+            [class.crit]="entry.Type == 'Crit'"
+            [class.multi]="entry.Type == 'Multi'"
+            [class.crit-multi]="entry.Type == 'CritMulti'"
+            [class.boss-defeat]="entry.Type == 'BossDefeat'"
+            [class.level-up]="entry.Type == 'LevelUp'">
+            {{ entry.Message }}
+          </p>
+          <p
+            class="submessage"
+            [class.crit]="entry.Type == 'Crit'"
+            [class.multi]="entry.Type == 'Multi'"
+            [class.crit-multi]="entry.Type == 'CritMulti'">
+            {{ GetSubMessage(entry.Type) }}
+          </p>
+        </div>
+      </div>
+    }
+  }
+</div>
