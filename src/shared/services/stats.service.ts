@@ -34,7 +34,6 @@ export class StatsService {
 
   public AttackSpeed = computed(() => {
     const modifier: number = this.GetModifierFromBuffs(['Speed Boost']);
-    console.log('Attack Speed Modifier:', modifier);
     return AttackSpeed.Calculate(this.Dexterity(), modifier);
   });
 

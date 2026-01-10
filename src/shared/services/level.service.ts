@@ -38,20 +38,6 @@ export class LevelService {
       LeveledUp: leveledUp,
       ExperienceOverflow: experienceOverflow
     };
-
-    // this.Experience += amount;
-
-    // while (this.Experience >= this.ExperienceToNextLevel) {
-    //   await TimeoutUtils.wait(this.levelUpDelay);
-
-    //   const currentExp = this.Experience;
-
-    //   this.LevelUp();
-
-    //   await TimeoutUtils.wait(this.levelUpDelay);
-
-    //   this.SetNextLevelExperience(currentExp);
-    // }
   }
 
   private LevelUp(): void {

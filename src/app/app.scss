@@ -6,12 +6,23 @@
   display: grid;
 
   grid:
-    "header header header" auto
+    "header character inventory" auto
     "game character inventory" 1fr
     / 1fr 1fr 1fr;
 
   gap: $gap;
   padding: $gap;
+}
+
+@media (max-width: $bp-lg) {
+  .container {
+    grid:
+      "header" auto
+      "game" 1fr
+      "character" auto
+      "inventory" auto
+      / 1fr;
+  }
 }
 
 .header,
