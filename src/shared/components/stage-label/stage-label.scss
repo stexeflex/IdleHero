@@ -5,6 +5,12 @@
   @include disable-text-selection();
   position: absolute;
   font-size: 5rem;
+
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+    transition: transform 0.2s;
+  }
 }
 
 .stage-label {
@@ -21,10 +27,10 @@
   text-align: center;
 
   text-shadow:
-    -1px -1px 0 #000,
-    1px -1px 0 #000,
-    -1px 1px 0 #000,
-    1px 1px 0 #000;
+    -1px -1px 0 $clr-text-shadow,
+    1px -1px 0 $clr-text-shadow,
+    -1px 1px 0 $clr-text-shadow,
+    1px 1px 0 $clr-text-shadow;
 
   // text-shadow:
   //   0 0 5px color.adjust($clr-black, $alpha: -0.5),

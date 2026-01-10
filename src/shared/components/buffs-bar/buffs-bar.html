@@ -1,0 +1,19 @@
+<div class="container">
+  @for (buff of Buffs; track buff.Name) {
+    <button
+      class="buff-button"
+      [class.active]="buff.IsActive"
+      [class.on-cooldown]="buff.IsOnCooldown"
+      [title]="GetTooltip(buff)"
+      (click)="ActivateBuff(buff)"
+      [disabled]="buff.IsOnCooldown">
+      @if (buff.IsActive) {
+        <span class="buff-duration">{{ Active.get(buff.Name) }}</span>
+      } @else if (buff.IsOnCooldown) {
+        <span class="buff-cooldown">{{ Cooldown.get(buff.Name) }}</span>
+      } @else {
+        <p class="buff-icon">{{ buff.Icon }}</p>
+      }
+    </button>
+  }
+</div>

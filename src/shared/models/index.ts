@@ -3,6 +3,7 @@ export * from './attack-result';
 export * from './attack-speed';
 export * from './battle-log-message';
 export * from './boss-health';
+export * from './buff';
 export * from './critical-hit-chance';
 export * from './critical-hit-damage';
 export * from './experience-gain-result';

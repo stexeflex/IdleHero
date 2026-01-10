@@ -23,6 +23,7 @@ $clr-highlight: #d4af37;
 
 /* ========== Additional Colors ========== */
 $clr-black: #0f0f0f;
+$clr-gray: #7a7a7a;
 
 /* ========= Game Colors ========== */
 $clr-hp-red: #e53e3e;
@@ -45,6 +46,8 @@ $clr-log-multi: $clr-epic;
 $clr-log-crit-multi: #ff8800;
 $clr-log-boss-defeat: color.scale($clr-accent, $lightness: 40%);
 $clr-log-level-up: #00aaff;
+
+$clr-buff-button: #ddd;
 
 /* ========== Gradients ========== */
 $grad-ui-bg: linear-gradient(

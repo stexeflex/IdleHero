@@ -24,7 +24,11 @@
   </div>
 
   <!-- Buffs -->
-  <div class="buffs"></div>
+  <div class="buffs">
+    @if (showBuffBar) {
+      <app-buffs-bar></app-buffs-bar>
+    }
+  </div>
 
   <!-- Battle Log -->
   <div class="battle-log">
