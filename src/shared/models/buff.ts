@@ -7,7 +7,8 @@ export class Buff {
     public readonly Name: string,
     public readonly Description: string,
     public readonly DurationInSeconds: number,
-    public readonly CooldownInSeconds: number
+    public readonly CooldownInSeconds: number,
+    public readonly Modifier?: number
   ) {
     this.IsActive = false;
     this.IsOnCooldown = false;
@@ -15,11 +16,12 @@ export class Buff {
 
   static FromObject(init: Partial<Buff>): Buff {
     return new Buff(
-      init.Icon!,
-      init.Name!,
-      init.Description!,
-      init.DurationInSeconds!,
-      init.CooldownInSeconds ?? 0
+      init.Icon ?? '',
+      init.Name ?? '',
+      init.Description ?? '',
+      init.DurationInSeconds ?? 0,
+      init.CooldownInSeconds ?? 0,
+      init.Modifier
     );
   }
 

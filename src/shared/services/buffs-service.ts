@@ -10,30 +10,34 @@ export class BuffsService {
     Buff.FromObject({
       Icon: '🔥',
       Name: 'Attack Boost',
-      Description: 'Increases damage by 10%.',
+      Description: 'Increases Damage by 25%.',
       DurationInSeconds: 20,
-      CooldownInSeconds: 30
+      CooldownInSeconds: 30,
+      Modifier: 0.25
     }),
     Buff.FromObject({
       Icon: '🥷🏼',
       Name: 'Speed Boost',
       Description: 'Increases Attack Speed by 50%.',
       DurationInSeconds: 10,
-      CooldownInSeconds: 60
+      CooldownInSeconds: 60,
+      Modifier: 0.5
     }),
     Buff.FromObject({
       Icon: '🎯',
       Name: 'Critical Focus',
       Description: 'Increases Critical Hit Chance by 15%.',
       DurationInSeconds: 15,
-      CooldownInSeconds: 60
+      CooldownInSeconds: 60,
+      Modifier: 0.15
     }),
     Buff.FromObject({
       Icon: '⚔️',
       Name: 'Multi-Hit Frenzy',
       Description: 'Increases Multi-Hit Chance by 20%.',
       DurationInSeconds: 15,
-      CooldownInSeconds: 60
+      CooldownInSeconds: 60,
+      Modifier: 0.2
     }),
     Buff.FromObject({
       Icon: '💥',
@@ -55,6 +59,19 @@ export class BuffsService {
       return false;
     }
 
-    return this.Buffs()[buffIndexToActivate].Activate();
+    const buffToActivate: Buff = this.Buffs()[buffIndexToActivate];
+    const activated: boolean = buffToActivate.Activate();
+
+    if (activated) {
+      this.UpdateBuff(buffIndexToActivate, buffToActivate);
+    }
+
+    return activated;
+  }
+
+  private UpdateBuff(buffIndex: number, updatedBuff: Buff) {
+    const updatedBuffs = [...this.Buffs()];
+    updatedBuffs[buffIndex] = updatedBuff;
+    this.Buffs.set(updatedBuffs);
   }
 }

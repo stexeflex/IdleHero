@@ -3,10 +3,10 @@ export class MultiHitChance {
   private static readonly MAX_MHC: number = 0.5;
   private static readonly MHC_PER_DEXTERITY: number = 0.005;
 
-  public static Calculate(dexterity: number): number {
-    // Formula: BASE_MHC + (Dexterity - 1) * MHC_PER_DEXTERITY
+  public static Calculate(dexterity: number, modifier: number = 1): number {
+    // Formula: BASE_MHC + (Dexterity - 1) * MHC_PER_DEXTERITY * Modifier
     return Math.min(
-      MultiHitChance.BASE_MHC + (dexterity - 1) * MultiHitChance.MHC_PER_DEXTERITY,
+      (MultiHitChance.BASE_MHC + (dexterity - 1) * MultiHitChance.MHC_PER_DEXTERITY) * modifier,
       MultiHitChance.MAX_MHC
     );
   }

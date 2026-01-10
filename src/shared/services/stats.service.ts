@@ -2,6 +2,7 @@ import {
   AttackPower,
   AttackResult,
   AttackSpeed,
+  AttackType,
   CriticalHitChance,
   CriticalHitDamage,
   MultiHitChance,
@@ -9,6 +10,7 @@ import {
 } from '../models';
 import { Injectable, computed, signal } from '@angular/core';
 
+import { BuffsService } from './buffs-service';
 import { ChanceUtils } from '../utils';
 
 @Injectable({
@@ -25,35 +27,52 @@ export class StatsService {
   public Dexterity = signal(1);
 
   /* Combat Stats */
-  public AttackPower = computed(() => AttackPower.Calculate(this.Strength()));
-  public AttackSpeed = computed(() => AttackSpeed.Calculate(this.Dexterity()));
-  public CriticalHitChance = computed(() => CriticalHitChance.Calculate(this.Intelligence()));
+  public AttackPower = computed(() => {
+    const modifier: number = this.GetModifierFromBuffs(['Attack Boost']);
+    return AttackPower.Calculate(this.Strength(), modifier);
+  });
+
+  public AttackSpeed = computed(() => {
+    const modifier: number = this.GetModifierFromBuffs(['Speed Boost']);
+    return AttackSpeed.Calculate(this.Dexterity(), modifier);
+  });
+
+  public CriticalHitChance = computed(() => {
+    const modifier: number = this.GetModifierFromBuffs(['Critical Focus']);
+    return CriticalHitChance.Calculate(this.Intelligence(), modifier);
+  });
+
   public CriticalHitDamage = signal(1.5);
-  public MultiHitChance = computed(() => MultiHitChance.Calculate(this.Dexterity()));
+
+  public MultiHitChance = computed(() => {
+    const modifier: number = this.GetModifierFromBuffs(['Multi-Hit Frenzy']);
+    return MultiHitChance.Calculate(this.Dexterity(), modifier);
+  });
+
   public MultiHitDamage = signal(2);
+
+  constructor(private buffsService: BuffsService) {}
 
   public Attack(): AttackResult {
     let damage: number = this.AttackPower();
-    let isCritical: boolean = false;
-    let isMultiHit: boolean = false;
+    let attackType: AttackType = AttackType.Normal;
 
     /* Critical Hit Calculation */
     if (ChanceUtils.success(this.CriticalHitChance())) {
       damage = CriticalHitDamage.Calculate(damage, this.CriticalHitDamage());
-      isCritical = true;
+      attackType |= AttackType.Critical;
     }
 
     /* Multi Hit Calculation */
     if (ChanceUtils.success(this.MultiHitChance())) {
       damage = MultiHitDamage.Calculate(damage, this.MultiHitDamage());
-      isMultiHit = true;
+      attackType |= AttackType.MultiHit;
     }
 
     return {
       Damage: damage,
-      IsCritical: isCritical,
-      IsMultiHit: isMultiHit
-    };
+      AttackType: attackType
+    } as AttackResult;
   }
 
   public LevelUp() {
@@ -99,5 +118,20 @@ export class StatsService {
     }
 
     this.UnspentSkillPoints.set(this.UnspentSkillPoints() + 1);
+  }
+
+  private GetModifierFromBuffs(buffs: string[]): number {
+    let modifier: number = 1;
+
+    this.buffsService
+      .Buffs()
+      .filter((buff) => buff.IsActive && buffs.includes(buff.Name))
+      .forEach((buff) => {
+        if (buff.Modifier) {
+          modifier += buff.Modifier;
+        }
+      });
+
+    return modifier;
   }
 }

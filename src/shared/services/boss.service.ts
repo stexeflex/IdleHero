@@ -1,6 +1,5 @@
+import { BossDamageResult, BossHealth } from '../models';
 import { Injectable, signal } from '@angular/core';
-
-import { BossHealth } from '../models';
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +15,14 @@ export class BossService {
     return this.CurrentHealth() <= 0;
   }
 
-  public TakeDamage(damage: number) {
-    this._currentHealth.update((health) => Math.max(0, health - damage));
+  public TakeDamage(damage: number): BossDamageResult {
+    const damageDealt = Math.min(damage, this.CurrentHealth());
+    this._currentHealth.update((health) => Math.max(0, health - damageDealt));
+
+    return {
+      DamageDealt: damageDealt,
+      IsBossDefeated: this.IsDefeated
+    } as BossDamageResult;
   }
 
   public SetBossForStage(stage: number) {

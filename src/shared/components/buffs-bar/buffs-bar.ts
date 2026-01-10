@@ -13,13 +13,25 @@ export class BuffsBar {
     return this.buffsService.Buffs();
   }
 
-  protected Active: Map<string, number> = new Map<string, number>();
-  protected Cooldown: Map<string, number> = new Map<string, number>();
+  private static Active: Map<string, number> = new Map<string, number>();
+  protected get Active(): Map<string, number> {
+    return BuffsBar.Active;
+  }
+
+  private static Cooldown: Map<string, number> = new Map<string, number>();
+  protected get Cooldown(): Map<string, number> {
+    return BuffsBar.Cooldown;
+  }
 
   constructor(private buffsService: BuffsService) {
     for (let buff of this.Buffs) {
-      this.Active.set(buff.Name, 0);
-      this.Cooldown.set(buff.Name, 0);
+      if (!BuffsBar.Active.has(buff.Name)) {
+        BuffsBar.Active.set(buff.Name, 0);
+      }
+
+      if (!BuffsBar.Cooldown.has(buff.Name)) {
+        BuffsBar.Cooldown.set(buff.Name, 0);
+      }
     }
   }
 
@@ -41,13 +53,13 @@ export class BuffsBar {
   }
 
   private setActiveTime(buff: Buff) {
-    this.Active.set(buff.Name, buff.DurationInSeconds);
+    BuffsBar.Active.set(buff.Name, buff.DurationInSeconds);
 
     const active = setInterval(() => {
-      const currentActive = this.Active.get(buff.Name) ?? 0;
+      const currentActive = BuffsBar.Active.get(buff.Name) ?? 0;
 
       if (currentActive > 0) {
-        this.Active.set(buff.Name, currentActive - 1);
+        BuffsBar.Active.set(buff.Name, currentActive - 1);
       } else {
         clearInterval(active);
       }
@@ -55,13 +67,13 @@ export class BuffsBar {
   }
 
   private setCooldownTime(buff: Buff) {
-    this.Cooldown.set(buff.Name, buff.DurationInSeconds + buff.CooldownInSeconds);
+    BuffsBar.Cooldown.set(buff.Name, buff.DurationInSeconds + buff.CooldownInSeconds);
 
     const cooldown = setInterval(() => {
-      const currentCooldown = this.Cooldown.get(buff.Name) ?? 0;
+      const currentCooldown = BuffsBar.Cooldown.get(buff.Name) ?? 0;
 
       if (currentCooldown > 0) {
-        this.Cooldown.set(buff.Name, currentCooldown - 1);
+        BuffsBar.Cooldown.set(buff.Name, currentCooldown - 1);
       } else {
         clearInterval(cooldown);
       }

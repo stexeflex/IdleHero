@@ -1,7 +1,7 @@
 <div #battleLogContainer class="container" [class.border]="Messages.length > 0">
   <div class="content">
     @for (entry of Messages; track entry) {
-      @if (entry.Type == "Separator") {
+      @if (GetMessageClass(entry.Type) == "separator") {
         <!-- <p class="separator">{{ entry.Message }}</p> -->
         <hr class="separator" />
       } @else {
@@ -10,21 +10,21 @@
           <div class="message-area">
             <p
               class="message"
-              [class.info]="entry.Type == 'Info'"
-              [class.other]="entry.Type == 'Other'"
-              [class.damage]="entry.Type == 'Damage'"
-              [class.crit]="entry.Type == 'Crit'"
-              [class.multi]="entry.Type == 'Multi'"
-              [class.crit-multi]="entry.Type == 'CritMulti'"
-              [class.boss-defeat]="entry.Type == 'BossDefeat'"
-              [class.level-up]="entry.Type == 'LevelUp'">
+              [class.info]="GetMessageClass(entry.Type) == 'info'"
+              [class.other]="GetMessageClass(entry.Type) == 'other'"
+              [class.damage]="GetMessageClass(entry.Type) == 'damage'"
+              [class.crit]="GetMessageClass(entry.Type) == 'crit'"
+              [class.multi]="GetMessageClass(entry.Type) == 'multi'"
+              [class.crit-multi]="GetMessageClass(entry.Type) == 'crit-multi'"
+              [class.boss-defeat]="GetMessageClass(entry.Type) == 'boss-defeat'"
+              [class.level-up]="GetMessageClass(entry.Type) == 'level-up'">
               {{ entry.Message }}
             </p>
             <p
               class="submessage"
-              [class.crit]="entry.Type == 'Crit'"
-              [class.multi]="entry.Type == 'Multi'"
-              [class.crit-multi]="entry.Type == 'CritMulti'">
+              [class.crit]="GetMessageClass(entry.Type) == 'crit'"
+              [class.multi]="GetMessageClass(entry.Type) == 'multi'"
+              [class.crit-multi]="GetMessageClass(entry.Type) == 'crit-multi'">
               {{ entry.Submessage }}
             </p>
           </div>
