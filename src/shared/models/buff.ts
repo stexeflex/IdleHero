@@ -24,23 +24,4 @@ export class Buff {
       init.Modifier
     );
   }
-
-  public Activate(): boolean {
-    if (this.IsActive || this.IsOnCooldown) {
-      return false;
-    }
-
-    this.IsActive = true;
-
-    setTimeout(() => {
-      this.IsActive = false;
-      this.IsOnCooldown = true;
-
-      setTimeout(() => {
-        this.IsOnCooldown = false;
-      }, this.CooldownInSeconds * 1000);
-    }, this.DurationInSeconds * 1000);
-
-    return true;
-  }
 }

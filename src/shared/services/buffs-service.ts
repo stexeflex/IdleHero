@@ -60,16 +60,26 @@ export class BuffsService {
     }
 
     const buffToActivate: Buff = this.Buffs()[buffIndexToActivate];
-    const activated: boolean = buffToActivate.Activate();
+    buffToActivate.IsActive = true;
+    this.UpdateBuffState(buffIndexToActivate, buffToActivate);
 
-    if (activated) {
-      this.UpdateBuff(buffIndexToActivate, buffToActivate);
-    }
+    /* Active duration timer */
+    setTimeout(() => {
+      buffToActivate.IsActive = false;
+      buffToActivate.IsOnCooldown = true;
+      this.UpdateBuffState(buffIndexToActivate, buffToActivate);
 
-    return activated;
+      /* Cooldown duration timer */
+      setTimeout(() => {
+        buffToActivate.IsOnCooldown = false;
+        this.UpdateBuffState(buffIndexToActivate, buffToActivate);
+      }, buffToActivate.CooldownInSeconds * 1000);
+    }, buffToActivate.DurationInSeconds * 1000);
+
+    return true;
   }
 
-  private UpdateBuff(buffIndex: number, updatedBuff: Buff) {
+  private UpdateBuffState(buffIndex: number, updatedBuff: Buff) {
     const updatedBuffs = [...this.Buffs()];
     updatedBuffs[buffIndex] = updatedBuff;
     this.Buffs.set(updatedBuffs);
