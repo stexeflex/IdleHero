@@ -39,7 +39,7 @@ export class GameService {
 
   /* Prestige the game */
   public Prestige() {
-    this.battleLogService.Prestige();
+    this.battleLogService.Prestige(this.stageService.Current());
 
     this._gameInProgress.set(false);
     this.bossService.Reset();
@@ -64,7 +64,8 @@ export class GameService {
 
       /* Boss Defeated */
       if (this.bossService.IsDefeated) {
-        this.battleLogService.BossDefeated();
+        const rewards: StageRewards = this.stageService.GetRewards();
+        this.battleLogService.BossDefeated(rewards);
 
         /* Boss Respawn Delay */
         await TimeoutUtils.wait(500);
@@ -73,7 +74,7 @@ export class GameService {
           break;
         }
 
-        await this.RewardPhase();
+        await this.RewardPhase(rewards);
 
         if (!this.InProgress()) {
           break;
@@ -93,9 +94,7 @@ export class GameService {
     this.bossService.TakeDamage(attackResult.Damage);
   }
 
-  private async RewardPhase() {
-    const rewards: StageRewards = this.stageService.GetRewards();
-
+  private async RewardPhase(rewards: StageRewards) {
     let experienceGainResult: ExperienceGainResult = await this.levelService.GainExperience(
       rewards.Experience
     );
@@ -126,12 +125,12 @@ export class GameService {
   }
 
   private PlayerLevelUp() {
-    this.battleLogService.LevelUp();
+    this.battleLogService.LevelUp(this.levelService.Current, this.levelService.Current + 1);
     this.statsService.LevelUp();
   }
 
   private NextStage() {
     this.stageService.NextStage();
-    this.bossService.SetBossForStage(this.stageService.CurrentStage());
+    this.bossService.SetBossForStage(this.stageService.Current());
   }
 }

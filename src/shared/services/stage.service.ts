@@ -8,7 +8,7 @@ export class StageService {
   private DEFAULT_STAGE = 1;
 
   private _currentStage = signal(this.DEFAULT_STAGE);
-  public CurrentStage = this._currentStage.asReadonly();
+  public Current = this._currentStage.asReadonly();
 
   public GetRewards(): StageRewards {
     const experience = Experience.GetForStage(this._currentStage());

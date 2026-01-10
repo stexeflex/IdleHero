@@ -62,20 +62,4 @@ export class BattleLog implements AfterViewInit {
         return null;
     }
   }
-
-  protected GetSubMessage(type: MessageType): string | null {
-    switch (type) {
-      case 'Crit':
-        return 'Critical Hit'.toUpperCase();
-
-      case 'Multi':
-        return 'Multi Hit'.toUpperCase();
-
-      case 'CritMulti':
-        return 'Critical Multi Hit'.toUpperCase();
-
-      default:
-        return null;
-    }
-  }
 }

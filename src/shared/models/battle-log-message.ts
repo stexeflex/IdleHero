@@ -1,5 +1,6 @@
 export interface BattleLogMessage {
   Message: string;
+  Submessage?: string;
   Type: MessageType;
 }
 

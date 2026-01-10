@@ -1,8 +1,7 @@
 <div class="container">
   <!-- Stage -->
   <div class="stage">
-    <app-stage-label
-      [stageNumber]="showStage ? stageService.CurrentStage() : null"></app-stage-label>
+    <app-stage-label [stageNumber]="showStage ? stageService.Current() : null"></app-stage-label>
   </div>
 
   <!-- Boss Health Bar -->

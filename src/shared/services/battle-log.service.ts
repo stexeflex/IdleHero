@@ -1,4 +1,4 @@
-import { AttackResult, BattleLogMessage, MessageType } from '../models';
+import { AttackResult, BattleLogMessage, MessageType, StageRewards } from '../models';
 import { Injectable, signal } from '@angular/core';
 
 @Injectable({
@@ -21,39 +21,55 @@ export class BattleLogService {
     this.AddSeparator();
   }
 
-  public Prestige() {
-    this.AddLog({ Message: 'Prestige!', Type: 'Info' });
+  public Prestige(stage: number) {
+    this.AddSeparator();
+    this.AddLog({
+      Message: 'Prestige!',
+      Submessage: `You reached Stage ${stage}`,
+      Type: 'Info'
+    });
     this.AddSeparator();
   }
 
   public AttackLog(attackResult: AttackResult) {
-    let messageType: MessageType = 'Damage';
+    let message: BattleLogMessage = {
+      Message: `${attackResult.Damage}`,
+      Type: 'Damage'
+    };
 
     if (attackResult.IsCritical && attackResult.IsMultiHit) {
       // this.AddLog({ Message: 'Critical Multi Hit!', Type: 'CritMulti' });
-      messageType = 'CritMulti';
+      message.Type = 'CritMulti';
+      message.Submessage = 'Critical Multi Hit'.toUpperCase();
     } else if (attackResult.IsCritical) {
       // this.AddLog({ Message: 'Critical Hit!', Type: 'Crit' });
-      messageType = 'Crit';
+      message.Type = 'Crit';
+      message.Submessage = 'Critical Hit'.toUpperCase();
     } else if (attackResult.IsMultiHit) {
       // this.AddLog({ Message: 'Multi Hit!', Type: 'Multi' });
-      messageType = 'Multi';
+      message.Type = 'Multi';
+      message.Submessage = 'Multi Hit'.toUpperCase();
     }
 
+    this.AddLog(message);
+  }
+
+  public BossDefeated(stageRewards: StageRewards) {
+    this.AddSeparator();
     this.AddLog({
-      Message: `${attackResult.Damage}`,
-      Type: messageType
+      Message: 'Boss defeated!',
+      Submessage: `⭐ ${stageRewards.Experience} 💰 ${stageRewards.Gold}`,
+      Type: 'BossDefeat'
     });
-  }
-
-  public BossDefeated() {
-    this.AddSeparator();
-    this.AddLog({ Message: 'Boss defeated!', Type: 'BossDefeat' });
     this.AddSeparator();
   }
 
-  public LevelUp() {
-    this.AddLog({ Message: 'Level Up!', Type: 'LevelUp' });
+  public LevelUp(previousLevel: number, newLevel: number) {
+    this.AddLog({
+      Message: 'Level Up!',
+      Submessage: `Level ${previousLevel} → Level ${newLevel}`,
+      Type: 'LevelUp'
+    });
     this.AddSeparator();
   }
 
