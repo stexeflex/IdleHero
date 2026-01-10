@@ -1,14 +1,14 @@
 import { Component, HostListener } from '@angular/core';
 import { Gear, GearType } from '../../shared/models';
+import { Gold, PanelHeader, Separator } from '../../shared/components';
 import { InventoryService, ItemPriceService, VendorService } from '../../shared/services';
 
 import { Enchanting } from './enchanting/enchanting';
 import { GearSlots } from './gear-slots/gear-slots';
-import { Gold } from '../../shared/components';
 
 @Component({
   selector: 'app-inventory-area',
-  imports: [GearSlots, Gold, Enchanting],
+  imports: [GearSlots, Gold, Enchanting, Separator, PanelHeader],
   templateUrl: './inventory-area.html',
   styleUrl: './inventory-area.scss'
 })
@@ -59,6 +59,7 @@ export class InventoryArea {
   }
 
   protected Enchanting: boolean = false;
+  protected EnchantingItem: Gear | null = null;
 
   constructor(
     protected inventoryService: InventoryService,
@@ -100,5 +101,6 @@ export class InventoryArea {
   protected enchantItem(event: MouseEvent) {
     event.stopPropagation();
     this.Enchanting = true;
+    this.EnchantingItem = this.SelectedGear;
   }
 }

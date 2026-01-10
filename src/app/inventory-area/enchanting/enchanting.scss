@@ -1,0 +1,19 @@
+@use "sass:color";
+@use "index" as *;
+
+.container {
+  @include flexbox();
+  width: 100%;
+  height: 100%;
+}
+
+.item-display {
+  @include panel($bg: $clr-gray);
+  @include panel-shadow($border-width: 2px, $border-color: $clr-border);
+  height: 300px;
+  width: 200px;
+}
+
+.enchanting-options {
+  flex: 1;
+}

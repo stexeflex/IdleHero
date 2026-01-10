@@ -7,4 +7,6 @@ export * from './icon/gear-slot.icons';
 export * from './icon/icon-size';
 export * from './icon/icon.component';
 export * from './icon/symbols.icons';
+export * from './panel-header/panel-header';
+export * from './separator/separator';
 export * from './stage-label/stage-label';

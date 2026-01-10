@@ -5,31 +5,12 @@
   @include relative-container();
 }
 
-.header {
-  @include flexbox();
-  @include divider();
-}
-
-.content {
-  @include flexbox($dir: column);
-  gap: $gap;
-}
-
-.separator {
-  width: 100%;
-}
-
-.inventory-items {
-  @include flexbox($dir: column);
-  width: 100%;
-}
-
 .subheader {
   @include flexbox($justify: space-between);
-  width: 100%;
 }
 
 .gear-area {
+  @include relative-container();
   display: grid;
 
   grid:
@@ -37,7 +18,6 @@
     / 1fr 1fr 1fr;
 
   gap: $gap;
-  width: 100%;
 }
 
 .gear-slots {
@@ -57,6 +37,5 @@
 }
 
 .enchanting-area {
-  @include flexbox($dir: column);
-  width: 100%;
+  @include relative-container();
 }

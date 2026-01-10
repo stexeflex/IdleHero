@@ -2,32 +2,13 @@
 @use "index" as *;
 
 .container {
-  @include relative-container();
-
-  display: grid;
-  grid:
-    "header" auto
-    "viewport" 1fr
-    "actions" auto
-    / 1fr;
-}
-
-.header {
-  grid-area: header;
-
-  @include flexbox();
-  @include divider();
 }
 
 .viewport {
-  grid-area: viewport;
+  height: 82vh;
 }
 
 .actions {
-  grid-area: actions;
-
-  @include flexbox();
-  @include divider-top();
-
-  gap: $gap;
+  align-self: center;
+  justify-self: center;
 }

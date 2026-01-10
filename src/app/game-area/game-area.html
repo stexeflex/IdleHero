@@ -1,10 +1,12 @@
 <div class="container">
-  <div class="header">
-    <h2>GAME</h2>
-  </div>
+  <app-panel-header title="GAME"></app-panel-header>
+
   <div class="viewport">
     <app-viewport></app-viewport>
   </div>
+
+  <separator></separator>
+
   <div class="actions">
     @if (gameService.InProgress()) {
       <button class="ih-button" (click)="prestige()">Prestige</button>

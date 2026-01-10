@@ -1,18 +1,22 @@
 <div class="container">
-  <div class="header">
-    <h2>INVENTORY</h2>
-  </div>
+  <app-panel-header title="INVENTORY"></app-panel-header>
+
+  <!-- INVENTORY -->
   <div class="content">
     <div class="inventory-items">
       <div class="subheader">
         <h3>ITEMS</h3>
         <app-gold [amount]="inventoryService.Gold()" size="md"></app-gold>
       </div>
+
+      <!-- GEAR -->
       <div class="gear-area">
         <div class="gear-slots">
           <app-gear-slots
             (gearSlotSelected)="onGearSlotSelected($event.event, $event.slot)"></app-gear-slots>
         </div>
+
+        <!-- ACTIONS -->
         <div class="gear-actions">
           @if (CanBuy) {
             <app-gold [amount]="ItemPrice" size="md"></app-gold>
@@ -30,13 +34,16 @@
         </div>
       </div>
     </div>
-    <hr class="separator" />
+
+    <separator></separator>
+
+    <!-- ENCHANTING -->
     @if (Enchanting) {
       <div class="enchanting-area">
         <div class="subheader">
           <h3>ENCHANTING AREA</h3>
         </div>
-        <app-enchanting></app-enchanting>
+        <app-enchanting [item]="EnchantingItem"></app-enchanting>
       </div>
     }
   </div>

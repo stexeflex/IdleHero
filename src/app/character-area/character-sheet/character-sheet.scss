@@ -2,31 +2,22 @@
 @use "index" as *;
 
 .sheet {
-  @include relative-container();
-  display: grid;
-  grid:
-    "portrait info" auto
-    "stats stats" 1fr
-    / auto 1fr;
-
-  gap: $gap;
+  @include flexbox();
 }
 
+/* === Portrait Section === */
 .sheet__portrait {
-  grid-area: portrait;
   object-fit: cover;
   border-radius: $border-radius;
 }
 
 /* === Info Section === */
 .sheet__info {
-  grid-area: info;
   padding: 0 $gap;
+  flex: 1;
 }
 
 /* === Stats Section === */
-.sheet__stats {
-  grid-area: stats;
+.stats {
   padding: 0 $gap;
-  flex: 1;
 }
