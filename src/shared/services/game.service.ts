@@ -121,6 +121,8 @@ export class GameService {
 
     if (bossDamageResult.DamageDealt < attackResult.Damage) {
       attackPowerOverflow = Math.max(attackResult.Damage - bossDamageResult.DamageDealt, 0);
+    } else {
+      attackPowerOverflow = 0;
     }
 
     return {
@@ -139,7 +141,7 @@ export class GameService {
     }
 
     if (experienceGainResult.LeveledUp) {
-      this.PlayerLevelUp();
+      this.LogPlayerLevelUp();
 
       while (experienceGainResult.ExperienceOverflow > 0) {
         experienceGainResult = await this.levelService.GainExperience(
@@ -153,15 +155,14 @@ export class GameService {
         if (!experienceGainResult.LeveledUp) {
           break;
         } else {
-          this.PlayerLevelUp();
+          this.LogPlayerLevelUp();
         }
       }
     }
   }
 
-  private PlayerLevelUp() {
-    this.battleLogService.LevelUp(this.levelService.Current, this.levelService.Current + 1);
-    this.statsService.LevelUp();
+  private LogPlayerLevelUp() {
+    this.battleLogService.LevelUp(this.levelService.Current(), this.levelService.Current() + 1);
   }
 
   private NextStage() {
