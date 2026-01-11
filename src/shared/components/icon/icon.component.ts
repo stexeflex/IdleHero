@@ -46,7 +46,7 @@ export class IconComponent implements OnChanges {
   }
 
   private sizeMap: Record<IconSize, number> = {
-    sm: 16,
+    sm: 24,
     md: 32,
     lg: 48,
     '2x': 64,

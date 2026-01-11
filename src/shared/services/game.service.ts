@@ -12,6 +12,7 @@ import { Injectable, signal } from '@angular/core';
 import { BattleLogService } from './battle-log.service';
 import { BossService } from './boss.service';
 import { BuffsService } from './buffs-service';
+import { HeroService } from './hero.service';
 import { InventoryService } from './inventory.service';
 import { LevelService } from './level.service';
 import { StageService } from './stage.service';
@@ -23,6 +24,7 @@ import { TimeoutUtils } from '../utils';
 })
 export class GameService {
   constructor(
+    private heroService: HeroService,
     private stageService: StageService,
     private statsService: StatsService,
     private levelService: LevelService,
@@ -59,6 +61,7 @@ export class GameService {
   /* Prestige the game */
   public Prestige() {
     this.battleLogService.Prestige(this.stageService.Current());
+    this.heroService.Prestige(this.stageService.Current());
 
     this._gameInProgress.set(false);
     this.bossService.Reset();

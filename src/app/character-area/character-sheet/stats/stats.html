@@ -2,6 +2,12 @@
   <div class="category">
     <div class="grid-header">
       <h2>Attributes</h2>
+      @if (ShowSkillPoints) {
+        <div class="skill-points">
+          {{ SkillPoints }}
+          <app-icon class="skill-points__icon" symbol="orb" size="sm"></app-icon>
+        </div>
+      }
     </div>
     <div class="grid">
       @for (attribute of Attributes; track attribute.label) {

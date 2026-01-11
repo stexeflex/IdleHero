@@ -1,13 +1,19 @@
 <!-- Header -->
 <div class="header">
   <div class="header__name">{{ heroService.Name() }}</div>
-  <div class="header__level">
-    <div class="level__label">Level:</div>
-    <div class="level__value">
-      {{ levelService.Current() }}
-    </div>
-  </div>
-  <div class="header__class">{{ heroService.Class() }}</div>
+  <app-number-value
+    class="header__level"
+    [label]="'Level:'"
+    [value]="levelService.Current()"></app-number-value>
+  <app-number-value
+    class="header__prestige"
+    [label]="'Prestiges:'"
+    [value]="heroService.PrestigeLevel()"></app-number-value>
+  <app-number-value
+    class="header__stage"
+    [label]="'Highest Stage:'"
+    [label]="'Highest Stage:'"
+    [value]="heroService.HighestStageReached()"></app-number-value>
 </div>
 
 <!-- Summary -->

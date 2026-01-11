@@ -2,10 +2,11 @@ import { DecimalPipe } from '@angular/common';
 import { HeroService, LevelService, StatsService } from '../../../../shared/services';
 
 import { Component, Inject, LOCALE_ID } from '@angular/core';
+import { NumberValue } from '../../../../shared/components/number-value/number-value';
 
 @Component({
   selector: 'app-info',
-  imports: [],
+  imports: [NumberValue],
   templateUrl: './info.html',
   styleUrl: './info.scss'
 })
@@ -28,13 +29,6 @@ export class Info {
       {
         label: 'Attack Power',
         value: this.decimalPipe.transform(this.statsService.AttackPower()) || this.PLACEHOLDER
-      },
-      {
-        label: 'Unspent Skill Points',
-        value:
-          this.levelService.TotalSkillPoints() > 0
-            ? this.levelService.UnspentSkillPoints() + ' / ' + this.levelService.TotalSkillPoints()
-            : this.PLACEHOLDER
       }
     ];
   }

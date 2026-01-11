@@ -4,6 +4,12 @@ import { Injectable, signal } from '@angular/core';
   providedIn: 'root'
 })
 export class HeroService {
-  public Name = signal('Hero');
-  public Class = signal('Wizard');
+  public readonly Name = signal('Hero');
+  public PrestigeLevel = signal(0);
+  public HighestStageReached = signal(0);
+
+  public Prestige(atStage: number) {
+    this.PrestigeLevel.update((level) => level + 1);
+    this.HighestStageReached.update((highest) => Math.max(highest, atStage));
+  }
 }
