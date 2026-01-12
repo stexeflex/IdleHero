@@ -19,15 +19,22 @@
   @include button-text-font();
   @include button-focus-visible-outline();
 
-  @include panel($bg: $clr-ui-bg, $padding: 0);
-  @include panel-shadow($border-width: 2px, $border-color: $clr-gray);
+  @include flexbox($dir: column, $align: center, $justify: center);
+  @include panel($bg: $clr-ui-bg);
+  @include box-shadow();
 
-  height: 100px;
-  width: 100px;
+  height: 110px;
+  width: 110px;
+
+  display: flex;
 }
 
 .gear-slot-large {
-  height: calc(200px + $gap);
+  height: calc(220px + $gap);
+}
+
+.gear-slot__icon {
+  flex: 1;
 }
 
 .weapon {
@@ -49,10 +56,17 @@
   grid-area: boots;
 }
 
+.equipped {
+  border-width: 3px;
+}
+
 .unequipped {
+  border: 2px solid $clr-gray;
   opacity: 0.5;
 }
 
 .selected {
-  border: 3px solid $clr-border;
+  // border: 3px solid $clr-border;
+  border-width: 4px;
+  background: $grad-ui-bg-lighten;
 }

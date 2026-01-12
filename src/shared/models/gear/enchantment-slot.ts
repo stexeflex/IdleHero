@@ -8,11 +8,11 @@ export class EnchantmentSlot {
   }
 
   public get CanUpgrade(): boolean {
-    return this.IsEnchanted && this.EnchantmentLevel < EnchantmentSlot.MAX_ENCHANTMENT_LEVEL;
+    return this.IsEnchanted && this.Level < EnchantmentSlot.MAX_ENCHANTMENT_LEVEL;
   }
 
   public readonly Name: string;
-  public EnchantmentLevel: number = 0;
+  public Level: number = 0;
   public Enchantment!: Enchantment;
 
   constructor(public Id: number) {

@@ -1,50 +1,20 @@
 <div class="gear-slots">
-  <!-- Head -->
-  <button
-    class="gear-slot head"
-    (click)="SelectGearSlot($event, GearType.Head)"
-    [class.selected]="IsSelected(GearType.Head)"
-    [class.unequipped]="IsUnequipped(GearType.Head)">
-    <app-icon gear="head" size="2x"></app-icon>
-  </button>
-  <!-- Chest -->
-  <button
-    class="gear-slot chest"
-    (click)="SelectGearSlot($event, GearType.Chest)"
-    [class.selected]="IsSelected(GearType.Chest)"
-    [class.unequipped]="IsUnequipped(GearType.Chest)">
-    <app-icon gear="chest" size="2x"></app-icon>
-  </button>
-  <!-- Legs -->
-  <button
-    class="gear-slot legs"
-    (click)="SelectGearSlot($event, GearType.Legs)"
-    [class.selected]="IsSelected(GearType.Legs)"
-    [class.unequipped]="IsUnequipped(GearType.Legs)">
-    <app-icon gear="legs" size="2x"></app-icon>
-  </button>
-  <!-- Boots -->
-  <button
-    class="gear-slot boots"
-    (click)="SelectGearSlot($event, GearType.Boots)"
-    [class.selected]="IsSelected(GearType.Boots)"
-    [class.unequipped]="IsUnequipped(GearType.Boots)">
-    <app-icon gear="boots" size="2x"></app-icon>
-  </button>
-  <!-- Weapon -->
-  <button
-    class="gear-slot gear-slot-large weapon"
-    (click)="SelectGearSlot($event, GearType.Weapon)"
-    [class.selected]="IsSelected(GearType.Weapon)"
-    [class.unequipped]="IsUnequipped(GearType.Weapon)">
-    <app-icon gear="sword" size="3x"></app-icon>
-  </button>
-  <!-- Shield -->
-  <button
-    class="gear-slot gear-slot-large shield"
-    (click)="SelectGearSlot($event, GearType.Shield)"
-    [class.selected]="IsSelected(GearType.Shield)"
-    [class.unequipped]="IsUnequipped(GearType.Shield)">
-    <app-icon gear="shield" size="3x"></app-icon>
-  </button>
+  @for (gearSlot of GearSlots; track gearSlot.type) {
+    <button
+      class="gear-slot"
+      [class]="gearSlot.class"
+      (click)="SelectGearSlot($event, gearSlot.type)"
+      [class.selected]="IsSelected(gearSlot.type)"
+      [class.unequipped]="IsUnequipped(gearSlot.type)"
+      [class.equipped]="IsEquipped(gearSlot.type)"
+      [class.common--border]="GetHighestEnchantmentLevel(gearSlot.type) === 1"
+      [class.magic--border]="GetHighestEnchantmentLevel(gearSlot.type) === 2"
+      [class.rare--border]="GetHighestEnchantmentLevel(gearSlot.type) === 3"
+      [class.epic--border]="GetHighestEnchantmentLevel(gearSlot.type) === 4"
+      [class.legendary--border]="GetHighestEnchantmentLevel(gearSlot.type) === 5">
+      <app-icon class="gear-slot__icon" [gear]="gearSlot.icon" size="2x"></app-icon>
+      <app-enchantment-slot-icon [enchantments]="GetEnchantments(gearSlot.type)" size="12">
+      </app-enchantment-slot-icon>
+    </button>
+  }
 </div>

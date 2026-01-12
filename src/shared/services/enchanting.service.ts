@@ -29,21 +29,33 @@ export class EnchantingService {
     const enchantment: Enchantment = this.CreateEnchantment(item.Type);
 
     item.EnchantmentSlots[slotIndex].Enchantment = enchantment;
-    item.EnchantmentSlots[slotIndex].EnchantmentLevel = 1;
+    item.EnchantmentSlots[slotIndex].Level = 1;
 
     this.inventoryService.SetGearForSlot(item.Type, item);
   }
 
-  public Disenchant(item: Gear, slotIndex: number) {
+  public Reroll(item: Gear, slotIndex: number) {
     if (!item.EnchantmentSlots[slotIndex].IsEnchanted) {
       return;
     }
+    const enchantment: Enchantment = this.CreateEnchantment(item.Type);
 
-    item.EnchantmentSlots[slotIndex].Enchantment = undefined!;
-    item.EnchantmentSlots[slotIndex].EnchantmentLevel = 0;
+    item.EnchantmentSlots[slotIndex].Enchantment = enchantment;
+    item.EnchantmentSlots[slotIndex].Level = 1;
 
     this.inventoryService.SetGearForSlot(item.Type, item);
   }
+
+  // public Disenchant(item: Gear, slotIndex: number) {
+  //   if (!item.EnchantmentSlots[slotIndex].IsEnchanted) {
+  //     return;
+  //   }
+
+  //   item.EnchantmentSlots[slotIndex].Enchantment = undefined!;
+  //   item.EnchantmentSlots[slotIndex].Level = 0;
+
+  //   this.inventoryService.SetGearForSlot(item.Type, item);
+  // }
 
   public Upgrade(item: Gear, slotIndex: number) {
     if (!item.EnchantmentSlots[slotIndex].CanUpgrade) {
@@ -59,7 +71,7 @@ export class EnchantingService {
         enchantmentSlot.Enchantment.Value * this.ENCHANTMENT_MODIFIER
       );
     }
-    enchantmentSlot.EnchantmentLevel++;
+    enchantmentSlot.Level++;
     item.EnchantmentSlots[slotIndex] = enchantmentSlot;
 
     this.inventoryService.SetGearForSlot(item.Type, item);

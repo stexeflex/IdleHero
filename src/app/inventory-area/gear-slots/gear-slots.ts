@@ -1,30 +1,62 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-
-import { GearType } from '../../../shared/models';
-import { IconComponent } from '../../../shared/components';
-import { InventoryService } from '../../../shared/services';
+import { EnchantmentSlot, GearType } from '../../../shared/models';
+import { EnchantmentSlotIcon, GearSlotIconName, IconComponent } from '../../../shared/components';
+import { InventoryService, SelectedGearService } from '../../../shared/services';
 
 @Component({
   selector: 'app-gear-slots',
-  imports: [IconComponent],
+  imports: [IconComponent, EnchantmentSlotIcon],
   templateUrl: './gear-slots.html',
   styleUrl: './gear-slots.scss'
 })
 export class GearSlots {
-  protected GearType = GearType;
-  protected SelectedGear: GearType | null = null;
+  protected get GearSlots(): { type: GearType; class: string; icon: GearSlotIconName }[] {
+    return [
+      { type: GearType.Weapon, class: 'weapon gear-slot-large', icon: 'sword' },
+      { type: GearType.Shield, class: 'shield gear-slot-large', icon: 'shield' },
+      { type: GearType.Head, class: 'head', icon: 'head' },
+      { type: GearType.Chest, class: 'chest', icon: 'chest' },
+      { type: GearType.Legs, class: 'legs', icon: 'legs' },
+      { type: GearType.Boots, class: 'boots', icon: 'boots' }
+    ];
+  }
 
-  @Output() gearSlotSelected = new EventEmitter<{ event: MouseEvent; slot: GearType }>();
+  @Output() GearSlotSelected = new EventEmitter<{ event: MouseEvent; slot: GearType }>();
 
-  constructor(private inventoryService: InventoryService) {}
+  constructor(
+    private selectedGearService: SelectedGearService,
+    private inventoryService: InventoryService
+  ) {}
 
   protected SelectGearSlot(event: MouseEvent, slot: GearType): void {
-    this.SelectedGear = slot;
-    this.gearSlotSelected.emit({ event, slot });
+    this.GearSlotSelected.emit({ event, slot });
+  }
+
+  protected GetEnchantments(slot: GearType): EnchantmentSlot[] {
+    switch (slot) {
+      case GearType.Weapon:
+        return this.inventoryService.Weapon()?.EnchantmentSlots ?? [];
+      case GearType.Shield:
+        return this.inventoryService.Shield()?.EnchantmentSlots ?? [];
+      case GearType.Head:
+        return this.inventoryService.Head()?.EnchantmentSlots ?? [];
+      case GearType.Chest:
+        return this.inventoryService.Chest()?.EnchantmentSlots ?? [];
+      case GearType.Legs:
+        return this.inventoryService.Legs()?.EnchantmentSlots ?? [];
+      case GearType.Boots:
+        return this.inventoryService.Boots()?.EnchantmentSlots ?? [];
+      default:
+        return [];
+    }
   }
 
   protected IsSelected(slot: GearType): boolean {
-    return this.SelectedGear === slot;
+    return this.selectedGearService.Type() === slot;
+  }
+
+  protected IsEquipped(slot: GearType): boolean {
+    return !this.IsUnequipped(slot);
   }
 
   protected IsUnequipped(slot: GearType): boolean {
@@ -43,6 +75,25 @@ export class GearSlots {
         return !this.inventoryService.Boots() && !this.IsSelected(slot);
       default:
         return false;
+    }
+  }
+
+  protected GetHighestEnchantmentLevel(slot: GearType): number {
+    switch (slot) {
+      case GearType.Weapon:
+        return this.inventoryService.Weapon()?.HighestEnchantmentLevel ?? 0;
+      case GearType.Shield:
+        return this.inventoryService.Shield()?.HighestEnchantmentLevel ?? 0;
+      case GearType.Head:
+        return this.inventoryService.Head()?.HighestEnchantmentLevel ?? 0;
+      case GearType.Chest:
+        return this.inventoryService.Chest()?.HighestEnchantmentLevel ?? 0;
+      case GearType.Legs:
+        return this.inventoryService.Legs()?.HighestEnchantmentLevel ?? 0;
+      case GearType.Boots:
+        return this.inventoryService.Boots()?.HighestEnchantmentLevel ?? 0;
+      default:
+        return 0;
     }
   }
 }

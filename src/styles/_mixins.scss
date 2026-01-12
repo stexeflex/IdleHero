@@ -97,6 +97,10 @@
   box-shadow: $shadow $shadow-color;
 }
 
+@mixin box-shadow($shadow: 0 8px 20px, $shadow-color: $clr-box-shadow) {
+  box-shadow: $shadow $shadow-color;
+}
+
 /* ========== Button Mixins ========== */
 @mixin button-text-font($weight: 700, $shadow: true) {
   font-family: $font-family-header;

@@ -2,6 +2,7 @@ import { Component, HostBinding, Input, OnChanges, inject } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { GEAR_SLOT_ICONS, GearSlotIconName } from './gear-slot.icons';
 import { SYMBOLS_ICONS, SymbolsIconName } from './symbols.icons';
+import { UI_ICONS, UiIconName } from './ui.icons';
 
 import { IconSize } from './icon-size';
 
@@ -35,8 +36,10 @@ export class IconComponent implements OnChanges {
   private sanitizer = inject(DomSanitizer);
 
   @Input() size: IconSize = 'lg';
+
   @Input() gear?: GearSlotIconName;
   @Input() symbol?: SymbolsIconName;
+  @Input() ui?: UiIconName;
 
   @HostBinding('style.width.px') get width() {
     return this.sizeMap[this.size];
@@ -72,6 +75,8 @@ export class IconComponent implements OnChanges {
       path = GEAR_SLOT_ICONS[this.gear];
     } else if (this.symbol !== undefined) {
       path = SYMBOLS_ICONS[this.symbol];
+    } else if (this.ui !== undefined) {
+      path = UI_ICONS[this.ui];
     }
 
     return path;

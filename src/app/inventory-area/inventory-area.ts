@@ -1,14 +1,19 @@
 import { Component, ElementRef, HostListener, inject } from '@angular/core';
 import { Gear, GearType } from '../../shared/models';
-import { Gold, PanelHeader, Separator } from '../../shared/components';
-import { InventoryService, ItemPriceService, VendorService } from '../../shared/services';
+import { Gold, IconComponent, PanelHeader, Separator } from '../../shared/components';
+import {
+  InventoryService,
+  ItemPriceService,
+  SelectedGearService,
+  VendorService
+} from '../../shared/services';
 
 import { Enchanting } from './enchanting/enchanting';
 import { GearSlots } from './gear-slots/gear-slots';
 
 @Component({
   selector: 'app-inventory-area',
-  imports: [GearSlots, Gold, Enchanting, Separator, PanelHeader],
+  imports: [GearSlots, Gold, Enchanting, Separator, PanelHeader, IconComponent],
   templateUrl: './inventory-area.html',
   styleUrl: './inventory-area.scss'
 })
@@ -18,7 +23,7 @@ export class InventoryArea {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     if (!this.elementRef.nativeElement.contains(event.target)) {
-      this.deselectGearSlot();
+      this.selectedGearService.DeselectGear();
     }
   }
 
@@ -52,32 +57,33 @@ export class InventoryArea {
     return this.SelectedGear.SellValue;
   }
 
-  private SelectedGearSlot: GearType | null = null;
+  private get SelectedGearSlot(): GearType | null {
+    return this.selectedGearService.Type();
+  }
 
   protected get SelectedGear(): Gear | null {
-    if (this.SelectedGearSlot === null) {
-      return null;
-    }
-
-    return this.inventoryService.GetGearForSlot(this.SelectedGearSlot);
+    return this.selectedGearService.Selected();
   }
 
   constructor(
+    protected selectedGearService: SelectedGearService,
     protected inventoryService: InventoryService,
     private itemPriceService: ItemPriceService,
     private vendorService: VendorService
   ) {}
 
-  protected onGearSlotSelected(event: MouseEvent, slot: GearType) {
+  protected OnGearSlotSelected(event: MouseEvent, slot: GearType) {
     event.stopPropagation();
-    this.SelectedGearSlot = slot;
+    this.SelectGear(slot);
   }
 
-  private deselectGearSlot(): void {
-    this.SelectedGearSlot = null;
+  private SelectGear(slot: GearType) {
+    const selected: Gear | null = this.inventoryService.GetGearForSlot(slot);
+    this.selectedGearService.SetSelectedGear(selected);
+    this.selectedGearService.SetSelectedGearType(slot);
   }
 
-  protected buyItem(event: MouseEvent) {
+  protected BuyItem(event: MouseEvent) {
     event.stopPropagation();
 
     if (this.SelectedGearSlot === null) {
@@ -85,9 +91,10 @@ export class InventoryArea {
     }
 
     this.vendorService.BuyItem(this.SelectedGearSlot);
+    this.SelectGear(this.SelectedGearSlot);
   }
 
-  protected sellItem(event: MouseEvent) {
+  protected SellItem(event: MouseEvent) {
     event.stopPropagation();
 
     if (this.SelectedGearSlot === null) {
@@ -95,6 +102,6 @@ export class InventoryArea {
     }
 
     this.vendorService.SellItem(this.SelectedGearSlot);
-    this.deselectGearSlot();
+    this.selectedGearService.DeselectGear();
   }
 }

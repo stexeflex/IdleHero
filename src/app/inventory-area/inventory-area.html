@@ -13,20 +13,20 @@
       <div class="gear-area">
         <div class="gear-slots">
           <app-gear-slots
-            (gearSlotSelected)="onGearSlotSelected($event.event, $event.slot)"></app-gear-slots>
+            (GearSlotSelected)="OnGearSlotSelected($event.event, $event.slot)"></app-gear-slots>
         </div>
 
         <!-- ACTIONS -->
         <div class="gear-actions">
           @if (CanBuy) {
             <app-gold [amount]="ItemPrice" size="md"></app-gold>
-            <button class="ih-button" (click)="buyItem($event)" [disabled]="!EnoughGoldToBuy">
+            <button class="ih-button" (click)="BuyItem($event)" [disabled]="!EnoughGoldToBuy">
               Buy
             </button>
           }
           @if (CanSell) {
             <app-gold [amount]="SellValue" size="md"></app-gold>
-            <button class="ih-button" (click)="sellItem($event)">Sell</button>
+            <button class="ih-button" (click)="SellItem($event)">Sell</button>
           }
         </div>
       </div>
@@ -38,10 +38,19 @@
     <div class="enchanting-area">
       @if (CanEnchant) {
         <div class="subheader">
-          <h3>ENCHANTING AREA</h3>
+          <h3>ENCHANTING</h3>
           <h3>{{ SelectedGear!.Type.toUpperCase() }}</h3>
+          <button
+            class="ih-button-icon button-cancel"
+            (click)="selectedGearService.DeselectGear()"
+            title="Clear Selection">
+            <app-icon ui="cancel" size="md"></app-icon>
+          </button>
         </div>
-        <app-enchanting [item]="SelectedGear!"></app-enchanting>
+        @if (SelectedGear) {
+          <app-enchanting [Item]="SelectedGear"></app-enchanting>
+          <separator></separator>
+        }
       }
     </div>
   </div>

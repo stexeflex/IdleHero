@@ -1,35 +1,61 @@
 <div class="item">
+  <!-- ITEM DISPLAY -->
   <div class="item-display">
-    <app-icon [gear]="GearIcon" size="5x"></app-icon>
+    <app-icon class="item__icon" [gear]="GearIcon" size="5x"></app-icon>
+    <app-enchantment-slot-icon [enchantments]="Item.EnchantmentSlots"></app-enchantment-slot-icon>
+    <separator class="item__separator"></separator>
+    <h3 class="item__name" [class.item__name--small]="Item.Innate.DisplayName.length > 22">
+      {{ Item.Innate.DisplayName }}
+    </h3>
   </div>
+
+  <!-- ENCHANTMENT SLOTS -->
   <div class="item-slots">
-    @for (slot of item.EnchantmentSlots; track $index) {
-      <button
-        class="item-slot"
-        (click)="OnEnchantmentSlotSelected(slot, $index)"
-        [class.selected]="selectedSlotIndex === $index">
-        <h2>{{ GetSlotDescription(slot) }}</h2>
-      </button>
+    @for (slot of Item.EnchantmentSlots; track $index) {
+      <div class="slot-row">
+        <!-- REROLL BUTTON -->
+        @if (ShowRerollAction(slot)) {
+          <button
+            class="ih-button-icon button-reroll"
+            (click)="Reroll($index)"
+            [disabled]="!CanReroll()">
+            <app-icon ui="rotation" size="md"></app-icon>
+          </button>
+        }
+
+        <!-- ENCHANTMENT SLOT BUTTON -->
+        @if (CanEnchantSlot(slot)) {
+          <button
+            class="button-empty-slot"
+            (click)="EnchantSlot($index)"
+            [disabled]="!CanEnchant(slot)">
+            <h2>Enchant Item Slot #{{ slot.Id }}</h2>
+            <app-gold [amount]="100"></app-gold>
+          </button>
+        } @else {
+          <div
+            class="enchanted-slot"
+            [class.common--border]="slot.Level === 1"
+            [class.magic--border]="slot.Level === 2"
+            [class.rare--border]="slot.Level === 3"
+            [class.epic--border]="slot.Level === 4"
+            [class.legendary--border]="slot.Level === 5">
+            <div class="enchanted-slot-description">
+              <h2>{{ GetEnchantmentDescription(slot) }}</h2>
+            </div>
+          </div>
+        }
+
+        <!-- UPGRADE BUTTON -->
+        @if (ShowUpgradeAction(slot)) {
+          <button
+            class="ih-button-icon button-upgrade"
+            (click)="Upgrade($index)"
+            [disabled]="!CanUpgrade(slot)">
+            <app-icon ui="arrow" size="md"></app-icon>
+          </button>
+        }
+      </div>
     }
   </div>
-</div>
-
-<separator></separator>
-
-<div class="enchanting-options">
-  @if (CanEnchant) {
-    <button class="ih-button enchant-button" (click)="Enchant()" [disabled]="!CanEnchant">
-      Enchant
-    </button>
-  } @else if (CanDisenchant) {
-    <button class="ih-button enchant-button" (click)="Disenchant()" [disabled]="!CanDisenchant">
-      Disenchant
-    </button>
-  }
-
-  @if (CanDisenchant) {
-    <button class="ih-button enchant-button" (click)="Upgrade()" [disabled]="!CanUpgrade">
-      Upgrade
-    </button>
-  }
 </div>

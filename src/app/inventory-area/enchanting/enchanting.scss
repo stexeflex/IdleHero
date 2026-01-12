@@ -11,6 +11,7 @@
 .item-display {
   grid-area: item-display;
 
+  @include flexbox($dir: column, $align: center, $justify: center);
   @include panel($bg: $clr-ui-bg);
   @include panel-shadow($border-width: 2px, $border-color: $clr-border);
 
@@ -20,14 +21,21 @@
   width: 220px;
 
   display: flex;
+}
 
-  // Center Display
-  // justify-self: center;
-  // align-self: center;
+.item__icon {
+  flex: 1;
+}
 
-  // Center Icon
-  justify-items: center;
-  align-items: center;
+.item__separator {
+  width: 100%;
+}
+
+.item__name {
+}
+
+.item__name--small {
+  font-size: 1em;
 }
 
 .item-slots {
@@ -38,36 +46,64 @@
   gap: $gap;
 }
 
-.item-slot {
+.slot-row {
+  @include flexbox($dir: row, $align: center, $justify: center);
+  width: 100%;
+  gap: $gap;
+}
+
+.button-empty-slot,
+.enchanted-slot {
   @include button-text-font();
-  @include button-focus-visible-outline();
+  @include button-hover-active(
+    $bg-color: color.scale($clr-ui-bg, $lightness: 10%),
+    $bg-color-active: color.scale($clr-ui-bg, $lightness: 10%)
+  );
 
   @include panel($bg: $clr-ui-bg);
-  @include panel-shadow($border-width: 2px, $border-color: $clr-gray);
+  @include box-shadow();
 
   height: 70px;
-  width: 90%;
+  width: 425px;
+}
+
+.button-empty-slot {
+  @include button-focus-visible-outline();
+
+  border-width: 1px;
+  border-style: dashed;
 
   > h2 {
-    font-size: 1.8em;
     font-weight: normal;
   }
 }
 
-.selected {
-  border: 3px solid $clr-border;
+.enchanted-slot {
+  text-align: center;
 
+  border-width: 4px;
+  border-style: solid;
+}
+
+.enchanted-slot-description {
   > h2 {
-    font-size: 2em;
+    // font-size: 2em;
     font-weight: bold;
   }
 }
 
-.enchanting-options {
-  @include flexbox();
-  gap: $gap;
+.button-upgrade {
+  rotate: 180deg;
 }
 
-.enchant-button {
-  width: 150px;
+.button-upgrade,
+.button-reroll {
+  @include button-hover-active(
+    $bg-color: color.scale($clr-ui-bg, $lightness: 30%),
+    $bg-color-active: color.scale($clr-ui-bg, $lightness: 50%)
+  );
+
+  border: 3px solid $clr-border;
+  border-radius: 50%;
+  padding: calc($gap / 2);
 }

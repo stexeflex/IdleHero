@@ -1,0 +1,44 @@
+@use "colors" as *;
+
+// Border Colors
+.common--border {
+  border-color: $clr-common;
+}
+
+.magic--border {
+  border-color: $clr-magic;
+}
+
+.rare--border {
+  border-color: $clr-rare;
+}
+
+.epic--border {
+  border-color: $clr-epic;
+}
+
+.legendary--border {
+  border-color: $clr-legendary;
+}
+
+// Font Colors
+.common--font {
+  // color: $clr-common;
+  color: $clr-text-primary;
+}
+
+.magic--font {
+  color: $clr-magic;
+}
+
+.rare--font {
+  color: $clr-rare;
+}
+
+.epic--font {
+  color: $clr-epic;
+}
+
+.legendary--font {
+  color: $clr-legendary;
+}

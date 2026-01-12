@@ -1,0 +1,18 @@
+@use "sass:color";
+@use "index" as *;
+
+.slots {
+  @include flexbox();
+  gap: $gap;
+}
+
+.slot {
+  border-width: 5px;
+  border-style: solid;
+  border-radius: 50%;
+}
+
+.unenchanted {
+  border-color: $clr-gray;
+  opacity: 0.5;
+}

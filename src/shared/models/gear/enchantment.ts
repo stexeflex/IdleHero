@@ -30,6 +30,12 @@ export class Enchantment {
       case 'AttackSpeed':
         return 'x' + Math.round(this.Value * 100) + '% Attack Speed';
 
+      case 'MultiHitChance':
+        return 'x' + Math.round(this.Value * 100) + '% Multi-Hit Chance';
+
+      case 'MultiHitDamage':
+        return 'x' + Math.round(this.Value * 100) + '% Multi-Hit Damage';
+
       default:
         return stat;
     }
