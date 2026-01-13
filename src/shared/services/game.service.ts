@@ -12,11 +12,11 @@ import { Injectable, signal } from '@angular/core';
 import { BattleLogService } from './battle-log.service';
 import { BossService } from './boss.service';
 import { BuffsService } from './buffs-service';
-import { HeroService } from './hero.service';
-import { InventoryService } from './inventory.service';
-import { LevelService } from './level.service';
+import { CurrencyService } from './character/currency.service';
+import { HeroService } from './character/hero.service';
+import { LevelService } from './character/level.service';
 import { StageService } from './stage.service';
-import { StatsService } from './stats.service';
+import { StatsService } from './character/stats.service';
 import { TimeoutUtils } from '../utils';
 
 @Injectable({
@@ -31,7 +31,7 @@ export class GameService {
     private bossService: BossService,
     private battleLogService: BattleLogService,
     private buffsService: BuffsService,
-    private inventoryService: InventoryService
+    private currencyService: CurrencyService
   ) {}
 
   private _gameInProgress = signal(false);
@@ -137,7 +137,7 @@ export class GameService {
   }
 
   private async RewardPhase(rewards: StageRewards) {
-    this.inventoryService.AddGold(rewards.Gold);
+    this.currencyService.AddGold(rewards.Gold);
     let experienceGainResult: ExperienceGainResult = await this.levelService.GainExperience(
       rewards.Experience
     );

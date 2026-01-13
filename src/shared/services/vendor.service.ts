@@ -1,7 +1,8 @@
 import { Gear, GearType } from '../models';
 
+import { CurrencyService } from './character/currency.service';
 import { Injectable } from '@angular/core';
-import { InventoryService } from './inventory.service';
+import { InventoryService } from './character/inventory.service';
 import { ItemPriceService } from './item-price.service';
 
 @Injectable({
@@ -9,6 +10,7 @@ import { ItemPriceService } from './item-price.service';
 })
 export class VendorService {
   constructor(
+    private currencyService: CurrencyService,
     private inventoryService: InventoryService,
     private itemPriceService: ItemPriceService
   ) {}
@@ -16,11 +18,8 @@ export class VendorService {
   public BuyItem(slot: GearType) {
     const price = this.itemPriceService.GetBuyPrice(slot);
 
-    if (this.inventoryService.Gold() >= price) {
-      this.inventoryService.Gold.update((gold) => gold - price);
-
+    if (this.currencyService.SpendGold(price)) {
       const item = Gear.Create(slot);
-
       this.inventoryService.SetGearForSlot(slot, item);
     }
   }
@@ -29,7 +28,7 @@ export class VendorService {
     const gear = this.inventoryService.GetGearForSlot(slot);
 
     if (gear !== null) {
-      this.inventoryService.Gold.update((gold) => gold + gear.SellValue);
+      this.currencyService.AddGold(gear.SellValue);
       this.inventoryService.RemoveGearFromSlot(slot);
     }
   }

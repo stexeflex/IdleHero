@@ -4,7 +4,7 @@ import { GearType } from './gear-type';
 import { StatType } from '../stats/stat-type';
 
 export abstract class Gear {
-  protected static readonly DEFAULT_SELL_MULTIPLIER = 0.5;
+  public static readonly DEFAULT_SELLVALUE_MULTIPLIER = 0.5;
 
   public readonly Enchantments: EnchantmentSlot[] = [];
   public SellValue: number;
@@ -35,7 +35,7 @@ export abstract class Gear {
   }
 
   private static CalculateSellValue(price: number): number {
-    return Math.floor(price * Gear.DEFAULT_SELL_MULTIPLIER);
+    return Math.floor(price * Gear.DEFAULT_SELLVALUE_MULTIPLIER);
   }
 
   public static Create(slot: GearType): Gear {

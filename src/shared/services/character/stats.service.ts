@@ -7,11 +7,11 @@ import {
   CriticalHitDamage,
   MultiHitChance,
   MultiHitDamage
-} from '../models';
+} from '../../models';
 import { Injectable, computed, signal } from '@angular/core';
 
-import { BuffsService } from './buffs-service';
-import { ChanceUtils } from '../utils';
+import { BuffsService } from '../buffs-service';
+import { ChanceUtils } from '../../utils';
 import { InventoryService } from './inventory.service';
 import { LevelService } from './level.service';
 

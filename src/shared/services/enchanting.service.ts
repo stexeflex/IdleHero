@@ -10,8 +10,10 @@ import {
   WEAPON_ENCHANTMENT_POOL
 } from '../models';
 
+import { CurrencyService } from './character/currency.service';
 import { Injectable } from '@angular/core';
-import { InventoryService } from './inventory.service';
+import { InventoryService } from './character/inventory.service';
+import { ItemPriceService } from './item-price.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,10 +21,20 @@ import { InventoryService } from './inventory.service';
 export class EnchantingService {
   private readonly ENCHANTMENT_MODIFIER = 1.2;
 
-  constructor(private inventoryService: InventoryService) {}
+  constructor(
+    private inventoryService: InventoryService,
+    private itemPriceService: ItemPriceService,
+    private currencyService: CurrencyService
+  ) {}
 
   public Enchant(item: Gear, slotIndex: number) {
     if (item.Enchantments[slotIndex].IsEnchanted) {
+      return;
+    }
+
+    const enchantmentCost = this.itemPriceService.GetEnchantmentCost(item);
+
+    if (!this.currencyService.SpendGold(enchantmentCost)) {
       return;
     }
 
@@ -30,6 +42,8 @@ export class EnchantingService {
 
     item.Enchantments[slotIndex].Enchantment = enchantment;
     item.Enchantments[slotIndex].Level = 1;
+
+    item.SellValue += Math.floor(enchantmentCost * Gear.DEFAULT_SELLVALUE_MULTIPLIER);
 
     this.inventoryService.SetGearForSlot(item.Type, item);
   }
@@ -38,31 +52,36 @@ export class EnchantingService {
     if (!item.Enchantments[slotIndex].IsEnchanted) {
       return;
     }
+
+    const rerollCost = this.itemPriceService.GetRerollCost();
+
+    if (!this.currencyService.SpendGold(rerollCost)) {
+      return;
+    }
+
     const enchantment: Enchantment = this.CreateEnchantment(item.Type);
 
     item.Enchantments[slotIndex].Enchantment = enchantment;
     item.Enchantments[slotIndex].Level = 1;
 
+    item.SellValue += Math.floor(rerollCost * Gear.DEFAULT_SELLVALUE_MULTIPLIER);
+
     this.inventoryService.SetGearForSlot(item.Type, item);
   }
-
-  // public Disenchant(item: Gear, slotIndex: number) {
-  //   if (!item.EnchantmentSlots[slotIndex].IsEnchanted) {
-  //     return;
-  //   }
-
-  //   item.EnchantmentSlots[slotIndex].Enchantment = undefined!;
-  //   item.EnchantmentSlots[slotIndex].Level = 0;
-
-  //   this.inventoryService.SetGearForSlot(item.Type, item);
-  // }
 
   public Upgrade(item: Gear, slotIndex: number) {
     if (!item.Enchantments[slotIndex].CanUpgrade) {
       return;
     }
 
+    const upgradeCost = this.itemPriceService.GetUpgradeCost(item.Enchantments[slotIndex]);
+
+    if (!this.currencyService.SpendGold(upgradeCost)) {
+      return;
+    }
+
     const enchantmentSlot = item.Enchantments[slotIndex];
+
     if (enchantmentSlot.Enchantment.Value < 1) {
       enchantmentSlot.Enchantment.Value =
         Math.ceil(enchantmentSlot.Enchantment.Value * this.ENCHANTMENT_MODIFIER * 100) / 100;
@@ -71,8 +90,11 @@ export class EnchantingService {
         enchantmentSlot.Enchantment.Value * this.ENCHANTMENT_MODIFIER
       );
     }
+
     enchantmentSlot.Level++;
     item.Enchantments[slotIndex] = enchantmentSlot;
+
+    item.SellValue += Math.floor(upgradeCost * Gear.DEFAULT_SELLVALUE_MULTIPLIER);
 
     this.inventoryService.SetGearForSlot(item.Type, item);
   }

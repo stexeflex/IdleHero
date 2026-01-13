@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 
-import { ExperienceGainResult } from '../models/results/experience-gain-result';
-import { TimeoutUtils } from '../utils';
+import { ExperienceGainResult } from '../../models';
+import { TimeoutUtils } from '../../utils';
 
 @Injectable({
   providedIn: 'root'

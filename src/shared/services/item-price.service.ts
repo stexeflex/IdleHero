@@ -1,4 +1,14 @@
-import { Boots, Chest, GearType, Head, Legs, Shield, Weapon } from '../models';
+import {
+  Boots,
+  Chest,
+  EnchantmentSlot,
+  Gear,
+  GearType,
+  Head,
+  Legs,
+  Shield,
+  Weapon
+} from '../models';
 
 import { Injectable } from '@angular/core';
 
@@ -6,8 +16,6 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class ItemPriceService {
-  constructor() {}
-
   public GetBuyPrice(itemSlot: GearType): number {
     switch (itemSlot) {
       case GearType.Weapon:
@@ -25,5 +33,20 @@ export class ItemPriceService {
       default:
         return 0;
     }
+  }
+
+  public GetEnchantmentCost(item: Gear): number {
+    return (
+      (item.SlotAmount - item.Enchantments.filter((e) => !e.IsEnchanted).length + 1) *
+      EnchantmentSlot.COST_PER_SLOT
+    );
+  }
+
+  public GetRerollCost(): number {
+    return EnchantmentSlot.REROLL_COST;
+  }
+
+  public GetUpgradeCost(slot: EnchantmentSlot): number {
+    return slot.Level * EnchantmentSlot.COST_PER_UPGRADE_LEVEL;
   }
 }

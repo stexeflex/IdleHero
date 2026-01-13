@@ -1,12 +1,13 @@
 import { Component, ElementRef, HostListener, inject } from '@angular/core';
-import { Gear, GearType } from '../../shared/models';
-import { Gold, IconComponent, PanelHeader, Separator } from '../../shared/components';
 import {
+  CurrencyService,
   InventoryService,
   ItemPriceService,
   SelectedGearService,
   VendorService
 } from '../../shared/services';
+import { Gear, GearType } from '../../shared/models';
+import { Gold, IconComponent, PanelHeader, Separator } from '../../shared/components';
 
 import { Enchanting } from './enchanting/enchanting';
 import { GearSlots } from './gear-slots/gear-slots';
@@ -27,12 +28,16 @@ export class InventoryArea {
     }
   }
 
+  protected get GoldAmount(): number {
+    return this.currencyService.Gold();
+  }
+
   protected get CanBuy(): boolean {
     return this.SelectedGearSlot !== null && this.SelectedGear === null;
   }
 
   protected get EnoughGoldToBuy(): boolean {
-    return this.inventoryService.Gold() >= this.ItemPrice;
+    return this.currencyService.Gold() >= this.ItemPrice;
   }
 
   protected get CanSell(): boolean {
@@ -67,7 +72,8 @@ export class InventoryArea {
 
   constructor(
     protected selectedGearService: SelectedGearService,
-    protected inventoryService: InventoryService,
+    private currencyService: CurrencyService,
+    private inventoryService: InventoryService,
     private itemPriceService: ItemPriceService,
     private vendorService: VendorService
   ) {}

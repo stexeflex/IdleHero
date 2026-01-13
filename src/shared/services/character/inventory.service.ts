@@ -1,12 +1,10 @@
-import { Gear, GearType, StatType } from '../models';
+import { Gear, GearType, StatType } from '../../models';
 import { Injectable, signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InventoryService {
-  public Gold = signal<number>(1337);
-
   public Weapon = signal<Gear>(null as any);
   public Shield = signal<Gear>(null as any);
 
@@ -14,10 +12,6 @@ export class InventoryService {
   public Chest = signal<Gear>(null as any);
   public Legs = signal<Gear>(null as any);
   public Boots = signal<Gear>(null as any);
-
-  public AddGold(amount: number): void {
-    this.Gold.update((gold) => gold + amount);
-  }
 
   public GetGearForSlot(slot: GearType): Gear | null {
     switch (slot) {
