@@ -5,13 +5,13 @@
       [class]="gearSlot.class"
       (click)="SelectGearSlot($event, gearSlot.type)"
       [class.selected]="IsSelected(gearSlot.type)"
-      [class.unequipped]="IsUnequipped(gearSlot.type)"
+      [class.empty]="IsEmpty(gearSlot.type)"
       [class.equipped]="IsEquipped(gearSlot.type)"
-      [class.common--border]="GetHighestEnchantmentLevel(gearSlot.type) === 1"
-      [class.magic--border]="GetHighestEnchantmentLevel(gearSlot.type) === 2"
-      [class.rare--border]="GetHighestEnchantmentLevel(gearSlot.type) === 3"
-      [class.epic--border]="GetHighestEnchantmentLevel(gearSlot.type) === 4"
-      [class.legendary--border]="GetHighestEnchantmentLevel(gearSlot.type) === 5">
+      [class.common--border]="GetGearLevel(gearSlot.type) === 1"
+      [class.magic--border]="GetGearLevel(gearSlot.type) === 2"
+      [class.rare--border]="GetGearLevel(gearSlot.type) === 3"
+      [class.epic--border]="GetGearLevel(gearSlot.type) === 4"
+      [class.legendary--border]="GetGearLevel(gearSlot.type) === 5">
       <app-icon class="gear-slot__icon" [gear]="gearSlot.icon" size="2x"></app-icon>
       <app-enchantment-slot-icon [enchantments]="GetEnchantments(gearSlot.type)" size="12">
       </app-enchantment-slot-icon>

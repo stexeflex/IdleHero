@@ -6,13 +6,13 @@ import { StatType } from '../stats/stat-type';
 export abstract class Gear {
   protected static readonly DEFAULT_SELL_MULTIPLIER = 0.5;
 
-  public readonly EnchantmentSlots: EnchantmentSlot[] = [];
+  public readonly Enchantments: EnchantmentSlot[] = [];
   public SellValue: number;
 
-  public get HighestEnchantmentLevel(): number {
+  public get Level(): number {
     let highestLevel = 0;
 
-    this.EnchantmentSlots.forEach((slot) => {
+    this.Enchantments.forEach((slot) => {
       if (slot.Level > highestLevel) {
         highestLevel = slot.Level;
       }
@@ -28,13 +28,13 @@ export abstract class Gear {
     public BuyPrice: number
   ) {
     for (let i = 0; i < SlotAmount; i++) {
-      this.EnchantmentSlots.push(new EnchantmentSlot(i + 1));
+      this.Enchantments.push(new EnchantmentSlot(i + 1));
     }
 
     this.SellValue = Gear.CalculateSellValue(BuyPrice);
   }
 
-  protected static CalculateSellValue(price: number): number {
+  private static CalculateSellValue(price: number): number {
     return Math.floor(price * Gear.DEFAULT_SELL_MULTIPLIER);
   }
 
@@ -58,7 +58,11 @@ export abstract class Gear {
   public GetStatBonus(stat: StatType): number {
     let totalBonus = 0;
 
-    this.EnchantmentSlots.forEach((slot) => {
+    if (this.Innate.Stat === stat) {
+      totalBonus += this.Innate.Value;
+    }
+
+    this.Enchantments.forEach((slot) => {
       if (slot.IsEnchanted && slot.Enchantment.Stat === stat) {
         totalBonus += slot.Enchantment.Value;
       }

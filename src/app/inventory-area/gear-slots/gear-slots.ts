@@ -35,17 +35,17 @@ export class GearSlots {
   protected GetEnchantments(slot: GearType): EnchantmentSlot[] {
     switch (slot) {
       case GearType.Weapon:
-        return this.inventoryService.Weapon()?.EnchantmentSlots ?? [];
+        return this.inventoryService.Weapon()?.Enchantments ?? [];
       case GearType.Shield:
-        return this.inventoryService.Shield()?.EnchantmentSlots ?? [];
+        return this.inventoryService.Shield()?.Enchantments ?? [];
       case GearType.Head:
-        return this.inventoryService.Head()?.EnchantmentSlots ?? [];
+        return this.inventoryService.Head()?.Enchantments ?? [];
       case GearType.Chest:
-        return this.inventoryService.Chest()?.EnchantmentSlots ?? [];
+        return this.inventoryService.Chest()?.Enchantments ?? [];
       case GearType.Legs:
-        return this.inventoryService.Legs()?.EnchantmentSlots ?? [];
+        return this.inventoryService.Legs()?.Enchantments ?? [];
       case GearType.Boots:
-        return this.inventoryService.Boots()?.EnchantmentSlots ?? [];
+        return this.inventoryService.Boots()?.Enchantments ?? [];
       default:
         return [];
     }
@@ -56,10 +56,10 @@ export class GearSlots {
   }
 
   protected IsEquipped(slot: GearType): boolean {
-    return !this.IsUnequipped(slot);
+    return !this.IsEmpty(slot);
   }
 
-  protected IsUnequipped(slot: GearType): boolean {
+  protected IsEmpty(slot: GearType): boolean {
     switch (slot) {
       case GearType.Weapon:
         return !this.inventoryService.Weapon() && !this.IsSelected(slot);
@@ -78,20 +78,20 @@ export class GearSlots {
     }
   }
 
-  protected GetHighestEnchantmentLevel(slot: GearType): number {
+  protected GetGearLevel(slot: GearType): number {
     switch (slot) {
       case GearType.Weapon:
-        return this.inventoryService.Weapon()?.HighestEnchantmentLevel ?? 0;
+        return this.inventoryService.Weapon()?.Level ?? 0;
       case GearType.Shield:
-        return this.inventoryService.Shield()?.HighestEnchantmentLevel ?? 0;
+        return this.inventoryService.Shield()?.Level ?? 0;
       case GearType.Head:
-        return this.inventoryService.Head()?.HighestEnchantmentLevel ?? 0;
+        return this.inventoryService.Head()?.Level ?? 0;
       case GearType.Chest:
-        return this.inventoryService.Chest()?.HighestEnchantmentLevel ?? 0;
+        return this.inventoryService.Chest()?.Level ?? 0;
       case GearType.Legs:
-        return this.inventoryService.Legs()?.HighestEnchantmentLevel ?? 0;
+        return this.inventoryService.Legs()?.Level ?? 0;
       case GearType.Boots:
-        return this.inventoryService.Boots()?.HighestEnchantmentLevel ?? 0;
+        return this.inventoryService.Boots()?.Level ?? 0;
       default:
         return 0;
     }

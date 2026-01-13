@@ -56,13 +56,13 @@
   grid-area: boots;
 }
 
-.equipped {
-  border-width: 3px;
-}
-
-.unequipped {
+.empty {
   border: 2px solid $clr-gray;
   opacity: 0.5;
+}
+
+.equipped {
+  border-width: 3px;
 }
 
 .selected {

@@ -2,7 +2,7 @@
   <!-- ITEM DISPLAY -->
   <div class="item-display">
     <app-icon class="item__icon" [gear]="GearIcon" size="5x"></app-icon>
-    <app-enchantment-slot-icon [enchantments]="Item.EnchantmentSlots"></app-enchantment-slot-icon>
+    <app-enchantment-slot-icon [enchantments]="Item.Enchantments"></app-enchantment-slot-icon>
     <separator class="item__separator"></separator>
     <h3 class="item__name" [class.item__name--small]="Item.Innate.DisplayName.length > 22">
       {{ Item.Innate.DisplayName }}
@@ -11,7 +11,7 @@
 
   <!-- ENCHANTMENT SLOTS -->
   <div class="item-slots">
-    @for (slot of Item.EnchantmentSlots; track $index) {
+    @for (slot of Item.Enchantments; track $index) {
       <div class="slot-row">
         <!-- REROLL BUTTON -->
         @if (ShowRerollAction(slot)) {
