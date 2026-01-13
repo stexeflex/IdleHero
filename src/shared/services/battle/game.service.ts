@@ -107,6 +107,16 @@ export class GameService {
           break;
         }
 
+        /* Game Win */
+        if (this.stageService.Current() == GAME_CONFIG.STAGE.MAX) {
+          this.Prestige();
+          this.battleLogService.AddLog({
+            Message: 'VICTORY!',
+            Type: MessageType.Info
+          });
+          break;
+        }
+
         this.NextStage();
       }
     }

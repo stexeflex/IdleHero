@@ -73,6 +73,7 @@ $padding-attributes-summary: $gap 0;
 
 .item__label,
 .item__value {
+  @include disable-text-selection();
   font-size: 1.3rem;
   font-weight: bold;
 }
