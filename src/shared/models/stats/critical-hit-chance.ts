@@ -1,5 +1,5 @@
 export class CriticalHitChance {
-  private static readonly BASE_CHC: number = 0.05;
+  private static readonly BASE_CHC: number = 0.01;
   private static readonly MAX_CHC: number = 1;
   private static readonly CHC_PER_INTELLIGENCE: number = 0.01;
 
