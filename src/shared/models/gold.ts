@@ -1,11 +1,10 @@
-export class Gold {
-  private static BASE_GOLD_REWARD = 10;
-  private static GOLD_GROWTH_RATE = 0.15;
+import { GAME_CONFIG } from '../constants';
 
+export class Gold {
   public static GetForStage(stage: number): number {
     // Formula: Base + (Stage - 1) * GrowthRate
     return Math.round(
-      this.BASE_GOLD_REWARD + (stage - 1) * this.BASE_GOLD_REWARD * this.GOLD_GROWTH_RATE
+      GAME_CONFIG.REWARDS.BASE_GOLD_REWARD + (stage - 1) * GAME_CONFIG.REWARDS.GOLD_REWARD_PER_STAGE
     );
   }
 }

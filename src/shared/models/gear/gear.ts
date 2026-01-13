@@ -1,25 +1,12 @@
 import { Enchantment } from './enchantment';
 import { EnchantmentSlot } from './enchantment-slot';
+import { GEAR_CONFIG } from '../../constants';
 import { GearType } from './gear-type';
 import { StatType } from '../stats/stat-type';
 
 export abstract class Gear {
-  public static readonly DEFAULT_SELLVALUE_MULTIPLIER = 0.5;
-
   public readonly Enchantments: EnchantmentSlot[] = [];
   public SellValue: number;
-
-  public get Level(): number {
-    let highestLevel = 0;
-
-    this.Enchantments.forEach((slot) => {
-      if (slot.Level > highestLevel) {
-        highestLevel = slot.Level;
-      }
-    });
-
-    return highestLevel;
-  }
 
   constructor(
     public Type: GearType,
@@ -34,8 +21,20 @@ export abstract class Gear {
     this.SellValue = Gear.CalculateSellValue(BuyPrice);
   }
 
+  public get Level(): number {
+    let highestLevel = 0;
+
+    this.Enchantments.forEach((slot) => {
+      if (slot.Level > highestLevel) {
+        highestLevel = slot.Level;
+      }
+    });
+
+    return highestLevel;
+  }
+
   private static CalculateSellValue(price: number): number {
-    return Math.floor(price * Gear.DEFAULT_SELLVALUE_MULTIPLIER);
+    return Math.floor(price * GEAR_CONFIG.PRICES.SELLVALUE_MULTIPLIER);
   }
 
   public static Create(slot: GearType): Gear {
@@ -63,8 +62,8 @@ export abstract class Gear {
     }
 
     this.Enchantments.forEach((slot) => {
-      if (slot.IsEnchanted && slot.Enchantment.Stat === stat) {
-        totalBonus += slot.Enchantment.Value;
+      if (slot.IsEnchanted && slot.Enchantment!.Stat === stat) {
+        totalBonus += slot.Enchantment!.Value;
       }
     });
 
@@ -73,7 +72,7 @@ export abstract class Gear {
 }
 
 export class Weapon extends Gear {
-  public static readonly Slots: number = 4;
+  public static readonly Slots: number = GEAR_CONFIG.SLOTS.WEAPON;
   public static readonly Innate: Enchantment = new Enchantment('AttackSpeed', 0.1);
   public static readonly BuyPrice: number = 250;
 
@@ -83,7 +82,7 @@ export class Weapon extends Gear {
 }
 
 export class Shield extends Gear {
-  public static readonly Slots: number = 2;
+  public static readonly Slots: number = GEAR_CONFIG.SLOTS.SHIELD;
   public static readonly Innate: Enchantment = new Enchantment('CriticalHitDamage', 0.5);
   public static readonly BuyPrice: number = 150;
 
@@ -93,7 +92,7 @@ export class Shield extends Gear {
 }
 
 export class Head extends Gear {
-  public static readonly Slots: number = 2;
+  public static readonly Slots: number = GEAR_CONFIG.SLOTS.HEAD;
   public static readonly Innate: Enchantment = new Enchantment('CriticalHitChance', 0.05);
   public static readonly BuyPrice: number = 80;
 
@@ -103,7 +102,7 @@ export class Head extends Gear {
 }
 
 export class Chest extends Gear {
-  public static readonly Slots: number = 3;
+  public static readonly Slots: number = GEAR_CONFIG.SLOTS.CHEST;
   public static readonly Innate: Enchantment = new Enchantment('Strength', 5);
   public static readonly BuyPrice: number = 100;
 
@@ -113,7 +112,7 @@ export class Chest extends Gear {
 }
 
 export class Legs extends Gear {
-  public static readonly Slots: number = 2;
+  public static readonly Slots: number = GEAR_CONFIG.SLOTS.LEGS;
   public static readonly Innate: Enchantment = new Enchantment('Dexterity', 5);
   public static readonly BuyPrice: number = 90;
 
@@ -123,7 +122,7 @@ export class Legs extends Gear {
 }
 
 export class Boots extends Gear {
-  public static readonly Slots: number = 1;
+  public static readonly Slots: number = GEAR_CONFIG.SLOTS.BOOTS;
   public static readonly Innate: Enchantment = new Enchantment('MultiHitChance', 0.01);
   public static readonly BuyPrice: number = 70;
 

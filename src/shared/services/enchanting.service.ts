@@ -9,6 +9,7 @@ import {
   SHIELD_ENCHANTMENT_POOL,
   WEAPON_ENCHANTMENT_POOL
 } from '../models';
+import { ENCHANTING_CONFIG, GEAR_CONFIG } from '../constants';
 
 import { CurrencyService } from './character/currency.service';
 import { Injectable } from '@angular/core';
@@ -19,8 +20,6 @@ import { ItemPriceService } from './item-price.service';
   providedIn: 'root'
 })
 export class EnchantingService {
-  private readonly ENCHANTMENT_MODIFIER = 1.2;
-
   constructor(
     private inventoryService: InventoryService,
     private itemPriceService: ItemPriceService,
@@ -43,7 +42,7 @@ export class EnchantingService {
     item.Enchantments[slotIndex].Enchantment = enchantment;
     item.Enchantments[slotIndex].Level = 1;
 
-    item.SellValue += Math.floor(enchantmentCost * Gear.DEFAULT_SELLVALUE_MULTIPLIER);
+    item.SellValue += Math.floor(enchantmentCost * GEAR_CONFIG.PRICES.SELLVALUE_MULTIPLIER);
 
     this.inventoryService.SetGearForSlot(item.Type, item);
   }
@@ -64,7 +63,7 @@ export class EnchantingService {
     item.Enchantments[slotIndex].Enchantment = enchantment;
     item.Enchantments[slotIndex].Level = 1;
 
-    item.SellValue += Math.floor(rerollCost * Gear.DEFAULT_SELLVALUE_MULTIPLIER);
+    item.SellValue += Math.floor(rerollCost * GEAR_CONFIG.PRICES.SELLVALUE_MULTIPLIER);
 
     this.inventoryService.SetGearForSlot(item.Type, item);
   }
@@ -82,19 +81,21 @@ export class EnchantingService {
 
     const enchantmentSlot = item.Enchantments[slotIndex];
 
-    if (enchantmentSlot.Enchantment.Value < 1) {
-      enchantmentSlot.Enchantment.Value =
-        Math.ceil(enchantmentSlot.Enchantment.Value * this.ENCHANTMENT_MODIFIER * 100) / 100;
+    if (enchantmentSlot.Enchantment!.Value < 1) {
+      enchantmentSlot.Enchantment!.Value =
+        Math.ceil(
+          enchantmentSlot.Enchantment!.Value * ENCHANTING_CONFIG.UPGRADE.STAT_MODIFIER * 100
+        ) / 100;
     } else {
-      enchantmentSlot.Enchantment.Value = Math.ceil(
-        enchantmentSlot.Enchantment.Value * this.ENCHANTMENT_MODIFIER
+      enchantmentSlot.Enchantment!.Value = Math.ceil(
+        enchantmentSlot.Enchantment!.Value * ENCHANTING_CONFIG.UPGRADE.STAT_MODIFIER
       );
     }
 
     enchantmentSlot.Level++;
     item.Enchantments[slotIndex] = enchantmentSlot;
 
-    item.SellValue += Math.floor(upgradeCost * Gear.DEFAULT_SELLVALUE_MULTIPLIER);
+    item.SellValue += Math.floor(upgradeCost * GEAR_CONFIG.PRICES.SELLVALUE_MULTIPLIER);
 
     this.inventoryService.SetGearForSlot(item.Type, item);
   }

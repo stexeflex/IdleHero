@@ -1,5 +1,11 @@
 import { DecimalPipe } from '@angular/common';
-import { AttackResult, AttackType, BattleLogMessage, MessageType, StageRewards } from '../models';
+import {
+  AttackResult,
+  AttackType,
+  BattleLogMessage,
+  MessageType,
+  StageRewards
+} from '../../models';
 import { Inject, Injectable, LOCALE_ID, signal } from '@angular/core';
 
 @Injectable({

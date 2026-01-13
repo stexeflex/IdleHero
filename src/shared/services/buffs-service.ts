@@ -10,10 +10,10 @@ export class BuffsService {
     Buff.FromObject({
       Icon: '🔥',
       Name: 'Attack Boost',
-      Description: 'Increases Damage by 25%.',
+      Description: 'Increases Damage by 50%.',
       DurationInSeconds: 20,
       CooldownInSeconds: 30,
-      Modifier: 0.25
+      Modifier: 0.5
     }),
     Buff.FromObject({
       Icon: '🥷🏼',
@@ -34,10 +34,10 @@ export class BuffsService {
     Buff.FromObject({
       Icon: '⚔️',
       Name: 'Multi-Hit Frenzy',
-      Description: 'Increases Multi-Hit Chance by 20%.',
+      Description: 'Increases Multi-Hit Chance by 45%.',
       DurationInSeconds: 15,
       CooldownInSeconds: 60,
-      Modifier: 0.2
+      Modifier: 0.45
     }),
     Buff.FromObject({
       Icon: '💥',

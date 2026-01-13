@@ -10,6 +10,7 @@ import {
   Weapon
 } from '../models';
 
+import { ENCHANTING_CONFIG } from '../constants';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -38,15 +39,15 @@ export class ItemPriceService {
   public GetEnchantmentCost(item: Gear): number {
     return (
       (item.SlotAmount - item.Enchantments.filter((e) => !e.IsEnchanted).length + 1) *
-      EnchantmentSlot.COST_PER_SLOT
+      ENCHANTING_CONFIG.COSTS.ENCHANT_COST
     );
   }
 
   public GetRerollCost(): number {
-    return EnchantmentSlot.REROLL_COST;
+    return ENCHANTING_CONFIG.COSTS.REROLL_COST;
   }
 
   public GetUpgradeCost(slot: EnchantmentSlot): number {
-    return slot.Level * EnchantmentSlot.COST_PER_UPGRADE_LEVEL;
+    return slot.Level * ENCHANTING_CONFIG.COSTS.UPGRADE_COST_PER_LEVEL;
   }
 }

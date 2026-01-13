@@ -1,13 +1,12 @@
-export class AttackPower {
-  private static readonly BASE_ATTACK_POWER: number = 1;
-  private static readonly ATTACK_POWER_PER_STRENGTH: number = 1;
-  private static readonly EXPONENT: number = 1.5;
+import { STATS_CONFIG } from '../../constants';
 
+export class AttackPower {
   public static Calculate(strength: number, modifier: number = 1): number {
     // Formula: Base + (Faktor * (Strength - 1)^Exponent) * Modifier
     return Math.round(
-      (AttackPower.BASE_ATTACK_POWER +
-        AttackPower.ATTACK_POWER_PER_STRENGTH * Math.pow(strength - 1, AttackPower.EXPONENT)) *
+      (STATS_CONFIG.ATTACK_POWER.BASE +
+        STATS_CONFIG.ATTACK_POWER.ATTACK_POWER_PER_STRENGTH *
+          Math.pow(strength - 1, STATS_CONFIG.ATTACK_POWER.EXPONENT)) *
         modifier
     );
   }

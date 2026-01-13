@@ -5,19 +5,21 @@ import {
   BossDamageResult,
   Buff,
   ExperienceGainResult,
+  MessageType,
   StageRewards
-} from '../models';
+} from '../../models';
+import { DELAYS, GAME_CONFIG } from '../../constants';
 import { Injectable, signal } from '@angular/core';
 
 import { BattleLogService } from './battle-log.service';
 import { BossService } from './boss.service';
-import { BuffsService } from './buffs-service';
-import { CurrencyService } from './character/currency.service';
-import { HeroService } from './character/hero.service';
-import { LevelService } from './character/level.service';
+import { BuffsService } from '../buffs-service';
+import { CurrencyService } from '../character/currency.service';
+import { HeroService } from '../character/hero.service';
+import { LevelService } from '../character/level.service';
 import { StageService } from './stage.service';
-import { StatsService } from './character/stats.service';
-import { TimeoutUtils } from '../utils';
+import { StatsService } from '../character/stats.service';
+import { TimeoutUtils } from '../../utils';
 
 @Injectable({
   providedIn: 'root'
@@ -93,7 +95,7 @@ export class GameService {
         this.battleLogService.BossDefeated(rewards);
 
         /* Boss Respawn Delay */
-        await TimeoutUtils.wait(500);
+        await TimeoutUtils.wait(DELAYS.BOSS_RESPAWN_ANIMATION_MS);
 
         if (!this.InProgress()) {
           break;

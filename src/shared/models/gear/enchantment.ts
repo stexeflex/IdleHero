@@ -1,14 +1,14 @@
 import { StatType } from '../stats/stat-type';
 
 export class Enchantment {
-  public get DisplayName(): string {
-    return this.GetStatDisplayName(this.Stat);
-  }
-
   constructor(
     public Stat: StatType,
     public Value: number
   ) {}
+
+  public get DisplayName(): string {
+    return this.GetStatDisplayName(this.Stat);
+  }
 
   private GetStatDisplayName(stat: StatType): string {
     switch (stat) {

@@ -1,10 +1,12 @@
 import { Injectable, signal } from '@angular/core';
 
+import { GAME_CONFIG } from '../../constants';
+
 @Injectable({
   providedIn: 'root'
 })
 export class CurrencyService {
-  private _gold = signal<number>(1337);
+  private _gold = signal<number>(GAME_CONFIG.CURRENCIES.GOLD.STARTING_AMOUNT);
   public Gold = this._gold.asReadonly();
 
   public AddGold(amount: number): void {

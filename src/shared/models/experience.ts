@@ -1,9 +1,11 @@
-export class Experience {
-  private static BASE_EXPERIENCE = 50;
-  private static EXPERIENCE_GROWTH_RATE = 10;
+import { GAME_CONFIG } from '../constants';
 
+export class Experience {
   public static GetForStage(stage: number): number {
     // Formula: Base + (Stage - 1) * GrowthRate
-    return this.BASE_EXPERIENCE + (stage - 1) * this.EXPERIENCE_GROWTH_RATE;
+    return Math.round(
+      GAME_CONFIG.REWARDS.BASE_EXPERIENCE_REWARD +
+        (stage - 1) * GAME_CONFIG.REWARDS.EXPERIENCE_REWARD_PER_STAGE
+    );
   }
 }

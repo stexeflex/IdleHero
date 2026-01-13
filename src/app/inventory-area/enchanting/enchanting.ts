@@ -79,7 +79,7 @@ export class Enchanting implements OnInit {
   }
 
   protected GetEnchantmentDescription(slot: EnchantmentSlot): string {
-    return slot.Enchantment.DisplayName;
+    return slot.Enchantment!.DisplayName;
   }
 
   /* ENCHANT SECTION */

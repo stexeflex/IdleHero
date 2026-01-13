@@ -1,14 +1,16 @@
-import { BossDamageResult, BossHealth } from '../models';
+import { BossDamageResult, BossHealth } from '../../models';
 import { Injectable, signal } from '@angular/core';
+
+import { GAME_CONFIG } from '../../constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BossService {
-  private _maxHealth = signal(BossHealth.HEALTH_BASE);
+  private _maxHealth = signal(GAME_CONFIG.BOSS.BASE_HEALTH);
   public MaxHealth = this._maxHealth.asReadonly();
 
-  private _currentHealth = signal(BossHealth.HEALTH_BASE);
+  private _currentHealth = signal(GAME_CONFIG.BOSS.BASE_HEALTH);
   public CurrentHealth = this._currentHealth.asReadonly();
 
   public get IsDefeated(): boolean {
@@ -31,7 +33,7 @@ export class BossService {
   }
 
   public Reset() {
-    this._maxHealth.set(BossHealth.HEALTH_BASE);
-    this._currentHealth.set(BossHealth.HEALTH_BASE);
+    this._maxHealth.set(GAME_CONFIG.BOSS.BASE_HEALTH);
+    this._currentHealth.set(GAME_CONFIG.BOSS.BASE_HEALTH);
   }
 }

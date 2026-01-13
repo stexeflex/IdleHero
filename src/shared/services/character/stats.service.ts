@@ -14,6 +14,7 @@ import { BuffsService } from '../buffs-service';
 import { ChanceUtils } from '../../utils';
 import { InventoryService } from './inventory.service';
 import { LevelService } from './level.service';
+import { STATS_CONFIG } from '../../constants';
 
 @Injectable({
   providedIn: 'root'
@@ -59,7 +60,7 @@ export class StatsService {
     return CriticalHitChance.Calculate(this.Intelligence(), bonus, modifier);
   });
 
-  private _criticalHitDamageStat = signal(1.5);
+  private _criticalHitDamageStat = signal(STATS_CONFIG.CHD.BASE);
   public CriticalHitDamage = computed(() => {
     const bonus: number = this.inventoryService.GetBonusStatFromGear('CriticalHitDamage');
     return this._criticalHitDamageStat() + bonus;
@@ -71,7 +72,7 @@ export class StatsService {
     return MultiHitChance.Calculate(this.Dexterity(), bonus, modifier);
   });
 
-  public MultiHitDamage = signal(2);
+  public MultiHitDamage = signal(STATS_CONFIG.MHD.BASE);
 
   constructor(
     private levelService: LevelService,
