@@ -1,5 +1,10 @@
-import { Component, ElementRef, HostListener, Input, OnInit, inject } from '@angular/core';
-import { CurrencyService, EnchantingService, ItemPriceService } from '../../../shared/services';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
+import {
+  CurrencyService,
+  EnchantingService,
+  GameService,
+  ItemPriceService
+} from '../../../shared/services';
 import { EnchantmentSlot, Gear } from '../../../shared/models';
 import { Gold, IconComponent } from '../../../shared/components';
 
@@ -10,13 +15,9 @@ import { Gold, IconComponent } from '../../../shared/components';
   styleUrl: './enchanting.scss'
 })
 export class Enchanting implements OnInit {
-  private elementRef = inject(ElementRef);
-
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
-    // if (!this.elementRef.nativeElement.contains(event.target)) {
     this.ResetSlotStates();
-    // }
   }
 
   @Input({ required: true }) Item!: Gear;
@@ -32,6 +33,7 @@ export class Enchanting implements OnInit {
   protected SlotStates: Map<number, 'Empty' | 'Enchanted' | 'Upgrading' | 'Rerolling'> = new Map();
 
   constructor(
+    private gameService: GameService,
     private enchantingService: EnchantingService,
     private currencyService: CurrencyService,
     private itemPriceService: ItemPriceService
@@ -68,6 +70,10 @@ export class Enchanting implements OnInit {
   }
 
   protected CanEnchant(slot: EnchantmentSlot): boolean {
+    if (this.gameService.InProgress()) {
+      return false;
+    }
+
     return !slot.IsEnchanted && this.SlotCost <= this.currencyService.Gold();
   }
 
@@ -79,6 +85,10 @@ export class Enchanting implements OnInit {
 
   /* REROLL SECTION */
   protected ShowRerollAction(slot: EnchantmentSlot): boolean {
+    if (this.gameService.InProgress()) {
+      return false;
+    }
+
     return slot.IsEnchanted;
   }
 
@@ -103,6 +113,10 @@ export class Enchanting implements OnInit {
 
   /* UPGRADE SECTION */
   protected ShowUpgradeAction(slot: EnchantmentSlot): boolean {
+    if (this.gameService.InProgress()) {
+      return false;
+    }
+
     return slot.IsEnchanted;
   }
 

@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   CurrencyService,
   EnchantingService,
+  GameService,
   ItemPriceService,
-  SelectedGearService,
   VendorService
 } from '../../../shared/services';
 import { Gear, GearType } from '../../../shared/models';
@@ -23,6 +23,10 @@ export class GearActions {
   @Output() OnItemSold = new EventEmitter();
 
   protected get CanBuy(): boolean {
+    if (this.gameService.InProgress()) {
+      return false;
+    }
+
     return this.ItemType !== null && this.Item === null;
   }
 
@@ -31,10 +35,18 @@ export class GearActions {
   }
 
   protected get CanSell(): boolean {
+    if (this.gameService.InProgress()) {
+      return false;
+    }
+
     return this.Item !== null;
   }
 
   protected get CanUpgrade(): boolean {
+    if (this.gameService.InProgress()) {
+      return false;
+    }
+
     return this.Item !== null && this.Item.CanUpgrade;
   }
 
@@ -64,6 +76,7 @@ export class GearActions {
   }
 
   constructor(
+    private gameService: GameService,
     private currencyService: CurrencyService,
     private itemPriceService: ItemPriceService,
     private vendorService: VendorService,

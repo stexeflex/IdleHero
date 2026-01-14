@@ -29,7 +29,6 @@ export class InventoryArea {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     if (!this.elementRef.nativeElement.contains(event.target)) {
-      event.stopPropagation();
       this.DeselectGear();
     }
   }
