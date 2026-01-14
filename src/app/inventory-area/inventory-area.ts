@@ -11,10 +11,11 @@ import { Gold, IconComponent, PanelHeader, Separator } from '../../shared/compon
 
 import { Enchanting } from './enchanting/enchanting';
 import { GearSlots } from './gear-slots/gear-slots';
+import { ItemDisplay } from './item-display/item-display';
 
 @Component({
   selector: 'app-inventory-area',
-  imports: [GearSlots, Gold, Enchanting, Separator, PanelHeader, IconComponent],
+  imports: [GearSlots, Gold, Enchanting, Separator, PanelHeader, IconComponent, ItemDisplay],
   templateUrl: './inventory-area.html',
   styleUrl: './inventory-area.scss'
 })
@@ -24,7 +25,7 @@ export class InventoryArea {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     if (!this.elementRef.nativeElement.contains(event.target)) {
-      this.selectedGearService.DeselectGear();
+      this.DeselectGear(event);
     }
   }
 
@@ -70,6 +71,8 @@ export class InventoryArea {
     return this.selectedGearService.Selected();
   }
 
+  protected GearPreview: Gear | null = null;
+
   constructor(
     protected selectedGearService: SelectedGearService,
     private currencyService: CurrencyService,
@@ -83,10 +86,20 @@ export class InventoryArea {
     this.SelectGear(slot);
   }
 
+  protected DeselectGear(event: MouseEvent) {
+    event.stopPropagation();
+    this.selectedGearService.DeselectGear();
+    this.GearPreview = null;
+  }
+
   private SelectGear(slot: GearType) {
     const selected: Gear | null = this.inventoryService.GetGearForSlot(slot);
     this.selectedGearService.SetSelectedGear(selected);
     this.selectedGearService.SetSelectedGearType(slot);
+
+    if (selected === null) {
+      this.GearPreview = Gear.Create(slot);
+    }
   }
 
   protected BuyItem(event: MouseEvent) {

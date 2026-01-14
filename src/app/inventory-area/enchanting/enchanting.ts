@@ -27,23 +27,6 @@ export class Enchanting implements OnInit {
 
   @Input({ required: true }) Item!: Gear;
 
-  protected get GearIcon(): GearSlotIconName {
-    switch (this.Item.Type) {
-      case GearType.Weapon:
-        return 'sword';
-      case GearType.Shield:
-        return 'shield';
-      case GearType.Head:
-        return 'head';
-      case GearType.Chest:
-        return 'chest';
-      case GearType.Legs:
-        return 'legs';
-      case GearType.Boots:
-        return 'boots';
-    }
-  }
-
   protected get SlotCost(): number {
     return this.itemPriceService.GetEnchantmentCost(this.Item);
   }

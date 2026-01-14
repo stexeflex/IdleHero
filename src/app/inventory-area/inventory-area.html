@@ -34,23 +34,29 @@
 
     <separator></separator>
 
-    <!-- ENCHANTING -->
-    <div class="enchanting-area">
-      @if (CanEnchant) {
+    <!-- ITEM DISPLAY & ENCHANTING -->
+    <div
+      [class.item-preview-area]="GearPreview && !SelectedGear"
+      [class.enchanting-area]="SelectedGear && CanEnchant">
+      @if (SelectedGear || GearPreview) {
         <div class="subheader">
-          <h3>ENCHANTING</h3>
-          <h3>{{ SelectedGear!.Type.toUpperCase() }}</h3>
+          <h3>ITEM</h3>
+          <h3>{{ SelectedGear?.Type?.toUpperCase() ?? GearPreview?.Type?.toUpperCase() }}</h3>
           <button
             class="ih-button-icon button-cancel"
-            (click)="selectedGearService.DeselectGear()"
+            (click)="DeselectGear($event)"
             title="Clear Selection">
             <app-icon ui="cancel" size="md"></app-icon>
           </button>
         </div>
-        @if (SelectedGear) {
-          <app-enchanting [Item]="SelectedGear"></app-enchanting>
-          <separator></separator>
+        <!-- ITEM DISPLAY -->
+        <app-item-display class="item-display" [Item]="SelectedGear ?? GearPreview!">
+        </app-item-display>
+        <!-- ENCHANTMENT SLOTS -->
+        @if (SelectedGear && CanEnchant) {
+          <app-enchanting class="item-slots" [Item]="SelectedGear"></app-enchanting>
         }
+        <separator class="ih-separator separator"></separator>
       }
     </div>
   </div>

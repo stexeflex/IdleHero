@@ -1,0 +1,29 @@
+@use "sass:color";
+@use "index" as *;
+
+.item-display {
+  grid-area: item-display;
+
+  @include flexbox($dir: column, $align: center, $justify: center);
+  @include panel($bg: $clr-ui-bg);
+  @include panel-shadow($border-width: 2px, $border-color: $clr-border);
+
+  cursor: pointer;
+
+  height: 320px;
+  width: 220px;
+
+  display: flex;
+}
+
+.item__icon {
+  flex: 1;
+}
+
+.item__name {
+}
+
+.item__name--small {
+  font-size: 1em;
+  line-height: 21px;
+}

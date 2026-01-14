@@ -1,0 +1,8 @@
+<div class="item-display">
+  <app-icon class="item__icon" [gear]="GearIcon" size="5x"></app-icon>
+  <app-enchantment-slot-icon [enchantments]="Item.Enchantments"></app-enchantment-slot-icon>
+  <separator class="ih-separator"></separator>
+  <h3 class="item__name" [class.item__name--small]="InnateDisplayName.length > 22">
+    {{ InnateDisplayName }}
+  </h3>
+</div>

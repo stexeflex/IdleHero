@@ -12,6 +12,7 @@
 }
 
 .subheader {
+  grid-area: header;
   @include flexbox($justify: space-between);
   margin-bottom: $gap;
 }
@@ -43,8 +44,40 @@
 }
 
 .enchanting-area {
+  display: grid;
+  grid:
+    "header header"
+    "item-display item-slots"
+    "separator separator"
+    / auto 1fr;
+}
+
+.item-preview-area {
+  display: grid;
+  grid:
+    "header"
+    "item-display"
+    "separator"
+    / 1fr;
+
+  > .item-display {
+    // Centered horizontally
+    margin: 0 auto;
+  }
+}
+
+.item-display {
+  grid-area: item-display;
+}
+
+.item-slots {
+  grid-area: item-slots;
 }
 
 .button-cancel {
   color: $clr-text-primary;
+}
+
+.separator {
+  grid-area: separator;
 }
