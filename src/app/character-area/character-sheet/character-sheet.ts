@@ -1,15 +1,20 @@
+import { CharactersIconName, IconComponent, Separator } from '../../../shared/components';
+
 import { Component } from '@angular/core';
+import { HeroService } from '../../../shared/services';
 import { Info } from './info/info';
-import { Separator } from '../../../shared/components';
 import { Stats } from './stats/stats';
-import { StatsService } from '../../../shared/services';
 
 @Component({
   selector: 'app-character-sheet',
-  imports: [Info, Stats, Separator],
+  imports: [Info, Stats, Separator, IconComponent],
   templateUrl: './character-sheet.html',
   styleUrl: './character-sheet.scss'
 })
 export class CharacterSheet {
-  constructor(protected statsService: StatsService) {}
+  protected get HeroIcon(): CharactersIconName {
+    return this.heroService.CharacterIcon();
+  }
+
+  constructor(private heroService: HeroService) {}
 }

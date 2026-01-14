@@ -1,10 +1,13 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, Signal, signal } from '@angular/core';
+
+import { CharactersIconName } from '../../components';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HeroService {
   public readonly Name = signal('Hero');
+  public readonly CharacterIcon: Signal<CharactersIconName> = signal('dwarf');
   public readonly PrestigeLevel = signal(0);
   public readonly HighestStageReached = signal(0);
 

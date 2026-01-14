@@ -3,11 +3,17 @@
 
 .sheet {
   @include flexbox();
+  margin-bottom: calc($gap * 2);
 }
 
 /* === Portrait Section === */
 .sheet__portrait {
-  object-fit: cover;
+  @include flexbox();
+
+  height: 12em;
+  width: 10em;
+
+  border: 3px solid $clr-border;
   border-radius: $border-radius;
 }
 
