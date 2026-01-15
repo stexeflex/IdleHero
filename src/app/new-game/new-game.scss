@@ -22,7 +22,7 @@ $margin: 40px;
 .header {
   margin-bottom: $margin;
 
-  width: 50%;
+  width: 300px;
   text-align: center;
 }
 
@@ -30,18 +30,32 @@ $margin: 40px;
   margin-bottom: $margin;
 
   width: 900px;
-
   text-align: center;
+
+  @media (max-width: $bp-md) {
+    width: 300px;
+    font-size: 1rem;
+  }
 }
 
 .character {
   @include flexbox($dir: row);
   gap: calc($gap * 4);
+
+  @media (max-width: $bp-md) {
+    flex-direction: column;
+    width: 300px;
+    font-size: 1rem;
+  }
 }
 
 .character-selection {
   @include flexbox($dir: row);
   gap: $gap;
+}
+
+.actions {
+  margin-bottom: $gap;
 }
 
 .button-arrow {
