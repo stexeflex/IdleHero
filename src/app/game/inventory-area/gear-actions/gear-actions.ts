@@ -5,9 +5,9 @@ import {
   GameService,
   ItemPriceService,
   VendorService
-} from '../../../shared/services';
-import { Gear, GearType } from '../../../shared/models';
-import { Gold, IconComponent } from '../../../shared/components';
+} from '../../../../shared/services';
+import { Gear, GearType } from '../../../../shared/models';
+import { Gold, IconComponent } from '../../../../shared/components';
 
 @Component({
   selector: 'app-gear-actions',

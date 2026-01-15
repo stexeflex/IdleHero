@@ -1,7 +1,7 @@
 import { Component, ElementRef, HostListener, inject } from '@angular/core';
-import { CurrencyService, InventoryService, SelectedGearService } from '../../shared/services';
-import { Gear, GearType } from '../../shared/models';
-import { Gold, IconComponent, PanelHeader, Separator } from '../../shared/components';
+import { CurrencyService, InventoryService, SelectedGearService } from '../../../shared/services';
+import { Gear, GearType } from '../../../shared/models';
+import { Gold, IconComponent, PanelHeader, Separator } from '../../../shared/components';
 
 import { Enchanting } from './enchanting/enchanting';
 import { GearActions } from './gear-actions/gear-actions';

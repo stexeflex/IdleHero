@@ -7,14 +7,14 @@ import {
   HealthBar,
   IconComponent,
   StageLabel
-} from '../../../shared/components';
+} from '../../../../shared/components';
 import {
   BossService,
   GameService,
   HeroService,
   LevelService,
   StageService
-} from '../../../shared/services';
+} from '../../../../shared/services';
 
 import { Component } from '@angular/core';
 

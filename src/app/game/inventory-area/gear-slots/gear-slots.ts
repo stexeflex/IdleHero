@@ -1,7 +1,11 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { EnchantmentSlot, GearType } from '../../../shared/models';
-import { EnchantmentSlotIcon, GearSlotIconName, IconComponent } from '../../../shared/components';
-import { InventoryService, SelectedGearService } from '../../../shared/services';
+import { EnchantmentSlot, GearType } from '../../../../shared/models';
+import {
+  EnchantmentSlotIcon,
+  GearSlotIconName,
+  IconComponent
+} from '../../../../shared/components';
+import { InventoryService, SelectedGearService } from '../../../../shared/services';
 
 @Component({
   selector: 'app-gear-slots',

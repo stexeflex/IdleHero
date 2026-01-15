@@ -4,9 +4,9 @@ import {
   EnchantingService,
   GameService,
   ItemPriceService
-} from '../../../shared/services';
-import { EnchantmentSlot, Gear } from '../../../shared/models';
-import { Gold, IconComponent } from '../../../shared/components';
+} from '../../../../shared/services';
+import { EnchantmentSlot, Gear } from '../../../../shared/models';
+import { Gold, IconComponent } from '../../../../shared/components';
 
 @Component({
   selector: 'app-enchanting',

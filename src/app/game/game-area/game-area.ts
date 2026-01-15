@@ -1,7 +1,7 @@
-import { PanelHeader, Separator } from '../../shared/components';
+import { PanelHeader, Separator } from '../../../shared/components';
 
 import { Component } from '@angular/core';
-import { GameService } from '../../shared/services';
+import { GameService } from '../../../shared/services';
 import { Viewport } from './viewport/viewport';
 
 @Component({

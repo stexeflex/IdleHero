@@ -1,8 +1,8 @@
 import { DecimalPipe } from '@angular/common';
-import { HeroService, LevelService, StatsService } from '../../../../shared/services';
+import { HeroService, LevelService, StatsService } from '../../../../../shared/services';
 
 import { Component, Inject, LOCALE_ID } from '@angular/core';
-import { NumberValue } from '../../../../shared/components/number-value/number-value';
+import { NumberValue } from '../../../../../shared/components';
 
 @Component({
   selector: 'app-info',

@@ -1,8 +1,8 @@
 import { Component, ElementRef, HostListener, inject } from '@angular/core';
 
-import { MenuService } from '../../shared/services';
-import { Separator } from '../../shared/components';
-import { environment } from '../../environment/environment';
+import { MenuService } from '../../../shared/services';
+import { Separator } from '../../../shared/components';
+import { environment } from '../../../environment/environment';
 
 @Component({
   selector: 'app-menu',

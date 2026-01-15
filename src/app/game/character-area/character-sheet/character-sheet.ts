@@ -1,7 +1,7 @@
-import { CharactersIconName, IconComponent, Separator } from '../../../shared/components';
+import { CharactersIconName, IconComponent, Separator } from '../../../../shared/components';
 
 import { Component } from '@angular/core';
-import { HeroService } from '../../../shared/services';
+import { HeroService } from '../../../../shared/services';
 import { Info } from './info/info';
 import { Stats } from './stats/stats';
 

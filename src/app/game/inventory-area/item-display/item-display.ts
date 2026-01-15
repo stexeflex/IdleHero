@@ -4,8 +4,8 @@ import {
   GearSlotIconName,
   IconComponent,
   Separator
-} from '../../../shared/components';
-import { Gear, GearType } from '../../../shared/models';
+} from '../../../../shared/components';
+import { Gear, GearType } from '../../../../shared/models';
 
 @Component({
   selector: 'app-item-display',

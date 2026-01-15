@@ -1,6 +1,6 @@
 import { CharacterSheet } from './character-sheet/character-sheet';
 import { Component } from '@angular/core';
-import { PanelHeader } from '../../shared/components';
+import { PanelHeader } from '../../../shared/components';
 
 @Component({
   selector: 'app-character-area',

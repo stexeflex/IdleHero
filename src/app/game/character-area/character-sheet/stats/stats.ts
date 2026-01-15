@@ -1,8 +1,8 @@
 import { Component, Inject, LOCALE_ID } from '@angular/core';
 
 import { PercentPipe } from '@angular/common';
-import { GameService, LevelService, StatsService } from '../../../../shared/services';
-import { IconComponent } from '../../../../shared/components';
+import { GameService, LevelService, StatsService } from '../../../../../shared/services';
+import { IconComponent } from '../../../../../shared/components';
 
 @Component({
   selector: 'app-stats',
