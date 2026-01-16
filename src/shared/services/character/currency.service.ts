@@ -1,13 +1,13 @@
 import { Injectable, signal } from '@angular/core';
 
+import { CURRENCY_CONFIG } from '../../constants';
 import { CurrencySchema } from '../../../persistence';
-import { GAME_CONFIG } from '../../constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CurrencyService {
-  private _gold = signal<number>(GAME_CONFIG.CURRENCIES.GOLD.STARTING_AMOUNT);
+  private _gold = signal<number>(CURRENCY_CONFIG.GOLD.STARTING_AMOUNT);
   public Gold = this._gold.asReadonly();
 
   public Init(currencySchema: CurrencySchema) {

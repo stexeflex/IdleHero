@@ -1,13 +1,13 @@
 import { Experience, Gold, StageRewards } from '../../models';
 import { Injectable, signal } from '@angular/core';
 
-import { GAME_CONFIG } from '../../constants';
+import { BATTLE_CONFIG } from '../../constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StageService {
-  private _currentStage = signal(GAME_CONFIG.STAGE.BASE);
+  private _currentStage = signal(BATTLE_CONFIG.STAGE.BASE);
   public Current = this._currentStage.asReadonly();
 
   public GetRewards(): StageRewards {
@@ -17,10 +17,10 @@ export class StageService {
   }
 
   public NextStage() {
-    this._currentStage.update((stage) => Math.min(stage + 1, GAME_CONFIG.STAGE.MAX));
+    this._currentStage.update((stage) => Math.min(stage + 1, BATTLE_CONFIG.STAGE.MAX));
   }
 
   public Reset() {
-    this._currentStage.set(GAME_CONFIG.STAGE.BASE);
+    this._currentStage.set(BATTLE_CONFIG.STAGE.BASE);
   }
 }

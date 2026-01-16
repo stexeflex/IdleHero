@@ -1,6 +1,6 @@
 import { Boots, Chest, Head, Legs, Shield, Weapon } from '../../shared/models';
+import { CHARACTER_CONFIG, CURRENCY_CONFIG, STATS_CONFIG } from '../../shared/constants';
 import { FallbackUtils, ObjectUtils } from '../../shared/utils';
-import { GAME_CONFIG, STATS_CONFIG } from '../../shared/constants';
 
 import { environment } from '../../environment/environment';
 
@@ -100,9 +100,9 @@ export class HeroSchema {
 }
 
 export class LevelSchema {
-  Level: number = GAME_CONFIG.LEVEL.BASE_LEVEL;
-  Experience: number = GAME_CONFIG.LEVEL.BASE_EXPERIENCE;
-  ExperienceToNextLevel: number = GAME_CONFIG.LEVEL.BASE_EXPERIENCE_TO_NEXT_LEVEL;
+  Level: number = CHARACTER_CONFIG.LEVEL.BASE_LEVEL;
+  Experience: number = CHARACTER_CONFIG.EXPERIENCE.BASE_EXPERIENCE;
+  ExperienceToNextLevel: number = CHARACTER_CONFIG.EXPERIENCE.BASE_EXPERIENCE_TO_NEXT_LEVEL;
   UnspentSkillPoints: number = 0;
   SpentSkillPoints: number = 0;
   TotalSkillPoints: number = 0;
@@ -161,7 +161,7 @@ export class InventorySchema {
 }
 
 export class CurrencySchema {
-  Gold: number = GAME_CONFIG.CURRENCIES.GOLD.STARTING_AMOUNT;
+  Gold: number = CURRENCY_CONFIG.GOLD.STARTING_AMOUNT;
 
   public static FromRaw(applyTo: CurrencySchema, raw: unknown): CurrencySchema {
     const currency = (raw as any).Currency;

@@ -1,14 +1,12 @@
 import {
   BOOTS_ENCHANTMENT_POOL,
   CHEST_ENCHANTMENT_POOL,
-  Enchantment,
-  Gear,
-  GearType,
   HEAD_ENCHANTMENT_POOL,
   LEGS_ENCHANTMENT_POOL,
   SHIELD_ENCHANTMENT_POOL,
   WEAPON_ENCHANTMENT_POOL
-} from '../models';
+} from '../constants';
+import { Enchantment, Gear, GearType } from '../models';
 
 import { CurrencyService } from './character/currency.service';
 import { Injectable } from '@angular/core';

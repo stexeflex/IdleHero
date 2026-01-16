@@ -8,7 +8,7 @@ import {
   MessageType,
   StageRewards
 } from '../../models';
-import { DELAYS, GAME_CONFIG } from '../../constants';
+import { BATTLE_CONFIG, DELAYS } from '../../constants';
 import { Injectable, signal } from '@angular/core';
 
 import { BattleLogService } from './battle-log.service';
@@ -108,7 +108,7 @@ export class GameService {
         }
 
         /* Game Win */
-        if (this.stageService.Current() == GAME_CONFIG.STAGE.MAX) {
+        if (this.stageService.Current() == BATTLE_CONFIG.STAGE.MAX) {
           this.Prestige();
           this.battleLogService.AddLog({
             Message: 'VICTORY!',

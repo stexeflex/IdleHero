@@ -1,17 +1,17 @@
 import { BossDamageResult, BossHealth } from '../../models';
 import { Injectable, Signal, WritableSignal, signal } from '@angular/core';
 
+import { BATTLE_CONFIG } from '../../constants';
 import { CreaturesIconName } from '../../components';
-import { GAME_CONFIG } from '../../constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BossService {
-  private _maxHealth = signal(GAME_CONFIG.BOSS.BASE_HEALTH);
+  private _maxHealth = signal(BATTLE_CONFIG.BOSS.BASE_HEALTH);
   public MaxHealth = this._maxHealth.asReadonly();
 
-  private _currentHealth = signal(GAME_CONFIG.BOSS.BASE_HEALTH);
+  private _currentHealth = signal(BATTLE_CONFIG.BOSS.BASE_HEALTH);
   public CurrentHealth = this._currentHealth.asReadonly();
 
   public _bossIcon: WritableSignal<CreaturesIconName> = signal('wyvern');
@@ -38,8 +38,8 @@ export class BossService {
   }
 
   public Reset() {
-    this._maxHealth.set(GAME_CONFIG.BOSS.BASE_HEALTH);
-    this._currentHealth.set(GAME_CONFIG.BOSS.BASE_HEALTH);
+    this._maxHealth.set(BATTLE_CONFIG.BOSS.BASE_HEALTH);
+    this._currentHealth.set(BATTLE_CONFIG.BOSS.BASE_HEALTH);
   }
 
   private NextBossIcon(): CreaturesIconName {

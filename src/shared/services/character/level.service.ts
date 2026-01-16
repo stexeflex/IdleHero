@@ -1,4 +1,4 @@
-import { DELAYS, GAME_CONFIG } from '../../constants';
+import { CHARACTER_CONFIG, DELAYS } from '../../constants';
 import { Injectable, signal } from '@angular/core';
 
 import { ExperienceGainResult } from '../../models';
@@ -13,9 +13,9 @@ export class LevelService {
   public SpentSkillPoints = signal(0);
   public TotalSkillPoints = signal(0);
 
-  public Current = signal(GAME_CONFIG.LEVEL.BASE_LEVEL);
-  public Experience = signal(GAME_CONFIG.LEVEL.BASE_EXPERIENCE);
-  public ExperienceToNextLevel = signal(GAME_CONFIG.LEVEL.BASE_EXPERIENCE_TO_NEXT_LEVEL);
+  public Current = signal(CHARACTER_CONFIG.LEVEL.BASE_LEVEL);
+  public Experience = signal(CHARACTER_CONFIG.EXPERIENCE.BASE_EXPERIENCE);
+  public ExperienceToNextLevel = signal(CHARACTER_CONFIG.EXPERIENCE.BASE_EXPERIENCE_TO_NEXT_LEVEL);
 
   public Init(levelSchema: LevelSchema) {
     this.Current.set(levelSchema.Level);
@@ -64,24 +64,19 @@ export class LevelService {
 
   private LevelUp(): void {
     this.Current.update((current) => current + 1);
-    this.UnspentSkillPoints.update((points) => points + GAME_CONFIG.LEVEL.SKILL_POINTS_PER_LEVEL);
-    this.TotalSkillPoints.update((points) => points + GAME_CONFIG.LEVEL.SKILL_POINTS_PER_LEVEL);
+    this.UnspentSkillPoints.update(
+      (points) => points + CHARACTER_CONFIG.LEVEL.SKILL_POINTS_PER_LEVEL
+    );
+    this.TotalSkillPoints.update(
+      (points) => points + CHARACTER_CONFIG.LEVEL.SKILL_POINTS_PER_LEVEL
+    );
   }
 
   private SetNextLevelExperience(): void {
     this.Experience.set(0);
     this.ExperienceToNextLevel.update((value) =>
-      Math.round(value * GAME_CONFIG.LEVEL.EXPERIENCE_GROWTH_RATE)
+      Math.round(value * CHARACTER_CONFIG.EXPERIENCE.EXPERIENCE_GROWTH_RATE)
     );
-  }
-
-  public Reset(): void {
-    this.Current.set(GAME_CONFIG.LEVEL.BASE_LEVEL);
-    this.Experience.set(GAME_CONFIG.LEVEL.BASE_EXPERIENCE);
-    this.ExperienceToNextLevel.set(GAME_CONFIG.LEVEL.BASE_EXPERIENCE_TO_NEXT_LEVEL);
-    this.UnspentSkillPoints.set(0);
-    this.SpentSkillPoints.set(0);
-    this.TotalSkillPoints.set(0);
   }
 
   public SpentSkillPoint() {

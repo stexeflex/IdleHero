@@ -80,8 +80,8 @@ export abstract class Gear {
 
 export class Weapon extends Gear {
   public static readonly Slots: number = GEAR_CONFIG.SLOTS.WEAPON;
-  public static readonly Innate: Enchantment = new Enchantment('AttackSpeed', 0.1);
-  public static readonly BuyPrice: number = 250;
+  public static readonly Innate: Enchantment = GEAR_CONFIG.INNATES.WEAPON;
+  public static readonly BuyPrice: number = GEAR_CONFIG.PRICES.WEAPON;
 
   constructor() {
     super(GearType.Weapon, Weapon.Slots, Weapon.Innate, Weapon.BuyPrice);
@@ -90,8 +90,8 @@ export class Weapon extends Gear {
 
 export class Shield extends Gear {
   public static readonly Slots: number = GEAR_CONFIG.SLOTS.SHIELD;
-  public static readonly Innate: Enchantment = new Enchantment('CriticalHitDamage', 0.5);
-  public static readonly BuyPrice: number = 150;
+  public static readonly Innate: Enchantment = GEAR_CONFIG.INNATES.SHIELD;
+  public static readonly BuyPrice: number = GEAR_CONFIG.PRICES.SHIELD;
 
   constructor() {
     super(GearType.Shield, Shield.Slots, Shield.Innate, Shield.BuyPrice);
@@ -100,8 +100,8 @@ export class Shield extends Gear {
 
 export class Head extends Gear {
   public static readonly Slots: number = GEAR_CONFIG.SLOTS.HEAD;
-  public static readonly Innate: Enchantment = new Enchantment('CriticalHitChance', 0.05);
-  public static readonly BuyPrice: number = 80;
+  public static readonly Innate: Enchantment = GEAR_CONFIG.INNATES.HEAD;
+  public static readonly BuyPrice: number = GEAR_CONFIG.PRICES.HEAD;
 
   constructor() {
     super(GearType.Head, Head.Slots, Head.Innate, Head.BuyPrice);
@@ -110,8 +110,8 @@ export class Head extends Gear {
 
 export class Chest extends Gear {
   public static readonly Slots: number = GEAR_CONFIG.SLOTS.CHEST;
-  public static readonly Innate: Enchantment = new Enchantment('Strength', 5);
-  public static readonly BuyPrice: number = 100;
+  public static readonly Innate: Enchantment = GEAR_CONFIG.INNATES.CHEST;
+  public static readonly BuyPrice: number = GEAR_CONFIG.PRICES.CHEST;
 
   constructor() {
     super(GearType.Chest, Chest.Slots, Chest.Innate, Chest.BuyPrice);
@@ -120,8 +120,8 @@ export class Chest extends Gear {
 
 export class Legs extends Gear {
   public static readonly Slots: number = GEAR_CONFIG.SLOTS.LEGS;
-  public static readonly Innate: Enchantment = new Enchantment('Dexterity', 5);
-  public static readonly BuyPrice: number = 90;
+  public static readonly Innate: Enchantment = GEAR_CONFIG.INNATES.LEGS;
+  public static readonly BuyPrice: number = GEAR_CONFIG.PRICES.LEGS;
 
   constructor() {
     super(GearType.Legs, Legs.Slots, Legs.Innate, Legs.BuyPrice);
@@ -130,8 +130,8 @@ export class Legs extends Gear {
 
 export class Boots extends Gear {
   public static readonly Slots: number = GEAR_CONFIG.SLOTS.BOOTS;
-  public static readonly Innate: Enchantment = new Enchantment('MultiHitChance', 0.01);
-  public static readonly BuyPrice: number = 70;
+  public static readonly Innate: Enchantment = GEAR_CONFIG.INNATES.BOOTS;
+  public static readonly BuyPrice: number = GEAR_CONFIG.PRICES.BOOTS;
 
   constructor() {
     super(GearType.Boots, Boots.Slots, Boots.Innate, Boots.BuyPrice);
