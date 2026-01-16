@@ -23,13 +23,13 @@ export class NewGame {
     private heroService: HeroService
   ) {}
 
-  StartGame() {
+  async StartGame() {
     this.gameStateService.GameCreated.set(true);
 
     this.heroService.CharacterIcon.set(this.CharacterIcon);
     this.heroService.Name.set(this.heroName);
 
-    this.router.navigate(['/game']);
+    await this.router.navigate(['']);
   }
 
   NextCharacter() {

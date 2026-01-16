@@ -2,6 +2,7 @@ import { DELAYS, GAME_CONFIG } from '../../constants';
 import { Injectable, signal } from '@angular/core';
 
 import { ExperienceGainResult } from '../../models';
+import { LevelSchema } from '../../../persistence';
 import { TimeoutUtils } from '../../utils';
 
 @Injectable({
@@ -15,6 +16,26 @@ export class LevelService {
   public Current = signal(GAME_CONFIG.LEVEL.BASE_LEVEL);
   public Experience = signal(GAME_CONFIG.LEVEL.BASE_EXPERIENCE);
   public ExperienceToNextLevel = signal(GAME_CONFIG.LEVEL.BASE_EXPERIENCE_TO_NEXT_LEVEL);
+
+  public Init(levelSchema: LevelSchema) {
+    this.Current.set(levelSchema.Level);
+    this.Experience.set(levelSchema.Experience);
+    this.ExperienceToNextLevel.set(levelSchema.ExperienceToNextLevel);
+    this.UnspentSkillPoints.set(levelSchema.UnspentSkillPoints);
+    this.SpentSkillPoints.set(levelSchema.SpentSkillPoints);
+    this.TotalSkillPoints.set(levelSchema.TotalSkillPoints);
+  }
+
+  public CollectSchema(): LevelSchema {
+    const schema = new LevelSchema();
+    schema.Level = this.Current();
+    schema.Experience = this.Experience();
+    schema.ExperienceToNextLevel = this.ExperienceToNextLevel();
+    schema.UnspentSkillPoints = this.UnspentSkillPoints();
+    schema.SpentSkillPoints = this.SpentSkillPoints();
+    schema.TotalSkillPoints = this.TotalSkillPoints();
+    return schema;
+  }
 
   public async GainExperience(amount: number): Promise<ExperienceGainResult> {
     let leveledUp = false;

@@ -15,27 +15,28 @@ import { ChanceUtils } from '../../utils';
 import { InventoryService } from './inventory.service';
 import { LevelService } from './level.service';
 import { STATS_CONFIG } from '../../constants';
+import { StatsSchema } from '../../../persistence';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StatsService {
   /* Attributes */
-  private _strengthStat = signal(1);
+  private _strengthStat = signal(STATS_CONFIG.ATTRIBUTES.STRENGTH_BASE);
   public StrengthStat = this._strengthStat.asReadonly();
   public Strength = computed(() => {
     const bonus: number = this.inventoryService.GetBonusStatFromGear('Strength');
     return this.StrengthStat() + bonus;
   });
 
-  private _intelligenceStat = signal(1);
+  private _intelligenceStat = signal(STATS_CONFIG.ATTRIBUTES.INTELLIGENCE_BASE);
   public IntelligenceStat = this._intelligenceStat.asReadonly();
   public Intelligence = computed(() => {
     const bonus: number = this.inventoryService.GetBonusStatFromGear('Intelligence');
     return this.IntelligenceStat() + bonus;
   });
 
-  private _dexterityStat = signal(1);
+  private _dexterityStat = signal(STATS_CONFIG.ATTRIBUTES.DEXTERITY_BASE);
   public DexterityStat = this._dexterityStat.asReadonly();
   public Dexterity = computed(() => {
     const bonus: number = this.inventoryService.GetBonusStatFromGear('Dexterity');
@@ -79,6 +80,20 @@ export class StatsService {
     private inventoryService: InventoryService,
     private buffsService: BuffsService
   ) {}
+
+  public Init(statsSchema: StatsSchema) {
+    this._strengthStat.set(statsSchema.Strength);
+    this._intelligenceStat.set(statsSchema.Intelligence);
+    this._dexterityStat.set(statsSchema.Dexterity);
+  }
+
+  public CollectSchema(): StatsSchema {
+    const schema = new StatsSchema();
+    schema.Strength = this.StrengthStat();
+    schema.Intelligence = this.IntelligenceStat();
+    schema.Dexterity = this.DexterityStat();
+    return schema;
+  }
 
   public Attack(): AttackResult {
     let damage: number = this.AttackPower();

@@ -6,6 +6,7 @@ export * from './gear/enchantment-pool';
 export * from './gear/enchantment-slot';
 export * from './gear/enchantment';
 export * from './gear/gear-type';
+export * from './gear/gear.factory';
 export * from './gear/gear';
 export * from './gold';
 export * from './results/attack-phase-result';

@@ -1,5 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 
+import { CurrencySchema } from '../../../persistence';
 import { GAME_CONFIG } from '../../constants';
 
 @Injectable({
@@ -8,6 +9,16 @@ import { GAME_CONFIG } from '../../constants';
 export class CurrencyService {
   private _gold = signal<number>(GAME_CONFIG.CURRENCIES.GOLD.STARTING_AMOUNT);
   public Gold = this._gold.asReadonly();
+
+  public Init(currencySchema: CurrencySchema) {
+    this._gold.set(currencySchema.Gold);
+  }
+
+  public CollectSchema(): CurrencySchema {
+    const schema = new CurrencySchema();
+    schema.Gold = this.Gold();
+    return schema;
+  }
 
   public AddGold(amount: number): void {
     this._gold.update((gold) => gold + amount);

@@ -1,6 +1,7 @@
 import { Component, ElementRef, HostListener, inject } from '@angular/core';
-import { GameService, GameStateService, MenuService } from '../../../shared/services';
 
+import { GameSaverService } from '../../../persistence';
+import { MenuService } from '../../../shared/services';
 import { Router } from '@angular/router';
 import { Separator } from '../../../shared/components';
 import { environment } from '../../../environment/environment';
@@ -29,7 +30,11 @@ export class Menu {
     return this.menuService.IsMenuOpen();
   }
 
-  constructor(private menuService: MenuService) {}
+  constructor(
+    private router: Router,
+    private menuService: MenuService,
+    private gameSaverService: GameSaverService
+  ) {}
 
   private CloseMenu() {
     this.menuService.IsMenuOpen.set(false);
@@ -39,7 +44,13 @@ export class Menu {
     this.menuService.IsMenuOpen.set(!this.menuService.IsMenuOpen());
   }
 
-  protected NewGame() {
-    window.location.reload();
+  protected async NewGame() {
+    this.gameSaverService.ClearGameSaves();
+    await this.router.navigate(['new']);
+  }
+
+  protected async SaveGame() {
+    await this.gameSaverService.SaveGame();
+    this.CloseMenu();
   }
 }
