@@ -84,6 +84,7 @@ export class HeroSchema {
   CharacterIcon: string = 'dwarf';
   PrestigeLevel: number = 0;
   HighestStageReached: number = 0;
+  HighestDamageDealt: number = 0;
 
   public static FromRaw(applyTo: HeroSchema, raw: unknown): HeroSchema {
     const hero = (raw as any).Hero;
@@ -93,6 +94,10 @@ export class HeroSchema {
     applyTo.HighestStageReached = FallbackUtils.pickNumber(
       hero?.HighestStageReached,
       applyTo.HighestStageReached
+    );
+    applyTo.HighestDamageDealt = FallbackUtils.pickNumber(
+      hero?.HighestDamageDealt,
+      applyTo.HighestDamageDealt
     );
 
     return applyTo;

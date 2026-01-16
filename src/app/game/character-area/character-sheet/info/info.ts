@@ -29,6 +29,10 @@ export class Info {
       {
         label: 'Attack Power',
         value: this.decimalPipe.transform(this.statsService.AttackPower()) || this.PLACEHOLDER
+      },
+      {
+        label: 'Highest Damage Dealt',
+        value: this.decimalPipe.transform(this.heroService.HighestDamageDealt()) || this.PLACEHOLDER
       }
     ];
   }

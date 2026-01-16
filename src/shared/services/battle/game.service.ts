@@ -132,6 +132,7 @@ export class GameService {
     }
 
     this.battleLogService.AttackLog(attackResult);
+    this.heroService.RecordDamageDealt(attackResult.Damage);
 
     /* Deal Damage */
     const bossDamageResult: BossDamageResult = this.bossService.TakeDamage(attackResult.Damage);
