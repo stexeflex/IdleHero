@@ -118,7 +118,7 @@ export class StatsService {
   }
 
   public IncreaseAttribute(attribute: 'Strength' | 'Intelligence' | 'Dexterity'): void {
-    if (this.levelService.UnspentSkillPoints() <= 0) {
+    if (this.levelService.UnspentAttributePoints() <= 0) {
       return;
     }
 
@@ -138,7 +138,7 @@ export class StatsService {
   }
 
   public DecreaseAttribute(attribute: 'Strength' | 'Intelligence' | 'Dexterity'): void {
-    if (this.levelService.SpentSkillPoints() <= 0) {
+    if (this.levelService.SpentAttributePoints() <= 0) {
       return;
     }
 

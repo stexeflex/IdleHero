@@ -1,44 +1,62 @@
 <div class="container">
   <div class="category">
-    <div class="grid-header">
+    <div class="grid-header" [class.grid-header--expanded]="AttributesExpanded">
       <h2>Attributes</h2>
-      @if (ShowSkillPoints) {
+      @if (ShowAttributePoints) {
         <div class="skill-points">
-          {{ SkillPoints }}
+          {{ AttributePoints }}
           <app-icon class="skill-points__icon" symbol="orb" size="sm"></app-icon>
         </div>
       }
+      <button
+        class="ih-button-icon grid-header__toggle"
+        (click)="AttributesExpanded = !AttributesExpanded">
+        <i
+          class="bi toggle-icon"
+          [class.bi-caret-up-fill]="AttributesExpanded"
+          [class.bi-caret-down-fill]="!AttributesExpanded"></i>
+      </button>
     </div>
-    <div class="grid">
-      @for (attribute of Attributes; track attribute.label) {
-        <div class="grid__label">{{ attribute.label }}</div>
-        <div class="grid__value">
-          <button
-            class="attribute-modifier-button"
-            (click)="decreaseAttribute(attribute.label)"
-            [disabled]="!CanDecreaseSkillPoints(attribute.label)">
-            -
-          </button>
-          <div class="attribute-value">{{ attribute.value }}</div>
-          <button
-            class="attribute-modifier-button"
-            (click)="increaseAttribute(attribute.label)"
-            [disabled]="!CanIncreaseSkillPoints()">
-            +
-          </button>
-        </div>
-      }
-    </div>
+    @if (AttributesExpanded) {
+      <div class="grid">
+        @for (attribute of Attributes; track attribute.label) {
+          <div class="grid__label">{{ attribute.label }}</div>
+          <div class="grid__value">
+            <button
+              class="attribute-modifier-button"
+              (click)="decreaseAttribute(attribute.label)"
+              [disabled]="!CanDecreaseAttribute(attribute.label)">
+              -
+            </button>
+            <div class="attribute-value">{{ attribute.value }}</div>
+            <button
+              class="attribute-modifier-button"
+              (click)="increaseAttribute(attribute.label)"
+              [disabled]="!CanIncreaseAttributes">
+              +
+            </button>
+          </div>
+        }
+      </div>
+    }
   </div>
   <div class="category">
-    <div class="grid-header">
+    <div class="grid-header" [class.grid-header--expanded]="StatsExpanded">
       <h2>Stats</h2>
+      <button class="ih-button-icon grid-header__toggle" (click)="StatsExpanded = !StatsExpanded">
+        <i
+          class="bi toggle-icon"
+          [class.bi-caret-up-fill]="StatsExpanded"
+          [class.bi-caret-down-fill]="!StatsExpanded"></i>
+      </button>
     </div>
-    <div class="grid">
-      @for (stat of Stats; track stat.label) {
-        <div class="grid__label">{{ stat.label }}</div>
-        <div class="grid__value">{{ stat.value }}</div>
-      }
-    </div>
+    @if (StatsExpanded) {
+      <div class="grid">
+        @for (stat of Stats; track stat.label) {
+          <div class="grid__label">{{ stat.label }}</div>
+          <div class="grid__value">{{ stat.value }}</div>
+        }
+      </div>
+    }
   </div>
 </div>

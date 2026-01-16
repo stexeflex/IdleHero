@@ -1,8 +1,9 @@
 import { Component, Inject, LOCALE_ID } from '@angular/core';
 
-import { PercentPipe } from '@angular/common';
-import { GameService, LevelService, StatsService } from '../../../../shared/services';
+import { DecimalPipe, PercentPipe } from '@angular/common';
+import { LevelService, StatsService } from '../../../../shared/services';
 import { IconComponent } from '../../../../shared/components';
+import { CanChangeAttributesSpecification } from '../../../../shared/specifications';
 
 @Component({
   selector: 'app-stats',
@@ -11,40 +12,47 @@ import { IconComponent } from '../../../../shared/components';
   styleUrl: './stats.scss'
 })
 export class Stats {
+  private readonly decimalPipe: DecimalPipe;
   private readonly percentPipe: PercentPipe;
+
+  protected AttributesExpanded: boolean = true;
+  protected StatsExpanded: boolean = true;
 
   constructor(
     @Inject(LOCALE_ID) locale: string,
     private statsService: StatsService,
     private levelService: LevelService,
-    private gameService: GameService
+    private canChangeAttributes: CanChangeAttributesSpecification
   ) {
+    this.decimalPipe = new DecimalPipe(locale);
     this.percentPipe = new PercentPipe(locale);
   }
 
-  get ShowSkillPoints(): boolean {
-    return this.levelService.UnspentSkillPoints() > 0;
+  get ShowAttributePoints(): boolean {
+    return this.levelService.UnspentAttributePoints() > 0;
   }
 
-  get SkillPoints(): string | undefined {
-    return this.levelService.TotalSkillPoints() > 0
-      ? this.levelService.UnspentSkillPoints() + ' / ' + this.levelService.TotalSkillPoints()
+  get AttributePoints(): string | undefined {
+    return this.levelService.TotalAttributePoints() > 0
+      ? this.levelService.UnspentAttributePoints() +
+          ' / ' +
+          this.levelService.TotalAttributePoints()
       : undefined;
   }
 
-  get Attributes(): { label: string; value: number }[] {
+  get Attributes(): { label: string; value: string | null }[] {
     return [
       {
         label: 'Strength',
-        value: this.statsService.Strength()
+        value: this.decimalPipe.transform(this.statsService.Strength(), '1.0-0')
       },
       {
         label: 'Intelligence',
-        value: this.statsService.Intelligence()
+        value: this.decimalPipe.transform(this.statsService.Intelligence(), '1.0-0')
       },
       {
         label: 'Dexterity',
-        value: this.statsService.Dexterity()
+        value: this.decimalPipe.transform(this.statsService.Dexterity(), '1.0-0')
       }
     ];
   }
@@ -74,52 +82,21 @@ export class Stats {
     ];
   }
 
-  CanIncreaseSkillPoints(): boolean {
-    return !this.gameService.InProgress() && this.levelService.UnspentSkillPoints() > 0;
+  get CanIncreaseAttributes(): boolean {
+    return this.canChangeAttributes.CanIncreaseAttributes();
   }
 
-  CanDecreaseSkillPoints(attribute: string): boolean {
-    if (this.levelService.SpentSkillPoints() <= 0) {
-      return false;
-    }
-
-    switch (attribute) {
-      case 'Strength':
-        return !this.gameService.InProgress() && this.statsService.StrengthStat() > 1;
-      case 'Intelligence':
-        return !this.gameService.InProgress() && this.statsService.IntelligenceStat() > 1;
-      case 'Dexterity':
-        return !this.gameService.InProgress() && this.statsService.DexterityStat() > 1;
-      default:
-        return false;
-    }
+  protected CanDecreaseAttribute(attribute: string): boolean {
+    return this.canChangeAttributes.CanDecreaseAttribute(
+      attribute as 'Strength' | 'Intelligence' | 'Dexterity'
+    );
   }
 
   protected increaseAttribute(attribute: string) {
-    switch (attribute) {
-      case 'Strength':
-        this.statsService.IncreaseAttribute('Strength');
-        break;
-      case 'Intelligence':
-        this.statsService.IncreaseAttribute('Intelligence');
-        break;
-      case 'Dexterity':
-        this.statsService.IncreaseAttribute('Dexterity');
-        break;
-    }
+    this.statsService.IncreaseAttribute(attribute as 'Strength' | 'Intelligence' | 'Dexterity');
   }
 
   protected decreaseAttribute(attribute: string) {
-    switch (attribute) {
-      case 'Strength':
-        this.statsService.DecreaseAttribute('Strength');
-        break;
-      case 'Intelligence':
-        this.statsService.DecreaseAttribute('Intelligence');
-        break;
-      case 'Dexterity':
-        this.statsService.DecreaseAttribute('Dexterity');
-        break;
-    }
+    this.statsService.DecreaseAttribute(attribute as 'Strength' | 'Intelligence' | 'Dexterity');
   }
 }

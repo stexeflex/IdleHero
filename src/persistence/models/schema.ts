@@ -108,24 +108,24 @@ export class LevelSchema {
   Level: number = CHARACTER_CONFIG.LEVEL.BASE_LEVEL;
   Experience: number = CHARACTER_CONFIG.EXPERIENCE.BASE_EXPERIENCE;
   ExperienceToNextLevel: number = CHARACTER_CONFIG.EXPERIENCE.BASE_EXPERIENCE_TO_NEXT_LEVEL;
-  UnspentSkillPoints: number = 0;
-  SpentSkillPoints: number = 0;
-  TotalSkillPoints: number = 0;
+  UnspentAttributePoints: number = 0;
+  SpentAttributePoints: number = 0;
+  TotalAttributePoints: number = 0;
 
   public static FromRaw(applyTo: LevelSchema, raw: unknown): LevelSchema {
     const level = (raw as any).Level;
     applyTo.Level = FallbackUtils.pickNumber(level?.Level, applyTo.Level);
-    applyTo.UnspentSkillPoints = FallbackUtils.pickNumber(
-      level?.UnspentSkillPoints,
-      applyTo.UnspentSkillPoints
+    applyTo.UnspentAttributePoints = FallbackUtils.pickNumber(
+      level?.UnspentAttributePoints,
+      applyTo.UnspentAttributePoints
     );
-    applyTo.SpentSkillPoints = FallbackUtils.pickNumber(
-      level?.SpentSkillPoints,
-      applyTo.SpentSkillPoints
+    applyTo.SpentAttributePoints = FallbackUtils.pickNumber(
+      level?.SpentAttributePoints,
+      applyTo.SpentAttributePoints
     );
-    applyTo.TotalSkillPoints = FallbackUtils.pickNumber(
-      level?.TotalSkillPoints,
-      applyTo.TotalSkillPoints
+    applyTo.TotalAttributePoints = FallbackUtils.pickNumber(
+      level?.TotalAttributePoints,
+      applyTo.TotalAttributePoints
     );
     return applyTo;
   }
