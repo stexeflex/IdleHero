@@ -73,7 +73,6 @@ export class EnchantingService {
 
     const enchantment: Enchantment = this.CreateEnchantment(item.Type);
     item.Slots[slotIndex].Reroll(enchantment, item.Level);
-    this.itemPriceService.IncreaseSellValue(item, rerollCost);
     this.UpdateSlot(item);
   }
 
