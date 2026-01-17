@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, effect, input, signal } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  input,
+  signal
+} from '@angular/core';
 
 import { DELAYS } from '../../constants';
 import { DecimalPipe } from '@angular/common';
@@ -11,7 +19,7 @@ import { TimeoutUtils } from '../../utils';
   styleUrl: './experience-bar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ExperienceBar {
+export class ExperienceBar implements AfterViewInit {
   // Animation timing (should match SCSS transition)
   private static readonly TRANSITION_MS = 800;
 
@@ -37,6 +45,9 @@ export class ExperienceBar {
   // Previous values to detect level-ups
   private prevLevel = this.currentLevel();
 
+  // Flag to skip level-up animation on initial render
+  private fullyRendered = false;
+
   // Queue to serialize animations
   private animationQueue: Promise<void> = Promise.resolve();
 
@@ -45,7 +56,10 @@ export class ExperienceBar {
     effect(() => {
       const level = this.currentLevel();
       const target = this.targetPercent();
-      const levelDelta = level - this.prevLevel;
+
+      // Determine if level-up(s) occurred
+      // Skip level-up animation until after initial render
+      const levelDelta = this.fullyRendered ? level - this.prevLevel : 0;
 
       if (levelDelta > 0) {
         // One or more level-ups occurred; animate fill-to-full cycles
@@ -57,6 +71,10 @@ export class ExperienceBar {
 
       this.prevLevel = level;
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.fullyRendered = true;
   }
 
   private animateLevelUp(levels: number, finalTarget: number) {
