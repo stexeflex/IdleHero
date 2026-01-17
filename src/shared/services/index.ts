@@ -2,6 +2,7 @@ export * from './battle/battle-log.service';
 export * from './battle/boss.service';
 export * from './battle/stage.service';
 export * from './buffs-service';
+export * from './character/attributes.service';
 export * from './character/currency.service';
 export * from './character/hero.service';
 export * from './character/inventory.service';

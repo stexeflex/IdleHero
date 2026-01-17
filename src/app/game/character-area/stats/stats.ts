@@ -1,7 +1,7 @@
 import { Component, Inject, LOCALE_ID } from '@angular/core';
 
 import { DecimalPipe, PercentPipe } from '@angular/common';
-import { LevelService, StatsService } from '../../../../shared/services';
+import { AttributesService, LevelService, StatsService } from '../../../../shared/services';
 import { IconComponent } from '../../../../shared/components';
 import { AttributesSpecification } from '../../../../shared/specifications';
 
@@ -20,6 +20,7 @@ export class Stats {
 
   constructor(
     @Inject(LOCALE_ID) locale: string,
+    private attributesService: AttributesService,
     private statsService: StatsService,
     private levelService: LevelService,
     private canChangeAttributes: AttributesSpecification
@@ -44,15 +45,15 @@ export class Stats {
     return [
       {
         label: 'Strength',
-        value: this.decimalPipe.transform(this.statsService.Strength(), '1.0-0')
+        value: this.decimalPipe.transform(this.attributesService.Strength(), '1.0-0')
       },
       {
         label: 'Intelligence',
-        value: this.decimalPipe.transform(this.statsService.Intelligence(), '1.0-0')
+        value: this.decimalPipe.transform(this.attributesService.Intelligence(), '1.0-0')
       },
       {
         label: 'Dexterity',
-        value: this.decimalPipe.transform(this.statsService.Dexterity(), '1.0-0')
+        value: this.decimalPipe.transform(this.attributesService.Dexterity(), '1.0-0')
       }
     ];
   }
@@ -93,10 +94,14 @@ export class Stats {
   }
 
   protected increaseAttribute(attribute: string) {
-    this.statsService.IncreaseAttribute(attribute as 'Strength' | 'Intelligence' | 'Dexterity');
+    this.attributesService.IncreaseAttribute(
+      attribute as 'Strength' | 'Intelligence' | 'Dexterity'
+    );
   }
 
   protected decreaseAttribute(attribute: string) {
-    this.statsService.DecreaseAttribute(attribute as 'Strength' | 'Intelligence' | 'Dexterity');
+    this.attributesService.DecreaseAttribute(
+      attribute as 'Strength' | 'Intelligence' | 'Dexterity'
+    );
   }
 }

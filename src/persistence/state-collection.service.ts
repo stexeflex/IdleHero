@@ -1,10 +1,10 @@
 import {
+  AttributesService,
   CurrencyService,
   GameStateService,
   HeroService,
   InventoryService,
-  LevelService,
-  StatsService
+  LevelService
 } from '../shared/services';
 
 import { Injectable } from '@angular/core';
@@ -16,7 +16,7 @@ export class StateCollectionService {
     private gameStateService: GameStateService,
     private heroService: HeroService,
     private levelService: LevelService,
-    private statsService: StatsService,
+    private attributesService: AttributesService,
     private inventoryService: InventoryService,
     private currencyService: CurrencyService
   ) {}
@@ -34,7 +34,7 @@ export class StateCollectionService {
     schema.Level = this.levelService.CollectSchema();
 
     // Stats
-    schema.Stats = this.statsService.CollectSchema();
+    schema.Attributes = this.attributesService.CollectSchema();
 
     // Inventory
     schema.Inventory = this.inventoryService.CollectSchema();

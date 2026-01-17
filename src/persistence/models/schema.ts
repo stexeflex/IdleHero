@@ -11,7 +11,7 @@ export class Schema {
   GameState: GameStateSchema = new GameStateSchema();
   Hero: HeroSchema = new HeroSchema();
   Level: LevelSchema = new LevelSchema();
-  Stats: StatsSchema = new StatsSchema();
+  Attributes: AttributesSchema = new AttributesSchema();
   Inventory: InventorySchema = new InventorySchema();
   Currency: CurrencySchema = new CurrencySchema();
 
@@ -41,7 +41,7 @@ export class Schema {
     applyTo.Level = LevelSchema.FromRaw(applyTo.Level, raw);
 
     // Stats
-    applyTo.Stats = StatsSchema.FromRaw(applyTo.Stats, raw);
+    applyTo.Attributes = AttributesSchema.FromRaw(applyTo.Attributes, raw);
 
     // Inventory
     applyTo.Inventory = InventorySchema.FromRaw(applyTo.Inventory, raw);
@@ -131,12 +131,12 @@ export class LevelSchema {
   }
 }
 
-export class StatsSchema {
+export class AttributesSchema {
   Strength: number = STATS_CONFIG.ATTRIBUTES.STRENGTH_BASE;
   Intelligence: number = STATS_CONFIG.ATTRIBUTES.INTELLIGENCE_BASE;
   Dexterity: number = STATS_CONFIG.ATTRIBUTES.DEXTERITY_BASE;
 
-  public static FromRaw(applyTo: StatsSchema, raw: unknown): StatsSchema {
+  public static FromRaw(applyTo: AttributesSchema, raw: unknown): AttributesSchema {
     const stats = (raw as any).Stats;
     applyTo.Strength = FallbackUtils.pickNumber(stats?.Strength, applyTo.Strength);
     applyTo.Intelligence = FallbackUtils.pickNumber(stats?.Intelligence, applyTo.Intelligence);

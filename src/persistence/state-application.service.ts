@@ -1,10 +1,10 @@
 import {
+  AttributesService,
   CurrencyService,
   GameStateService,
   HeroService,
   InventoryService,
-  LevelService,
-  StatsService
+  LevelService
 } from '../shared/services';
 
 import { Injectable } from '@angular/core';
@@ -16,7 +16,7 @@ export class StateApplicationService {
     private gameStateService: GameStateService,
     private heroService: HeroService,
     private levelService: LevelService,
-    private statsService: StatsService,
+    private attributesService: AttributesService,
     private inventoryService: InventoryService,
     private currencyService: CurrencyService
   ) {}
@@ -25,7 +25,7 @@ export class StateApplicationService {
     this.gameStateService.GameCreated.set(schema.GameState.GameCreated);
     this.heroService.Init(schema.Hero);
     this.levelService.Init(schema.Level);
-    this.statsService.Init(schema.Stats);
+    this.attributesService.Init(schema.Attributes);
     this.inventoryService.Init(schema.Inventory);
     this.currencyService.Init(schema.Currency);
   }

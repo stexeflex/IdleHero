@@ -1,11 +1,11 @@
-import { GameStateService, LevelService, StatsService } from '../services';
+import { AttributesService, GameStateService, LevelService } from '../services';
 
 import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class AttributesSpecification {
   constructor(
-    private statsService: StatsService,
+    private attributesService: AttributesService,
     private levelService: LevelService,
     private gameStateService: GameStateService
   ) {}
@@ -27,11 +27,11 @@ export class AttributesSpecification {
 
     switch (attribute) {
       case 'Strength':
-        return this.statsService.StrengthStat() > 1;
+        return this.attributesService.StrengthStat() > 1;
       case 'Intelligence':
-        return this.statsService.IntelligenceStat() > 1;
+        return this.attributesService.IntelligenceStat() > 1;
       case 'Dexterity':
-        return this.statsService.DexterityStat() > 1;
+        return this.attributesService.DexterityStat() > 1;
 
       default:
         return false;
