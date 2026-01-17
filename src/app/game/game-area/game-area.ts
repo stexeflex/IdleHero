@@ -29,8 +29,6 @@ export class GameArea implements OnDestroy {
     if (this.timeoutId) {
       clearTimeout(this.timeoutId);
     }
-
-    this.battleService.Prestige();
   }
 
   startGame() {
