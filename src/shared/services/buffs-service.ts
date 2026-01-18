@@ -19,25 +19,25 @@ export class BuffsService {
       Icon: '🥷🏼',
       Name: 'Speed Boost',
       Description: 'Increases Attack Speed by 50%.',
-      DurationInSeconds: 10,
+      DurationInSeconds: 20,
       CooldownInSeconds: 60,
       Modifier: 0.5
     }),
     Buff.FromObject({
       Icon: '🎯',
       Name: 'Critical Focus',
-      Description: 'Increases Critical Hit Chance by 15%.',
+      Description: 'Increases Critical Hit Chance by 25%.',
       DurationInSeconds: 15,
       CooldownInSeconds: 60,
-      Modifier: 0.15
+      Modifier: 0.25
     }),
     Buff.FromObject({
       Icon: '⚔️',
       Name: 'Multi-Hit Frenzy',
-      Description: 'Increases Multi-Hit Chance by 45%.',
+      Description: 'Increases Multi-Hit Chance by 50%.',
       DurationInSeconds: 15,
       CooldownInSeconds: 60,
-      Modifier: 0.45
+      Modifier: 0.5
     }),
     Buff.FromObject({
       Icon: '💥',

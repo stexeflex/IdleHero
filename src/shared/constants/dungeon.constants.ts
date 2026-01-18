@@ -21,7 +21,7 @@ export const DUNGEON_CONFIG = {
       BASE_EXPERIENCE_REWARD: 20,
       EXPERIENCE_REWARD_PER_STAGE: 10,
       BASE_GOLD_REWARD: 10,
-      GOLD_REWARD_PER_STAGE: 2
+      GOLD_REWARD_PER_STAGE: 5
     },
     ROOM_REWARDS: {
       GOLD: 1000,
@@ -30,7 +30,7 @@ export const DUNGEON_CONFIG = {
   },
   2: {
     PREREQUISITES: {
-      GOLD_COST: 1000,
+      GOLD_COST: 250,
       KEY: 'Silver Key' as DungeonRoomKey
     },
     STAGES: {
@@ -38,13 +38,13 @@ export const DUNGEON_CONFIG = {
       MAX: 75
     },
     BOSS: {
-      BASE_HEALTH: 1000000,
+      BASE_HEALTH: 50000,
       HEALTH_EXP_GROWTH_RATE: 1.25
     },
     REWARDS: {
-      BASE_EXPERIENCE_REWARD: 100,
+      BASE_EXPERIENCE_REWARD: 250,
       EXPERIENCE_REWARD_PER_STAGE: 50,
-      BASE_GOLD_REWARD: 50,
+      BASE_GOLD_REWARD: 100,
       GOLD_REWARD_PER_STAGE: 25
     },
     ROOM_REWARDS: {
@@ -62,14 +62,14 @@ export const DUNGEON_CONFIG = {
       MAX: 100
     },
     BOSS: {
-      BASE_HEALTH: 10000000,
+      BASE_HEALTH: 1000000,
       HEALTH_EXP_GROWTH_RATE: 1.35
     },
     REWARDS: {
       BASE_EXPERIENCE_REWARD: 1000,
       EXPERIENCE_REWARD_PER_STAGE: 500,
-      BASE_GOLD_REWARD: 100,
-      GOLD_REWARD_PER_STAGE: 50
+      BASE_GOLD_REWARD: 2500,
+      GOLD_REWARD_PER_STAGE: 1000
     },
     ROOM_REWARDS: {
       GOLD: 20000,
