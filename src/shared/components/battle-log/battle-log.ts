@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { BattleLogMessage, MessageType } from '../../models';
 
 import { BattleLogService } from '../../services';
+import { FlagsUtils } from '../../utils';
 
 @Component({
   selector: 'app-battle-log',
@@ -33,82 +34,84 @@ export class BattleLog implements AfterViewInit {
   }
 
   protected GetMessageClass(type: MessageType): string {
-    if (type === MessageType.Info) {
+    if (FlagsUtils.IsFlag(type, MessageType.Info)) {
       return 'info';
     }
 
-    if (type === MessageType.Separator) {
+    if (FlagsUtils.IsFlag(type, MessageType.Separator)) {
       return 'separator';
     }
 
-    if (type === MessageType.Other) {
+    if (FlagsUtils.IsFlag(type, MessageType.Other)) {
       return 'other';
     }
 
-    if ((type & MessageType.Damage) === MessageType.Damage) {
-      if (
-        (type & MessageType.Crit) === MessageType.Crit &&
-        (type & MessageType.Multi) === MessageType.Multi
-      ) {
+    if (FlagsUtils.HasFlag(type, MessageType.Damage)) {
+      if (FlagsUtils.HasFlag(type, MessageType.Crit | MessageType.Multi)) {
         return 'crit-multi';
       }
 
-      if ((type & MessageType.Crit) === MessageType.Crit) {
+      if (FlagsUtils.HasFlag(type, MessageType.Crit)) {
         return 'crit';
       }
 
-      if ((type & MessageType.Multi) === MessageType.Multi) {
+      if (FlagsUtils.HasFlag(type, MessageType.Multi)) {
         return 'multi';
       }
 
       return 'damage';
     }
 
-    if ((type & MessageType.LevelUp) === MessageType.LevelUp) {
+    if (FlagsUtils.IsFlag(type, MessageType.LevelUp)) {
       return 'level-up';
     }
 
-    if ((type & MessageType.BossDefeat) === MessageType.BossDefeat) {
+    if (FlagsUtils.IsFlag(type, MessageType.BossDefeat)) {
       return 'boss-defeat';
+    }
+
+    if (FlagsUtils.IsFlag(type, MessageType.DungeonCleared)) {
+      return 'dungeon-cleared';
     }
 
     return '';
   }
 
   protected GetMessageIcon(type: MessageType): string | null {
-    if (type === MessageType.Info) {
+    if (FlagsUtils.IsFlag(type, MessageType.Info)) {
       return 'ℹ️';
     }
 
-    if ((type & MessageType.Damage) === MessageType.Damage) {
-      if ((type & MessageType.Splash) === MessageType.Splash) {
+    if (FlagsUtils.HasFlag(type, MessageType.Damage)) {
+      if (FlagsUtils.HasFlag(type, MessageType.Splash)) {
         return '💥';
       }
 
-      if (
-        (type & MessageType.Crit) === MessageType.Crit &&
-        (type & MessageType.Multi) === MessageType.Multi
-      ) {
+      if (FlagsUtils.HasFlag(type, MessageType.Crit | MessageType.Multi)) {
         return '⚡⚔️';
       }
 
-      if ((type & MessageType.Crit) === MessageType.Crit) {
+      if (FlagsUtils.HasFlag(type, MessageType.Crit)) {
         return '⚡';
       }
 
-      if ((type & MessageType.Multi) === MessageType.Multi) {
+      if (FlagsUtils.HasFlag(type, MessageType.Multi)) {
         return '⚔️';
       }
 
       return '🗡️';
     }
 
-    if ((type & MessageType.LevelUp) === MessageType.LevelUp) {
+    if (FlagsUtils.IsFlag(type, MessageType.LevelUp)) {
       return '⬆️';
     }
 
-    if ((type & MessageType.BossDefeat) === MessageType.BossDefeat) {
+    if (FlagsUtils.IsFlag(type, MessageType.BossDefeat)) {
       return '❌';
+    }
+
+    if (FlagsUtils.IsFlag(type, MessageType.DungeonCleared)) {
+      return '🏆';
     }
 
     return null;

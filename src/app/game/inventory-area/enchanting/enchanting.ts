@@ -2,7 +2,7 @@ import { Component, HostListener, Input, OnInit } from '@angular/core';
 import {
   CurrencyService,
   EnchantingService,
-  GameService,
+  GameStateService,
   ItemPriceService
 } from '../../../../shared/services';
 import { EnchantmentSlot, Gear } from '../../../../shared/models';
@@ -33,7 +33,7 @@ export class Enchanting implements OnInit {
   protected SlotStates: Map<number, 'Empty' | 'Enchanted' | 'Upgrading' | 'Rerolling'> = new Map();
 
   constructor(
-    private gameService: GameService,
+    private gameStateService: GameStateService,
     private enchantingService: EnchantingService,
     private currencyService: CurrencyService,
     private itemPriceService: ItemPriceService
@@ -70,7 +70,7 @@ export class Enchanting implements OnInit {
   }
 
   protected CanEnchant(slot: EnchantmentSlot): boolean {
-    if (this.gameService.InProgress()) {
+    if (this.gameStateService.IsGameInProgress) {
       return false;
     }
 
@@ -85,7 +85,7 @@ export class Enchanting implements OnInit {
 
   /* REROLL SECTION */
   protected ShowRerollAction(slot: EnchantmentSlot): boolean {
-    if (this.gameService.InProgress()) {
+    if (this.gameStateService.IsGameInProgress) {
       return false;
     }
 
@@ -113,7 +113,7 @@ export class Enchanting implements OnInit {
 
   /* UPGRADE SECTION */
   protected ShowUpgradeAction(slot: EnchantmentSlot): boolean {
-    if (this.gameService.InProgress()) {
+    if (this.gameStateService.IsGameInProgress) {
       return false;
     }
 

@@ -1,0 +1,48 @@
+<div
+  class="skill"
+  [class.unlockable]="unlockable"
+  [class.unlocked]="unlocked"
+  [class.locked]="!unlockable"
+  [class.maxed]="isMaxed">
+  <div class="skill-main">
+    <!-- TITLE -->
+    <div class="skill-title">
+      <span>{{ skill.Id }}</span>
+      <strong class="skill-title__name">{{ skill.Name }}</strong>
+      @if (unlocked) {
+        <span>[{{ skill.Level }} / {{ skill.MaxLevel }}]</span>
+      }
+    </div>
+
+    <!-- DESCRIPTIONS -->
+    <div class="skill-description">{{ skill.GetDescription(skill.Level) }}</div>
+    @if (!isMaxed) {
+      <div class="skill-description">Next: {{ skill.GetDescription(skill.Level + 1) }}</div>
+    }
+    <!-- DEPENDENCIES -->
+    @if (!unlocked && hasDependencies) {
+      <div class="skill-dependencies">Requires: {{ skillDependencies }}</div>
+    }
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="skill-actions">
+    @if (unlockable && skill.Level === 0) {
+      <button
+        class="ih-button-icon ih-button-icon-border"
+        [disabled]="!canUnlock"
+        title="Unlock Skill"
+        (click)="unlockSkill.emit(skill)">
+        <app-icon symbol="padlockopen" size="sm"></app-icon>
+      </button>
+    } @else if (unlocked && skill.Level < skill.MaxLevel) {
+      <button
+        class="ih-button-icon ih-button-icon-border"
+        [disabled]="!canLevel"
+        title="Upgrade Skill"
+        (click)="upgradeSkill.emit(skill)">
+        <app-icon symbol="growth" size="sm"></app-icon>
+      </button>
+    }
+  </div>
+</div>

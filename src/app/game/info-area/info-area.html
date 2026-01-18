@@ -1,0 +1,28 @@
+<div class="container">
+  <div class="info-value gold" title="Gold Amount">
+    <app-gold [amount]="GoldAmount" size="md"></app-gold>
+  </div>
+  <separator class="separator" [vertical]="true"></separator>
+
+  @if (HasAnyKey) {
+    <div class="info-value dungeon-key">
+      @if (HasKey("Silver Key")) {
+        <app-icon class="common--font" symbol="skeletonkey" size="sm" title="Silver Key"></app-icon>
+      }
+      @if (HasKey("Magic Key")) {
+        <app-icon class="magic--font" symbol="skeletonkey" size="sm" title="Magic Key"></app-icon>
+      }
+      @if (HasKey("Golden Key")) {
+        <app-icon class="rare--font" symbol="skeletonkey" size="sm" title="Golden Key"></app-icon>
+      }
+    </div>
+    <separator class="separator" [vertical]="true"></separator>
+  }
+
+  <div class="info-value" title="Prestiges">
+    <h3>🏆 {{ PrestigeLevel | number }}</h3>
+  </div>
+  <div class="info-value" title="Highest Stages">
+    <h3>🚩 {{ MaxStages }}</h3>
+  </div>
+</div>

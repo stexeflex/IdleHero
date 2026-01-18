@@ -1,0 +1,45 @@
+@use "sass:color";
+@use "index" as *;
+
+$dungeon-height: 87vh;
+$combat-log-height: 53vh;
+// $combat-log-width: 40%;
+$combat-log-width: 450px;
+
+.dungeon-root {
+  @include flexbox($dir: column, $justify: flex-start, $align: stretch);
+  gap: $gap;
+  max-height: $dungeon-height;
+}
+
+.arena {
+  @include flexbox($justify: flex-start, $align: stretch);
+  gap: $gap;
+  padding: 0 $gap;
+}
+
+.arena-battle {
+  margin-left: 50px;
+  flex: 1 1 auto;
+}
+
+.hud {
+  @include panel($bg: $grad-ui-bg);
+  @include panel-shadow($border-width: 2px, $border-color: $clr-border);
+  min-height: 88px;
+}
+
+.buffs {
+  @include flexbox($align: center, $justify: center);
+}
+
+.actions {
+  @include flexbox($dir: column, $align: center, $justify: center);
+  gap: $gap;
+}
+
+.combat-log {
+  height: $combat-log-height;
+  min-width: $combat-log-width;
+  margin: 0 auto;
+}

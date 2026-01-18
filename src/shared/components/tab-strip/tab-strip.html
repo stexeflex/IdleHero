@@ -1,0 +1,17 @@
+<div class="tab-strip">
+  @for (tab of tabs(); track tab.id) {
+    <button
+      type="button"
+      class="tab"
+      role="tab"
+      [disabled]="tab.disabled"
+      [class.is-active]="isSelected(tab)"
+      [class.is-disabled]="tab.disabled"
+      [attr.aria-selected]="isSelected(tab)"
+      [attr.tabindex]="isSelected(tab) ? 0 : -1"
+      (click)="select(tab)">
+      <span class="tab__label">{{ tab.label }}</span>
+    </button>
+  }
+</div>
+<separator></separator>

@@ -1,5 +1,7 @@
-import { Gear, GearType, StatType } from '../../models';
+import { Gear, GearType, ReconstructGear, StatType } from '../../models';
 import { Injectable, signal } from '@angular/core';
+
+import { InventorySchema } from '../../../persistence';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +14,25 @@ export class InventoryService {
   public Chest = signal<Gear>(null as any);
   public Legs = signal<Gear>(null as any);
   public Boots = signal<Gear>(null as any);
+
+  public Init(inventorySchema: InventorySchema) {
+    this.Weapon.set(ReconstructGear(inventorySchema.Weapon) as any);
+    this.Shield.set(ReconstructGear(inventorySchema.Shield) as any);
+    this.Head.set(ReconstructGear(inventorySchema.Head) as any);
+    this.Chest.set(ReconstructGear(inventorySchema.Chest) as any);
+    this.Legs.set(ReconstructGear(inventorySchema.Legs) as any);
+    this.Boots.set(ReconstructGear(inventorySchema.Boots) as any);
+  }
+
+  public CollectSchema(schema: InventorySchema): InventorySchema {
+    schema.Weapon = this.Weapon();
+    schema.Shield = this.Shield();
+    schema.Head = this.Head();
+    schema.Chest = this.Chest();
+    schema.Legs = this.Legs();
+    schema.Boots = this.Boots();
+    return schema;
+  }
 
   public GetGearForSlot(slot: GearType): Gear | null {
     switch (slot) {

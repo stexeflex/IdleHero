@@ -6,14 +6,14 @@
         @if (ShowRerollAction(slot)) {
           @if (SlotStates.get($index) === "Rerolling") {
             <button
-              class="ih-button-icon button-cancel"
+              class="ih-button-icon ih-button-icon-border button-cancel"
               (click)="CancelReroll($event, $index)"
               title="Cancel Reroll">
               <app-icon ui="rotation" size="md"></app-icon>
             </button>
           } @else {
             <button
-              class="ih-button-icon button-reroll"
+              class="ih-button-icon ih-button-icon-border button-reroll"
               (click)="StartReroll($event, $index)"
               title="Reroll">
               <app-icon ui="cycle" size="md"></app-icon>
@@ -66,14 +66,14 @@
         @if (ShowUpgradeAction(slot)) {
           @if (SlotStates.get($index) === "Upgrading") {
             <button
-              class="ih-button-icon button-cancel"
+              class="ih-button-icon ih-button-icon-border button-cancel"
               (click)="CancelUpgrade($event, $index)"
               title="Cancel Upgrade">
               <app-icon ui="rotation" size="md"></app-icon>
             </button>
           } @else {
             <button
-              class="ih-button-icon button-upgrade"
+              class="ih-button-icon ih-button-icon-border button-upgrade"
               (click)="StartUpgrade($event, $index)"
               [disabled]="!CanStartUpgrade(slot)"
               title="Upgrade">

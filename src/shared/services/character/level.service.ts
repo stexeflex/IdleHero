@@ -1,22 +1,49 @@
-import { DELAYS, GAME_CONFIG } from '../../constants';
-import { Injectable, signal } from '@angular/core';
+import { Injectable, computed, signal } from '@angular/core';
 
+import { CHARACTER_CONFIG } from '../../constants';
 import { ExperienceGainResult } from '../../models';
-import { TimeoutUtils } from '../../utils';
+import { LevelSchema } from '../../../persistence';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LevelService {
-  public UnspentSkillPoints = signal(0);
-  public SpentSkillPoints = signal(0);
-  public TotalSkillPoints = signal(0);
+  public UnspentAttributePoints = computed(() => {
+    return this.TotalAttributePoints() - this.SpentAttributePoints();
+  });
 
-  public Current = signal(GAME_CONFIG.LEVEL.BASE_LEVEL);
-  public Experience = signal(GAME_CONFIG.LEVEL.BASE_EXPERIENCE);
-  public ExperienceToNextLevel = signal(GAME_CONFIG.LEVEL.BASE_EXPERIENCE_TO_NEXT_LEVEL);
+  public SpentAttributePoints = signal(0);
 
-  public async GainExperience(amount: number): Promise<ExperienceGainResult> {
+  public TotalAttributePoints = computed(() => {
+    const base = 0;
+    const perLevel = CHARACTER_CONFIG.LEVEL.SKILL_POINTS_PER_LEVEL;
+    const level = this.Level() - CHARACTER_CONFIG.LEVEL.BASE_LEVEL;
+    return base + perLevel * level;
+  });
+
+  public Level = signal(CHARACTER_CONFIG.LEVEL.BASE_LEVEL);
+  public Experience = signal(CHARACTER_CONFIG.EXPERIENCE.BASE_EXPERIENCE);
+  public ExperienceToNextLevel = computed(() => {
+    const baseExperience = CHARACTER_CONFIG.EXPERIENCE.BASE_EXPERIENCE_TO_NEXT_LEVEL;
+    const growthRate = CHARACTER_CONFIG.EXPERIENCE.EXPERIENCE_GROWTH_RATE;
+    const level = this.Level() - CHARACTER_CONFIG.LEVEL.BASE_LEVEL;
+    return Math.round(baseExperience * Math.pow(growthRate, level));
+  });
+
+  public Init(levelSchema: LevelSchema) {
+    this.Level.set(levelSchema.Level);
+    this.Experience.set(levelSchema.Experience);
+    this.SpentAttributePoints.set(levelSchema.SpentAttributePoints);
+  }
+
+  public CollectSchema(schema: LevelSchema): LevelSchema {
+    schema.Level = this.Level();
+    schema.Experience = this.Experience();
+    schema.SpentAttributePoints = this.SpentAttributePoints();
+    return schema;
+  }
+
+  public GainExperience(amount: number): ExperienceGainResult {
     let leveledUp = false;
     let experienceOverflow = 0;
 
@@ -27,12 +54,8 @@ export class LevelService {
       experienceOverflow = this.Experience() - this.ExperienceToNextLevel();
       this.Experience.set(this.ExperienceToNextLevel());
 
-      await TimeoutUtils.wait(DELAYS.LEVEL_UP_ANIMATION_MS);
-
       this.LevelUp();
       this.SetNextLevelExperience();
-
-      await TimeoutUtils.wait(DELAYS.LEVEL_UP_ANIMATION_MS);
     }
 
     return {
@@ -42,42 +65,26 @@ export class LevelService {
   }
 
   private LevelUp(): void {
-    this.Current.update((current) => current + 1);
-    this.UnspentSkillPoints.update((points) => points + GAME_CONFIG.LEVEL.SKILL_POINTS_PER_LEVEL);
-    this.TotalSkillPoints.update((points) => points + GAME_CONFIG.LEVEL.SKILL_POINTS_PER_LEVEL);
+    this.Level.update((current) => current + 1);
   }
 
   private SetNextLevelExperience(): void {
     this.Experience.set(0);
-    this.ExperienceToNextLevel.update((value) =>
-      Math.round(value * GAME_CONFIG.LEVEL.EXPERIENCE_GROWTH_RATE)
-    );
-  }
-
-  public Reset(): void {
-    this.Current.set(GAME_CONFIG.LEVEL.BASE_LEVEL);
-    this.Experience.set(GAME_CONFIG.LEVEL.BASE_EXPERIENCE);
-    this.ExperienceToNextLevel.set(GAME_CONFIG.LEVEL.BASE_EXPERIENCE_TO_NEXT_LEVEL);
-    this.UnspentSkillPoints.set(0);
-    this.SpentSkillPoints.set(0);
-    this.TotalSkillPoints.set(0);
   }
 
   public SpentSkillPoint() {
-    if (this.UnspentSkillPoints() <= 0) {
+    if (this.UnspentAttributePoints() <= 0) {
       return;
     }
 
-    this.UnspentSkillPoints.update((points) => points - 1);
-    this.SpentSkillPoints.update((points) => points + 1);
+    this.SpentAttributePoints.update((points) => points + 1);
   }
 
   public UnspentSkillPoint() {
-    if (this.SpentSkillPoints() <= 0) {
+    if (this.SpentAttributePoints() <= 0) {
       return;
     }
 
-    this.UnspentSkillPoints.update((points) => points + 1);
-    this.SpentSkillPoints.update((points) => points - 1);
+    this.SpentAttributePoints.update((points) => points - 1);
   }
 }

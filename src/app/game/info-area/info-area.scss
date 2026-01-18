@@ -1,0 +1,35 @@
+@use "sass:color";
+@use "index" as *;
+
+.container {
+  display: flex;
+  gap: $gap;
+
+  @media (max-width: $bp-sm) {
+    flex-direction: column;
+  }
+}
+
+.separator {
+  align-content: center;
+}
+
+.info-value {
+  @include flexbox();
+  gap: $gap;
+
+  min-width: 100px;
+  min-height: 45px;
+
+  border: 2px solid $clr-border;
+  border-radius: calc($border-radius * 2);
+  padding: calc($gap / 4) $gap;
+}
+
+.gold {
+  min-width: 150px;
+}
+
+.dungeon-key {
+  min-width: 60px;
+}

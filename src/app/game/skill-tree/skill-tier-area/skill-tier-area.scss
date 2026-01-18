@@ -1,0 +1,52 @@
+@use "sass:color";
+@use "index" as *;
+
+.tier {
+  border: 1px solid $clr-border;
+  border-radius: $border-radius;
+  padding: $gap calc($gap / 2);
+}
+
+.tier-header {
+  @include flexbox(row, space-between, center);
+  gap: $gap;
+
+  min-height: 45px;
+  margin-bottom: $gap;
+
+  > h3 {
+    margin-left: $gap;
+    color: $clr-highlight;
+  }
+}
+
+.requirements {
+  display: flex;
+  gap: $gap;
+}
+
+.level-requirement {
+  font-family: $font-family-title;
+  align-self: baseline;
+  justify-self: baseline;
+
+  font-size: 1.1rem;
+  color: $clr-legendary;
+}
+
+.tier-actions {
+  margin-right: 10px;
+}
+
+.badge {
+  @include disable-text-selection();
+
+  background: $clr-highlight;
+  color: $clr-black;
+
+  border-radius: $border-radius;
+  padding: calc($gap / 4) $gap;
+
+  font-family: $font-family-header;
+  font-weight: 600;
+}

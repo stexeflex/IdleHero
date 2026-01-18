@@ -3,12 +3,15 @@
 
 .container {
   @include relative-container();
+  @include dim();
+
+  height: 100vh;
   display: grid;
 
   grid:
-    "header character inventory" auto
-    "game character inventory" 1fr
-    / 1fr 1fr 1fr;
+    "header info info" auto
+    "game character sidecontent" 1fr
+    / 1fr 650px 1fr;
 
   gap: $gap;
   padding: $gap;
@@ -18,27 +21,35 @@
   .container {
     grid:
       "header" auto
+      "info" auto
       "game" 1fr
       "character" auto
-      "inventory" auto
+      "sidecontent" auto
       / 1fr;
   }
 }
 
 .header,
+.info,
 .game-area,
 .character-area,
-.inventory-area {
+.sidecontent {
   @include panel();
   @include panel-shadow();
 }
 
 .header {
   grid-area: header;
-
-  // Center Text
   display: flex;
-  justify-content: center;
+}
+
+.title {
+  width: 100%;
+  text-align: center;
+}
+
+.info {
+  grid-area: info;
 }
 
 .game-area {
@@ -49,10 +60,9 @@
   grid-area: character;
 }
 
-.inventory-area {
-  grid-area: inventory;
-}
+.sidecontent {
+  grid-area: sidecontent;
 
-.opacity {
-  opacity: 0.4;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
 }

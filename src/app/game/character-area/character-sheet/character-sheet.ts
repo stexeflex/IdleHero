@@ -1,13 +1,12 @@
-import { CharactersIconName, IconComponent, Separator } from '../../../../shared/components';
+import { CharactersIconName, IconComponent } from '../../../../shared/components';
 
 import { Component } from '@angular/core';
 import { HeroService } from '../../../../shared/services';
 import { Info } from './info/info';
-import { Stats } from './stats/stats';
 
 @Component({
   selector: 'app-character-sheet',
-  imports: [Info, Stats, Separator, IconComponent],
+  imports: [Info, IconComponent],
   templateUrl: './character-sheet.html',
   styleUrl: './character-sheet.scss'
 })

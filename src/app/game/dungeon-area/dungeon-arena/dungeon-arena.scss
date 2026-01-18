@@ -1,0 +1,126 @@
+@use "sass:color";
+@use "index" as *;
+
+.battle-area {
+  // @include panel();
+  // @include panel-shadow($border-width: 2px, $border-color: $clr-border);
+  @include flexbox($justify: space-between, $align: stretch);
+
+  gap: $gap;
+  min-height: 200px;
+}
+
+.hero,
+.boss {
+  @include flexbox($dir: column, $align: center, $justify: center);
+  gap: calc($gap / 2);
+}
+
+.arena {
+  @include flexbox($align: center, $justify: center);
+  flex: 1 1 auto;
+}
+
+.vs {
+  @include disable-text-selection();
+  color: $clr-highlight;
+  font-family: $font-family-title;
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+/* Idle animations */
+.icon {
+  animation: idle-bob 3s ease-in-out infinite;
+}
+
+@keyframes idle-bob {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Hero animations */
+.hero.attack .icon {
+  animation: hero-attack 240ms ease-out;
+}
+
+.hero.crit .icon {
+  filter: drop-shadow(0 0 10px $clr-log-crit);
+}
+
+.hero.multi .icon {
+  animation: hero-multi-attack 300ms ease-out;
+  filter: drop-shadow(0 0 15px $clr-log-multi);
+}
+
+.hero.crit-multi .icon {
+  filter: drop-shadow(0 0 20px $clr-log-crit-multi);
+}
+
+@keyframes hero-attack {
+  0% {
+    transform: translateX(0) scale(1);
+  }
+  40% {
+    transform: translateX(10px) scale(1.05);
+  }
+  100% {
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes hero-multi-attack {
+  0% {
+    transform: translateX(0) scale(1);
+  }
+  25% {
+    transform: translateX(20px) scale(1.2);
+  }
+  70% {
+    transform: translateX(-10px) scale(1.2);
+  }
+  100% {
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* Boss animations */
+.boss.taking-hit .icon {
+  animation: boss-hit 300ms ease-out;
+  filter: drop-shadow(0 0 5px $clr-log-boss-defeat);
+}
+
+.boss.defeated .icon {
+  animation: boss-defeat 600ms ease-in forwards;
+  filter: grayscale(100%) brightness(50%);
+}
+
+@keyframes boss-hit {
+  0% {
+    transform: translateX(0) scale(1);
+  }
+  50% {
+    transform: translateX(10px) scale(0.95);
+  }
+  100% {
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes boss-defeat {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(50%) rotate(360deg) scale(0);
+    opacity: 0;
+  }
+}

@@ -4,8 +4,11 @@ $position-top: calc($gap + 12px);
 $position-left: calc($gap + 12px);
 
 .menu__toggle {
-  @include fixed-floating($position-top, null, null, $position-left, 1000);
-  cursor: pointer;
+  position: relative;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+
   background: $clr-accent;
   width: 42px;
   height: 42px;
@@ -27,6 +30,7 @@ $position-left: calc($gap + 12px);
   @include fixed-floating($position-top, null, null, $position-left, 999);
   @include panel($grad-ui-bg, $padding: 20px);
   @include panel-shadow();
+
   width: 400px;
   border: 2px solid #fff;
 }
@@ -50,4 +54,8 @@ $position-left: calc($gap + 12px);
   display: flex;
   flex-direction: column;
   gap: $gap;
+}
+
+.footer {
+  @include flexbox(row, space-between, center);
 }

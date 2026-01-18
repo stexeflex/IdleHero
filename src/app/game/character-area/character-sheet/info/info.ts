@@ -15,6 +15,10 @@ export class Info {
 
   private readonly decimalPipe: DecimalPipe;
 
+  private get DamagePerSecond(): number {
+    return Math.round(this.statsService.AttackPower() * this.statsService.AttackSpeed());
+  }
+
   constructor(
     @Inject(LOCALE_ID) locale: string,
     protected heroService: HeroService,
@@ -29,6 +33,10 @@ export class Info {
       {
         label: 'Attack Power',
         value: this.decimalPipe.transform(this.statsService.AttackPower()) || this.PLACEHOLDER
+      },
+      {
+        label: 'DPS',
+        value: this.decimalPipe.transform(this.DamagePerSecond) || this.PLACEHOLDER
       }
     ];
   }

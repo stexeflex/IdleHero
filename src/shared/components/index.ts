@@ -15,3 +15,5 @@ export * from './number-value/number-value';
 export * from './panel-header/panel-header';
 export * from './separator/separator';
 export * from './stage-label/stage-label';
+export * from './tab-strip/tab-definition.model';
+export * from './tab-strip/tab-strip';

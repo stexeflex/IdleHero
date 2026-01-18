@@ -4,16 +4,10 @@ import { Routes } from '@angular/router';
 import { gameGuard } from './guards';
 
 export const routes: Routes = [
-  // Default route redirects to New Game
   {
     path: '',
-    redirectTo: 'new-game',
-    pathMatch: 'prefix'
-  },
-  // New Game route
-  {
-    path: 'new-game',
-    component: NewGame
+    redirectTo: 'game',
+    pathMatch: 'full'
   },
   // Game route protected by the gameGuard
   {
@@ -21,9 +15,14 @@ export const routes: Routes = [
     component: Game,
     canActivate: [gameGuard]
   },
-  // Fallback route
+  // New Game route
+  {
+    path: 'new',
+    component: NewGame
+  },
+  // Optional: fallback to new game for unknown paths
   {
     path: '**',
-    redirectTo: 'new-game'
+    redirectTo: 'new'
   }
 ];

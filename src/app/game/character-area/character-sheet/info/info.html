@@ -4,16 +4,7 @@
   <app-number-value
     class="header__level"
     [label]="'Level:'"
-    [value]="levelService.Current()"></app-number-value>
-  <app-number-value
-    class="header__prestige"
-    [label]="'Prestiges:'"
-    [value]="heroService.PrestigeLevel()"></app-number-value>
-  <app-number-value
-    class="header__stage"
-    [label]="'Highest Stage:'"
-    [label]="'Highest Stage:'"
-    [value]="heroService.HighestStageReached()"></app-number-value>
+    [value]="levelService.Level()"></app-number-value>
 </div>
 
 <!-- Summary -->

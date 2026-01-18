@@ -5,7 +5,7 @@ export class AttackSpeed {
    * Berechnet die Angriffe pro Sekunde (APS)
    */
   public static Calculate(dexterity: number, bonus: number, modifier: number = 1): number {
-    // 1. Dexterity Bonus berechnen (1% Speed pro Punkt)
+    // 1. Dexterity Bonus berechnen (% Speed pro Punkt)
     const dexBonus = (dexterity - 1) * STATS_CONFIG.ATTACK_SPEED.ATTACK_SPEED_PER_DEXTERITY;
 
     // 2. Additive Boni zusammenrechnen (IAS - Increased Attack Speed)
