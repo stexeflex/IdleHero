@@ -24,7 +24,7 @@ export const GEAR_CONFIG = {
     BOOTS: new Enchantment('MultiHitChance', 0.01)
   },
   COSTS: {
-    UPGRADE_COST_PER_LEVEL: 250
+    UPGRADE_COST_PER_LEVEL: 750
   },
   PRICES: {
     SELLVALUE_MULTIPLIER: 0.5,

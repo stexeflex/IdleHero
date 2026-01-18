@@ -35,17 +35,17 @@ export const DUNGEON_CONFIG = {
     },
     STAGES: {
       BASE: 1,
-      MAX: 150
+      MAX: 75
     },
     BOSS: {
-      BASE_HEALTH: 100000,
-      HEALTH_EXP_GROWTH_RATE: 1.3
+      BASE_HEALTH: 1000000,
+      HEALTH_EXP_GROWTH_RATE: 1.25
     },
     REWARDS: {
       BASE_EXPERIENCE_REWARD: 100,
       EXPERIENCE_REWARD_PER_STAGE: 50,
       BASE_GOLD_REWARD: 50,
-      GOLD_REWARD_PER_STAGE: 10
+      GOLD_REWARD_PER_STAGE: 25
     },
     ROOM_REWARDS: {
       GOLD: 5000,
@@ -59,17 +59,17 @@ export const DUNGEON_CONFIG = {
     },
     STAGES: {
       BASE: 1,
-      MAX: 250
+      MAX: 100
     },
     BOSS: {
-      BASE_HEALTH: 1000000,
+      BASE_HEALTH: 10000000,
       HEALTH_EXP_GROWTH_RATE: 1.35
     },
     REWARDS: {
       BASE_EXPERIENCE_REWARD: 1000,
       EXPERIENCE_REWARD_PER_STAGE: 500,
       BASE_GOLD_REWARD: 100,
-      GOLD_REWARD_PER_STAGE: 20
+      GOLD_REWARD_PER_STAGE: 50
     },
     ROOM_REWARDS: {
       GOLD: 20000,
