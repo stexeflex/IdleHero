@@ -27,6 +27,10 @@ export class DungeonRoomService {
     }
   }
 
+  public Get(): DungeonRoom {
+    return this.GetRoom(this.Current())!;
+  }
+
   public Set(room: DungeonRoomId): void {
     if (room < 1 || room > this.Total()) {
       return;

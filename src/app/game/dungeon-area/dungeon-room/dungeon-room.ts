@@ -16,6 +16,8 @@ import { ChangeDetectionStrategy, Component, Signal, inject, output, signal } fr
 
 import { DELAYS } from '../../../../shared/constants';
 import { DungeonArena } from './../dungeon-arena/dungeon-arena';
+import { DungeonRoomId } from '../../../../shared/models';
+import { DungeonSpecifications } from '../../../../shared/specifications';
 import { DungeonTopBar } from './../dungeon-top-bar/dungeon-top-bar';
 
 @Component({
@@ -40,6 +42,7 @@ export class DungeonRoom {
   private readonly stageService = inject(StageService);
   private readonly dungeonRoomService = inject(DungeonRoomService);
   private readonly gameStateService = inject(GameStateService);
+  private readonly dungeonSpecifications = inject(DungeonSpecifications);
 
   // Signals from services
   protected readonly heroIcon: Signal<CharactersIconName> = this.heroService.CharacterIcon;
@@ -49,10 +52,13 @@ export class DungeonRoom {
   protected readonly maxBossHealth: Signal<number> = this.bossService.MaxHealth;
 
   protected readonly currentStage: Signal<number> = this.stageService.Current;
-  protected readonly currentRoom: Signal<number> = this.dungeonRoomService.Current;
+  protected readonly currentRoomId: Signal<DungeonRoomId> = this.dungeonRoomService.Current;
 
   // Action State
-  protected CanStartGame = signal<boolean>(true);
+  protected get CanStartGame(): boolean {
+    return this.dungeonSpecifications.CanEnterDungeonRoom(this.currentRoomId());
+  }
+  protected RestartDelay = signal<boolean>(false);
   protected InDungeon = signal<boolean>(false);
   protected get InBattle(): boolean {
     return this.gameStateService.GameState() === 'IN_PROGRESS';
@@ -79,7 +85,7 @@ export class DungeonRoom {
   }
 
   protected Prestige(): void {
-    this.CanStartGame.set(false);
+    this.RestartDelay.set(true);
     this.onPrestige.emit();
 
     // Delay before the player can start a new game
@@ -93,7 +99,7 @@ export class DungeonRoom {
   private delayRestart() {
     if (this.restartTimer) clearTimeout(this.restartTimer);
     this.restartTimer = setTimeout(() => {
-      this.CanStartGame.set(true);
+      this.RestartDelay.set(false);
     }, DELAYS.BATTLE_RESTART_MS);
   }
 }

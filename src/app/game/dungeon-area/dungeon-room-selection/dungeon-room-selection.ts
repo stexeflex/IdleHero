@@ -4,6 +4,7 @@ import { DungeonRoom, DungeonRoomId } from '../../../../shared/models';
 import { Gold, IconComponent, Separator } from '../../../../shared/components';
 
 import { DecimalPipe } from '@angular/common';
+import { DungeonSpecifications } from '../../../../shared/specifications';
 
 @Component({
   selector: 'app-dungeon-room-selection',
@@ -15,6 +16,7 @@ import { DecimalPipe } from '@angular/common';
 export class DungeonRoomSelection {
   private readonly currency = inject(CurrencyService);
   private readonly dungeonRooms = inject(DungeonRoomService);
+  private readonly dungeonSpecifications = inject(DungeonSpecifications);
 
   readonly onEnterRoom = output<DungeonRoomId>();
 
@@ -35,17 +37,11 @@ export class DungeonRoomSelection {
   }
 
   protected CanEnter(room: DungeonRoom): boolean {
-    const goldEnough = this.gold() >= room.Prerequisites.Gold;
-    const hasKey = this.KeyRequirementMet(room);
-    return goldEnough && hasKey;
+    return this.dungeonSpecifications.CanEnterDungeonRoom(room.Id);
   }
 
   protected KeyRequirementMet(room: DungeonRoom): boolean {
-    if (!room.Prerequisites.Key) {
-      return true;
-    }
-
-    return this.currency.HasKey(room.Prerequisites.Key);
+    return this.dungeonSpecifications.KeyRequirementMet(room);
   }
 
   protected ShowRoomInfo(room: DungeonRoom): boolean {

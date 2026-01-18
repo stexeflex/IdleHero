@@ -1,6 +1,8 @@
 import { Component, input } from '@angular/core';
 import { HealthBar, Separator } from '../../../../shared/components';
 
+import { DungeonRoomId } from '../../../../shared/models';
+
 @Component({
   selector: 'app-dungeon-top-bar',
   imports: [Separator, HealthBar],
@@ -8,7 +10,7 @@ import { HealthBar, Separator } from '../../../../shared/components';
   styleUrl: './dungeon-top-bar.scss'
 })
 export class DungeonTopBar {
-  readonly currentRoom = input.required<number>();
+  readonly currentRoomId = input.required<DungeonRoomId>();
   readonly currentStage = input.required<number>();
 
   readonly showBossHealthBar = input.required<boolean>();

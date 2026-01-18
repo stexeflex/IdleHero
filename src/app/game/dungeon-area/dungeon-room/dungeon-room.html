@@ -1,7 +1,7 @@
 <div class="dungeon-root">
   <!-- INFO -->
   <app-dungeon-top-bar
-    [currentRoom]="currentRoom()"
+    [currentRoomId]="currentRoomId()"
     [currentStage]="currentStage()"
     [showBossHealthBar]="InBattle"
     [currentBossHealth]="currentBossHealth()"
@@ -12,13 +12,13 @@
     <div class="actions">
       @if (InBattle) {
         <button class="ih-button" (click)="Prestige()">PRESTIGE</button>
-      } @else if (!CanStartGame()) {
+      } @else if (RestartDelay()) {
         <button class="ih-button" disabled>
           <i class="fa fa-circle-o-notch fa-spin"></i>
         </button>
         <h3>Leaving...</h3>
       } @else {
-        <button class="ih-button" (click)="Start()">FIGHT</button>
+        <button class="ih-button" (click)="Start()" [disabled]="!CanStartGame">FIGHT</button>
         <button class="ih-button" (click)="Leave()">LEAVE</button>
       }
     </div>
