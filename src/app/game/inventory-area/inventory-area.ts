@@ -1,6 +1,6 @@
 import { Component, ElementRef, HostListener, inject } from '@angular/core';
 import { Gear, GearType } from '../../../shared/models';
-import { IconComponent, PanelHeader, Separator } from '../../../shared/components';
+import { IconComponent, Separator } from '../../../shared/components';
 import { InventoryService, SelectedGearService } from '../../../shared/services';
 
 import { Enchanting } from './enchanting/enchanting';
@@ -10,7 +10,7 @@ import { ItemDisplay } from './item-display/item-display';
 
 @Component({
   selector: 'app-inventory-area',
-  imports: [GearSlots, Enchanting, Separator, PanelHeader, IconComponent, ItemDisplay, GearActions],
+  imports: [GearSlots, Enchanting, Separator, IconComponent, ItemDisplay, GearActions],
   templateUrl: './inventory-area.html',
   styleUrl: './inventory-area.scss'
 })

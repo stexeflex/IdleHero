@@ -55,3 +55,7 @@ $position-left: calc($gap + 12px);
   flex-direction: column;
   gap: $gap;
 }
+
+.footer {
+  @include flexbox(row, space-between, center);
+}
