@@ -1,6 +1,8 @@
 import {
   BattleLogService,
   BossService,
+  CurrencyService,
+  DungeonRoomService,
   GameStateService,
   HeroService,
   StageService
@@ -8,19 +10,19 @@ import {
 import { EffectRef, Injectable, OnDestroy, effect } from '@angular/core';
 
 import { AttackTickHandler } from './models/attack-tick-handler';
-import { BATTLE_CONFIG } from '../constants';
 import { BattleEngine } from './battle.engine';
 import { BattleLogic } from './functions/attack-tick.function';
 import { BattleState } from './battle.state';
+import { DungeonRoomId } from '../models';
+import { DungeonSpecifications } from '../specifications';
 import { FrameHandler } from './models/frame-handler';
-import { MessageType } from '../models';
 import { OrchestrationLogic } from './functions/frame-tick.function';
 
 @Injectable({ providedIn: 'root' })
 export class BattleService implements OnDestroy {
   private attackTickSubscriptions: Array<() => void> = [];
   private frameSubscriptions: Array<() => void> = [];
-  private effects: EffectRef[] = [];
+  private battleEndedEffect: EffectRef | null = null;
 
   constructor(
     private gameStateService: GameStateService,
@@ -29,18 +31,26 @@ export class BattleService implements OnDestroy {
     private orchestrationLogic: OrchestrationLogic,
     private battleState: BattleState,
     private heroService: HeroService,
+    private dungeonRoomService: DungeonRoomService,
     private stageService: StageService,
     private bossService: BossService,
-    private battleLogService: BattleLogService
+    private battleLogService: BattleLogService,
+    private dungeonSpecifications: DungeonSpecifications,
+    private currencyService: CurrencyService
   ) {
-    const battleEndedEffect = effect(() => {
-      this.OnBattleEnded();
+    if (this.battleEndedEffect) this.battleEndedEffect.destroy();
+
+    this.battleEndedEffect = effect(() => {
+      if (this.battleState.battleEnded()) {
+        this.battleState.battleEnded.set(false);
+        this.OnBattleEnded();
+      }
     });
-    this.effects.push(battleEndedEffect);
   }
 
   ngOnDestroy(): void {
     this.Stop();
+    this.battleEndedEffect?.destroy();
   }
 
   /**
@@ -61,6 +71,11 @@ export class BattleService implements OnDestroy {
       this.AddAttackTickHandler(handler);
     }
 
+    // Reset game state
+    this.battleState.Reset();
+    this.stageService.Reset();
+    this.bossService.Reset();
+
     // Prepare logging
     this.battleLogService.ClearLogs();
     this.battleLogService.StartGame();
@@ -79,8 +94,13 @@ export class BattleService implements OnDestroy {
     // Process prestige
     this.battleLogService.Prestige(this.stageService.Current());
     this.heroService.Prestige(this.stageService.Current());
-    this.bossService.Reset();
-    this.stageService.Reset();
+  }
+
+  private AutoPrestige() {
+    this.Stop();
+
+    // Process prestige
+    this.heroService.Prestige(this.stageService.Current());
   }
 
   private Stop() {
@@ -89,6 +109,33 @@ export class BattleService implements OnDestroy {
 
     // Clean up subscriptions
     this.UnsubscribeAll();
+  }
+
+  private OnBattleEnded() {
+    // Auto-prestige if the dungeon room is cleared
+    if (this.dungeonSpecifications.DungeonRoomCleared()) {
+      const dungeonRoom: DungeonRoomId = this.dungeonRoomService.Current();
+      this.AutoPrestige();
+      this.OnDungeonRoomCleared(dungeonRoom);
+    }
+    // Manual prestige if the dungeon room is not cleared
+    else {
+      this.Prestige();
+    }
+  }
+
+  private OnDungeonRoomCleared(dungeonRoomId: DungeonRoomId) {
+    const room = this.dungeonRoomService.GetRoom(dungeonRoomId);
+
+    if (room) {
+      this.battleLogService.DungeonCleared(room);
+
+      this.currencyService.AddGold(room.Rewards.Gold);
+
+      if (room.Rewards.Key) {
+        this.currencyService.ObtainKey(room.Rewards.Key);
+      }
+    }
   }
 
   private UnsubscribeAll() {
@@ -101,10 +148,6 @@ export class BattleService implements OnDestroy {
       unsubscribe();
     }
     this.frameSubscriptions = [];
-
-    for (const effectRef of this.effects) {
-      effectRef.destroy();
-    }
   }
 
   /**
@@ -138,21 +181,5 @@ export class BattleService implements OnDestroy {
     );
     this.frameSubscriptions.push(unsubscribe);
     return unsubscribe;
-  }
-
-  private OnBattleEnded() {
-    const battleEnded: boolean = this.battleState.battleEnded();
-
-    if (battleEnded) {
-      if (this.stageService.Current() == BATTLE_CONFIG.STAGE.MAX) {
-        this.Prestige();
-        this.battleLogService.AddLog({
-          Message: 'VICTORY!',
-          Type: MessageType.Info
-        });
-      } else {
-        this.Prestige();
-      }
-    }
   }
 }

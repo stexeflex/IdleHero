@@ -185,10 +185,16 @@ export class InventorySchema {
 
 export class CurrencySchema {
   Gold: number = CURRENCY_CONFIG.GOLD.STARTING_AMOUNT;
+  SilverKey: boolean = CURRENCY_CONFIG.KEYS.HAS_SILVER_KEY;
+  MagicKey: boolean = CURRENCY_CONFIG.KEYS.HAS_MAGIC_KEY;
+  GoldenKey: boolean = CURRENCY_CONFIG.KEYS.HAS_GOLDEN_KEY;
 
   public static FromRaw(applyTo: CurrencySchema, raw: unknown): CurrencySchema {
     const currency = (raw as any).Currency;
     applyTo.Gold = FallbackUtils.pickNumber(currency?.Gold, applyTo.Gold);
+    applyTo.SilverKey = FallbackUtils.pickBoolean(currency?.SilverKey, applyTo.SilverKey);
+    applyTo.MagicKey = FallbackUtils.pickBoolean(currency?.MagicKey, applyTo.MagicKey);
+    applyTo.GoldenKey = FallbackUtils.pickBoolean(currency?.GoldenKey, applyTo.GoldenKey);
     return applyTo;
   }
 }

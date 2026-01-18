@@ -16,10 +16,10 @@ import { BuffsService } from '../services';
  */
 @Injectable({ providedIn: 'root' })
 export class BattleState {
-  constructor(private buffsService: BuffsService) {}
+  private readonly buffsService: BuffsService = inject(BuffsService);
 
   /** Battle has ended */
-  readonly battleEnded = signal(false);
+  readonly battleEnded = signal<boolean>(false);
 
   /** Attack overflow */
   readonly splashDamageEnabled = computed(() => {
@@ -28,7 +28,7 @@ export class BattleState {
       .find((b) => b.Name === 'Splash Area Damage');
     return splashBuff ? splashBuff.IsActive : false;
   });
-  readonly attackOverflow = signal(0);
+  readonly attackOverflow = signal<number>(0);
 
   /** Most recent attack result */
   readonly attackResult = signal<AttackResult | null>(null);
@@ -43,14 +43,24 @@ export class BattleState {
   readonly experienceGainResult = signal<ExperienceGainResult | null>(null);
 
   /** Whether a stage/boss transition animation is in progress */
-  readonly isTransitioning = signal(false);
+  readonly isTransitioning = signal<boolean>(false);
 
   /** Respawn animation progress (0 → 1) */
-  readonly respawnProgress = signal(0);
+  readonly respawnProgress = signal<number>(0);
 
   /** Internal counters for frame-driven transitions */
   private transitionRemainingSec = 0;
   private transitionTotalSec = 0;
+
+  public Reset(): void {
+    this.battleEnded.set(false);
+    this.attackOverflow.set(0);
+    this.attackResult.set(null);
+    this.bossFightResult.set(null);
+    this.rewards.set(null);
+    this.experienceGainResult.set(null);
+    this.endTransition();
+  }
 
   /** Begin a transition with a given duration in milliseconds */
   beginTransition(durationMs: number): void {

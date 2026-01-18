@@ -1,0 +1,43 @@
+<div class="dungeon-root">
+  <!-- INFO -->
+  <app-dungeon-top-bar
+    [currentRoom]="currentRoom()"
+    [currentStage]="currentStage()"
+    [showBossHealthBar]="InBattle"
+    [currentBossHealth]="currentBossHealth()"
+    [maxBossHealth]="maxBossHealth()"></app-dungeon-top-bar>
+
+  <!-- ARENA -->
+  <div class="arena">
+    <div class="actions">
+      @if (InBattle) {
+        <button class="ih-button" (click)="Prestige()">PRESTIGE</button>
+      } @else if (!CanStartGame()) {
+        <button class="ih-button" disabled>
+          <i class="fa fa-circle-o-notch fa-spin"></i>
+        </button>
+        <h3>Leaving...</h3>
+      } @else {
+        <button class="ih-button" (click)="Start()">FIGHT</button>
+        <button class="ih-button" (click)="Leave()">LEAVE</button>
+      }
+    </div>
+    <app-dungeon-arena
+      class="arena-battle"
+      [heroIcon]="heroIcon()"
+      [bossIcon]="bossIcon()"
+      [showBoss]="InBattle"></app-dungeon-arena>
+  </div>
+
+  <!-- HUD -->
+  <div class="hud">
+    <div class="buffs">
+      <app-buffs-bar></app-buffs-bar>
+    </div>
+  </div>
+
+  <!-- COMBAT LOG -->
+  <div class="combat-log">
+    <app-battle-log></app-battle-log>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+<div class="top-bar">
+  <div class="room">
+    <div class="room-info">
+      <div class="room-label">DUNGEON ROOM</div>
+      <div class="room-value">{{ currentRoom() }}</div>
+    </div>
+    <div class="room-info">
+      <div class="room-label">STAGE</div>
+      <div class="room-value">{{ currentStage() }}</div>
+    </div>
+  </div>
+  <separator [vertical]="true"></separator>
+  @if (showBossHealthBar()) {
+    <div class="boss-health">
+      <app-health-bar
+        [currentHealth]="currentBossHealth()"
+        [maxHealth]="maxBossHealth()"
+        [showHealthValues]="true"></app-health-bar>
+    </div>
+  }
+</div>

@@ -1,5 +1,9 @@
 export class FlagsUtils {
-  public static IsFlagSet(value: number, flag: number): boolean {
+  public static IsFlag(value: number, flag: number): boolean {
+    return value === flag;
+  }
+
+  public static HasFlag(value: number, flag: number): boolean {
     return (value & flag) === flag;
   }
 

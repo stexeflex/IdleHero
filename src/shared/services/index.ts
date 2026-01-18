@@ -1,5 +1,6 @@
 export * from './battle/battle-log.service';
 export * from './battle/boss.service';
+export * from './battle/dungeon-room.service';
 export * from './battle/stage.service';
 export * from './buffs-service';
 export * from './character/attributes.service';

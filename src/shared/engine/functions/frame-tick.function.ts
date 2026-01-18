@@ -1,4 +1,3 @@
-import { BATTLE_CONFIG, DELAYS } from '../../constants';
 import {
   BattleLogService,
   BossService,
@@ -9,6 +8,8 @@ import {
 import { BossDamageResult, ExperienceGainResult, StageRewards } from '../../models';
 
 import { BattleState } from '../battle.state';
+import { DELAYS } from '../../constants';
+import { DungeonSpecifications } from '../../specifications';
 import { FrameHandler } from '../models/frame-handler';
 import { Injectable } from '@angular/core';
 
@@ -17,10 +18,11 @@ export class OrchestrationLogic {
   constructor(
     private battleState: BattleState,
     private stageService: StageService,
+    private bossService: BossService,
     private battleLogService: BattleLogService,
     private currencyService: CurrencyService,
     private levelService: LevelService,
-    private bossService: BossService
+    private dungeonSpecifications: DungeonSpecifications
   ) {}
 
   /**
@@ -38,11 +40,11 @@ export class OrchestrationLogic {
 
         // If transition just ended, advance to next stage
         if (!this.battleState.isTransitioning() && this.battleState.respawnProgress() >= 1) {
-          if (this.stageService.Current() == BATTLE_CONFIG.STAGE.MAX) {
+          if (this.dungeonSpecifications.DungeonRoomCleared()) {
             this.battleState.battleEnded.set(true);
           } else {
             this.stageService.NextStage();
-            this.bossService.SetBossForStage(this.stageService.Current());
+            this.bossService.NextBoss();
           }
         }
       },

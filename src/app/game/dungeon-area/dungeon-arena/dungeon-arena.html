@@ -1,0 +1,20 @@
+<div class="battle-area">
+  <div
+    class="hero"
+    [class.attack]="isAttacking()"
+    [class.crit]="isCrit()"
+    [class.multi]="isMulti()"
+    [class.crit-multi]="isCritMulti()">
+    <app-icon class="icon" [character]="heroIcon()" size="3x"></app-icon>
+  </div>
+
+  @if (showBoss()) {
+    <div class="arena">
+      <div class="vs">VS</div>
+    </div>
+
+    <div class="boss" [class.taking-hit]="isAttacking()" [class.defeated]="isBossDefeated()">
+      <app-icon class="icon" [creatures]="bossIcon()" size="5x"></app-icon>
+    </div>
+  }
+</div>

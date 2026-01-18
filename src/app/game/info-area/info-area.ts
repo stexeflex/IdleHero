@@ -1,16 +1,20 @@
+import { Component, inject } from '@angular/core';
 import { CurrencyService, HeroService } from '../../../shared/services';
-import { Gold, Separator } from '../../../shared/components';
+import { Gold, IconComponent, Separator } from '../../../shared/components';
 
-import { Component } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
+import { DungeonRoomKey } from '../../../shared/models';
 
 @Component({
   selector: 'app-info-area',
-  imports: [DecimalPipe, Gold, Separator],
+  imports: [DecimalPipe, Gold, Separator, IconComponent],
   templateUrl: './info-area.html',
   styleUrl: './info-area.scss'
 })
 export class InfoArea {
+  readonly currencyService = inject<CurrencyService>(CurrencyService);
+  readonly heroService = inject<HeroService>(HeroService);
+
   protected get GoldAmount(): number {
     return this.currencyService.Gold();
   }
@@ -27,8 +31,15 @@ export class InfoArea {
     return this.heroService.HighestDamageDealt();
   }
 
-  constructor(
-    private currencyService: CurrencyService,
-    private heroService: HeroService
-  ) {}
+  protected get HasAnyKey(): boolean {
+    return (
+      this.currencyService.SilverKey() ||
+      this.currencyService.MagicKey() ||
+      this.currencyService.GoldenKey()
+    );
+  }
+
+  protected HasKey(key: DungeonRoomKey): boolean {
+    return this.currencyService.HasKey(key);
+  }
 }

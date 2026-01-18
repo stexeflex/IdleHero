@@ -5,12 +5,13 @@
   @include relative-container();
   @include dim();
 
+  height: 100vh;
   display: grid;
 
   grid:
     "header info info" auto
     "game character sidecontent" 1fr
-    / 1fr 1fr 1fr;
+    / 1fr 650px 1fr;
 
   gap: $gap;
   padding: $gap;

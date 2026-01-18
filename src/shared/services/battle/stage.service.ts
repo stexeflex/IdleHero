@@ -1,26 +1,32 @@
 import { Experience, Gold, StageRewards } from '../../models';
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 
-import { BATTLE_CONFIG } from '../../constants';
+import { DungeonRoomService } from './dungeon-room.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StageService {
-  private _currentStage = signal(BATTLE_CONFIG.STAGE.BASE);
+  readonly dungeonRoomService = inject(DungeonRoomService);
+
+  private _currentStage = signal<number>(1);
   public Current = this._currentStage.asReadonly();
 
   public GetRewards(): StageRewards {
-    const experience = Experience.GetForStage(this._currentStage());
-    const gold = Gold.GetForStage(this._currentStage());
+    const currentDungeonRoom = this.dungeonRoomService.Current();
+    const currentStage = this._currentStage();
+
+    const experience = Experience.GetForStage(currentDungeonRoom, currentStage);
+    const gold = Gold.GetForStage(currentDungeonRoom, currentStage);
     return new StageRewards(experience, gold);
   }
 
   public NextStage() {
-    this._currentStage.update((stage) => Math.min(stage + 1, BATTLE_CONFIG.STAGE.MAX));
+    const maxStage = this.dungeonRoomService.GetMaxStage();
+    this._currentStage.update((stage) => Math.min(stage + 1, maxStage));
   }
 
   public Reset() {
-    this._currentStage.set(BATTLE_CONFIG.STAGE.BASE);
+    this._currentStage.set(1);
   }
 }

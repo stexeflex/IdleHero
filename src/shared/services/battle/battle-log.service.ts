@@ -3,6 +3,7 @@ import {
   AttackResult,
   AttackType,
   BattleLogMessage,
+  DungeonRoom,
   MessageType,
   StageRewards
 } from '../../models';
@@ -51,18 +52,18 @@ export class BattleLogService {
       Type: MessageType.Damage
     };
 
-    if (FlagsUtils.IsFlagSet(attackResult.AttackType, AttackType.Critical | AttackType.MultiHit)) {
+    if (FlagsUtils.HasFlag(attackResult.AttackType, AttackType.Critical | AttackType.MultiHit)) {
       message.Type |= MessageType.Crit | MessageType.Multi;
       message.Submessage = 'Critical Multi Hit'.toUpperCase();
-    } else if (FlagsUtils.IsFlagSet(attackResult.AttackType, AttackType.Critical)) {
+    } else if (FlagsUtils.HasFlag(attackResult.AttackType, AttackType.Critical)) {
       message.Type |= MessageType.Crit;
       message.Submessage = 'Critical Hit'.toUpperCase();
-    } else if (FlagsUtils.IsFlagSet(attackResult.AttackType, AttackType.MultiHit)) {
+    } else if (FlagsUtils.HasFlag(attackResult.AttackType, AttackType.MultiHit)) {
       message.Type |= MessageType.Multi;
       message.Submessage = 'Multi Hit'.toUpperCase();
     }
 
-    if (FlagsUtils.IsFlagSet(attackResult.AttackType, AttackType.Splash)) {
+    if (FlagsUtils.HasFlag(attackResult.AttackType, AttackType.Splash)) {
       message.Type = FlagsUtils.AddFlag(message.Type, MessageType.Splash);
     }
 
@@ -86,6 +87,20 @@ export class BattleLogService {
       Type: MessageType.LevelUp
     });
     this.AddSeparator();
+  }
+
+  public DungeonCleared(dungeonRoom: DungeonRoom) {
+    let message: BattleLogMessage = {
+      Message: `Cleared ${dungeonRoom.Title}`,
+      Submessage: `💰 ${dungeonRoom.Rewards.Gold}`,
+      Type: MessageType.DungeonCleared
+    };
+
+    if (dungeonRoom.Rewards.Key) {
+      message.Submessage += ' 🔑 ' + dungeonRoom.Rewards.Key;
+    }
+
+    this.AddLog(message);
   }
 
   public ClearLogs() {
