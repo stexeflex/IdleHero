@@ -17,6 +17,7 @@ import {
 import { BattleState } from '../../../../shared/engine';
 import { DELAYS } from '../../../../shared/constants';
 import { FlagsUtils } from '../../../../shared/utils';
+import { StatsService } from '../../../../shared/services';
 
 @Component({
   selector: 'app-dungeon-arena',
@@ -31,6 +32,7 @@ export class DungeonArena implements AfterViewInit {
   readonly showBoss = input.required<boolean>();
 
   private readonly battleState = inject(BattleState);
+  private readonly statsService = inject(StatsService);
 
   // Animation state
   protected readonly isAttacking = signal(false);
@@ -47,6 +49,7 @@ export class DungeonArena implements AfterViewInit {
   private bossDefeatedTimer: any = null;
 
   private fullyRendered = false;
+  private lastAttackCount = 0;
 
   ngAfterViewInit(): void {
     this.fullyRendered = true;
@@ -54,9 +57,20 @@ export class DungeonArena implements AfterViewInit {
 
   constructor() {
     effect(() => {
-      const result: AttackResult | null = this.battleState.attackResult();
+      const counter: number = this.battleState.attackCounter();
 
-      if (!this.fullyRendered || !result) {
+      if (!this.fullyRendered) {
+        return;
+      }
+
+      if (counter === this.lastAttackCount || counter === 0) {
+        return;
+      }
+
+      this.lastAttackCount = counter;
+      const result: AttackResult = this.battleState.attacks[counter - 1];
+
+      if (!result) {
         return;
       }
 

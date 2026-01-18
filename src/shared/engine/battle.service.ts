@@ -17,6 +17,7 @@ import { DungeonRoomId } from '../models';
 import { DungeonSpecifications } from '../specifications';
 import { FrameHandler } from './models/frame-handler';
 import { OrchestrationLogic } from './functions/frame-tick.function';
+import { StatisticsService } from '../services/character/statistics.service';
 
 @Injectable({ providedIn: 'root' })
 export class BattleService implements OnDestroy {
@@ -30,7 +31,7 @@ export class BattleService implements OnDestroy {
     private battleLogic: BattleLogic,
     private orchestrationLogic: OrchestrationLogic,
     private battleState: BattleState,
-    private heroService: HeroService,
+    private statisticsService: StatisticsService,
     private dungeonRoomService: DungeonRoomService,
     private stageService: StageService,
     private bossService: BossService,
@@ -93,14 +94,20 @@ export class BattleService implements OnDestroy {
 
     // Process prestige
     this.battleLogService.Prestige(this.stageService.Current());
-    this.heroService.Prestige(this.stageService.Current());
+    this.statisticsService.RecordPrestige(
+      this.dungeonRoomService.Current(),
+      this.stageService.Current()
+    );
   }
 
   private AutoPrestige() {
     this.Stop();
 
     // Process prestige
-    this.heroService.Prestige(this.stageService.Current());
+    this.statisticsService.RecordPrestige(
+      this.dungeonRoomService.Current(),
+      this.stageService.Current()
+    );
   }
 
   private Stop() {

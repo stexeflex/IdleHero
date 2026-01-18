@@ -1,4 +1,14 @@
-import { Boots, Chest, Head, Legs, Shield, SkillTreeState, Weapon } from '../../shared/models';
+import {
+  Boots,
+  Chest,
+  DamageStatistics,
+  Head,
+  Legs,
+  Shield,
+  SkillTreeState,
+  StageStatistics,
+  Weapon
+} from '../../shared/models';
 import { CHARACTER_CONFIG, CURRENCY_CONFIG, STATS_CONFIG } from '../../shared/constants';
 import { FallbackUtils, ObjectUtils } from '../../shared/utils';
 
@@ -9,6 +19,7 @@ export class Schema {
   TimeStamp: Date;
 
   GameState: GameStateSchema = new GameStateSchema();
+  Statistics: StatisticsSchema = new StatisticsSchema();
   Hero: HeroSchema = new HeroSchema();
   Level: LevelSchema = new LevelSchema();
   Attributes: AttributesSchema = new AttributesSchema();
@@ -34,6 +45,9 @@ export class Schema {
 
     // GameState
     applyTo.GameState = GameStateSchema.FromRaw(applyTo.GameState, raw);
+
+    // Statistics
+    applyTo.Statistics = StatisticsSchema.FromRaw(applyTo.Statistics, raw);
 
     // Hero
     applyTo.Hero = HeroSchema.FromRaw(applyTo.Hero, raw);
@@ -79,6 +93,58 @@ export class GameStateSchema {
   public static FromRaw(applyTo: GameStateSchema, raw: unknown): GameStateSchema {
     const gameState = (raw as any).GameState;
     applyTo.GameCreated = FallbackUtils.pickBoolean(gameState?.GameCreated, applyTo.GameCreated);
+    return applyTo;
+  }
+}
+
+export class StatisticsSchema {
+  PrestigeLevel: number = 0;
+  StageStatistics: StageStatistics = { HighestStageReached: {} };
+
+  DamageStatistics: DamageStatistics = {
+    HighestSingleHit: 0,
+    HighestCriticalHit: 0,
+    HighestMultiHit: 0,
+    HighestCriticalMultiHit: 0,
+    HighestSplashHit: 0
+  };
+
+  public static FromRaw(applyTo: StatisticsSchema, raw: unknown): StatisticsSchema {
+    const stats = (raw as any).Statistics;
+
+    applyTo.PrestigeLevel = FallbackUtils.pickNumber(stats?.PrestigeLevel, applyTo.PrestigeLevel);
+
+    const stageStats = stats?.StageStatistics?.HighestStageReached;
+    if (ObjectUtils.isPlainObject(stageStats)) {
+      for (const [key, value] of Object.entries(stageStats)) {
+        applyTo.StageStatistics.HighestStageReached[Number(key)] = FallbackUtils.pickNumber(
+          value,
+          0
+        );
+      }
+    }
+
+    const damageStats = stats?.DamageStatistics;
+    applyTo.DamageStatistics.HighestSingleHit = FallbackUtils.pickNumber(
+      damageStats?.HighestSingleHit,
+      applyTo.DamageStatistics.HighestSingleHit
+    );
+    applyTo.DamageStatistics.HighestCriticalHit = FallbackUtils.pickNumber(
+      damageStats?.HighestCriticalHit,
+      applyTo.DamageStatistics.HighestCriticalHit
+    );
+    applyTo.DamageStatistics.HighestMultiHit = FallbackUtils.pickNumber(
+      damageStats?.HighestMultiHit,
+      applyTo.DamageStatistics.HighestMultiHit
+    );
+    applyTo.DamageStatistics.HighestCriticalMultiHit = FallbackUtils.pickNumber(
+      damageStats?.HighestCriticalMultiHit,
+      applyTo.DamageStatistics.HighestCriticalMultiHit
+    );
+    applyTo.DamageStatistics.HighestSplashHit = FallbackUtils.pickNumber(
+      damageStats?.HighestSplashHit,
+      applyTo.DamageStatistics.HighestSplashHit
+    );
     return applyTo;
   }
 }

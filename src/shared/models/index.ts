@@ -20,6 +20,8 @@ export * from './skills/skill-id';
 export * from './skills/skill-tier';
 export * from './skills/skill-tree-state';
 export * from './skills/skill';
+export * from './statistics/damage-stats';
+export * from './statistics/stage-stats';
 export * from './stats/attack-power';
 export * from './stats/attack-speed';
 export * from './stats/critical-hit-chance';

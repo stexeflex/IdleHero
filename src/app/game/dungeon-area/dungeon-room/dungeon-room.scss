@@ -26,6 +26,7 @@ $combat-log-width: 450px;
 .hud {
   @include panel($bg: $grad-ui-bg);
   @include panel-shadow($border-width: 2px, $border-color: $clr-border);
+  min-height: 88px;
 }
 
 .buffs {

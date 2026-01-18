@@ -31,9 +31,11 @@
 
   <!-- HUD -->
   <div class="hud">
-    <div class="buffs">
-      <app-buffs-bar></app-buffs-bar>
-    </div>
+    @if (InBattle) {
+      <div class="buffs">
+        <app-buffs-bar></app-buffs-bar>
+      </div>
+    }
   </div>
 
   <!-- COMBAT LOG -->

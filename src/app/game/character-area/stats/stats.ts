@@ -4,6 +4,7 @@ import { DecimalPipe, PercentPipe } from '@angular/common';
 import { AttributesService, LevelService, StatsService } from '../../../../shared/services';
 import { IconComponent } from '../../../../shared/components';
 import { AttributesSpecifications } from '../../../../shared/specifications';
+import { StatisticsService } from '../../../../shared/services/character/statistics.service';
 
 @Component({
   selector: 'app-stats',
@@ -16,13 +17,15 @@ export class Stats {
   private readonly percentPipe: PercentPipe;
 
   protected AttributesExpanded: boolean = true;
-  protected StatsExpanded: boolean = true;
+  protected StatsExpanded: boolean = false;
+  protected StatisticsExpanded: boolean = false;
 
   constructor(
     @Inject(LOCALE_ID) locale: string,
     private attributesService: AttributesService,
     private statsService: StatsService,
     private levelService: LevelService,
+    private statisticsService: StatisticsService,
     private canChangeAttributes: AttributesSpecifications
   ) {
     this.decimalPipe = new DecimalPipe(locale);
@@ -39,6 +42,10 @@ export class Stats {
           ' / ' +
           this.levelService.TotalAttributePoints()
       : undefined;
+  }
+
+  get CanIncreaseAttributes(): boolean {
+    return this.canChangeAttributes.CanIncrease();
   }
 
   get Attributes(): { label: string; value: string | null }[] {
@@ -83,8 +90,44 @@ export class Stats {
     ];
   }
 
-  get CanIncreaseAttributes(): boolean {
-    return this.canChangeAttributes.CanIncrease();
+  get Statistics(): { label: string; value: string | null }[] {
+    return [
+      {
+        label: 'Highest Single Hit',
+        value: this.decimalPipe.transform(
+          this.statisticsService.DamageStatistics().HighestSingleHit,
+          '1.0-0'
+        )
+      },
+      {
+        label: 'Highest Critical Hit',
+        value: this.decimalPipe.transform(
+          this.statisticsService.DamageStatistics().HighestCriticalHit,
+          '1.0-0'
+        )
+      },
+      {
+        label: 'Highest Multi Hit',
+        value: this.decimalPipe.transform(
+          this.statisticsService.DamageStatistics().HighestMultiHit,
+          '1.0-0'
+        )
+      },
+      {
+        label: 'Highest Critical Multi Hit',
+        value: this.decimalPipe.transform(
+          this.statisticsService.DamageStatistics().HighestCriticalMultiHit,
+          '1.0-0'
+        )
+      },
+      {
+        label: 'Highest Splash Hit',
+        value: this.decimalPipe.transform(
+          this.statisticsService.DamageStatistics().HighestSplashHit,
+          '1.0-0'
+        )
+      }
+    ];
   }
 
   protected CanDecreaseAttribute(attribute: string): boolean {

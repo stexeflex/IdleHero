@@ -1,9 +1,10 @@
 import { Component, inject } from '@angular/core';
-import { CurrencyService, HeroService } from '../../../shared/services';
 import { Gold, IconComponent, Separator } from '../../../shared/components';
 
+import { CurrencyService } from '../../../shared/services';
 import { DecimalPipe } from '@angular/common';
 import { DungeonRoomKey } from '../../../shared/models';
+import { StatisticsService } from '../../../shared/services/character/statistics.service';
 
 @Component({
   selector: 'app-info-area',
@@ -13,22 +14,23 @@ import { DungeonRoomKey } from '../../../shared/models';
 })
 export class InfoArea {
   readonly currencyService = inject<CurrencyService>(CurrencyService);
-  readonly heroService = inject<HeroService>(HeroService);
+  readonly statisticsService = inject<StatisticsService>(StatisticsService);
 
   protected get GoldAmount(): number {
     return this.currencyService.Gold();
   }
 
   protected get PrestigeLevel(): number {
-    return this.heroService.PrestigeLevel();
+    return this.statisticsService.PrestigeLevel();
   }
 
-  protected get MaxStage(): number {
-    return this.heroService.HighestStageReached();
-  }
-
-  protected get MaxDamageDealt(): number {
-    return this.heroService.HighestDamageDealt();
+  protected get MaxStages(): string {
+    const stageStatistics = this.statisticsService.StageStatistics();
+    const stages =
+      Object.entries(stageStatistics.HighestStageReached)
+        .map(([roomId, stage]) => `${roomId} - ${stage}`)
+        .join(' | ') || '1 - 0';
+    return stages;
   }
 
   protected get HasAnyKey(): boolean {

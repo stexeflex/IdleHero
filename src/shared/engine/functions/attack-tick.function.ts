@@ -1,18 +1,19 @@
 import { AttackResult, AttackType, BossDamageResult } from '../../models';
-import { BattleLogService, BossService, HeroService, StatsService } from '../../services';
+import { BattleLogService, BossService, StatsService } from '../../services';
 
 import { AttackTickContext } from '../models/attack-tick-context';
 import { AttackTickHandler } from '../models/attack-tick-handler';
 import { BattleState } from '../battle.state';
 import { FlagsUtils } from '../../utils';
 import { Injectable } from '@angular/core';
+import { StatisticsService } from '../../services/character/statistics.service';
 
 @Injectable({ providedIn: 'root' })
 export class BattleLogic {
   constructor(
     private battleState: BattleState,
     private statsService: StatsService,
-    private heroService: HeroService,
+    private statisticsService: StatisticsService,
     private bossService: BossService,
     private battleLogService: BattleLogService
   ) {}
@@ -47,6 +48,8 @@ export class BattleLogic {
         }
 
         this.battleState.attackResult.set(attackResult);
+        this.battleState.attacks.push(attackResult);
+        this.battleState.attackCounter.set(this.battleState.attackCounter() + 1);
       },
       /* Record Damage Dealt */
       (ctx: AttackTickContext) => {
@@ -57,7 +60,7 @@ export class BattleLogic {
         if (!attackResult) return;
 
         this.battleLogService.AttackLog(attackResult);
-        this.heroService.RecordDamageDealt(attackResult.Damage);
+        this.statisticsService.RecordDamageDealt(attackResult);
       },
       /* Deal Damage */
       (ctx: AttackTickContext) => {

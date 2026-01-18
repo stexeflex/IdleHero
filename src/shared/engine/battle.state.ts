@@ -21,6 +21,10 @@ export class BattleState {
   /** Battle has ended */
   readonly battleEnded = signal<boolean>(false);
 
+  /** Attacks made in the current battle */
+  readonly attackCounter = signal<number>(0);
+  attacks: AttackResult[] = [];
+
   /** Attack overflow */
   readonly splashDamageEnabled = computed(() => {
     const splashBuff: Buff | undefined = this.buffsService
@@ -54,6 +58,8 @@ export class BattleState {
 
   public Reset(): void {
     this.battleEnded.set(false);
+    this.attackCounter.set(0);
+    this.attacks = [];
     this.attackOverflow.set(0);
     this.attackResult.set(null);
     this.bossFightResult.set(null);

@@ -10,11 +10,13 @@ import {
 
 import { Injectable } from '@angular/core';
 import { Schema } from './models/schema';
+import { StatisticsService } from '../shared/services/character/statistics.service';
 
 @Injectable({ providedIn: 'root' })
 export class StateCollectionService {
   constructor(
     private gameStateService: GameStateService,
+    private statisticsService: StatisticsService,
     private heroService: HeroService,
     private levelService: LevelService,
     private attributesService: AttributesService,
@@ -28,6 +30,9 @@ export class StateCollectionService {
 
     // Game State
     schema.GameState.GameCreated = this.gameStateService.GameCreated();
+
+    // Statistics
+    schema.Statistics = this.statisticsService.CollectSchema(schema.Statistics);
 
     // Hero
     schema.Hero = this.heroService.CollectSchema(schema.Hero);

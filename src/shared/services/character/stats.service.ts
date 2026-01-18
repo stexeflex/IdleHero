@@ -14,7 +14,6 @@ import { Injectable, computed, signal } from '@angular/core';
 import { AttributesService } from './attributes.service';
 import { BuffsService } from '../buffs-service';
 import { InventoryService } from './inventory.service';
-import { LevelService } from './level.service';
 import { STATS_CONFIG } from '../../constants';
 
 @Injectable({

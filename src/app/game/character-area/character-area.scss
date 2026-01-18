@@ -6,3 +6,8 @@
 
   gap: $gap;
 }
+
+.stats {
+  @include overflow($max-height: 60vh);
+  @include scrollbar($size: 0.75rem);
+}
