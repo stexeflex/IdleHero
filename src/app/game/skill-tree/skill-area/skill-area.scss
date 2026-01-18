@@ -1,0 +1,59 @@
+@use "sass:color";
+@use "index" as *;
+
+.skill {
+  display: grid;
+  grid-template-columns: 1fr auto;
+
+  gap: $gap;
+  padding: 0.5rem;
+  align-items: center;
+
+  border-width: 2px;
+  border-style: solid;
+  border-radius: $border-radius;
+}
+
+.skill.unlockable {
+  border-style: dashed;
+  border-color: $clr-gray;
+}
+
+.skill.unlocked {
+  border-style: solid;
+  border-color: $clr-border;
+}
+
+.skill.locked {
+  opacity: 0.5;
+}
+
+.skill.maxed {
+  border-color: $clr-highlight;
+}
+
+.skill-title,
+.skill-description,
+.skill-dependencies {
+  @include disable-text-selection();
+}
+
+.skill-title {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  font-size: 1.1rem;
+}
+
+.skill-title__name {
+  font-family: $font-family-header;
+}
+
+.skill-description {
+  font-family: $font-family-header;
+  font-size: 0.9rem;
+}
+
+.skill-dependencies {
+  font-size: 0.85rem;
+}

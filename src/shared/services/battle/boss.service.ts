@@ -1,17 +1,24 @@
 import { BossDamageResult, BossHealth } from '../../models';
-import { Injectable, Signal, WritableSignal, signal } from '@angular/core';
+import { Injectable, Signal, WritableSignal, computed, inject, signal } from '@angular/core';
 
 import { CreaturesIconName } from '../../components';
-import { GAME_CONFIG } from '../../constants';
+import { DungeonRoomService } from './dungeon-room.service';
+import { StageService } from './stage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BossService {
-  private _maxHealth = signal(GAME_CONFIG.BOSS.BASE_HEALTH);
-  public MaxHealth = this._maxHealth.asReadonly();
+  readonly dungeonRoomService = inject(DungeonRoomService);
+  readonly stageService = inject(StageService);
 
-  private _currentHealth = signal(GAME_CONFIG.BOSS.BASE_HEALTH);
+  public MaxHealth = computed(() => {
+    const room = this.dungeonRoomService.Current();
+    const stage = this.stageService.Current();
+    return BossHealth.CalculateForStage(room, stage);
+  });
+
+  private _currentHealth = signal(this.MaxHealth());
   public CurrentHealth = this._currentHealth.asReadonly();
 
   public _bossIcon: WritableSignal<CreaturesIconName> = signal('wyvern');
@@ -31,15 +38,14 @@ export class BossService {
     } as BossDamageResult;
   }
 
-  public SetBossForStage(stage: number) {
-    this._maxHealth.update(() => BossHealth.CalculateForStage(stage));
+  public NextBoss() {
     this._currentHealth.set(this.MaxHealth());
-    this._bossIcon.update(() => this.NextBossIcon());
+    this._bossIcon.set(this.NextBossIcon());
   }
 
   public Reset() {
-    this._maxHealth.set(GAME_CONFIG.BOSS.BASE_HEALTH);
-    this._currentHealth.set(GAME_CONFIG.BOSS.BASE_HEALTH);
+    this._currentHealth.set(this.MaxHealth());
+    this._bossIcon.set('wyvern');
   }
 
   private NextBossIcon(): CreaturesIconName {

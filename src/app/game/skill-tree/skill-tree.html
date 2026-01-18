@@ -1,0 +1,25 @@
+<div class="container">
+  <div class="tiers">
+    @for (tier of SkillTree; track tier.Id) {
+      @let tierState = getTierState(tier);
+      <app-skill-tier-area
+        [tier]="tier"
+        [isUnlocked]="tierState.isUnlocked"
+        [canUnlock]="tierState.canUnlock"
+        (unlockTier)="unlockTier($event)">
+        <div class="skills">
+          @for (skill of tier.Skills; track skill.Id) {
+            @let skillState = getSkillState(skill);
+            <app-skill-area
+              [skill]="skill"
+              [unlockable]="skillState.available"
+              [canUnlock]="skillState.canUnlock"
+              [canLevel]="skillState.canLevel"
+              (unlockSkill)="unlockSkill($event)"
+              (upgradeSkill)="upgradeSkill($event)"></app-skill-area>
+          }
+        </div>
+      </app-skill-tier-area>
+    }
+  </div>
+</div>

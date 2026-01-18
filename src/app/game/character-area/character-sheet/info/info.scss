@@ -16,6 +16,7 @@
 .header__name,
 .header__level {
   @include divider($clr-ui-bg-invert, $margin: 0 0 0.5rem 0, $padding: 0);
+  margin-bottom: 40px;
 }
 
 .header__name {

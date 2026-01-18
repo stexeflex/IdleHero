@@ -1,0 +1,17 @@
+@use "sass:color";
+@use "index" as *;
+
+.container {
+  display: grid;
+  gap: $gap;
+}
+
+.tiers {
+  display: grid;
+  gap: $gap;
+}
+
+.skills {
+  display: grid;
+  gap: $gap;
+}

@@ -1,0 +1,33 @@
+@use "sass:color";
+@use "index" as *;
+
+.tab-strip {
+  @include flexbox(row, space-around, stretch);
+  gap: $gap;
+}
+
+.tab {
+  @include button-style($bg-color: transparent);
+  @include button-text-font();
+  @include button-sizing($min-width: auto, $padding: 0 $gap);
+  @include button-focus-visible-outline();
+
+  &:hover:not(.is-disabled) {
+  }
+
+  &.is-active {
+    color: $clr-highlight;
+  }
+
+  &.is-disabled {
+    cursor: default;
+    color: $clr-gray;
+    opacity: 0.7;
+  }
+}
+
+.tab__label {
+  display: inline-block;
+  font-family: $font-family-header;
+  font-size: 1.5rem;
+}

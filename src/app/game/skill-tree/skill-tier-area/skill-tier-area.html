@@ -1,0 +1,33 @@
+<div class="tier" [class.unlocked]="isUnlocked" [class.locked]="!isUnlocked">
+  <div class="tier-header">
+    <h3>TIER {{ tier.Id }}</h3>
+    @if (!isUnlocked) {
+      <div class="requirements">
+        <div class="level-requirement" title="Required Level">
+          {{ tier.RequiredLevel }}
+          <app-icon symbol="skillpoint" size="sm"></app-icon>
+        </div>
+        <app-gold
+          title="Gold Requirement"
+          fontSize="1.1rem"
+          size="sm"
+          [amount]="tier.GoldCost"></app-gold>
+      </div>
+    }
+    <div class="tier-actions">
+      @if (!isUnlocked) {
+        <button
+          class="ih-button-icon ih-button-icon-border"
+          [disabled]="!canUnlock"
+          title="Unlock Tier"
+          (click)="unlockTier.emit(tier)">
+          <app-icon symbol="padlockopen" size="sm"></app-icon>
+        </button>
+      } @else {
+        <span class="badge">UNLOCKED</span>
+      }
+    </div>
+  </div>
+
+  <ng-content></ng-content>
+</div>

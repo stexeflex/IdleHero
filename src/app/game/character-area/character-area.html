@@ -1,5 +1,19 @@
 <div class="container">
   <app-panel-header title="CHARACTER"></app-panel-header>
 
+  <!-- SHEET -->
   <app-character-sheet></app-character-sheet>
+
+  <!-- EXP BAR -->
+  <app-experience-bar
+    [currentLevel]="levelService.Level()"
+    [currentExp]="levelService.Experience()"
+    [expToNextLevel]="levelService.ExperienceToNextLevel()"></app-experience-bar>
+
+  <separator></separator>
+
+  <!-- STATS -->
+  <div class="stats">
+    <app-stats></app-stats>
+  </div>
 </div>

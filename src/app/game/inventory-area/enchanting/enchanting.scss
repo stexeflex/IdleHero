@@ -71,16 +71,3 @@
 .button-cancel {
   color: $clr-accent;
 }
-
-.button-upgrade,
-.button-reroll,
-.button-cancel {
-  // @include button-hover-active(
-  //   $bg-color: color.scale($clr-ui-bg, $lightness: 30%),
-  //   $bg-color-active: color.scale($clr-ui-bg, $lightness: 50%)
-  // );
-
-  border: 3px solid $clr-border;
-  border-radius: 50%;
-  padding: calc($gap / 2);
-}

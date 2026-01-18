@@ -13,4 +13,5 @@ import { IconSize } from '../icon/icon-size';
 export class Gold {
   @Input() amount: number = 0;
   @Input() size: IconSize = 'md';
+  @Input() fontSize: string = '1.5rem';
 }

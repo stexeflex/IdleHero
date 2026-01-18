@@ -13,5 +13,6 @@ export enum MessageType {
   Multi = 1 << 4,
   Splash = 1 << 5,
   LevelUp = 1 << 6,
-  BossDefeat = 1 << 7
+  BossDefeat = 1 << 7,
+  DungeonCleared = 1 << 8
 }

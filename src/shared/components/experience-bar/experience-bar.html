@@ -1,8 +1,11 @@
 <div class="experience-labels">
-  <span>{{ currentLevel }}</span>
-  <span>{{ experience }} / {{ expToNextLevel }} XP</span>
-  <span>{{ currentLevel + 1 }}</span>
+  <span>{{ currentLevel() }}</span>
+  <span>{{ experience() | number }} / {{ expToNextLevel() | number }} XP</span>
+  <span>{{ currentLevel() + 1 }}</span>
 </div>
 <div class="experience-bar-bg">
-  <div class="experience-bar-fill" [style.width]="progress + '%'"></div>
+  <div
+    class="experience-bar-fill"
+    [class.no-transition]="!isAnimating()"
+    [style.width.%]="progress()"></div>
 </div>

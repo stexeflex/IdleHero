@@ -1,12 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import {
-  CurrencyService,
-  EnchantingService,
-  GameService,
-  ItemPriceService,
-  VendorService
-} from '../../../../shared/services';
+import { EnchantingService, ItemPriceService, VendorService } from '../../../../shared/services';
 import { Gear, GearType } from '../../../../shared/models';
+import { GearSpecifications, VendorSpecifications } from '../../../../shared/specifications';
 import { Gold, IconComponent } from '../../../../shared/components';
 
 @Component({
@@ -23,7 +18,7 @@ export class GearActions {
   @Output() OnItemSold = new EventEmitter();
 
   protected get CanBuy(): boolean {
-    if (this.gameService.InProgress()) {
+    if (!this.vendorSpecifications.CanBuy()) {
       return false;
     }
 
@@ -31,11 +26,11 @@ export class GearActions {
   }
 
   protected get EnoughGoldToBuy(): boolean {
-    return this.currencyService.Gold() >= this.ItemPrice;
+    return this.vendorSpecifications.EnoughGold(this.ItemPrice);
   }
 
   protected get CanSell(): boolean {
-    if (this.gameService.InProgress()) {
+    if (!this.vendorSpecifications.CanSell()) {
       return false;
     }
 
@@ -43,44 +38,35 @@ export class GearActions {
   }
 
   protected get CanUpgrade(): boolean {
-    if (this.gameService.InProgress()) {
+    if (this.Item && !this.gearSpecifications.CanUpgrade(this.Item)) {
       return false;
     }
 
-    return this.Item !== null && this.Item.CanUpgrade;
+    return this.Item !== null;
   }
 
   protected get EnoughGoldToUpgrade(): boolean {
-    return this.currencyService.Gold() >= this.UpgradeCost;
+    return this.vendorSpecifications.EnoughGold(this.UpgradeCost);
   }
 
   protected get ItemPrice(): number {
-    if (this.ItemType === null) {
-      return 0;
-    }
-    return this.itemPriceService.GetBuyPrice(this.ItemType);
+    return this.ItemType ? this.itemPriceService.GetBuyPrice(this.ItemType) : 0;
   }
 
   protected get SellValue(): number {
-    if (this.Item === null) {
-      return 0;
-    }
-    return this.Item.SellValue;
+    return this.Item?.SellValue ?? 0;
   }
 
   protected get UpgradeCost(): number {
-    if (this.Item === null) {
-      return 0;
-    }
-    return this.itemPriceService.GetGearUpgradeCost(this.Item);
+    return this.Item ? this.itemPriceService.GetGearUpgradeCost(this.Item) : 0;
   }
 
   constructor(
-    private gameService: GameService,
-    private currencyService: CurrencyService,
     private itemPriceService: ItemPriceService,
     private vendorService: VendorService,
-    private enchantingService: EnchantingService
+    private enchantingService: EnchantingService,
+    private gearSpecifications: GearSpecifications,
+    private vendorSpecifications: VendorSpecifications
   ) {}
 
   protected BuyItem() {

@@ -5,8 +5,8 @@
   height: 100%;
   width: 100%;
 
-  @include flexbox($dir: column, $align: center, $justify: flex-start);
-  flex-direction: column-reverse;
+  @include flexbox($dir: row, $align: center, $justify: flex-start);
+  // flex-direction: column-reverse;
   gap: $gap;
 }
 

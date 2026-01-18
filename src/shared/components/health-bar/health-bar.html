@@ -1,6 +1,6 @@
 <div class="health-bar-bg">
   <div class="health-bar-fill" [style.width]="progress + '%'"></div>
-  @if (showHealthValues) {
-    <div class="health-bar-text">{{ currentHealth | number }} / {{ maxHealth | number }} HP</div>
-  }
 </div>
+@if (showHealthValues) {
+  <div class="health-bar-text">{{ currentHealth | number }} / {{ maxHealth | number }} HP</div>
+}

@@ -1,8 +1,8 @@
 import { CharactersIconName, IconComponent, Separator } from '../../shared/components';
-import { GameStateService, HeroService } from '../../shared/services';
 
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { GameLoaderService } from '../../persistence';
 import { Router } from '@angular/router';
 
 @Component({
@@ -19,17 +19,12 @@ export class NewGame {
 
   constructor(
     private router: Router,
-    private gameStateService: GameStateService,
-    private heroService: HeroService
+    private gameLoaderService: GameLoaderService
   ) {}
 
-  StartGame() {
-    this.gameStateService.GameCreated.set(true);
-
-    this.heroService.CharacterIcon.set(this.CharacterIcon);
-    this.heroService.Name.set(this.heroName);
-
-    this.router.navigate(['/game']);
+  async StartGame() {
+    await this.gameLoaderService.LoadNewGame(this.heroName, this.CharacterIcon);
+    await this.router.navigate(['']);
   }
 
   NextCharacter() {

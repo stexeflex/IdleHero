@@ -17,7 +17,8 @@
               [class.multi]="GetMessageClass(entry.Type) == 'multi'"
               [class.crit-multi]="GetMessageClass(entry.Type) == 'crit-multi'"
               [class.boss-defeat]="GetMessageClass(entry.Type) == 'boss-defeat'"
-              [class.level-up]="GetMessageClass(entry.Type) == 'level-up'">
+              [class.level-up]="GetMessageClass(entry.Type) == 'level-up'"
+              [class.dungeon-cleared]="GetMessageClass(entry.Type) == 'dungeon-cleared'">
               {{ entry.Message }}
             </p>
             <p

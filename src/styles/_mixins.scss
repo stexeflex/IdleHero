@@ -198,3 +198,21 @@
     background: $grad-accent-lighten;
   }
 }
+
+/* Dimming Mixin */
+@mixin dim() {
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 1;
+  }
+
+  &.opacity::after {
+    opacity: 1;
+  }
+}

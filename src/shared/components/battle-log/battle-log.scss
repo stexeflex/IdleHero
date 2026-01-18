@@ -61,7 +61,8 @@
 .multi,
 .crit-multi,
 .boss-defeat,
-.level-up {
+.level-up,
+.dungeon-cleared {
   font-weight: bold;
   text-shadow:
     -1px -1px 0 $clr-text-shadow,
@@ -113,5 +114,10 @@
 
 .level-up {
   color: $clr-log-level-up;
+  font-size: 1.4rem;
+}
+
+.dungeon-cleared {
+  color: $clr-log-dungeon-cleared;
   font-size: 1.4rem;
 }

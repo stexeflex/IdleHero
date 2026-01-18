@@ -1,7 +1,7 @@
 import { Component, ElementRef, HostListener, inject } from '@angular/core';
-import { CurrencyService, InventoryService, SelectedGearService } from '../../../shared/services';
 import { Gear, GearType } from '../../../shared/models';
-import { Gold, IconComponent, PanelHeader, Separator } from '../../../shared/components';
+import { IconComponent, Separator } from '../../../shared/components';
+import { InventoryService, SelectedGearService } from '../../../shared/services';
 
 import { Enchanting } from './enchanting/enchanting';
 import { GearActions } from './gear-actions/gear-actions';
@@ -10,16 +10,7 @@ import { ItemDisplay } from './item-display/item-display';
 
 @Component({
   selector: 'app-inventory-area',
-  imports: [
-    GearSlots,
-    Gold,
-    Enchanting,
-    Separator,
-    PanelHeader,
-    IconComponent,
-    ItemDisplay,
-    GearActions
-  ],
+  imports: [GearSlots, Enchanting, Separator, IconComponent, ItemDisplay, GearActions],
   templateUrl: './inventory-area.html',
   styleUrl: './inventory-area.scss'
 })
@@ -31,10 +22,6 @@ export class InventoryArea {
     if (!this.elementRef.nativeElement.contains(event.target)) {
       this.DeselectGear();
     }
-  }
-
-  protected get GoldAmount(): number {
-    return this.currencyService.Gold();
   }
 
   protected get ShowItemDisplay(): boolean {
@@ -61,7 +48,6 @@ export class InventoryArea {
 
   constructor(
     private selectedGearService: SelectedGearService,
-    private currencyService: CurrencyService,
     private inventoryService: InventoryService
   ) {}
 

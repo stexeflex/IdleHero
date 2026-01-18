@@ -3,7 +3,6 @@
 
 .sheet {
   @include flexbox();
-  margin-bottom: calc($gap * 2);
 }
 
 /* === Portrait Section === */
