@@ -98,7 +98,7 @@ export class GameStateSchema {
 }
 
 export class StatisticsSchema {
-  PrestigeLevel: number = 0;
+  Prestiges: number = 0;
   StageStatistics: StageStatistics = { HighestStageReached: {} };
 
   DamageStatistics: DamageStatistics = {
@@ -112,7 +112,7 @@ export class StatisticsSchema {
   public static FromRaw(applyTo: StatisticsSchema, raw: unknown): StatisticsSchema {
     const stats = (raw as any).Statistics;
 
-    applyTo.PrestigeLevel = FallbackUtils.pickNumber(stats?.PrestigeLevel, applyTo.PrestigeLevel);
+    applyTo.Prestiges = FallbackUtils.pickNumber(stats?.Prestiges, applyTo.Prestiges);
 
     const stageStats = stats?.StageStatistics?.HighestStageReached;
     if (ObjectUtils.isPlainObject(stageStats)) {

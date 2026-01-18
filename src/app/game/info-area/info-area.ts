@@ -21,7 +21,7 @@ export class InfoArea {
   }
 
   protected get PrestigeLevel(): number {
-    return this.statisticsService.PrestigeLevel();
+    return this.statisticsService.Prestiges();
   }
 
   protected get MaxStages(): string {

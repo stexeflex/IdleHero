@@ -11,7 +11,7 @@ import { FlagsUtils } from '../../utils';
 
 @Injectable({ providedIn: 'root' })
 export class StatisticsService {
-  public readonly PrestigeLevel = signal(0);
+  public readonly Prestiges = signal(0);
   public readonly StageStatistics = signal(<StageStatistics>{});
 
   public readonly DamageStatistics = signal(<DamageStatistics>{
@@ -23,18 +23,20 @@ export class StatisticsService {
   });
 
   public Init(schema: StatisticsSchema) {
+    this.Prestiges.set(schema.Prestiges);
     this.DamageStatistics.set(schema.DamageStatistics);
     this.StageStatistics.set(schema.StageStatistics);
   }
 
   public CollectSchema(schema: StatisticsSchema): StatisticsSchema {
+    schema.Prestiges = this.Prestiges();
     schema.DamageStatistics = this.DamageStatistics();
     schema.StageStatistics = this.StageStatistics();
     return schema;
   }
 
   public RecordPrestige(inRoom: DungeonRoomId, atStage: number) {
-    this.PrestigeLevel.update((level) => level + 1);
+    this.Prestiges.update((level) => level + 1);
     this.StageStatistics.update((stats) => {
       const currentHighest = stats.HighestStageReached[inRoom] || 0;
       stats.HighestStageReached[inRoom] = Math.max(currentHighest, atStage);
