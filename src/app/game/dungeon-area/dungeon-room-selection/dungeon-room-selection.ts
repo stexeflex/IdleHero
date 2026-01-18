@@ -53,9 +53,9 @@ export class DungeonRoomSelection {
       case 1:
         return this.currency.HasKey(this.dungeonRooms.GetRoom(2)!.Prerequisites.Key!);
       case 2:
-        return this.currency.HasKey(this.dungeonRooms.GetRoom(3)!.Prerequisites.Key!);
+        return this.currency.HasKey(this.dungeonRooms.GetRoom(2)!.Prerequisites.Key!);
       case 3:
-        return this.currency.HasKey(this.dungeonRooms.GetRoom(3)!.Rewards.Key!);
+        return this.currency.HasKey(this.dungeonRooms.GetRoom(3)!.Prerequisites.Key!);
       default:
         return false;
     }

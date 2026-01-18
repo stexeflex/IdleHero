@@ -27,7 +27,7 @@
           <span class="label">Stages</span>
           <span class="value">
             @if (!ShowRoomInfo(currentRoom)) {
-              <i class="bi bi-question-lg"></i>
+              1 → <i class="bi bi-question-lg"></i>
             } @else {
               {{ currentRoom.StagesBase | number }} → {{ currentRoom.StagesMax | number }}
             }
