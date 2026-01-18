@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, Signal, inject, output, signal } from '@angular/core';
 import { CurrencyService, DungeonRoomService } from '../../../../shared/services';
 import { DungeonRoom, DungeonRoomId } from '../../../../shared/models';
-import { Gold, IconComponent, PanelHeader, Separator } from '../../../../shared/components';
+import { Gold, IconComponent, Separator } from '../../../../shared/components';
 
 import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-dungeon-room-selection',
-  imports: [DecimalPipe, PanelHeader, IconComponent, Gold, Separator],
+  imports: [DecimalPipe, IconComponent, Gold, Separator],
   templateUrl: './dungeon-room-selection.html',
   styleUrl: './dungeon-room-selection.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -74,39 +74,32 @@ export class DungeonArena implements AfterViewInit {
         return;
       }
 
+      const delays = this.getEffectiveDurations();
+
       // Base attack animation
       this.isAttacking.set(true);
       if (this.attackTimer) clearTimeout(this.attackTimer);
-      this.attackTimer = setTimeout(
-        () => this.isAttacking.set(false),
-        DELAYS.HERO_ATTACK_ANIMATION_MS
-      );
+      this.attackTimer = setTimeout(() => this.isAttacking.set(false), delays.attack);
 
       // Crit + Multi-hit effect
       if (FlagsUtils.HasFlag(result.AttackType, AttackType.Critical | AttackType.MultiHit)) {
         this.isCritMulti.set(true);
         if (this.critMultiTimer) clearTimeout(this.critMultiTimer);
-        this.critMultiTimer = setTimeout(
-          () => this.isCritMulti.set(false),
-          DELAYS.HERO_CRIT_MULTI_HIT_ANIMATION_MS
-        );
+        this.critMultiTimer = setTimeout(() => this.isCritMulti.set(false), delays.critMulti);
       }
 
       // Crit effect
       if (FlagsUtils.HasFlag(result.AttackType, AttackType.Critical)) {
         this.isCrit.set(true);
         if (this.critTimer) clearTimeout(this.critTimer);
-        this.critTimer = setTimeout(() => this.isCrit.set(false), DELAYS.HERO_CRIT_ANIMATION_MS);
+        this.critTimer = setTimeout(() => this.isCrit.set(false), delays.crit);
       }
 
       // Multi-hit effect
       if (FlagsUtils.HasFlag(result.AttackType, AttackType.MultiHit)) {
         this.isMulti.set(true);
         if (this.multiTimer) clearTimeout(this.multiTimer);
-        this.multiTimer = setTimeout(
-          () => this.isMulti.set(false),
-          DELAYS.HERO_MULTI_HIT_ANIMATION_MS
-        );
+        this.multiTimer = setTimeout(() => this.isMulti.set(false), delays.multi);
       }
     });
 
@@ -127,5 +120,26 @@ export class DungeonArena implements AfterViewInit {
         );
       }
     });
+  }
+
+  private clamp(n: number, min: number, max: number): number {
+    return Math.max(min, Math.min(max, n));
+  }
+
+  private getEffectiveDurations() {
+    const speedPercent = this.statsService.AttackSpeed(); // 100 => 1/s
+    const aps = Math.max(speedPercent / 100, 0.1); // Untergrenze
+    const interval = 1000 / aps; // ms pro Attack
+
+    return {
+      attack: this.clamp(Math.floor(interval * 0.45), 60, DELAYS.HERO_ATTACK_ANIMATION_MS),
+      crit: this.clamp(Math.floor(interval * 0.65), 80, DELAYS.HERO_CRIT_ANIMATION_MS),
+      multi: this.clamp(Math.floor(interval * 0.55), 80, DELAYS.HERO_MULTI_HIT_ANIMATION_MS),
+      critMulti: this.clamp(
+        Math.floor(interval * 0.75),
+        100,
+        DELAYS.HERO_CRIT_MULTI_HIT_ANIMATION_MS
+      )
+    };
   }
 }
