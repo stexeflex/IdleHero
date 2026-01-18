@@ -6,6 +6,6 @@ export class LevelSpecifications {
   constructor(private levelService: LevelService) {}
 
   public HasRequiredLevel(requiredLevel: number): boolean {
-    return this.levelService.Current() >= requiredLevel;
+    return this.levelService.Level() >= requiredLevel;
   }
 }

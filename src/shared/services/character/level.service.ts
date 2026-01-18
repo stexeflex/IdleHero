@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, computed, signal } from '@angular/core';
 
 import { CHARACTER_CONFIG } from '../../constants';
 import { ExperienceGainResult } from '../../models';
@@ -8,30 +8,38 @@ import { LevelSchema } from '../../../persistence';
   providedIn: 'root'
 })
 export class LevelService {
-  public UnspentAttributePoints = signal(0);
-  public SpentAttributePoints = signal(0);
-  public TotalAttributePoints = signal(0);
+  public UnspentAttributePoints = computed(() => {
+    return this.TotalAttributePoints() - this.SpentAttributePoints();
+  });
 
-  public Current = signal(CHARACTER_CONFIG.LEVEL.BASE_LEVEL);
+  public SpentAttributePoints = signal(0);
+
+  public TotalAttributePoints = computed(() => {
+    const base = 0;
+    const perLevel = CHARACTER_CONFIG.LEVEL.SKILL_POINTS_PER_LEVEL;
+    const level = this.Level() - CHARACTER_CONFIG.LEVEL.BASE_LEVEL;
+    return base + perLevel * level;
+  });
+
+  public Level = signal(CHARACTER_CONFIG.LEVEL.BASE_LEVEL);
   public Experience = signal(CHARACTER_CONFIG.EXPERIENCE.BASE_EXPERIENCE);
-  public ExperienceToNextLevel = signal(CHARACTER_CONFIG.EXPERIENCE.BASE_EXPERIENCE_TO_NEXT_LEVEL);
+  public ExperienceToNextLevel = computed(() => {
+    const baseExperience = CHARACTER_CONFIG.EXPERIENCE.BASE_EXPERIENCE_TO_NEXT_LEVEL;
+    const growthRate = CHARACTER_CONFIG.EXPERIENCE.EXPERIENCE_GROWTH_RATE;
+    const level = this.Level() - CHARACTER_CONFIG.LEVEL.BASE_LEVEL;
+    return Math.round(baseExperience * Math.pow(growthRate, level));
+  });
 
   public Init(levelSchema: LevelSchema) {
-    this.Current.set(levelSchema.Level);
+    this.Level.set(levelSchema.Level);
     this.Experience.set(levelSchema.Experience);
-    this.ExperienceToNextLevel.set(levelSchema.ExperienceToNextLevel);
-    this.UnspentAttributePoints.set(levelSchema.UnspentAttributePoints);
     this.SpentAttributePoints.set(levelSchema.SpentAttributePoints);
-    this.TotalAttributePoints.set(levelSchema.TotalAttributePoints);
   }
 
   public CollectSchema(schema: LevelSchema): LevelSchema {
-    schema.Level = this.Current();
+    schema.Level = this.Level();
     schema.Experience = this.Experience();
-    schema.ExperienceToNextLevel = this.ExperienceToNextLevel();
-    schema.UnspentAttributePoints = this.UnspentAttributePoints();
     schema.SpentAttributePoints = this.SpentAttributePoints();
-    schema.TotalAttributePoints = this.TotalAttributePoints();
     return schema;
   }
 
@@ -57,20 +65,11 @@ export class LevelService {
   }
 
   private LevelUp(): void {
-    this.Current.update((current) => current + 1);
-    this.UnspentAttributePoints.update(
-      (points) => points + CHARACTER_CONFIG.LEVEL.SKILL_POINTS_PER_LEVEL
-    );
-    this.TotalAttributePoints.update(
-      (points) => points + CHARACTER_CONFIG.LEVEL.SKILL_POINTS_PER_LEVEL
-    );
+    this.Level.update((current) => current + 1);
   }
 
   private SetNextLevelExperience(): void {
     this.Experience.set(0);
-    this.ExperienceToNextLevel.update((value) =>
-      Math.round(value * CHARACTER_CONFIG.EXPERIENCE.EXPERIENCE_GROWTH_RATE)
-    );
   }
 
   public SpentSkillPoint() {
@@ -78,7 +77,6 @@ export class LevelService {
       return;
     }
 
-    this.UnspentAttributePoints.update((points) => points - 1);
     this.SpentAttributePoints.update((points) => points + 1);
   }
 
@@ -87,7 +85,6 @@ export class LevelService {
       return;
     }
 
-    this.UnspentAttributePoints.update((points) => points + 1);
     this.SpentAttributePoints.update((points) => points - 1);
   }
 }

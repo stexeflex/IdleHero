@@ -113,6 +113,6 @@ export class OrchestrationLogic {
   }
 
   private LogPlayerLevelUp() {
-    this.battleLogService.LevelUp(this.levelService.Current(), this.levelService.Current() + 1);
+    this.battleLogService.LevelUp(this.levelService.Level(), this.levelService.Level() + 1);
   }
 }

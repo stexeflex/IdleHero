@@ -111,30 +111,15 @@ export class HeroSchema {
 export class LevelSchema {
   Level: number = CHARACTER_CONFIG.LEVEL.BASE_LEVEL;
   Experience: number = CHARACTER_CONFIG.EXPERIENCE.BASE_EXPERIENCE;
-  ExperienceToNextLevel: number = CHARACTER_CONFIG.EXPERIENCE.BASE_EXPERIENCE_TO_NEXT_LEVEL;
-  UnspentAttributePoints: number = 0;
   SpentAttributePoints: number = 0;
-  TotalAttributePoints: number = 0;
 
   public static FromRaw(applyTo: LevelSchema, raw: unknown): LevelSchema {
     const level = (raw as any).Level;
     applyTo.Level = FallbackUtils.pickNumber(level?.Level, applyTo.Level);
     applyTo.Experience = FallbackUtils.pickNumber(level?.Experience, applyTo.Experience);
-    applyTo.ExperienceToNextLevel = FallbackUtils.pickNumber(
-      level?.ExperienceToNextLevel,
-      applyTo.ExperienceToNextLevel
-    );
-    applyTo.UnspentAttributePoints = FallbackUtils.pickNumber(
-      level?.UnspentAttributePoints,
-      applyTo.UnspentAttributePoints
-    );
     applyTo.SpentAttributePoints = FallbackUtils.pickNumber(
       level?.SpentAttributePoints,
       applyTo.SpentAttributePoints
-    );
-    applyTo.TotalAttributePoints = FallbackUtils.pickNumber(
-      level?.TotalAttributePoints,
-      applyTo.TotalAttributePoints
     );
     return applyTo;
   }
@@ -146,7 +131,7 @@ export class AttributesSchema {
   Dexterity: number = STATS_CONFIG.ATTRIBUTES.DEXTERITY_BASE;
 
   public static FromRaw(applyTo: AttributesSchema, raw: unknown): AttributesSchema {
-    const stats = (raw as any).Stats;
+    const stats = (raw as any).Attributes;
     applyTo.Strength = FallbackUtils.pickNumber(stats?.Strength, applyTo.Strength);
     applyTo.Intelligence = FallbackUtils.pickNumber(stats?.Intelligence, applyTo.Intelligence);
     applyTo.Dexterity = FallbackUtils.pickNumber(stats?.Dexterity, applyTo.Dexterity);
