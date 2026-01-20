@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { Gold, IconComponent } from '../../../../shared/components';
 
 import { SkillTier } from '../../../../shared/models';
@@ -14,5 +14,5 @@ export class SkillTierArea {
   readonly isUnlocked = input.required<boolean>();
   readonly canUnlock = input.required<boolean>();
 
-  @Output() unlockTier = new EventEmitter<SkillTier>();
+  readonly unlockTier = output<SkillTier>();
 }

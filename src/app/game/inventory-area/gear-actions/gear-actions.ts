@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, inject, input } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { EnchantingService, ItemPriceService, VendorService } from '../../../../shared/services';
 import { Gear, GearType } from '../../../../shared/models';
 import { GearSpecifications, VendorSpecifications } from '../../../../shared/specifications';
@@ -20,8 +20,8 @@ export class GearActions {
   readonly ItemType = input<GearType | null>(null);
   readonly Item = input<Gear | null>(null);
 
-  @Output() OnItemBought = new EventEmitter<GearType>();
-  @Output() OnItemSold = new EventEmitter();
+  readonly OnItemBought = output<GearType>();
+  readonly OnItemSold = output();
 
   protected get CanBuy(): boolean {
     if (!this.vendorSpecifications.CanBuy()) {

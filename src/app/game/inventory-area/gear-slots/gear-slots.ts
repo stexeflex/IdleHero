@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
 import { EnchantmentSlot, GearType } from '../../../../shared/models';
 import {
   EnchantmentSlotIcon,
@@ -28,7 +28,10 @@ export class GearSlots {
     ];
   }
 
-  @Output() GearSlotSelected = new EventEmitter<{ event: MouseEvent; slot: GearType }>();
+  readonly GearSlotSelected = output<{
+    event: MouseEvent;
+    slot: GearType;
+}>();
 
   protected SelectGearSlot(event: MouseEvent, slot: GearType): void {
     this.GearSlotSelected.emit({ event, slot });

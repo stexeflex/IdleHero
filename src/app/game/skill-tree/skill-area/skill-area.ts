@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 import { IconComponent } from '../../../../shared/components';
 import { Skill } from '../../../../shared/models';
@@ -16,8 +16,8 @@ export class SkillArea {
   readonly canUnlock = input.required<boolean>();
   readonly canLevel = input.required<boolean>();
 
-  @Output() unlockSkill = new EventEmitter<Skill>();
-  @Output() upgradeSkill = new EventEmitter<Skill>();
+  readonly unlockSkill = output<Skill>();
+  readonly upgradeSkill = output<Skill>();
 
   protected get unlocked() {
     return this.skill().Level > 0;
