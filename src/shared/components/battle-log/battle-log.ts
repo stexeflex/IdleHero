@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, viewChild } from '@angular/core';
 import { BattleLogMessage, MessageType } from '../../models';
 
 import { BattleLogService } from '../../services';
@@ -13,14 +13,14 @@ import { FlagsUtils } from '../../utils';
 export class BattleLog implements AfterViewInit {
   private battleLogService = inject(BattleLogService);
 
-  @ViewChild('battleLogContainer') battleLogContainer!: ElementRef;
+  readonly battleLogContainer = viewChild.required<ElementRef>('battleLogContainer');
 
   protected get Messages(): BattleLogMessage[] {
     return this.battleLogService.Logs();
   }
 
   ngAfterViewInit(): void {
-    this.scrollToBottom(this.battleLogContainer);
+    this.scrollToBottom(this.battleLogContainer());
   }
 
   private scrollToBottom(element: ElementRef): void {
