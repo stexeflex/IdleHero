@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-stage-label',
@@ -7,5 +7,5 @@ import { Component, Input } from '@angular/core';
   styleUrl: './stage-label.scss'
 })
 export class StageLabel {
-  @Input() stageNumber: number | null = null;
+  readonly stageNumber = input<number | null>(null);
 }

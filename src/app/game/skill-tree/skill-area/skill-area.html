@@ -1,23 +1,23 @@
 <div
   class="skill"
-  [class.unlockable]="unlockable"
+  [class.unlockable]="unlockable()"
   [class.unlocked]="unlocked"
-  [class.locked]="!unlockable"
+  [class.locked]="!unlockable()"
   [class.maxed]="isMaxed">
   <div class="skill-main">
     <!-- TITLE -->
     <div class="skill-title">
-      <span>{{ skill.Id }}</span>
-      <strong class="skill-title__name">{{ skill.Name }}</strong>
+      <span>{{ skill().Id }}</span>
+      <strong class="skill-title__name">{{ skill().Name }}</strong>
       @if (unlocked) {
-        <span>[{{ skill.Level }} / {{ skill.MaxLevel }}]</span>
+        <span>[{{ skill().Level }} / {{ skill().MaxLevel }}]</span>
       }
     </div>
 
     <!-- DESCRIPTIONS -->
-    <div class="skill-description">{{ skill.GetDescription(skill.Level) }}</div>
+    <div class="skill-description">{{ skill().GetDescription(skill().Level) }}</div>
     @if (!isMaxed) {
-      <div class="skill-description">Next: {{ skill.GetDescription(skill.Level + 1) }}</div>
+      <div class="skill-description">Next: {{ skill().GetDescription(skill().Level + 1) }}</div>
     }
     <!-- DEPENDENCIES -->
     @if (!unlocked && hasDependencies) {
@@ -27,20 +27,20 @@
 
   <!-- ACTIONS -->
   <div class="skill-actions">
-    @if (unlockable && skill.Level === 0) {
+    @if (unlockable() && skill().Level === 0) {
       <button
         class="ih-button-icon ih-button-icon-border"
-        [disabled]="!canUnlock"
+        [disabled]="!canUnlock()"
         title="Unlock Skill"
-        (click)="unlockSkill.emit(skill)">
+        (click)="unlockSkill.emit(skill())">
         <app-icon symbol="padlockopen" size="sm"></app-icon>
       </button>
-    } @else if (unlocked && skill.Level < skill.MaxLevel) {
+    } @else if (unlocked && skill().Level < skill().MaxLevel) {
       <button
         class="ih-button-icon ih-button-icon-border"
-        [disabled]="!canLevel"
+        [disabled]="!canLevel()"
         title="Upgrade Skill"
-        (click)="upgradeSkill.emit(skill)">
+        (click)="upgradeSkill.emit(skill())">
         <app-icon symbol="growth" size="sm"></app-icon>
       </button>
     }

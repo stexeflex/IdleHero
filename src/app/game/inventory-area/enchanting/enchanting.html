@@ -1,5 +1,5 @@
 <div class="item-slots">
-  @for (slot of Item.Slots; track $index) {
+  @for (slot of Item().Slots; track $index) {
     @if (ShowEnchantSlot($index)) {
       <div class="slot-row">
         <!-- REROLL BUTTON -->

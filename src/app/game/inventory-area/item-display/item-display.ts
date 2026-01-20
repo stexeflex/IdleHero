@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import {
   EnchantmentSlotIcon,
   GearSlotIconName,
@@ -14,10 +14,10 @@ import { Gear, GearType } from '../../../../shared/models';
   styleUrl: './item-display.scss'
 })
 export class ItemDisplay {
-  @Input({ required: true }) Item!: Gear;
+  readonly Item = input.required<Gear>();
 
   protected get GearIcon(): GearSlotIconName {
-    switch (this.Item.Type) {
+    switch (this.Item().Type) {
       case GearType.Weapon:
         return 'sword';
       case GearType.Shield:
@@ -34,6 +34,6 @@ export class ItemDisplay {
   }
 
   protected get InnateDisplayName(): string {
-    return this.Item.Innate.DisplayName;
+    return this.Item().Innate.DisplayName;
   }
 }

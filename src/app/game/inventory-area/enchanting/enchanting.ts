@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit, inject } from '@angular/core';
+import { Component, HostListener, OnInit, inject, input } from '@angular/core';
 import {
   CurrencyService,
   EnchantingService,
@@ -25,10 +25,10 @@ export class Enchanting implements OnInit {
     this.ResetSlotStates();
   }
 
-  @Input({ required: true }) Item!: Gear;
+  readonly Item = input.required<Gear>();
 
   protected get SlotCost(): number {
-    return this.itemPriceService.GetEnchantmentCost(this.Item);
+    return this.itemPriceService.GetEnchantmentCost(this.Item());
   }
 
   protected get RerollCost(): number {
@@ -46,7 +46,7 @@ export class Enchanting implements OnInit {
   }
 
   private ResetSlotStates() {
-    this.Item.Slots.forEach((slot, index) => {
+    this.Item().Slots.forEach((slot, index) => {
       if (slot.IsEnchanted) {
         this.SlotStates.set(index, 'Enchanted');
       } else {
@@ -61,7 +61,7 @@ export class Enchanting implements OnInit {
 
   /* ENCHANT SECTION */
   protected ShowEnchantSlot(index: number): boolean {
-    const enchantedSlots = this.Item.Slots.filter((e) => e.IsEnchanted).length;
+    const enchantedSlots = this.Item().Slots.filter((e) => e.IsEnchanted).length;
 
     // Show all enchanted Slots and first non-enchanted Slot
     return index < enchantedSlots + 1;
@@ -78,7 +78,7 @@ export class Enchanting implements OnInit {
   protected Enchant($event: MouseEvent, index: number): void {
     $event.stopPropagation();
     this.SlotStates.set(index, 'Enchanted');
-    this.enchantingService.Enchant(this.Item, index);
+    this.enchantingService.Enchant(this.Item(), index);
   }
 
   /* REROLL SECTION */
@@ -100,7 +100,7 @@ export class Enchanting implements OnInit {
   }
 
   protected Reroll(index: number): void {
-    this.enchantingService.Reroll(this.Item, index);
+    this.enchantingService.Reroll(this.Item(), index);
     this.SlotStates.set(index, 'Enchanted');
   }
 
@@ -137,7 +137,7 @@ export class Enchanting implements OnInit {
 
   protected Upgrade($event: MouseEvent, index: number): void {
     $event.stopPropagation();
-    this.enchantingService.Upgrade(this.Item, index);
+    this.enchantingService.Upgrade(this.Item(), index);
     this.SlotStates.set(index, 'Enchanted');
   }
 

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 import { DecimalPipe } from '@angular/common';
 
@@ -9,11 +9,11 @@ import { DecimalPipe } from '@angular/common';
   styleUrl: './health-bar.scss'
 })
 export class HealthBar {
-  @Input() currentHealth: number = 0;
-  @Input() maxHealth: number = 0;
-  @Input() showHealthValues: boolean = false;
+  readonly currentHealth = input<number>(0);
+  readonly maxHealth = input<number>(0);
+  readonly showHealthValues = input<boolean>(false);
 
   get progress(): number {
-    return Math.min(100, (this.currentHealth / this.maxHealth) * 100);
+    return Math.min(100, (this.currentHealth() / this.maxHealth()) * 100);
   }
 }

@@ -1,6 +1,6 @@
 import { CHARACTERS_ICONS, CharactersIconName } from './characters.icons';
 import { CREATURES_ICONS, CreaturesIconName } from './creatures.icons';
-import { Component, HostBinding, Input, OnChanges, inject } from '@angular/core';
+import { Component, HostBinding, OnChanges, inject, input } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { GEAR_SLOT_ICONS, GearSlotIconName } from './gear-slot.icons';
 import { SYMBOLS_ICONS, SymbolsIconName } from './symbols.icons';
@@ -37,19 +37,19 @@ import { IconSize } from './icon-size';
 export class IconComponent implements OnChanges {
   private sanitizer = inject(DomSanitizer);
 
-  @Input() size: IconSize = 'lg';
+  readonly size = input<IconSize>('lg');
 
-  @Input() gear?: GearSlotIconName;
-  @Input() symbol?: SymbolsIconName;
-  @Input() ui?: UiIconName;
-  @Input() character?: CharactersIconName;
-  @Input() creatures?: CreaturesIconName;
+  readonly gear = input<GearSlotIconName>();
+  readonly symbol = input<SymbolsIconName>();
+  readonly ui = input<UiIconName>();
+  readonly character = input<CharactersIconName>();
+  readonly creatures = input<CreaturesIconName>();
 
   @HostBinding('style.width.px') get width() {
-    return this.sizeMap[this.size];
+    return this.sizeMap[this.size()];
   }
   @HostBinding('style.height.px') get height() {
-    return this.sizeMap[this.size];
+    return this.sizeMap[this.size()];
   }
 
   private sizeMap: Record<IconSize, number> = {
@@ -75,16 +75,22 @@ export class IconComponent implements OnChanges {
   private getSvgContent(): string | null {
     let path: string | null = null;
 
-    if (this.gear !== undefined) {
-      path = GEAR_SLOT_ICONS[this.gear];
-    } else if (this.symbol !== undefined) {
-      path = SYMBOLS_ICONS[this.symbol];
-    } else if (this.ui !== undefined) {
-      path = UI_ICONS[this.ui];
-    } else if (this.character !== undefined) {
-      path = CHARACTERS_ICONS[this.character];
-    } else if (this.creatures !== undefined) {
-      path = CREATURES_ICONS[this.creatures];
+    const gear = this.gear();
+    const symbol = this.symbol();
+    const ui = this.ui();
+    const character = this.character();
+    const creatures = this.creatures();
+
+    if (gear !== undefined) {
+      path = GEAR_SLOT_ICONS[gear];
+    } else if (symbol !== undefined) {
+      path = SYMBOLS_ICONS[symbol];
+    } else if (ui !== undefined) {
+      path = UI_ICONS[ui];
+    } else if (character !== undefined) {
+      path = CHARACTERS_ICONS[character];
+    } else if (creatures !== undefined) {
+      path = CREATURES_ICONS[creatures];
     }
 
     return path;

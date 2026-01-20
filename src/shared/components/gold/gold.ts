@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 import { DecimalPipe } from '@angular/common';
 import { IconComponent } from '../icon/icon.component';
@@ -11,7 +11,7 @@ import { IconSize } from '../icon/icon-size';
   styleUrl: './gold.scss'
 })
 export class Gold {
-  @Input() amount: number = 0;
-  @Input() size: IconSize = 'md';
-  @Input() fontSize: string = '1.5rem';
+  readonly amount = input<number>(0);
+  readonly size = input<IconSize>('md');
+  readonly fontSize = input<string>('1.5rem');
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Output, inject, input } from '@angular/core';
 import { EnchantingService, ItemPriceService, VendorService } from '../../../../shared/services';
 import { Gear, GearType } from '../../../../shared/models';
 import { GearSpecifications, VendorSpecifications } from '../../../../shared/specifications';
@@ -17,8 +17,8 @@ export class GearActions {
   private gearSpecifications = inject(GearSpecifications);
   private vendorSpecifications = inject(VendorSpecifications);
 
-  @Input() ItemType: GearType | null = null;
-  @Input() Item: Gear | null = null;
+  readonly ItemType = input<GearType | null>(null);
+  readonly Item = input<Gear | null>(null);
 
   @Output() OnItemBought = new EventEmitter<GearType>();
   @Output() OnItemSold = new EventEmitter();
@@ -28,7 +28,7 @@ export class GearActions {
       return false;
     }
 
-    return this.ItemType !== null && this.Item === null;
+    return this.ItemType() !== null && this.Item() === null;
   }
 
   protected get EnoughGoldToBuy(): boolean {
@@ -40,15 +40,16 @@ export class GearActions {
       return false;
     }
 
-    return this.Item !== null;
+    return this.Item() !== null;
   }
 
   protected get CanUpgrade(): boolean {
-    if (this.Item && !this.gearSpecifications.CanUpgrade(this.Item)) {
+    const Item = this.Item();
+    if (Item && !this.gearSpecifications.CanUpgrade(Item)) {
       return false;
     }
 
-    return this.Item !== null;
+    return Item !== null;
   }
 
   protected get EnoughGoldToUpgrade(): boolean {
@@ -56,40 +57,45 @@ export class GearActions {
   }
 
   protected get ItemPrice(): number {
-    return this.ItemType ? this.itemPriceService.GetBuyPrice(this.ItemType) : 0;
+    const ItemType = this.ItemType();
+    return ItemType ? this.itemPriceService.GetBuyPrice(ItemType) : 0;
   }
 
   protected get SellValue(): number {
-    return this.Item?.SellValue ?? 0;
+    return this.Item()?.SellValue ?? 0;
   }
 
   protected get UpgradeCost(): number {
-    return this.Item ? this.itemPriceService.GetGearUpgradeCost(this.Item) : 0;
+    const Item = this.Item();
+    return Item ? this.itemPriceService.GetGearUpgradeCost(Item) : 0;
   }
 
   protected BuyItem() {
-    if (this.ItemType === null) {
+    const ItemType = this.ItemType();
+    if (ItemType === null) {
       return;
     }
 
-    this.vendorService.BuyItem(this.ItemType);
-    this.OnItemBought.emit(this.ItemType);
+    this.vendorService.BuyItem(ItemType);
+    this.OnItemBought.emit(ItemType);
   }
 
   protected SellItem() {
-    if (this.ItemType === null) {
+    const ItemType = this.ItemType();
+    if (ItemType === null) {
       return;
     }
 
-    this.vendorService.SellItem(this.ItemType);
+    this.vendorService.SellItem(ItemType);
     this.OnItemSold.emit();
   }
 
   protected UpgradeItem() {
-    if (this.Item === null) {
+    const Item = this.Item();
+    if (Item === null) {
       return;
     }
 
-    this.enchantingService.UpgradeGear(this.Item);
+    this.enchantingService.UpgradeGear(Item);
   }
 }

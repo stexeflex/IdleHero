@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Output, input } from '@angular/core';
 import { Gold, IconComponent } from '../../../../shared/components';
 
 import { SkillTier } from '../../../../shared/models';
@@ -10,9 +10,9 @@ import { SkillTier } from '../../../../shared/models';
   styleUrl: './skill-tier-area.scss'
 })
 export class SkillTierArea {
-  @Input({ required: true }) tier!: SkillTier;
-  @Input({ required: true }) isUnlocked!: boolean;
-  @Input({ required: true }) canUnlock!: boolean;
+  readonly tier = input.required<SkillTier>();
+  readonly isUnlocked = input.required<boolean>();
+  readonly canUnlock = input.required<boolean>();
 
   @Output() unlockTier = new EventEmitter<SkillTier>();
 }

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 import { EnchantmentSlot } from '../../models';
 
@@ -9,6 +9,6 @@ import { EnchantmentSlot } from '../../models';
   styleUrl: './enchantment-slot-icon.scss'
 })
 export class EnchantmentSlotIcon {
-  @Input() enchantments: EnchantmentSlot[] = [];
-  @Input() size: string = '20px';
+  readonly enchantments = input<EnchantmentSlot[]>([]);
+  readonly size = input<string>('20px');
 }
