@@ -1,18 +1,17 @@
 import { GameStateService, HeroService } from '../shared/services';
 
 import { CharactersIconName } from '../shared/components';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { StateApplicationService } from './state-application.service';
 import { StatePersistenceService } from './state-persistence.service';
 
 @Injectable({ providedIn: 'root' })
 export class GameLoaderService {
-  constructor(
-    private gameStateService: GameStateService,
-    private heroService: HeroService,
-    private statePersistenceService: StatePersistenceService,
-    private stateApplicationService: StateApplicationService
-  ) {}
+  private gameStateService = inject(GameStateService);
+  private heroService = inject(HeroService);
+  private statePersistenceService = inject(StatePersistenceService);
+  private stateApplicationService = inject(StateApplicationService);
+
 
   public async LoadGame(): Promise<void> {
     const schema = await this.statePersistenceService.LoadSchema();

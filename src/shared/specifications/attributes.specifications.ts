@@ -1,14 +1,13 @@
 import { AttributesService, GameStateService, LevelService } from '../services';
 
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class AttributesSpecifications {
-  constructor(
-    private attributesService: AttributesService,
-    private levelService: LevelService,
-    private gameStateService: GameStateService
-  ) {}
+  private attributesService = inject(AttributesService);
+  private levelService = inject(LevelService);
+  private gameStateService = inject(GameStateService);
+
 
   public CanIncrease(): boolean {
     return (

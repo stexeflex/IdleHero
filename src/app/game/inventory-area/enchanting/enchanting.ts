@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit, inject } from '@angular/core';
 import {
   CurrencyService,
   EnchantingService,
@@ -15,6 +15,11 @@ import { Gold, IconComponent } from '../../../../shared/components';
   styleUrl: './enchanting.scss'
 })
 export class Enchanting implements OnInit {
+  private gameStateService = inject(GameStateService);
+  private enchantingService = inject(EnchantingService);
+  private currencyService = inject(CurrencyService);
+  private itemPriceService = inject(ItemPriceService);
+
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     this.ResetSlotStates();
@@ -31,13 +36,6 @@ export class Enchanting implements OnInit {
   }
 
   protected SlotStates: Map<number, 'Empty' | 'Enchanted' | 'Upgrading' | 'Rerolling'> = new Map();
-
-  constructor(
-    private gameStateService: GameStateService,
-    private enchantingService: EnchantingService,
-    private currencyService: CurrencyService,
-    private itemPriceService: ItemPriceService
-  ) {}
 
   ngOnInit(): void {
     this.ResetSlotStates();

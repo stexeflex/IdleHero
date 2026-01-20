@@ -1,6 +1,6 @@
 import { CharactersIconName, IconComponent } from '../../../../shared/components';
 
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { HeroService } from '../../../../shared/services';
 import { Info } from './info/info';
 
@@ -11,9 +11,9 @@ import { Info } from './info/info';
   styleUrl: './character-sheet.scss'
 })
 export class CharacterSheet {
+  private heroService = inject(HeroService);
+
   protected get HeroIcon(): CharactersIconName {
     return this.heroService.CharacterIcon();
   }
-
-  constructor(private heroService: HeroService) {}
 }

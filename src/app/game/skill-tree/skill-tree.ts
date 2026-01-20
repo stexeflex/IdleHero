@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, inject } from '@angular/core';
 import { Skill, SkillTier } from '../../../shared/models';
 
 import { SkillArea } from './skill-area/skill-area';
@@ -14,16 +14,14 @@ import { SkillsSpecifications } from '../../../shared/specifications';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SkillTree {
+  private skillsService = inject(SkillsService);
+  private skillsSpecifications = inject(SkillsSpecifications);
+
   availableSkillPoints = input<number>(100);
 
   protected get SkillTree() {
     return this.skillsService.SkillTree();
   }
-
-  constructor(
-    private skillsService: SkillsService,
-    private skillsSpecifications: SkillsSpecifications
-  ) {}
 
   protected getTierState(tier: SkillTier) {
     const isUnlocked: boolean = this.skillsService.IsUnlocked(tier.Id);

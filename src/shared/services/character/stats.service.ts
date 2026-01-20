@@ -9,7 +9,7 @@ import {
   MultiHitDamage
 } from '../../models';
 import { ChanceUtils, FlagsUtils } from '../../utils';
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 
 import { AttributesService } from './attributes.service';
 import { BuffsService } from '../buffs-service';
@@ -52,11 +52,9 @@ export class StatsService {
 
   public MultiHitDamage = signal(STATS_CONFIG.MHD.BASE);
 
-  constructor(
-    private attributesService: AttributesService,
-    private inventoryService: InventoryService,
-    private buffsService: BuffsService
-  ) {}
+  private readonly attributesService = inject(AttributesService);
+  private readonly inventoryService = inject(InventoryService);
+  private readonly buffsService = inject(BuffsService);
 
   public Attack(): AttackResult {
     let damage: number = this.AttackPower();

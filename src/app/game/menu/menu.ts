@@ -13,6 +13,11 @@ import { environment } from '../../../environment/environment';
   styleUrl: './menu.scss'
 })
 export class Menu {
+  private router = inject(Router);
+  private menuService = inject(MenuService);
+  private gameStateService = inject(GameStateService);
+  private gameSaverService = inject(GameSaverService);
+
   private elementRef = inject(ElementRef);
 
   @HostListener('document:click', ['$event'])
@@ -29,13 +34,6 @@ export class Menu {
   protected get IsMenuOpen(): boolean {
     return this.menuService.IsMenuOpen();
   }
-
-  constructor(
-    private router: Router,
-    private menuService: MenuService,
-    private gameStateService: GameStateService,
-    private gameSaverService: GameSaverService
-  ) {}
 
   private CloseMenu() {
     this.menuService.IsMenuOpen.set(false);

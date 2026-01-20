@@ -1,7 +1,7 @@
 import { Gear, GearType } from '../models';
 
 import { CurrencyService } from './character/currency.service';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { InventoryService } from './character/inventory.service';
 import { ItemPriceService } from './item-price.service';
 
@@ -9,11 +9,9 @@ import { ItemPriceService } from './item-price.service';
   providedIn: 'root'
 })
 export class VendorService {
-  constructor(
-    private currencyService: CurrencyService,
-    private inventoryService: InventoryService,
-    private itemPriceService: ItemPriceService
-  ) {}
+  private readonly currencyService = inject(CurrencyService);
+  private readonly inventoryService = inject(InventoryService);
+  private readonly itemPriceService = inject(ItemPriceService);
 
   public BuyItem(slot: GearType) {
     const price = this.itemPriceService.GetBuyPrice(slot);

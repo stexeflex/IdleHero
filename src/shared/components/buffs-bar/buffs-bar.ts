@@ -1,6 +1,6 @@
 import { Buff } from '../../models';
 import { BuffsService } from '../../services';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 @Component({
   selector: 'app-buffs-bar',
@@ -9,6 +9,8 @@ import { Component } from '@angular/core';
   styleUrl: './buffs-bar.scss'
 })
 export class BuffsBar {
+  private buffsService = inject(BuffsService);
+
   protected get Buffs(): Buff[] {
     return this.buffsService.Buffs();
   }
@@ -23,7 +25,7 @@ export class BuffsBar {
     return BuffsBar.Cooldown;
   }
 
-  constructor(private buffsService: BuffsService) {
+  constructor() {
     for (let buff of this.Buffs) {
       if (!BuffsBar.Active.has(buff.Name)) {
         BuffsBar.Active.set(buff.Name, 0);

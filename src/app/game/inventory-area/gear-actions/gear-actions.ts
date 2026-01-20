@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { EnchantingService, ItemPriceService, VendorService } from '../../../../shared/services';
 import { Gear, GearType } from '../../../../shared/models';
 import { GearSpecifications, VendorSpecifications } from '../../../../shared/specifications';
@@ -11,6 +11,12 @@ import { Gold, IconComponent } from '../../../../shared/components';
   styleUrl: './gear-actions.scss'
 })
 export class GearActions {
+  private itemPriceService = inject(ItemPriceService);
+  private vendorService = inject(VendorService);
+  private enchantingService = inject(EnchantingService);
+  private gearSpecifications = inject(GearSpecifications);
+  private vendorSpecifications = inject(VendorSpecifications);
+
   @Input() ItemType: GearType | null = null;
   @Input() Item: Gear | null = null;
 
@@ -60,14 +66,6 @@ export class GearActions {
   protected get UpgradeCost(): number {
     return this.Item ? this.itemPriceService.GetGearUpgradeCost(this.Item) : 0;
   }
-
-  constructor(
-    private itemPriceService: ItemPriceService,
-    private vendorService: VendorService,
-    private enchantingService: EnchantingService,
-    private gearSpecifications: GearSpecifications,
-    private vendorSpecifications: VendorSpecifications
-  ) {}
 
   protected BuyItem() {
     if (this.ItemType === null) {

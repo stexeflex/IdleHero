@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { TabDefinition, TabStrip } from '../../shared/components';
 
 import { CharacterArea } from './character-area/character-area';
@@ -16,6 +16,8 @@ import { SkillTree } from './skill-tree/skill-tree';
   styleUrl: './game.scss'
 })
 export class Game {
+  private menuService = inject(MenuService);
+
   protected readonly title = signal('IDLE HERO');
 
   protected get IsMenuOpen(): boolean {
@@ -31,8 +33,6 @@ export class Game {
   }
 
   protected SelectedTab = signal<TabDefinition['id'] | null>('inventory');
-
-  constructor(private menuService: MenuService) {}
 
   protected onTabSelected(tabId: TabDefinition['id']): void {
     this.SelectedTab.set(tabId);

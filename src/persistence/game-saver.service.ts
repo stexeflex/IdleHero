@@ -1,13 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { StateCollectionService } from './state-collection.service';
 import { StatePersistenceService } from './state-persistence.service';
 
 @Injectable({ providedIn: 'root' })
 export class GameSaverService {
-  constructor(
-    private stateCollectionService: StateCollectionService,
-    private statePersistenceService: StatePersistenceService
-  ) {}
+  private stateCollectionService = inject(StateCollectionService);
+  private statePersistenceService = inject(StatePersistenceService);
+
 
   public async SaveGame(): Promise<void> {
     const schema = this.stateCollectionService.CollectStates();

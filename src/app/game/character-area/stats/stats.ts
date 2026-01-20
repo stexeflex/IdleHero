@@ -1,4 +1,4 @@
-import { Component, Inject, LOCALE_ID } from '@angular/core';
+import { Component, LOCALE_ID, inject } from '@angular/core';
 
 import { DecimalPipe, PercentPipe } from '@angular/common';
 import { AttributesService, LevelService, StatsService } from '../../../../shared/services';
@@ -13,6 +13,12 @@ import { StatisticsService } from '../../../../shared/services/character/statist
   styleUrl: './stats.scss'
 })
 export class Stats {
+  private attributesService = inject(AttributesService);
+  private statsService = inject(StatsService);
+  private levelService = inject(LevelService);
+  private statisticsService = inject(StatisticsService);
+  private canChangeAttributes = inject(AttributesSpecifications);
+
   private readonly decimalPipe: DecimalPipe;
   private readonly percentPipe: PercentPipe;
 
@@ -20,14 +26,9 @@ export class Stats {
   protected StatsExpanded: boolean = false;
   protected StatisticsExpanded: boolean = false;
 
-  constructor(
-    @Inject(LOCALE_ID) locale: string,
-    private attributesService: AttributesService,
-    private statsService: StatsService,
-    private levelService: LevelService,
-    private statisticsService: StatisticsService,
-    private canChangeAttributes: AttributesSpecifications
-  ) {
+  constructor() {
+    const locale = inject(LOCALE_ID);
+
     this.decimalPipe = new DecimalPipe(locale);
     this.percentPipe = new PercentPipe(locale);
   }

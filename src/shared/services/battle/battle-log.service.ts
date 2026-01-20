@@ -1,4 +1,3 @@
-import { DecimalPipe } from '@angular/common';
 import {
   AttackResult,
   AttackType,
@@ -7,7 +6,9 @@ import {
   MessageType,
   StageRewards
 } from '../../models';
-import { Inject, Injectable, LOCALE_ID, signal } from '@angular/core';
+import { Injectable, LOCALE_ID, inject, signal } from '@angular/core';
+
+import { DecimalPipe } from '@angular/common';
 import { FlagsUtils } from '../../utils';
 
 @Injectable({
@@ -17,11 +18,8 @@ export class BattleLogService {
   private _logs = signal<BattleLogMessage[]>([]);
   public readonly Logs = this._logs.asReadonly();
 
-  private readonly decimalPipe: DecimalPipe;
-
-  constructor(@Inject(LOCALE_ID) locale: string) {
-    this.decimalPipe = new DecimalPipe(locale);
-  }
+  private readonly locale = inject(LOCALE_ID);
+  private readonly decimalPipe: DecimalPipe = new DecimalPipe(this.locale);
 
   public AddLog(message: BattleLogMessage) {
     this._logs.update((logs) => [...logs, message]);

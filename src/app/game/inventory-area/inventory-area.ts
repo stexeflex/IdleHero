@@ -15,6 +15,9 @@ import { ItemDisplay } from './item-display/item-display';
   styleUrl: './inventory-area.scss'
 })
 export class InventoryArea {
+  private selectedGearService = inject(SelectedGearService);
+  private inventoryService = inject(InventoryService);
+
   private elementRef = inject(ElementRef);
 
   @HostListener('document:click', ['$event'])
@@ -45,11 +48,6 @@ export class InventoryArea {
   }
 
   protected GearPreview: Gear | null = null;
-
-  constructor(
-    private selectedGearService: SelectedGearService,
-    private inventoryService: InventoryService
-  ) {}
 
   protected OnGearSlotSelected(event: MouseEvent, slot: GearType) {
     event.stopPropagation();

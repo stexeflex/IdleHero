@@ -1,4 +1,4 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 
 import { AttributesSchema } from '../../../persistence';
 import { InventoryService } from './inventory.service';
@@ -31,10 +31,8 @@ export class AttributesService {
     return this.DexterityStat() + bonus;
   });
 
-  constructor(
-    private inventoryService: InventoryService,
-    private levelService: LevelService
-  ) {}
+  private readonly inventoryService = inject(InventoryService);
+  private readonly levelService = inject(LevelService);
 
   public Init(statsSchema: AttributesSchema) {
     this._strengthStat.set(statsSchema.Strength);

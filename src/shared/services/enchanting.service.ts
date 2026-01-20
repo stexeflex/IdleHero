@@ -7,10 +7,10 @@ import {
   WEAPON_ENCHANTMENT_POOL
 } from '../constants';
 import { Enchantment, Gear, GearType } from '../models';
+import { Injectable, inject } from '@angular/core';
 
 import { CurrencyService } from './character/currency.service';
 import { GearSpecifications } from '../specifications';
-import { Injectable } from '@angular/core';
 import { InventoryService } from './character/inventory.service';
 import { ItemPriceService } from './item-price.service';
 
@@ -18,12 +18,10 @@ import { ItemPriceService } from './item-price.service';
   providedIn: 'root'
 })
 export class EnchantingService {
-  constructor(
-    private inventoryService: InventoryService,
-    private itemPriceService: ItemPriceService,
-    private currencyService: CurrencyService,
-    private gearSpecifications: GearSpecifications
-  ) {}
+  private readonly inventoryService = inject(InventoryService);
+  private readonly itemPriceService = inject(ItemPriceService);
+  private readonly currencyService = inject(CurrencyService);
+  private readonly gearSpecifications = inject(GearSpecifications);
 
   public UpgradeGear(item: Gear) {
     if (!this.gearSpecifications.CanUpgrade(item)) {

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { LevelSpecifications } from './level.specifications';
 import { SkillId } from '../models';
 import { SkillsService } from '../services';
@@ -6,11 +6,10 @@ import { VendorSpecifications } from './vendor.specifications';
 
 @Injectable({ providedIn: 'root' })
 export class SkillsSpecifications {
-  constructor(
-    private levelSpecifications: LevelSpecifications,
-    private vendorSpecifications: VendorSpecifications,
-    private skillsService: SkillsService
-  ) {}
+  private levelSpecifications = inject(LevelSpecifications);
+  private vendorSpecifications = inject(VendorSpecifications);
+  private skillsService = inject(SkillsService);
+
 
   public CanUnlockTier(tierId: number): boolean {
     const tier = this.skillsService.GetTier(tierId);

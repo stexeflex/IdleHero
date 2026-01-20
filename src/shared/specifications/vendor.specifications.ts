@@ -1,13 +1,12 @@
 import { CurrencyService, GameStateService } from '../services';
 
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class VendorSpecifications {
-  constructor(
-    private gameStateService: GameStateService,
-    private currencyService: CurrencyService
-  ) {}
+  private gameStateService = inject(GameStateService);
+  private currencyService = inject(CurrencyService);
+
 
   public CanBuy(): boolean {
     return !this.gameStateService.IsGameInProgress;

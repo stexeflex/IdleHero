@@ -1,7 +1,7 @@
 import { ExperienceBar, PanelHeader, Separator } from '../../../shared/components';
 
 import { CharacterSheet } from './character-sheet/character-sheet';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { LevelService } from '../../../shared/services';
 import { Stats } from './stats/stats';
 
@@ -11,6 +11,6 @@ import { Stats } from './stats/stats';
   templateUrl: './character-area.html',
   styleUrl: './character-area.scss'
 })
-export class CharacterArea {
-  constructor(protected levelService: LevelService) {}
+export class CharacterArea {  protected levelService = inject(LevelService);
+
 }

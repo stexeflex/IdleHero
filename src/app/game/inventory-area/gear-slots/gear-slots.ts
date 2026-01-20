@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { EnchantmentSlot, GearType } from '../../../../shared/models';
 import {
   EnchantmentSlotIcon,
@@ -14,6 +14,9 @@ import { InventoryService, SelectedGearService } from '../../../../shared/servic
   styleUrl: './gear-slots.scss'
 })
 export class GearSlots {
+  private selectedGearService = inject(SelectedGearService);
+  private inventoryService = inject(InventoryService);
+
   protected get GearSlots(): { type: GearType; class: string; icon: GearSlotIconName }[] {
     return [
       { type: GearType.Weapon, class: 'weapon gear-slot-large', icon: 'sword' },
@@ -26,11 +29,6 @@ export class GearSlots {
   }
 
   @Output() GearSlotSelected = new EventEmitter<{ event: MouseEvent; slot: GearType }>();
-
-  constructor(
-    private selectedGearService: SelectedGearService,
-    private inventoryService: InventoryService
-  ) {}
 
   protected SelectGearSlot(event: MouseEvent, slot: GearType): void {
     this.GearSlotSelected.emit({ event, slot });

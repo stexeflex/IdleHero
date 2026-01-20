@@ -1,6 +1,6 @@
 import { CharactersIconName, IconComponent, Separator } from '../../shared/components';
 
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { GameLoaderService } from '../../persistence';
 import { Router } from '@angular/router';
@@ -12,15 +12,13 @@ import { Router } from '@angular/router';
   styleUrl: './new-game.scss'
 })
 export class NewGame {
+  private router = inject(Router);
+  private gameLoaderService = inject(GameLoaderService);
+
   private CharacterIcons: CharactersIconName[] = ['dwarf', 'overlord', 'wizard'];
   protected CharacterIcon: CharactersIconName = 'dwarf';
 
   protected heroName: string = '';
-
-  constructor(
-    private router: Router,
-    private gameLoaderService: GameLoaderService
-  ) {}
 
   async StartGame() {
     await this.gameLoaderService.LoadNewGame(this.heroName, this.CharacterIcon);
