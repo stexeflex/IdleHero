@@ -152,23 +152,11 @@ export class StatisticsSchema {
 export class HeroSchema {
   Name: string = 'Hero';
   CharacterIcon: string = 'dwarf';
-  PrestigeLevel: number = 0;
-  HighestStageReached: number = 0;
-  HighestDamageDealt: number = 0;
 
   public static FromRaw(applyTo: HeroSchema, raw: unknown): HeroSchema {
     const hero = (raw as any).Hero;
     applyTo.Name = FallbackUtils.pickString(hero?.Name, applyTo.Name);
     applyTo.CharacterIcon = FallbackUtils.pickString(hero?.CharacterIcon, applyTo.CharacterIcon);
-    applyTo.PrestigeLevel = FallbackUtils.pickNumber(hero?.PrestigeLevel, applyTo.PrestigeLevel);
-    applyTo.HighestStageReached = FallbackUtils.pickNumber(
-      hero?.HighestStageReached,
-      applyTo.HighestStageReached
-    );
-    applyTo.HighestDamageDealt = FallbackUtils.pickNumber(
-      hero?.HighestDamageDealt,
-      applyTo.HighestDamageDealt
-    );
 
     return applyTo;
   }
