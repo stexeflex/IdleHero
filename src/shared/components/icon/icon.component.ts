@@ -6,7 +6,7 @@ import { GEAR_SLOT_ICONS, GearSlotIconName } from './gear-slot.icons';
 import { SYMBOLS_ICONS, SymbolsIconName } from './symbols.icons';
 import { UI_ICONS, UiIconName } from './ui.icons';
 
-import { IconSize } from './icon-size';
+import { IconSize } from './icon-size.type';
 
 @Component({
   selector: 'app-icon',

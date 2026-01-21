@@ -7,7 +7,7 @@ export * from './health-bar/health-bar';
 export * from './icon/characters.icons';
 export * from './icon/creatures.icons';
 export * from './icon/gear-slot.icons';
-export * from './icon/icon-size';
+export * from './icon/icon-size.type';
 export * from './icon/icon.component';
 export * from './icon/symbols.icons';
 export * from './icon/ui.icons';

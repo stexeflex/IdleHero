@@ -1,6 +1,6 @@
 import { CharactersIconName, IconComponent, Separator } from '../../shared/components';
-
 import { Component, inject } from '@angular/core';
+
 import { FormsModule } from '@angular/forms';
 import { GameLoaderService } from '../../persistence';
 import { Router } from '@angular/router';

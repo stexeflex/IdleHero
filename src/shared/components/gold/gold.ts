@@ -2,7 +2,7 @@ import { Component, input } from '@angular/core';
 
 import { DecimalPipe } from '@angular/common';
 import { IconComponent } from '../icon/icon.component';
-import { IconSize } from '../icon/icon-size';
+import { IconSize } from '../icon/icon-size.type';
 
 @Component({
   selector: 'app-gold',

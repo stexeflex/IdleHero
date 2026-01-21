@@ -1,9 +1,9 @@
-import { Component, LOCALE_ID, inject } from '@angular/core';
-
-import { DecimalPipe, PercentPipe } from '@angular/common';
 import { AttributesService, LevelService, StatsService } from '../../../../shared/services';
-import { IconComponent } from '../../../../shared/components';
+import { Component, LOCALE_ID, inject } from '@angular/core';
+import { DecimalPipe, PercentPipe } from '@angular/common';
+
 import { AttributesSpecifications } from '../../../../shared/specifications';
+import { IconComponent } from '../../../../shared/components';
 import { StatisticsService } from '../../../../shared/services/character/statistics.service';
 
 @Component({

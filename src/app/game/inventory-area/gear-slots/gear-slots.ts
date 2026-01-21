@@ -19,19 +19,19 @@ export class GearSlots {
 
   protected get GearSlots(): { type: GearType; class: string; icon: GearSlotIconName }[] {
     return [
-      { type: GearType.Weapon, class: 'weapon gear-slot-large', icon: 'sword' },
-      { type: GearType.Shield, class: 'shield gear-slot-large', icon: 'shield' },
-      { type: GearType.Head, class: 'head', icon: 'head' },
-      { type: GearType.Chest, class: 'chest', icon: 'chest' },
-      { type: GearType.Legs, class: 'legs', icon: 'legs' },
-      { type: GearType.Boots, class: 'boots', icon: 'boots' }
+      { type: GearType.Weapon, class: 'weapon gear-slot-large', icon: 'relicblade' },
+      { type: GearType.Shield, class: 'shield gear-slot-large', icon: 'dragonshield' },
+      { type: GearType.Head, class: 'head', icon: 'brutalhelm' },
+      { type: GearType.Chest, class: 'chest', icon: 'chestarmor' },
+      { type: GearType.Legs, class: 'legs', icon: 'metalskirt' },
+      { type: GearType.Boots, class: 'boots', icon: 'legarmor' }
     ];
   }
 
   readonly GearSlotSelected = output<{
     event: MouseEvent;
     slot: GearType;
-}>();
+  }>();
 
   protected SelectGearSlot(event: MouseEvent, slot: GearType): void {
     this.GearSlotSelected.emit({ event, slot });

@@ -19,17 +19,17 @@ export class ItemDisplay {
   protected get GearIcon(): GearSlotIconName {
     switch (this.Item().Type) {
       case GearType.Weapon:
-        return 'sword';
+        return 'relicblade';
       case GearType.Shield:
-        return 'shield';
+        return 'dragonshield';
       case GearType.Head:
-        return 'head';
+        return 'brutalhelm';
       case GearType.Chest:
-        return 'chest';
+        return 'chestarmor';
       case GearType.Legs:
-        return 'legs';
+        return 'metalskirt';
       case GearType.Boots:
-        return 'boots';
+        return 'legarmor';
     }
   }
 
