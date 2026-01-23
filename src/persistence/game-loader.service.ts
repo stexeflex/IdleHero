@@ -22,6 +22,7 @@ export class GameLoaderService {
     this.statePersistenceService.Clear();
 
     const schema = await this.statePersistenceService.LoadSchema();
+
     console.log('Loaded schema:', schema);
 
     this.stateApplicationService.ApplyState(schema);
