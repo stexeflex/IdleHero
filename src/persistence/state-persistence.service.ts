@@ -1,5 +1,6 @@
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 
+import { AppStateService } from '../shared/services';
 import { LocalStorageData } from './models/local-storage-data';
 import { Schema } from './models/schema';
 import { environment } from '../environment/environment';
@@ -7,14 +8,14 @@ import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({ providedIn: 'root' })
 export class StatePersistenceService {
-  private readonly platformId = inject(PLATFORM_ID);
   private readonly STORAGE_KEY = 'idle-hero:save:v1';
+
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly AppState = inject(AppStateService);
 
   private get Version(): string {
     return environment.version;
   }
-
-  constructor() {}
 
   public async Save<T>(data: T): Promise<void> {
     if (!this.isBrowser()) {
@@ -24,9 +25,9 @@ export class StatePersistenceService {
 
     try {
       const payloadData: LocalStorageData<T> = {
-        version: this.Version,
-        timestamp: Date.now(),
-        data: data
+        Version: this.Version,
+        TimeStamp: new Date(Date.now()),
+        Data: data
       };
       const payload = JSON.stringify(payloadData);
       localStorage.setItem(this.STORAGE_KEY, payload);
@@ -57,8 +58,8 @@ export class StatePersistenceService {
         return null;
       }
 
-      const version = localStorageData.version;
-      let data = localStorageData.data;
+      const version: string = localStorageData.Version;
+      let data: T = localStorageData.Data;
 
       if (version !== this.Version) {
         data = this.migrate(data, version, this.Version) as T;
@@ -77,12 +78,11 @@ export class StatePersistenceService {
    */
   public async LoadSchema(): Promise<Schema> {
     const raw = await this.Load<unknown>();
+
+    this.AppState.LoadedExistingSaveGame.set(raw !== null);
+
     const defaults = new Schema();
     const merged = Schema.FromRaw(defaults, raw);
-
-    // Always set schema version to current app version
-    merged.Version = this.Version;
-
     return merged;
   }
 

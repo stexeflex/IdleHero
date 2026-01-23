@@ -1,3 +1,4 @@
+export * from './app-state.service';
 export * from './battle/battle-log.service';
 export * from './battle/boss.service';
 export * from './battle/dungeon-room.service';
@@ -9,6 +10,7 @@ export * from './character/hero.service';
 export * from './character/inventory.service';
 export * from './character/level.service';
 export * from './character/skills.service';
+export * from './character/statistics.service';
 export * from './character/stats.service';
 export * from './enchanting.service';
 export * from './item-price.service';
