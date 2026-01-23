@@ -6,12 +6,9 @@ import { GameState } from '../../models';
   providedIn: 'root'
 })
 export class GameStateService {
-  public GameCreated = signal(false);
-
   public GameState = signal<GameState>('IDLE');
 
   public Reset(): void {
-    this.GameCreated.set(false);
     this.SetGameIdle();
   }
 

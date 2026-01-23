@@ -1,20 +1,18 @@
 import {
   AttributesService,
   CurrencyService,
-  GameStateService,
   HeroService,
   InventoryService,
   LevelService,
   SkillsService
 } from '../shared/services';
-
 import { Injectable, inject } from '@angular/core';
+
 import { Schema } from './models/schema';
 import { StatisticsService } from '../shared/services/character/statistics.service';
 
 @Injectable({ providedIn: 'root' })
 export class StateCollectionService {
-  private gameStateService = inject(GameStateService);
   private statisticsService = inject(StatisticsService);
   private heroService = inject(HeroService);
   private levelService = inject(LevelService);
@@ -23,12 +21,8 @@ export class StateCollectionService {
   private inventoryService = inject(InventoryService);
   private currencyService = inject(CurrencyService);
 
-
   public CollectStates(): Schema {
     const schema = new Schema();
-
-    // Game State
-    schema.GameState.GameCreated = this.gameStateService.GameCreated();
 
     // Statistics
     schema.Statistics = this.statisticsService.CollectSchema(schema.Statistics);

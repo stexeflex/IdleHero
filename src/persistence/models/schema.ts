@@ -12,13 +12,7 @@ import {
 import { CHARACTER_CONFIG, CURRENCY_CONFIG, STATS_CONFIG } from '../../shared/constants';
 import { FallbackUtils, ObjectUtils } from '../../shared/utils';
 
-import { environment } from '../../environment/environment';
-
 export class Schema {
-  Version: string;
-  TimeStamp: Date;
-
-  GameState: GameStateSchema = new GameStateSchema();
   Statistics: StatisticsSchema = new StatisticsSchema();
   Hero: HeroSchema = new HeroSchema();
   Level: LevelSchema = new LevelSchema();
@@ -27,24 +21,10 @@ export class Schema {
   Inventory: InventorySchema = new InventorySchema();
   Currency: CurrencySchema = new CurrencySchema();
 
-  constructor() {
-    this.Version = environment.version;
-    this.TimeStamp = new Date(Date.now());
-  }
-
   public static FromRaw(applyTo: Schema, raw: unknown): Schema {
     if (!ObjectUtils.isPlainObject(raw)) {
       return applyTo;
     }
-
-    // Version
-    this.SetVersionFromRaw(applyTo, raw);
-
-    // TimeStamp
-    this.SetTimeStampFromRaw(applyTo, raw);
-
-    // GameState
-    applyTo.GameState = GameStateSchema.FromRaw(applyTo.GameState, raw);
 
     // Statistics
     applyTo.Statistics = StatisticsSchema.FromRaw(applyTo.Statistics, raw);
@@ -67,32 +47,6 @@ export class Schema {
     // Currency
     applyTo.Currency = CurrencySchema.FromRaw(applyTo.Currency, raw);
 
-    return applyTo;
-  }
-
-  private static SetVersionFromRaw(applyTo: Schema, raw: unknown): void {
-    if (typeof (raw as any).Version === 'string') {
-      applyTo.Version = (raw as any).Version as string;
-    }
-  }
-
-  private static SetTimeStampFromRaw(applyTo: Schema, raw: unknown): void {
-    if (typeof (raw as any).TimeStamp === 'string') {
-      const parsedDate = new Date((raw as any).TimeStamp);
-
-      if (!isNaN(parsedDate.getTime())) {
-        applyTo.TimeStamp = parsedDate;
-      }
-    }
-  }
-}
-
-export class GameStateSchema {
-  GameCreated: boolean = false;
-
-  public static FromRaw(applyTo: GameStateSchema, raw: unknown): GameStateSchema {
-    const gameState = (raw as any).GameState;
-    applyTo.GameCreated = FallbackUtils.pickBoolean(gameState?.GameCreated, applyTo.GameCreated);
     return applyTo;
   }
 }
