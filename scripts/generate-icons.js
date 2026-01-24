@@ -25,6 +25,12 @@ const ICON_CONFIGS = [
     constName: "CREATURES_ICONS"
   },
   {
+    folder: "combat",
+    outFile: path.join(workspaceRoot, "src", "shared", "components", "icon", "combat.icons.ts"),
+    typeName: "CombatIconName",
+    constName: "COMBAT_ICONS"
+  },
+  {
     folder: "gear",
     outFile: path.join(workspaceRoot, "src", "shared", "components", "icon", "gear-slot.icons.ts"),
     typeName: "GearSlotIconName",
