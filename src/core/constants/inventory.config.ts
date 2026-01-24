@@ -1,0 +1,3 @@
+export const INVENTORY_CONFIG = {
+  ITEM_CAPACITY: 30
+};

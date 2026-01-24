@@ -4,26 +4,25 @@ import {
   CurrencyService,
   LevelService,
   StageService
-} from '../../services';
-import { BossDamageResult, ExperienceGainResult, StageRewards } from '../../models';
+} from '../../../services';
+import { BossDamageResult, ExperienceGainResult, StageRewards } from '../../../models';
 
 import { BattleState } from '../battle.state';
-import { DELAYS } from '../../constants';
-import { DungeonSpecifications } from '../../specifications';
+import { DELAYS } from '../../../constants';
+import { DungeonSpecifications } from '../../../specifications';
 import { FrameHandler } from '../models/frame-handler';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class OrchestrationLogic {
-  constructor(
-    private battleState: BattleState,
-    private stageService: StageService,
-    private bossService: BossService,
-    private battleLogService: BattleLogService,
-    private currencyService: CurrencyService,
-    private levelService: LevelService,
-    private dungeonSpecifications: DungeonSpecifications
-  ) {}
+  private battleState = inject(BattleState);
+  private stageService = inject(StageService);
+  private bossService = inject(BossService);
+  private battleLogService = inject(BattleLogService);
+  private currencyService = inject(CurrencyService);
+  private levelService = inject(LevelService);
+  private dungeonSpecifications = inject(DungeonSpecifications);
+
 
   /**
    * Per-frame work driven by requestAnimationFrame.

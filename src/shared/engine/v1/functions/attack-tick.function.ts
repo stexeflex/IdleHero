@@ -1,22 +1,21 @@
-import { AttackResult, AttackType, BossDamageResult } from '../../models';
-import { BattleLogService, BossService, StatsService } from '../../services';
+import { AttackResult, AttackType, BossDamageResult } from '../../../models';
+import { BattleLogService, BossService, StatsService } from '../../../services';
 
 import { AttackTickContext } from '../models/attack-tick-context';
 import { AttackTickHandler } from '../models/attack-tick-handler';
 import { BattleState } from '../battle.state';
-import { FlagsUtils } from '../../utils';
-import { Injectable } from '@angular/core';
-import { StatisticsService } from '../../services/character/statistics.service';
+import { FlagsUtils } from '../../../utils';
+import { Injectable, inject } from '@angular/core';
+import { StatisticsService } from '../../../services/character/statistics.service';
 
 @Injectable({ providedIn: 'root' })
 export class BattleLogic {
-  constructor(
-    private battleState: BattleState,
-    private statsService: StatsService,
-    private statisticsService: StatisticsService,
-    private bossService: BossService,
-    private battleLogService: BattleLogService
-  ) {}
+  private battleState = inject(BattleState);
+  private statsService = inject(StatsService);
+  private statisticsService = inject(StatisticsService);
+  private bossService = inject(BossService);
+  private battleLogService = inject(BattleLogService);
+
 
   /**
    * Ordered battle phase steps executed on each attack tick.

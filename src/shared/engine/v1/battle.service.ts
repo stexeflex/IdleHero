@@ -6,39 +6,39 @@ import {
   GameStateService,
   HeroService,
   StageService
-} from '../services';
-import { EffectRef, Injectable, OnDestroy, effect } from '@angular/core';
+} from '../../services';
+import { EffectRef, Injectable, OnDestroy, effect, inject } from '@angular/core';
 
 import { AttackTickHandler } from './models/attack-tick-handler';
 import { BattleEngine } from './battle.engine';
 import { BattleLogic } from './functions/attack-tick.function';
 import { BattleState } from './battle.state';
-import { DungeonRoomId } from '../models';
-import { DungeonSpecifications } from '../specifications';
+import { DungeonRoomId } from '../../models';
+import { DungeonSpecifications } from '../../specifications';
 import { FrameHandler } from './models/frame-handler';
 import { OrchestrationLogic } from './functions/frame-tick.function';
-import { StatisticsService } from '../services/character/statistics.service';
+import { StatisticsService } from '../../services/character/statistics.service';
 
 @Injectable({ providedIn: 'root' })
 export class BattleService implements OnDestroy {
+  private gameStateService = inject(GameStateService);
+  private battleEngine = inject(BattleEngine);
+  private battleLogic = inject(BattleLogic);
+  private orchestrationLogic = inject(OrchestrationLogic);
+  private battleState = inject(BattleState);
+  private statisticsService = inject(StatisticsService);
+  private dungeonRoomService = inject(DungeonRoomService);
+  private stageService = inject(StageService);
+  private bossService = inject(BossService);
+  private battleLogService = inject(BattleLogService);
+  private dungeonSpecifications = inject(DungeonSpecifications);
+  private currencyService = inject(CurrencyService);
+
   private attackTickSubscriptions: Array<() => void> = [];
   private frameSubscriptions: Array<() => void> = [];
   private battleEndedEffect: EffectRef | null = null;
 
-  constructor(
-    private gameStateService: GameStateService,
-    private battleEngine: BattleEngine,
-    private battleLogic: BattleLogic,
-    private orchestrationLogic: OrchestrationLogic,
-    private battleState: BattleState,
-    private statisticsService: StatisticsService,
-    private dungeonRoomService: DungeonRoomService,
-    private stageService: StageService,
-    private bossService: BossService,
-    private battleLogService: BattleLogService,
-    private dungeonSpecifications: DungeonSpecifications,
-    private currencyService: CurrencyService
-  ) {
+  constructor() {
     if (this.battleEndedEffect) this.battleEndedEffect.destroy();
 
     this.battleEndedEffect = effect(() => {

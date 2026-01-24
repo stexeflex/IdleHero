@@ -3,7 +3,7 @@ import { Injectable, NgZone, computed, inject, signal } from '@angular/core';
 import { AttackTickContext } from './models/attack-tick-context';
 import { AttackTickHandler } from './models/attack-tick-handler';
 import { FrameHandler } from './models/frame-handler';
-import { StatsService } from '../services/character/stats.service';
+import { StatsService } from '../../services/character/stats.service';
 
 /**
  * Battle Engine

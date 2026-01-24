@@ -1,0 +1,121 @@
+import { Attributes, InitialAttributes } from '../models';
+import { Injectable, computed, inject, signal } from '@angular/core';
+
+import { LevelService } from './level.service';
+
+@Injectable({ providedIn: 'root' })
+export class AttributesService {
+  private readonly Level = inject(LevelService);
+
+  private readonly Base = signal<Attributes>(InitialAttributes());
+  private readonly Allocated = signal<Attributes>(InitialAttributes());
+
+  /**
+   * Effective attributes: Base + Allocated
+   */
+  public readonly Effective = computed<Attributes>(() => {
+    const b = this.Base();
+    const a = this.Allocated();
+    return {
+      Strength: b.Strength + a.Strength,
+      Intelligence: b.Intelligence + a.Intelligence,
+      Dexterity: b.Dexterity + a.Dexterity
+    };
+  });
+
+  /**
+   * Total allocated attribute points
+   */
+  public readonly AllocatedTotal = computed<number>(() => {
+    const a = this.Allocated();
+    return a.Strength + a.Intelligence + a.Dexterity;
+  });
+
+  /**
+   * Sets the base attributes
+   * @param attributes the base attributes to set
+   */
+  public SetBase(attributes: Attributes): void {
+    this.Base.set({ ...attributes });
+  }
+
+  /**
+   * Gets a copy of the base attributes
+   * @returns the base attributes
+   */
+  public GetBase(): Attributes {
+    return { ...this.Base() };
+  }
+
+  /**
+   * Gets a copy of the allocated attributes
+   * @returns the allocated attributes
+   */
+  public GetAllocated(): Attributes {
+    return { ...this.Allocated() };
+  }
+
+  /**
+   * Allocates attribute points if available
+   * @param attribute the attribute to allocate points to
+   * @param amount the amount of points to allocate
+   * @returns true if allocation was successful, false otherwise
+   */
+  public Allocate(attribute: keyof Attributes, amount: number): boolean {
+    if (!Number.isFinite(amount) || amount <= 0) return false;
+
+    const spendOk = this.Level.SpendAttributePoints(amount);
+
+    if (!spendOk) return false;
+
+    this.Allocated.update((cur) => ({
+      ...cur,
+      [attribute]: cur[attribute] + Math.floor(amount)
+    }));
+
+    return true;
+  }
+
+  /**
+   * Deallocates attribute points, refunding them back to unspent pool
+   * @param attribute the attribute to deallocate points from
+   * @param amount the amount of points to deallocate
+   * @returns the number of points actually deallocated
+   */
+  public Deallocate(attribute: keyof Attributes, amount: number): number {
+    if (!Number.isFinite(amount) || amount <= 0) return 0;
+
+    const currentlyAllocated = this.Allocated();
+    const available = currentlyAllocated[attribute];
+    const toRefund = Math.min(available, Math.floor(amount));
+
+    if (toRefund <= 0) return 0;
+
+    this.Allocated.update((a) => ({
+      ...a,
+      [attribute]: a[attribute] - toRefund
+    }));
+
+    this.Level.RefundAttributePoints(toRefund);
+
+    return toRefund;
+  }
+
+  /**
+   * Refund all allocated points and reset allocation to zero.
+   * @returns number of points refunded
+   */
+  public Respec(): number {
+    const currentlyAllocated = this.Allocated();
+
+    const total =
+      currentlyAllocated.Strength + currentlyAllocated.Intelligence + currentlyAllocated.Dexterity;
+
+    if (total > 0) {
+      this.Allocated.set(InitialAttributes());
+      this.Level.RefundAttributePoints(total);
+    }
+
+    return total;
+  }
+}

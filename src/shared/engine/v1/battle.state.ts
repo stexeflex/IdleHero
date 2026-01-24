@@ -4,10 +4,10 @@ import {
   Buff,
   ExperienceGainResult,
   StageRewards
-} from '../models';
+} from '../../models';
 import { Injectable, computed, inject, signal } from '@angular/core';
 
-import { BuffsService } from '../services';
+import { BuffsService } from '../../services';
 
 /**
  * BattleState
