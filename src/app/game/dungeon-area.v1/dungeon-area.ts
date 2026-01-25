@@ -37,7 +37,7 @@ export class DungeonAreaV1 {
     this.InDungeon.set(false);
   }
 
-  protected onDungeonRoomSelected(dungeonId: number): void {
+  protected onDungeonRoomSelected(dungeonId: string): void {
     if (this.dungeonRoomService.EnterDungeon(dungeonId)) {
       this.InDungeon.set(true);
     }

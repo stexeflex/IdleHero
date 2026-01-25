@@ -18,8 +18,8 @@ export interface DungeonBossConfig {
   BossPools: Map<number, BossFactory[]>;
 }
 
-export const DUNGEON_BOSS_CONFIGS: Record<number, DungeonBossConfig> = {
-  1: {
+export const DUNGEON_BOSS_CONFIGS: Record<string, DungeonBossConfig> = {
+  D1: {
     StageSpecific: new Map<number, BossFactory>([
       [1, Gooey],
       [20, Slug],
@@ -27,7 +27,9 @@ export const DUNGEON_BOSS_CONFIGS: Record<number, DungeonBossConfig> = {
     ]),
     BossPools: new Map<number, BossFactory[]>([
       [1, [Gooey]],
-      [20, [Gooey, Slime]]
+      [10, [Gooey, Slime]],
+      [20, [Slime, Slug]],
+      [30, [Slug]]
     ])
   }
 };

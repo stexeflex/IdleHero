@@ -30,7 +30,7 @@ export class DungeonRoomSelection {
   private readonly dungeonRooms = inject(DungeonRoomService);
 
   // Outputs
-  public readonly onEnterRoom = output<number>();
+  public readonly onEnterRoom = output<string>();
 
   // State
   protected currentRoomIndex = signal<number>(0);

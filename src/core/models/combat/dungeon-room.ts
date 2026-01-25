@@ -18,7 +18,7 @@ export interface DungeonRoomRewards {
 }
 
 export interface DungeonRoom {
-  Id: number;
+  Id: string;
   Title: string;
   Description: string;
 

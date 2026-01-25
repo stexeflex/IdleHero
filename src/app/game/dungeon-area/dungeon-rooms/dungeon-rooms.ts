@@ -24,11 +24,11 @@ export class DungeonRooms {
   );
 
   // Actions
-  public EnterDungeon(id: number): void {
+  public EnterDungeon(id: string): void {
     this.dungeonRoom.EnterDungeon(id);
   }
 
-  public CanEnter(id: number): boolean {
+  public CanEnter(id: string): boolean {
     return this.dungeonRoom.CanEnter(id);
   }
 }

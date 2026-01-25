@@ -12,7 +12,7 @@ export class BossSelectionService {
    * @param stageId The stage number within the dungeon.
    * @returns The selected Boss instance.
    */
-  public GetBoss(dungeonId: number, stageId: number): Boss {
+  public GetBoss(dungeonId: string, stageId: number): Boss {
     const dungeonConfig = this.GetDungeonConfig(dungeonId);
 
     // Stage specific Boss
@@ -28,7 +28,7 @@ export class BossSelectionService {
     }
   }
 
-  private GetDungeonConfig(dungeonId: number): DungeonBossConfig {
+  private GetDungeonConfig(dungeonId: string): DungeonBossConfig {
     const dungeonConfig = DUNGEON_BOSS_CONFIGS[dungeonId];
 
     if (!dungeonConfig) {

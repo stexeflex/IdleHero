@@ -8,7 +8,7 @@ import {
 
 export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
   {
-    Id: 1,
+    Id: 'D1',
     Title: 'Slime Cave',
     Description: 'A damp cave filled with oozing slimes.',
     Icon: 'slime',
@@ -21,7 +21,7 @@ export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
     GoldBase: 12
   },
   {
-    Id: 2,
+    Id: 'D2',
     Title: 'Goblin Caves',
     Description: 'A dank cave infested with mischievous goblins.',
     Icon: 'brute',
@@ -34,7 +34,7 @@ export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
     GoldBase: 15
   },
   {
-    Id: 3,
+    Id: 'D3',
     Title: 'Wolf Den',
     Description: 'A frozen den where hungry wolves lurk.',
     Icon: 'werewolf',
@@ -47,7 +47,7 @@ export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
     GoldBase: 20
   },
   {
-    Id: 4,
+    Id: 'D4',
     Title: 'Ghostly Crypt',
     Description: 'A dark crypt teeming with the spectral.',
     Icon: 'spectre',
@@ -63,7 +63,7 @@ export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
 
 export const CAPSTONE_DUNGEONS: CapstoneDungeonRoom[] = [
   {
-    Id: 101,
+    Id: 'C1',
     Title: 'Trial of Silver',
     Description: 'Prove your worth in the trial of Silver.',
     Icon: 'wyvern',
@@ -78,7 +78,7 @@ export const CAPSTONE_DUNGEONS: CapstoneDungeonRoom[] = [
     Rewards: { Gold: 2500, Key: 'Silver Key' as DungeonRoomKey }
   },
   {
-    Id: 102,
+    Id: 'C2',
     Title: 'Trial of Arcana',
     Description: 'Arcane guardians test your mastery.',
     Icon: 'evilbat',
@@ -93,7 +93,7 @@ export const CAPSTONE_DUNGEONS: CapstoneDungeonRoom[] = [
     Rewards: { Gold: 10000, Key: 'Magic Key' as DungeonRoomKey }
   },
   {
-    Id: 103,
+    Id: 'C3',
     Title: 'Trial of Gold',
     Description: 'The final trial, guarded by golden sentinels.',
     Icon: 'gargoyle',
@@ -113,6 +113,6 @@ export function GetAllDungeons(): DungeonRoom[] {
   return [...NORMAL_DUNGEONS, ...CAPSTONE_DUNGEONS];
 }
 
-export function GetDungeonById(id: number): DungeonRoom | null {
+export function GetDungeonById(id: string): DungeonRoom | null {
   return [...NORMAL_DUNGEONS, ...CAPSTONE_DUNGEONS].find((d) => d.Id === id) ?? null;
 }

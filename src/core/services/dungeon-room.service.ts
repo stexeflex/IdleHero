@@ -15,12 +15,11 @@ export class DungeonRoomService {
   private readonly Keys = inject(DungeonKeyService);
   private readonly Gold = inject(GoldService);
 
-  private readonly CurrentDungeonIdState = signal<number | null>(null);
+  private readonly CurrentDungeonIdState = signal<string | null>(null);
   private readonly CurrentStageState = signal<number>(1);
 
   // Current Dungeon ID
-  public readonly CurrentDungeonId = computed<number | null>(() => this.CurrentDungeonIdState());
-
+  public readonly CurrentDungeonId = computed<string | null>(() => this.CurrentDungeonIdState());
   // Current Dungeon Room
   public readonly CurrentDungeon = computed<DungeonRoom | null>(() => {
     const id = this.CurrentDungeonIdState();
@@ -46,7 +45,7 @@ export class DungeonRoomService {
    * @param dungeonId The dungeon Id to check.
    * @returns True if entry is allowed; false otherwise.
    */
-  public CanEnter(dungeonId: number): boolean {
+  public CanEnter(dungeonId: string): boolean {
     const dungeon = GetDungeonById(dungeonId);
 
     if (!dungeon) return false;
@@ -81,7 +80,7 @@ export class DungeonRoomService {
    * @param dungeonId The dungeon Id to enter.
    * @returns True if entered successfully; false otherwise.
    */
-  public EnterDungeon(dungeonId: number): boolean {
+  public EnterDungeon(dungeonId: string): boolean {
     if (!this.CanEnter(dungeonId)) return false;
 
     const dungeon = GetDungeonById(dungeonId);

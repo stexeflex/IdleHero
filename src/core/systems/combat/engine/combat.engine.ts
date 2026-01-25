@@ -25,7 +25,6 @@ export class CombatEngine {
   public Start(): void {
     if (this.Running) return;
     this.Running = true;
-    this.CombatState.InProgress.set(true);
 
     this.EventHandling();
     this.ListenOnVisibilityChange();

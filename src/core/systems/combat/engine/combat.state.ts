@@ -54,9 +54,10 @@ export class CombatState {
    * Setup Combat with Actors
    * @param actors Combat Actors to setup
    */
-  public SetupCombat(dungeonId: number) {
+  public SetupCombat(dungeonId: string) {
     this.Log.Clear();
     this.Queue.Clear();
+    this.InProgress.set(true);
 
     // Set Combat Actors
     const hero: Hero = this.SetupHero();
@@ -134,7 +135,7 @@ export class CombatState {
     return hero;
   }
 
-  private SetupBoss(dungeonId: number) {
+  private SetupBoss(dungeonId: string): Boss {
     const boss: Boss | null = this.DungeonRoom.CurrentBoss();
 
     if (!boss) {

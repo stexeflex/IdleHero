@@ -20,7 +20,7 @@ import { DungeonTopBar } from './../dungeon-top-bar/dungeon-top-bar';
 import { Subscription } from 'rxjs';
 
 export interface DungeonTopBarInfo {
-  RoomId: number;
+  RoomId: string;
   Stage: number;
   ShowBossHealthBar: boolean;
   CurrentBossHealth: number;
@@ -62,7 +62,7 @@ export class DungeonRoom implements OnDestroy {
     const stage: number = this.dungeonRoomService.CurrentStage();
 
     return {
-      RoomId: this.dungeonRoomService.CurrentDungeonId() || 0,
+      RoomId: this.dungeonRoomService.CurrentDungeonId() || 'D?',
       Stage: stage,
       ShowBossHealthBar: inBattle,
       CurrentBossHealth: boss?.Life?.Hp || 0,
