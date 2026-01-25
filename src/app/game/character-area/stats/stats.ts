@@ -23,8 +23,9 @@ export class Stats {
   private readonly decimalPipe: DecimalPipe;
   private readonly percentPipe: PercentPipe;
 
-  protected AttributesExpanded = signal<boolean>(true);
+  protected AttributesExpanded = signal<boolean>(false);
   protected StatsExpanded = signal<boolean>(true);
+  protected UtilityStatsExpanded = signal<boolean>(true);
   protected StatisticsExpanded = signal<boolean>(false);
 
   constructor() {
@@ -75,7 +76,7 @@ export class Stats {
       },
       {
         label: 'Critical Hit Chance',
-        value: this.percentPipe.transform(combatStats.CriticalHitChance, '1.0-0')
+        value: this.percentPipe.transform(combatStats.CriticalHitChance, '1.0-1')
       },
       {
         label: 'Critical Hit Damage',
@@ -83,15 +84,30 @@ export class Stats {
       },
       {
         label: 'Multi Hit Chance',
-        value: this.percentPipe.transform(combatStats.MultiHitChance, '1.0-0')
+        value: this.percentPipe.transform(combatStats.MultiHitChance, '1.0-1')
       },
       {
         label: 'Multi Hit Chain',
-        value: this.percentPipe.transform(combatStats.MultiHitChainFactor, '1.0-0')
+        value: this.percentPipe.transform(combatStats.MultiHitChainFactor, '1.0-1')
       },
       {
         label: 'Multi Hit Damage',
         value: this.percentPipe.transform(combatStats.MultiHitDamage, '1.0-0')
+      }
+    ];
+  }
+
+  get UtilityStats(): { label: string; value: string | null }[] {
+    const combatStats = this.statsService.Effective();
+
+    return [
+      {
+        label: 'Accuracy',
+        value: this.percentPipe.transform(combatStats.Accuracy, '1.0-1')
+      },
+      {
+        label: 'Evasion',
+        value: this.percentPipe.transform(combatStats.Evasion, '1.0-1')
       }
     ];
   }

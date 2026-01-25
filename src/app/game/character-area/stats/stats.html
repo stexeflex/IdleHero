@@ -1,6 +1,4 @@
-<div
-  class="container"
-  [class.is-scrolling]="AttributesExpanded() && StatsExpanded() && StatisticsExpanded()">
+<div class="container">
   <!-- ATTRIBUTES -->
   <div class="category">
     <div class="grid-header" [class.grid-header--expanded]="AttributesExpanded()">
@@ -60,6 +58,29 @@
     @if (StatsExpanded()) {
       <div class="grid">
         @for (stat of Stats; track stat.label) {
+          <div class="grid__label">{{ stat.label }}</div>
+          <div class="grid__value">{{ stat.value }}</div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- UTILITY STATS -->
+  <div class="category">
+    <div class="grid-header" [class.grid-header--expanded]="UtilityStatsExpanded()">
+      <h2>UTILITY</h2>
+      <button
+        class="ih-button-icon grid-header__toggle"
+        (click)="UtilityStatsExpanded.set(!UtilityStatsExpanded())">
+        <i
+          class="bi toggle-icon"
+          [class.bi-caret-up-fill]="UtilityStatsExpanded()"
+          [class.bi-caret-down-fill]="!UtilityStatsExpanded()"></i>
+      </button>
+    </div>
+    @if (UtilityStatsExpanded()) {
+      <div class="grid">
+        @for (stat of UtilityStats; track stat.label) {
           <div class="grid__label">{{ stat.label }}</div>
           <div class="grid__value">{{ stat.value }}</div>
         }

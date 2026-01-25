@@ -4,6 +4,17 @@
 .container {
   @include flexbox(column, flex-start, stretch);
   gap: $gap;
+
+  animation: scrolling forwards;
+  animation-timeline: scroll(y);
+}
+
+@keyframes scrolling {
+  0%,
+  to {
+    /* the CSS applied to .container when it has overflow */
+    padding-right: calc($gap / 2);
+  }
 }
 
 .is-scrolling {
@@ -62,7 +73,7 @@ $grid-header-padding: 0.5rem 0.5rem;
 .grid__value {
   font-size: 1.2em;
   color: $clr-text-primary;
-  padding: $gap 0;
+  padding: calc($gap / 3) 0;
 }
 
 .skill-points {
