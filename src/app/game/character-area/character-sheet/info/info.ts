@@ -1,7 +1,8 @@
-import { DecimalPipe } from '@angular/common';
-import { HeroService, LevelService, StatsService } from '../../../../../shared/services';
+import { CombatStatsService, LevelService } from '../../../../../core/services';
+import { Component, LOCALE_ID, inject, signal } from '@angular/core';
 
-import { Component, LOCALE_ID, inject } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
+import { HeroService } from '../../../../../shared/services';
 import { NumberValue } from '../../../../../shared/components';
 
 @Component({
@@ -11,22 +12,23 @@ import { NumberValue } from '../../../../../shared/components';
   styleUrl: './info.scss'
 })
 export class Info {
-  protected heroService = inject(HeroService);
-  protected statsService = inject(StatsService);
-  protected levelService = inject(LevelService);
+  private readonly locale = inject(LOCALE_ID);
+  private heroService = inject(HeroService);
+  private statsService = inject(CombatStatsService);
+  private levelService = inject(LevelService);
 
   private readonly PLACEHOLDER = '-';
-
   private readonly decimalPipe: DecimalPipe;
 
-  private get DamagePerSecond(): number {
-    return Math.round(this.statsService.AttackPower() * this.statsService.AttackSpeed());
+  constructor() {
+    this.decimalPipe = new DecimalPipe(this.locale);
   }
 
-  constructor() {
-    const locale = inject(LOCALE_ID);
-
-    this.decimalPipe = new DecimalPipe(locale);
+  get HeroInfo(): { name: string; level: number } {
+    return {
+      name: this.heroService.Name(),
+      level: this.levelService.Level()
+    };
   }
 
   get SummaryStats(): { label: string; value: string }[] {
@@ -37,7 +39,7 @@ export class Info {
       },
       {
         label: 'DPS',
-        value: this.decimalPipe.transform(this.DamagePerSecond) || this.PLACEHOLDER
+        value: this.decimalPipe.transform(this.statsService.DamagePerSecond()) || this.PLACEHOLDER
       }
     ];
   }

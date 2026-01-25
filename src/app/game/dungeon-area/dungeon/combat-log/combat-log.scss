@@ -1,0 +1,95 @@
+@use "sass:color";
+@use "index" as *;
+
+.log-list {
+  @include panel();
+  @include panel-shadow($border-width: 2px, $border-color: $clr-border);
+
+  @include overflow($display: flex, $max-height: 550px);
+  @include scrollbar($size: 25px);
+
+  display: flex;
+  flex-direction: column;
+
+  // Horizontal gap between separators and list
+  gap: calc($gap / 2);
+}
+
+.log-entry,
+.log-damage-entry,
+.log-damage-header {
+  @include disable-text-selection();
+  display: flex;
+  flex-wrap: wrap;
+
+  // Vertical gap between entry items
+  gap: calc($gap / 2);
+
+  align-items: center;
+  justify-items: center;
+
+  font-size: 1.2rem;
+}
+
+.log-damage-entry {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.log-damage-values {
+  display: flex;
+  gap: calc($gap / 2);
+}
+
+.log-time {
+  color: $clr-text-primary;
+  min-width: 65px;
+}
+
+.log-info {
+  color: $clr-log-info;
+  font-weight: bold;
+}
+
+.log-damage {
+  color: $clr-log-damage;
+}
+
+.log-miss {
+  color: $clr-log-miss;
+}
+
+.log-heal {
+  color: $clr-log-heal;
+  font-weight: bold;
+}
+
+.log-death {
+  color: $clr-log-boss-defeat;
+  font-weight: bold;
+}
+
+.log-critical {
+  color: $clr-log-crit;
+  font-weight: bold;
+}
+
+.log-multi {
+  color: $clr-log-multi;
+  font-weight: bold;
+}
+
+.log-critical-multi {
+  color: $clr-log-crit-multi;
+  font-weight: bold;
+}
+
+.level-up {
+  color: $clr-log-level-up;
+  font-weight: bold;
+}
+
+.log-dungeon-cleared {
+  color: $clr-log-dungeon-cleared;
+  font-weight: bold;
+}

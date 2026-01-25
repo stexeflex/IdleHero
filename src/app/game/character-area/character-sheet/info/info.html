@@ -1,10 +1,11 @@
 <!-- Header -->
 <div class="header">
-  <div class="header__name">{{ heroService.Name() }}</div>
+  @let hero = HeroInfo;
+  <div class="header__name">{{ hero.name }}</div>
   <app-number-value
     class="header__level"
     [label]="'Level:'"
-    [value]="levelService.Level()"></app-number-value>
+    [value]="hero.level"></app-number-value>
 </div>
 
 <!-- Summary -->

@@ -1,3 +1,5 @@
+import { ATTRIBUTES_CONFIG } from '../../../constants';
+
 export interface Attributes {
   Strength: number;
   Intelligence: number;
@@ -6,8 +8,16 @@ export interface Attributes {
 
 export function InitialAttributes(): Attributes {
   return {
-    Strength: 1,
-    Intelligence: 1,
-    Dexterity: 1
+    Strength: ATTRIBUTES_CONFIG.BASE.STRENGTH,
+    Intelligence: ATTRIBUTES_CONFIG.BASE.INTELLIGENCE,
+    Dexterity: ATTRIBUTES_CONFIG.BASE.DEXTERITY
+  };
+}
+
+export function ZeroAttributes(): Attributes {
+  return {
+    Strength: 0,
+    Intelligence: 0,
+    Dexterity: 0
   };
 }

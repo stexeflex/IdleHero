@@ -7,6 +7,13 @@ export class EventQueue<T extends Timestamp> {
   private QueuedItems: T[] = [];
 
   /**
+   * Leert die Queue.
+   */
+  public Clear(): void {
+    this.QueuedItems = [];
+  }
+
+  /**
    * Fügt ein Event in die Queue hinzu.
    */
   public Push(event: T): void {
@@ -22,6 +29,10 @@ export class EventQueue<T extends Timestamp> {
     return this.QueuedItems[0];
   }
 
+  /**
+   * Entfernt und gibt das nächste Event aus der Queue zurück.
+   * @returns Das nächste Event oder undefined, wenn die Queue leer ist.
+   */
   public Pop(): T | undefined {
     if (this.QueuedItems.length === 0) return undefined;
 
@@ -34,6 +45,23 @@ export class EventQueue<T extends Timestamp> {
     }
 
     return top;
+  }
+
+  /**
+   * Applies a mutator to all queued events.
+   * If the mutator returns null, the event is removed.
+   * Resulting events are re-sorted by timestamp.
+   */
+  public UpdateAll(mutator: (event: T) => T | null): void {
+    const next: T[] = [];
+
+    for (const e of this.QueuedItems) {
+      const m = mutator(e);
+      if (m) next.push(m);
+    }
+
+    next.sort((a, b) => a.AtMs - b.AtMs);
+    this.QueuedItems = next;
   }
 
   private BubbleUp(index: number): void {

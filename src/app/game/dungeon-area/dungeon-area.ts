@@ -1,45 +1,31 @@
-import { Component, inject, signal } from '@angular/core';
-import { CurrencyService, DungeonRoomService, VendorService } from '../../../shared/services';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 
-import { BattleService } from '../../../shared/engine';
-import { DungeonRoom } from './dungeon-room/dungeon-room';
-import { DungeonRoomId } from '../../../shared/models';
-import { DungeonRoomSelection } from './dungeon-room-selection/dungeon-room-selection';
-import { PanelHeader } from '../../../shared/components';
+import { DungeonRoomService } from '../../../core/services/dungeon-room.service';
+import { DungeonRooms } from './dungeon-rooms/dungeon-rooms';
+import { InnerDungeon } from './dungeon/inner-dungeon';
 
 @Component({
   selector: 'app-dungeon-area',
-  imports: [DungeonRoomSelection, PanelHeader, DungeonRoom],
+  imports: [DungeonRooms, InnerDungeon],
   templateUrl: './dungeon-area.html',
-  styleUrl: './dungeon-area.scss'
+  styleUrl: './dungeon-area.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DungeonArea {
-  private readonly battleService = inject(BattleService);
-  private readonly dungeonRoomService = inject(DungeonRoomService);
-  private readonly currencyService = inject(CurrencyService);
+  private readonly dungeonRoom = inject(DungeonRoomService);
 
-  // Dungeon State
-  protected InDungeon = signal<boolean>(false);
+  // State
+  public readonly CurrentDungeon = this.dungeonRoom.CurrentDungeon;
 
-  protected onStart() {
-    this.InDungeon.set(true);
+  // Derived view states
+  public readonly IsInDungeon = computed<boolean>(() => this.CurrentDungeon() !== null);
 
-    const dungeonRoom = this.dungeonRoomService.Get();
-    this.currencyService.SpendGold(dungeonRoom.Prerequisites.Gold);
-
-    this.battleService.Battle();
+  // Actions
+  public EnterDungeon(id: number): void {
+    this.dungeonRoom.EnterDungeon(id);
   }
 
-  protected onPrestige(): void {
-    this.battleService.Prestige();
-  }
-
-  protected onLeave(): void {
-    this.InDungeon.set(false);
-  }
-
-  protected onDungeonRoomSelected(dungeonRoomId: DungeonRoomId): void {
-    this.dungeonRoomService.Set(dungeonRoomId);
-    this.InDungeon.set(true);
+  public CanEnter(id: number): boolean {
+    return this.dungeonRoom.CanEnter(id);
   }
 }

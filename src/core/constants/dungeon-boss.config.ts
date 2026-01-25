@@ -1,6 +1,6 @@
-import { Goblin, KingSlime, Slime, Wolf } from './boss.factory';
+import { Gooey, KingSlime, Slime, Slug } from '../systems/combat/dungeons/boss.factory';
 
-import { Boss } from '../../../models';
+import { Boss } from '../models';
 
 export type BossFactory = () => Boss;
 
@@ -18,18 +18,16 @@ export interface DungeonBossConfig {
   BossPools: Map<number, BossFactory[]>;
 }
 
-export const DUNGEON_BOSS_CONFIGS: Record<string, DungeonBossConfig> = {
-  'slime-caves': {
+export const DUNGEON_BOSS_CONFIGS: Record<number, DungeonBossConfig> = {
+  1: {
     StageSpecific: new Map<number, BossFactory>([
-      [1, Slime],
-      [20, KingSlime],
-      [40, KingSlime],
-      [60, KingSlime]
+      [1, Gooey],
+      [20, Slug],
+      [40, KingSlime]
     ]),
     BossPools: new Map<number, BossFactory[]>([
-      [1, [Slime]],
-      [20, [Slime, Goblin]],
-      [40, [Goblin, Wolf]]
+      [1, [Gooey]],
+      [20, [Gooey, Slime]]
     ])
   }
 };

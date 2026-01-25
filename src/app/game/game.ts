@@ -1,4 +1,4 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { TabDefinition, TabStrip } from '../../shared/components';
 
 import { CharacterArea } from './character-area/character-area';

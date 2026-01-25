@@ -1,0 +1,33 @@
+<!-- ITEM DISPLAY & ENCHANTING -->
+<div
+  [class.item-preview-area]="GearPreview && !SelectedGear"
+  [class.enchanting-area]="SelectedGear"
+  [hidden]="!ShowItemDisplay">
+  <div class="subheader">
+    <h3>ITEM</h3>
+    <h3>{{ GearType }}</h3>
+    <button class="ih-button-icon button-cancel" (click)="DeselectGear()" title="Clear Selection">
+      <app-icon ui="cancel" size="md"></app-icon>
+    </button>
+  </div>
+
+  <!-- ITEM DISPLAY -->
+  @if (ShowItemDisplay) {
+    <app-item-display class="item-display" [Item]="SelectedGear ?? GearPreview!"></app-item-display>
+  }
+
+  <!-- ENCHANTMENT SLOTS -->
+  @if (ShowSlots) {
+    <app-enchanting class="item-slots" [Item]="SelectedGear!"></app-enchanting>
+  }
+
+  <!-- ACTIONS -->
+  <app-gear-actions
+    class="gear-actions"
+    [ItemType]="SelectedGearSlot"
+    [Item]="SelectedGear"
+    (OnItemBought)="OnItemBought($event)"
+    (OnItemSold)="OnItemSold()"></app-gear-actions>
+
+  <separator class="ih-separator separator"></separator>
+</div>

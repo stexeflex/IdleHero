@@ -1,12 +1,15 @@
 import {
+  Actor,
   AttackEvent,
   CombatEvent,
   DamageEvent,
   DeathEvent,
   HealEvent,
   MissEvent,
-  MultiHitEvent
+  Target
 } from './combat-event';
+
+import { DamageResult } from '../../systems/combat';
 
 export function CreateEvent(overrides: Partial<CombatEvent>): CombatEvent {
   return {
@@ -14,87 +17,65 @@ export function CreateEvent(overrides: Partial<CombatEvent>): CombatEvent {
   } as CombatEvent;
 }
 
-export function CreateAttackEvent(atMs: number, actorId: string, targetId: string): AttackEvent {
+export function CreateAttackEvent(atMs: number, actor: Actor, target: Target): AttackEvent {
   return {
     Type: 'Attack',
     AtMs: atMs,
-    ActorId: actorId,
-    TargetId: targetId
+    Actor: actor,
+    Target: target
   };
 }
 
 export function CreateMissEvent(
   atMs: number,
-  actorId: string,
-  targetId: string,
+  actor: Actor,
+  target: Target,
   hitChance: number
 ): MissEvent {
   return {
     Type: 'Miss',
     AtMs: atMs,
-    ActorId: actorId,
-    TargetId: targetId,
+    Actor: actor,
+    Target: target,
     HitChance: hitChance
   };
 }
 
 export function CreateDamageEvent(
   atMs: number,
-  actorId: string,
-  targetId: string,
-  damage: number,
-  isCritical: boolean
+  actor: Actor,
+  target: Target,
+  damage: DamageResult[]
 ): DamageEvent {
   return {
     Type: 'Damage',
     AtMs: atMs,
-    ActorId: actorId,
-    TargetId: targetId,
-    Amount: damage,
-    IsCritical: isCritical
-  };
-}
-
-export function CreateMultiHitEvent(
-  atMs: number,
-  actorId: string,
-  targetId: string,
-  hitNumber: number,
-  totalHits: number,
-  damage: number,
-  isCritical: boolean
-): MultiHitEvent {
-  return {
-    Type: 'MultiHit',
-    AtMs: atMs,
-    ActorId: actorId,
-    TargetId: targetId,
-    HitNumber: hitNumber,
-    TotalHits: totalHits,
-    Amount: damage,
-    IsCritical: isCritical
+    Actor: actor,
+    Target: target,
+    Damage: damage,
+    IsMultiHit: damage.length > 1
   };
 }
 
 export function CreateHealEvent(
   atMs: number,
-  actorId: string,
-  targetId: string,
+  actor: Actor,
+  target: Target,
   healing: number
 ): HealEvent {
   return {
     Type: 'Heal',
     AtMs: atMs,
-    ActorId: actorId,
-    TargetId: targetId,
+    Actor: actor,
+    Target: target,
     Amount: healing
   };
 }
 
-export function CreateDeathEvent(atMs: number, actorId: string): DeathEvent {
+export function CreateDeathEvent(atMs: number, actor: Actor): DeathEvent {
   return {
     Type: 'Death',
     AtMs: atMs,
-    ActorId: actorId
+    Actor: actor
   };
 }

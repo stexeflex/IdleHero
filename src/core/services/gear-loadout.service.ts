@@ -60,6 +60,15 @@ export class GearLoadoutService {
   }
 
   /**
+   * Checks if an item is currently equipped in the specified slot
+   * @param slot the item slot
+   * @returns true if an item is equipped, false otherwise
+   */
+  public IsEquipped(slot: ItemSlot): boolean {
+    return this.equipped()[slot] != null;
+  }
+
+  /**
    * Clears all equipped items
    */
   public Clear(): void {

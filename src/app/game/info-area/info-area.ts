@@ -1,10 +1,10 @@
 import { Component, inject } from '@angular/core';
+import { CurrencyService, StatisticsService } from '../../../shared/services';
 import { Gold, IconComponent, Separator } from '../../../shared/components';
 
-import { CurrencyService } from '../../../shared/services';
 import { DecimalPipe } from '@angular/common';
 import { DungeonRoomKey } from '../../../shared/models';
-import { StatisticsService } from '../../../shared/services/character/statistics.service';
+import { GoldService } from '../../../core/services';
 
 @Component({
   selector: 'app-info-area',
@@ -13,11 +13,12 @@ import { StatisticsService } from '../../../shared/services/character/statistics
   styleUrl: './info-area.scss'
 })
 export class InfoArea {
-  readonly currencyService = inject<CurrencyService>(CurrencyService);
-  readonly statisticsService = inject<StatisticsService>(StatisticsService);
+  private readonly goldService = inject<GoldService>(GoldService);
+  private readonly currencyService = inject<CurrencyService>(CurrencyService);
+  private readonly statisticsService = inject<StatisticsService>(StatisticsService);
 
   protected get GoldAmount(): number {
-    return this.currencyService.Gold();
+    return this.goldService.Balance();
   }
 
   protected get PrestigeLevel(): number {

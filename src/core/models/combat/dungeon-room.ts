@@ -1,4 +1,11 @@
+import { CreaturesIconName } from '../../../shared/components';
+
 export type DungeonRoomKey = 'Silver Key' | 'Magic Key' | 'Golden Key';
+
+export enum DungeonType {
+  Normal = 'Normal',
+  Capstone = 'Capstone'
+}
 
 export interface DungeonRoomPrerequisites {
   Gold: number;
@@ -13,14 +20,26 @@ export interface DungeonRoomRewards {
 export interface DungeonRoom {
   Id: number;
   Title: string;
+  Description: string;
+
+  Icon: CreaturesIconName;
+  Type: DungeonType;
 
   StagesBase: number;
+  MidStages: number[];
   StagesMax: number;
 
   BossBaseHealth: number;
   XpBase: number;
   GoldBase: number;
+}
 
+export interface NormalDungeonRoom extends DungeonRoom {
+  Type: DungeonType.Normal;
+}
+
+export interface CapstoneDungeonRoom extends DungeonRoom {
+  Type: DungeonType.Capstone;
   Prerequisites: DungeonRoomPrerequisites;
   Rewards: DungeonRoomRewards;
 }

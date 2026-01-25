@@ -1,0 +1,156 @@
+@use "sass:color";
+@use "index" as *;
+
+.combat {
+  @include panel();
+  @include panel-shadow($border-width: 2px, $border-color: $clr-border);
+  display: flex;
+  flex-direction: column;
+  gap: calc($gap);
+}
+
+.actor-info {
+  display: flex;
+  flex-direction: column;
+  gap: calc($gap / 2);
+  padding: 0 calc($gap / 2);
+}
+
+.actor-name {
+  color: $clr-highlight;
+}
+
+.right {
+  margin: 0 0 0 auto;
+  padding-right: calc($gap / 2);
+}
+
+.bottom {
+  margin: auto 0 0 0;
+}
+
+.boss {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: calc($gap / 2);
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: calc($gap / 2);
+}
+
+.hero-icon,
+.boss-icon {
+  @include flexbox($dir: column, $align: center, $justify: center);
+  gap: calc($gap / 2);
+}
+
+.arena {
+  @include flexbox($align: center, $justify: center);
+}
+
+.vs {
+  @include disable-text-selection();
+  color: $clr-highlight;
+  font-family: $font-family-title;
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+/* Idle animations */
+.icon {
+  animation: idle-bob 3s ease-in-out infinite;
+}
+
+@keyframes idle-bob {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Hero animations */
+.hero-icon.attack .icon {
+  animation: hero-attack 240ms ease-out;
+}
+
+.hero-icon.crit .icon {
+  filter: drop-shadow(0 0 10px $clr-log-crit);
+}
+
+.hero-icon.multi .icon {
+  animation: hero-multi-attack 300ms ease-out;
+  filter: drop-shadow(0 0 15px $clr-log-multi);
+}
+
+.hero-icon.crit-multi .icon {
+  filter: drop-shadow(0 0 20px $clr-log-crit-multi);
+}
+
+@keyframes hero-attack {
+  0% {
+    transform: translateX(0) scale(1);
+  }
+  40% {
+    transform: translateX(10px) scale(1.05);
+  }
+  100% {
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes hero-multi-attack {
+  0% {
+    transform: translateX(0) scale(1);
+  }
+  25% {
+    transform: translateX(20px) scale(1.2);
+  }
+  70% {
+    transform: translateX(-10px) scale(1.2);
+  }
+  100% {
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* Boss animations */
+.boss-icon.taking-hit .icon {
+  animation: boss-hit 300ms ease-out;
+  filter: drop-shadow(0 0 5px $clr-log-boss-defeat);
+}
+
+.boss-icon.defeated .icon {
+  animation: boss-defeat 600ms ease-in forwards;
+  filter: grayscale(100%) brightness(50%);
+}
+
+@keyframes boss-hit {
+  0% {
+    transform: translateX(0) scale(1);
+  }
+  50% {
+    transform: translateX(10px) scale(0.95);
+  }
+  100% {
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes boss-defeat {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(50%) rotate(360deg) scale(0);
+    opacity: 0;
+  }
+}

@@ -7,7 +7,7 @@ import { Component, input } from '@angular/core';
     @if (vertical() == true) {
       <div class="separator-vertical"></div>
     } @else {
-      <hr class="separator" />
+      <hr [class.separator]="margin()" />
     }
   `,
   styles: `
@@ -23,4 +23,5 @@ import { Component, input } from '@angular/core';
 })
 export class Separator {
   readonly vertical = input<boolean>(false);
+  readonly margin = input<boolean>(true);
 }

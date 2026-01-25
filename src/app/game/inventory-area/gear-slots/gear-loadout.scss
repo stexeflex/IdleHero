@@ -5,10 +5,10 @@
   display: grid;
 
   grid:
-    "weapon head shield"
-    "weapon chest shield"
-    "weapon legs shield"
-    "weapon boots shield"
+    "weapon head offhand"
+    "weapon chest offhand"
+    "weapon legs offhand"
+    "weapon boots offhand"
     / auto auto auto;
 
   gap: $gap;
@@ -40,8 +40,8 @@
 .weapon {
   grid-area: weapon;
 }
-.shield {
-  grid-area: shield;
+.offhand {
+  grid-area: offhand;
 }
 .head {
   grid-area: head;

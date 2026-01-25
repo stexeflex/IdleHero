@@ -1,82 +1,24 @@
 import { Component, ElementRef, HostListener, inject } from '@angular/core';
-import { Gear, GearType } from '../../../shared/models';
-import { IconComponent, Separator } from '../../../shared/components';
-import { InventoryService, SelectedGearService } from '../../../shared/services';
 
-import { Enchanting } from './enchanting/enchanting';
-import { GearActions } from './gear-actions/gear-actions';
-import { GearSlots } from './gear-slots/gear-slots';
-import { ItemDisplay } from './item-display/item-display';
+import { GearLoadout } from './gear-slots/gear-loadout';
+import { ItemSlot } from '../../../core/models';
 
 @Component({
   selector: 'app-inventory-area',
-  imports: [GearSlots, Enchanting, Separator, IconComponent, ItemDisplay, GearActions],
+  imports: [GearLoadout],
   templateUrl: './inventory-area.html',
   styleUrl: './inventory-area.scss'
 })
 export class InventoryArea {
-  private selectedGearService = inject(SelectedGearService);
-  private inventoryService = inject(InventoryService);
-
   private elementRef = inject(ElementRef);
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     if (!this.elementRef.nativeElement.contains(event.target)) {
-      this.DeselectGear();
     }
   }
 
-  protected get ShowItemDisplay(): boolean {
-    return this.SelectedGear !== null || this.GearPreview !== null;
-  }
-
-  protected get ShowSlots(): boolean {
-    return this.SelectedGear !== null && this.GearPreview === null;
-  }
-
-  protected get GearType(): string {
-    return this.SelectedGear?.Type?.toUpperCase() ?? this.GearPreview?.Type?.toUpperCase() ?? '';
-  }
-
-  protected get SelectedGearSlot(): GearType | null {
-    return this.selectedGearService.Type();
-  }
-
-  protected get SelectedGear(): Gear | null {
-    return this.selectedGearService.Selected();
-  }
-
-  protected GearPreview: Gear | null = null;
-
-  protected OnGearSlotSelected(event: MouseEvent, slot: GearType) {
+  protected OnItemSlotSelected(event: MouseEvent, slot: ItemSlot) {
     event.stopPropagation();
-    this.SelectGear(slot);
-  }
-
-  protected OnItemBought(slot: GearType) {
-    this.SelectGear(slot);
-  }
-
-  protected OnItemSold() {
-    this.DeselectGear();
-  }
-
-  protected DeselectGear() {
-    this.selectedGearService.DeselectGear();
-    this.GearPreview = null;
-  }
-
-  private SelectGear(slot: GearType) {
-    const selected: Gear | null = this.inventoryService.GetGearForSlot(slot);
-
-    if (selected === null) {
-      this.GearPreview = Gear.Create(slot);
-    } else {
-      this.GearPreview = null;
-    }
-
-    this.selectedGearService.SetSelectedGear(selected);
-    this.selectedGearService.SetSelectedGearType(slot);
   }
 }

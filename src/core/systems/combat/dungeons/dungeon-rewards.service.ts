@@ -1,15 +1,16 @@
-import { CompletionFactor, MidBossFactor, StageFactor } from '../systems/economy';
+import { CapstoneDungeonRoom, DungeonRoom, DungeonType, Rewards } from '../../../models';
+import { CompletionFactor, MidBossFactor, StageFactor } from '../../economy';
 import { Injectable, inject } from '@angular/core';
 
-import { DungeonRoom } from '../models';
-import { GoldService } from './gold.service';
-import { LevelService } from './level.service';
-import { Rewards } from '../models/economy/rewards';
+import { DungeonKeyService } from '../../../services/dungeon-key.service';
+import { GoldService } from '../../../services/gold.service';
+import { LevelService } from '../../../services/level.service';
 
 @Injectable({ providedIn: 'root' })
 export class DungeonRewardsService {
-  private readonly Gold = inject(GoldService);
   private readonly Level = inject(LevelService);
+  private readonly Gold = inject(GoldService);
+  private readonly Keys = inject(DungeonKeyService);
 
   /**
    * Computes rewards for a single stage within a dungeon.
@@ -93,6 +94,16 @@ export class DungeonRewardsService {
     const rewards = this.ComputeCompletionRewards(dungeon);
     this.Gold.Add(rewards.Gold);
     this.Level.AddExperience(rewards.Experience);
+
+    // If capstone dungeon, also grant any key reward
+    if (dungeon.Type === DungeonType.Capstone) {
+      const capstoneDungeon = dungeon as CapstoneDungeonRoom;
+
+      if (capstoneDungeon.Rewards.Key) {
+        this.Keys.AddKey(capstoneDungeon.Rewards.Key);
+      }
+    }
+
     return rewards;
   }
 }

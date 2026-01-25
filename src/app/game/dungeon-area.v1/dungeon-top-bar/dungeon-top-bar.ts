@@ -10,7 +10,7 @@ import { DungeonRoomId } from '../../../../shared/models';
   styleUrl: './dungeon-top-bar.scss'
 })
 export class DungeonTopBar {
-  readonly currentRoomId = input.required<DungeonRoomId>();
+  readonly currentRoomId = input.required<number>();
   readonly currentStage = input.required<number>();
 
   readonly showBossHealthBar = input.required<boolean>();

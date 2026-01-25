@@ -48,7 +48,7 @@ export class GoldService {
    * @returns true if spending succeeded, false otherwise
    */
   public Spend(amount: number): boolean {
-    if (!Number.isFinite(amount) || amount <= 0) return false;
+    if (!Number.isFinite(amount) || amount < 0) return false;
 
     const decreaseAmount = Math.floor(amount);
 
@@ -69,7 +69,7 @@ export class GoldService {
    * @returns true if balance is sufficient, false otherwise
    */
   public CanAfford(amount: number): boolean {
-    if (!Number.isFinite(amount) || amount <= 0) return false;
+    if (!Number.isFinite(amount) || amount < 0) return false;
     return this.State().Balance >= Math.floor(amount);
   }
 

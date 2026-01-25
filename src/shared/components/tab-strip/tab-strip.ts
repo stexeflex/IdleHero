@@ -1,7 +1,12 @@
 import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
 
 import { Separator } from '../separator/separator';
-import { TabDefinition } from './tab-definition.model';
+
+export interface TabDefinition {
+  id: string | number;
+  label: string;
+  disabled?: boolean;
+}
 
 @Component({
   selector: 'app-tab-strip',

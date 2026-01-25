@@ -1,4 +1,4 @@
-import { Attributes, InitialAttributes } from '../models';
+import { Attributes, InitialAttributes, ZeroAttributes } from '../models';
 import { Injectable, computed, inject, signal } from '@angular/core';
 
 import { LevelService } from './level.service';
@@ -8,7 +8,7 @@ export class AttributesService {
   private readonly Level = inject(LevelService);
 
   private readonly Base = signal<Attributes>(InitialAttributes());
-  private readonly Allocated = signal<Attributes>(InitialAttributes());
+  private readonly Allocated = signal<Attributes>(ZeroAttributes());
 
   /**
    * Effective attributes: Base + Allocated
@@ -99,6 +99,16 @@ export class AttributesService {
     this.Level.RefundAttributePoints(toRefund);
 
     return toRefund;
+  }
+
+  /**
+   * Checks if deallocation is possible for the given attribute
+   * @param attribute the attribute to check
+   * @returns true if deallocation is possible, false otherwise
+   */
+  public CanDeallocate(attribute: keyof Attributes): boolean {
+    const currentlyAllocated = this.Allocated();
+    return currentlyAllocated[attribute] > 0;
   }
 
   /**

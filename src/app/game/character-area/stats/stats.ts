@@ -1,10 +1,10 @@
-import { AttributesService, LevelService, StatsService } from '../../../../shared/services';
-import { Component, LOCALE_ID, inject } from '@angular/core';
+import { AttributesService, CombatStatsService, LevelService } from '../../../../core/services';
+import { Component, LOCALE_ID, inject, signal } from '@angular/core';
 import { DecimalPipe, PercentPipe } from '@angular/common';
 
 import { AttributesSpecifications } from '../../../../shared/specifications';
 import { IconComponent } from '../../../../shared/components';
-import { StatisticsService } from '../../../../shared/services/character/statistics.service';
+import { StatisticsService } from '../../../../shared/services';
 
 @Component({
   selector: 'app-stats',
@@ -13,24 +13,23 @@ import { StatisticsService } from '../../../../shared/services/character/statist
   styleUrl: './stats.scss'
 })
 export class Stats {
-  private attributesService = inject(AttributesService);
-  private statsService = inject(StatsService);
-  private levelService = inject(LevelService);
-  private statisticsService = inject(StatisticsService);
-  private canChangeAttributes = inject(AttributesSpecifications);
+  private readonly locale = inject(LOCALE_ID);
+  private readonly attributesService = inject(AttributesService);
+  private readonly statsService = inject(CombatStatsService);
+  private readonly levelService = inject(LevelService);
+  private readonly statisticsService = inject(StatisticsService);
+  private readonly canChangeAttributes = inject(AttributesSpecifications);
 
   private readonly decimalPipe: DecimalPipe;
   private readonly percentPipe: PercentPipe;
 
-  protected AttributesExpanded: boolean = true;
-  protected StatsExpanded: boolean = false;
-  protected StatisticsExpanded: boolean = false;
+  protected AttributesExpanded = signal<boolean>(true);
+  protected StatsExpanded = signal<boolean>(true);
+  protected StatisticsExpanded = signal<boolean>(false);
 
   constructor() {
-    const locale = inject(LOCALE_ID);
-
-    this.decimalPipe = new DecimalPipe(locale);
-    this.percentPipe = new PercentPipe(locale);
+    this.decimalPipe = new DecimalPipe(this.locale);
+    this.percentPipe = new PercentPipe(this.locale);
   }
 
   get ShowAttributePoints(): boolean {
@@ -38,10 +37,8 @@ export class Stats {
   }
 
   get AttributePoints(): string | undefined {
-    return this.levelService.TotalAttributePoints() > 0
-      ? this.levelService.UnspentAttributePoints() +
-          ' / ' +
-          this.levelService.TotalAttributePoints()
+    return this.attributesService.AllocatedTotal() > 0
+      ? this.levelService.UnspentAttributePoints() + ' / ' + this.attributesService.AllocatedTotal()
       : undefined;
   }
 
@@ -50,43 +47,51 @@ export class Stats {
   }
 
   get Attributes(): { label: string; value: string | null }[] {
+    const attributes = this.attributesService.Effective();
+
     return [
       {
         label: 'Strength',
-        value: this.decimalPipe.transform(this.attributesService.Strength(), '1.0-0')
+        value: this.decimalPipe.transform(attributes.Strength, '1.0-0')
       },
       {
         label: 'Intelligence',
-        value: this.decimalPipe.transform(this.attributesService.Intelligence(), '1.0-0')
+        value: this.decimalPipe.transform(attributes.Intelligence, '1.0-0')
       },
       {
         label: 'Dexterity',
-        value: this.decimalPipe.transform(this.attributesService.Dexterity(), '1.0-0')
+        value: this.decimalPipe.transform(attributes.Dexterity, '1.0-0')
       }
     ];
   }
 
   get Stats(): { label: string; value: string | null }[] {
+    const combatStats = this.statsService.Effective();
+
     return [
       {
         label: 'Attack Speed',
-        value: this.percentPipe.transform(this.statsService.AttackSpeed(), '1.0-0')
+        value: this.percentPipe.transform(combatStats.AttackSpeed, '1.0-0')
       },
       {
         label: 'Critical Hit Chance',
-        value: this.percentPipe.transform(this.statsService.CriticalHitChance(), '1.0-0')
+        value: this.percentPipe.transform(combatStats.CriticalHitChance, '1.0-0')
       },
       {
         label: 'Critical Hit Damage',
-        value: this.percentPipe.transform(this.statsService.CriticalHitDamage(), '1.0-0')
+        value: this.percentPipe.transform(combatStats.CriticalHitDamage, '1.0-0')
       },
       {
         label: 'Multi Hit Chance',
-        value: this.percentPipe.transform(this.statsService.MultiHitChance(), '1.0-0')
+        value: this.percentPipe.transform(combatStats.MultiHitChance, '1.0-0')
+      },
+      {
+        label: 'Multi Hit Chain',
+        value: this.percentPipe.transform(combatStats.MultiHitChainFactor, '1.0-0')
       },
       {
         label: 'Multi Hit Damage',
-        value: this.percentPipe.transform(this.statsService.MultiHitDamage(), '1.0-0')
+        value: this.percentPipe.transform(combatStats.MultiHitDamage, '1.0-0')
       }
     ];
   }
@@ -132,20 +137,16 @@ export class Stats {
   }
 
   protected CanDecreaseAttribute(attribute: string): boolean {
-    return this.canChangeAttributes.CanDecrease(
+    return this.attributesService.CanDeallocate(
       attribute as 'Strength' | 'Intelligence' | 'Dexterity'
     );
   }
 
   protected increaseAttribute(attribute: string) {
-    this.attributesService.IncreaseAttribute(
-      attribute as 'Strength' | 'Intelligence' | 'Dexterity'
-    );
+    this.attributesService.Allocate(attribute as 'Strength' | 'Intelligence' | 'Dexterity', 1);
   }
 
   protected decreaseAttribute(attribute: string) {
-    this.attributesService.DecreaseAttribute(
-      attribute as 'Strength' | 'Intelligence' | 'Dexterity'
-    );
+    this.attributesService.Deallocate(attribute as 'Strength' | 'Intelligence' | 'Dexterity', 1);
   }
 }

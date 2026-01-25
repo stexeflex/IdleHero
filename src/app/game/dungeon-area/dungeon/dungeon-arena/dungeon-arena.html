@@ -1,0 +1,50 @@
+<section class="combat">
+  <!-- BOSS -->
+  <div class="boss">
+    @let boss = Boss();
+    @if (boss) {
+      <div class="actor-info">
+        <h2 class="actor-name">{{ boss.Name }}</h2>
+        <app-health-bar
+          [currentHealth]="boss.Life.Hp"
+          [maxHealth]="boss.Life.MaxHp"
+          [showHealthValues]="true"></app-health-bar>
+      </div>
+
+      <div
+        class="boss-icon"
+        [class.taking-hit]="isBossTakingHit()"
+        [class.defeated]="isBossDefeated()">
+        <app-icon class="icon" [creatures]="boss.BossIcon" size="5x"></app-icon>
+      </div>
+    }
+  </div>
+
+  @if (boss) {
+    <div class="arena">
+      <div class="vs">VS</div>
+    </div>
+  }
+
+  <!-- HERO -->
+  <div class="hero">
+    @let hero = Hero();
+    @if (hero) {
+      <div
+        class="hero-icon"
+        [class.attack]="isAttacking()"
+        [class.crit]="isCrit()"
+        [class.multi]="isMulti()"
+        [class.crit-multi]="isCritMulti()">
+        <app-icon class="icon" [character]="hero.HeroIcon" size="4x"></app-icon>
+      </div>
+      <div class="actor-info bottom">
+        <h2 class="actor-name right">{{ hero.Name }}</h2>
+        <app-health-bar
+          [currentHealth]="hero.Life.Hp"
+          [maxHealth]="hero.Life.MaxHp"
+          [showHealthValues]="true"></app-health-bar>
+      </div>
+    }
+  </div>
+</section>

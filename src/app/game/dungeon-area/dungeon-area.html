@@ -1,13 +1,5 @@
-@if (!InDungeon()) {
-  <!-- DUNGEON ROOM SELECTION -->
-  <app-panel-header title="DUNGEON ENTRANCE"></app-panel-header>
-  <app-dungeon-room-selection
-    (onEnterRoom)="onDungeonRoomSelected($event)"></app-dungeon-room-selection>
+@if (IsInDungeon()) {
+  <app-inner-dungeon></app-inner-dungeon>
 } @else {
-  <!-- DUNGEON ROOM -->
-  <app-panel-header title="DUNGEON"></app-panel-header>
-  <app-dungeon-room
-    (onStartBattle)="onStart()"
-    (onPrestige)="onPrestige()"
-    (onLeaveRoom)="onLeave()"></app-dungeon-room>
+  <app-dungeon-rooms></app-dungeon-rooms>
 }

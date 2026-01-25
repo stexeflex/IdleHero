@@ -1,0 +1,132 @@
+<div class="room-selection-root">
+  <!-- DESCRIPTION -->
+  <div class="description">
+    <h3>Select a dungeon to enter and face its challenges.</h3>
+    <h3>Each dungeon offers different rewards.</h3>
+    <h3>Prerequisites have to be met before entering.</h3>
+  </div>
+
+  <!-- SELECTION -->
+  <div class="room-selection">
+    <button
+      class="ih-button-icon ih-button-icon-border left"
+      [disabled]="currentRoomIndex() == minRoomIndex"
+      (click)="PreviousRoom()">
+      <app-icon ui="arrow" size="sm"></app-icon>
+    </button>
+
+    <div class="card" [class.locked]="!CurrentRoom().CanEnter">
+      <div class="room-header">
+        <app-icon [creatures]="CurrentRoom().Icon" size="2x"></app-icon>
+        <h3 class="title">{{ CurrentRoom().Title }}</h3>
+      </div>
+
+      <!-- INFO -->
+      <div class="room-body">
+        <div class="stat">
+          <span class="label">Stages</span>
+          <span class="value">
+            @if (!ShowRoomInfo(CurrentRoom())) {
+              1 → <i class="bi bi-question-lg"></i>
+            } @else {
+              {{ CurrentRoom().StagesBase | number }} → {{ CurrentRoom().StagesMax | number }}
+            }
+          </span>
+        </div>
+        <div class="stat">
+          <span class="label">Base Boss HP</span>
+          <span class="value">
+            @if (!ShowRoomInfo(CurrentRoom())) {
+              <i class="bi bi-question-lg"></i>
+            } @else {
+              {{ CurrentRoom().BossBaseHealth | number }}
+            }
+          </span>
+        </div>
+        <div class="stat">
+          <span class="label">Base XP Reward</span>
+          <span class="value">
+            @if (!ShowRoomInfo(CurrentRoom())) {
+              <i class="bi bi-question-lg"></i>
+            } @else {
+              {{ CurrentRoom().XpBase | number }} / Boss
+            }
+          </span>
+        </div>
+        <div class="stat">
+          <span class="label">Base Gold Reward</span>
+          <span class="value">
+            @if (!ShowRoomInfo(CurrentRoom())) {
+              <i class="bi bi-question-lg"></i>
+            } @else {
+              {{ CurrentRoom().GoldBase | number }} / Boss
+            }
+          </span>
+        </div>
+      </div>
+
+      <!-- PREREQUISITES -->
+      @if (CurrentRoom().Capstone) {
+        <div class="prereqs" [class.warn]="!CurrentRoom().CanEnter">
+          <div class="prereq-header">Prerequisites</div>
+          <div class="prereq">
+            <app-gold [amount]="CurrentRoom().Capstone!.Prerequisites.Gold" size="sm"></app-gold>
+            @if (CurrentRoom().Capstone!.Prerequisites.Key) {
+              <app-icon
+                [class.common--font]="CurrentRoom().Capstone!.Prerequisites.Key == 'Silver Key'"
+                [class.magic--font]="CurrentRoom().Capstone!.Prerequisites.Key == 'Magic Key'"
+                [class.rare--font]="CurrentRoom().Capstone!.Prerequisites.Key == 'Golden Key'"
+                [title]="CurrentRoom().Capstone!.Prerequisites.Key"
+                symbol="skeletonkey"
+                size="sm"></app-icon>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- REWARDS -->
+      @if (CurrentRoom().Capstone) {
+        <div class="rewards">
+          <div class="reward-header">Rewards</div>
+          @if (!ShowRoomInfo(CurrentRoom())) {
+            <div class="reward-placeholder">
+              <i class="bi bi-question-lg"></i>
+            </div>
+          } @else {
+            <div class="reward">
+              <app-gold [amount]="CurrentRoom().Capstone!.Rewards.Gold" size="sm"></app-gold>
+              @if (CurrentRoom().Capstone!.Rewards.Key) {
+                <app-icon
+                  [class.common--font]="CurrentRoom().Capstone!.Rewards.Key == 'Silver Key'"
+                  [class.magic--font]="CurrentRoom().Capstone!.Rewards.Key == 'Magic Key'"
+                  [class.rare--font]="CurrentRoom().Capstone!.Rewards.Key == 'Golden Key'"
+                  [title]="CurrentRoom().Capstone!.Rewards.Key"
+                  symbol="skeletonkey"
+                  size="sm"></app-icon>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <button
+      class="ih-button-icon ih-button-icon-border right"
+      [disabled]="currentRoomIndex() == maxRoomIndex"
+      (click)="NextRoom()">
+      <app-icon ui="arrow" size="sm"></app-icon>
+    </button>
+  </div>
+
+  <separator></separator>
+
+  <!-- ACTIONS -->
+  <div class="actions">
+    <button
+      class="ih-button"
+      [disabled]="!CurrentRoom().CanEnter"
+      (click)="EnterDungeon(CurrentRoom())">
+      Enter Dungeon
+    </button>
+  </div>
+</div>

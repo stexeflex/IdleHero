@@ -1,0 +1,37 @@
+<app-panel-header [title]="IsInArena() ? 'DUNGEON ARENA' : 'DUNGEON ENTRANCE'"></app-panel-header>
+
+<section class="dungeon">
+  @let dungeonRoom = CurrentDungeon();
+  @if (dungeonRoom) {
+    <div class="top-bar">
+      <app-icon [creatures]="dungeonRoom.Icon" size="lg"></app-icon>
+      <div class="room-info">
+        <div class="room-label">DUNGEON ROOM</div>
+        <div class="room-value">{{ dungeonRoom.Title }}</div>
+      </div>
+      <div class="room-info">
+        @if (IsInArena()) {
+          <div class="room-label">STAGE</div>
+          <div class="room-value">{{ CurrentStage() }}</div>
+        }
+      </div>
+      <div class="dungeon-actions">
+        @if (IsInArena()) {
+          <button class="ih-button" (click)="Prestige()">PRESTIGE</button>
+        } @else if (RestartDelay()) {
+          <button class="ih-button-secondary button-leaving" disabled>
+            <i class="fa fa-circle-o-notch fa-spin"></i>
+            <h3>LEAVING...</h3>
+          </button>
+        } @else {
+          <button class="ih-button" (click)="StartBattle()">BATTLE</button>
+          <button class="ih-button-secondary" (click)="ExitDungeon()">LEAVE</button>
+        }
+      </div>
+    </div>
+  }
+  @if (IsInArena()) {
+    <app-dungeon-arena></app-dungeon-arena>
+    <app-combat-log></app-combat-log>
+  }
+</section>

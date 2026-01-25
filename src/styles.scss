@@ -82,6 +82,20 @@ button {
   @include button-focus-visible-outline();
 }
 
+.ih-button-secondary {
+  @include button-style(
+    $bg-color: color.scale($clr-ui-bg-invert, $lightness: -20%),
+    $color: $clr-text-invert
+  );
+  @include button-text-font($shadow: false);
+  @include button-sizing();
+  @include button-hover-active(
+    $bg-color: color.scale($clr-ui-bg-invert, $lightness: -40%),
+    $bg-color-active: color.scale($clr-ui-bg-invert, $lightness: -60%)
+  );
+  @include button-focus-visible-outline();
+}
+
 .ih-button-icon {
   @include button-focus-visible-outline();
 

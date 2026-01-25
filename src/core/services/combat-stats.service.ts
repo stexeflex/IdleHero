@@ -25,6 +25,22 @@ export class CombatStatsService {
   });
 
   /**
+   * The Attack Power value based on effective stats
+   */
+  public readonly AttackPower = computed<number>(() => {
+    const stats = this.Effective();
+    return stats.Damage;
+  });
+
+  /**
+   * The Damage Per Second (DPS) value based on effective stats
+   */
+  public readonly DamagePerSecond = computed<number>(() => {
+    const stats = this.Effective();
+    return Math.round(stats.Damage * stats.AttackSpeed);
+  });
+
+  /**
    * Sets the combat stats
    * @param stats the combat stats to set
    */

@@ -5,10 +5,11 @@
   <app-character-sheet></app-character-sheet>
 
   <!-- EXP BAR -->
+  @let levelInfo = LevelInfo;
   <app-experience-bar
-    [currentLevel]="levelService.Level()"
-    [currentExp]="levelService.Experience()"
-    [expToNextLevel]="levelService.ExperienceToNextLevel()"></app-experience-bar>
+    [currentLevel]="levelInfo.level"
+    [currentExp]="levelInfo.currentExp"
+    [expToNextLevel]="levelInfo.expToNext"></app-experience-bar>
 
   <separator></separator>
 

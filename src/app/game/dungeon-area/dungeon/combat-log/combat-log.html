@@ -1,0 +1,94 @@
+<div class="log-list">
+  @for (entry of VisibleEntries(); track entry) {
+    <!-- SEPARATOR -->
+    <separator class="ih-separator" [margin]="false"></separator>
+    @if (entry.Type == "Death") {
+      <separator class="ih-separator" [margin]="false"></separator>
+    }
+
+    <!-- LOG ENTRY -->
+    <div class="log-entry">
+      <!-- TIMESTAMP -->
+      <span class="log-time">{{ FormatTimestamp(entry.TimestampMs) }}</span>
+
+      @switch (entry.Type) {
+        <!-- INFO -->
+        @case ("Info") {
+          <span class="log-info">{{ entry.Message }}</span>
+        }
+        <!-- DAMAGE -->
+        @case ("Damage") {
+          @let damageLogEntry = DamageLogEntryExtended(entry);
+
+          <div class="log-damage-entry">
+            <div class="log-damage-header">
+              <app-combat-actor-icon
+                [Actor]="entry.Actor"
+                [class]="damageLogEntry.ActorClass"
+                Size="md"></app-combat-actor-icon>
+
+              <span>{{ damageLogEntry.ActionContent }}</span>
+
+              <app-combat-actor-icon
+                [Actor]="entry.Target"
+                Size="md"
+                class="log-damage"></app-combat-actor-icon>
+
+              <!-- <span> {{ Separator }} </span> -->
+            </div>
+
+            <div>
+              <span class="log-damage" [class]="damageLogEntry.ActorClass">
+                {{ damageLogEntry.DamageDetails }}
+              </span>
+            </div>
+
+            <div class="log-damage-values">
+              <span class="log-damage" [class]="damageLogEntry.ActorClass">
+                {{ damageLogEntry.TotalDamage | number: "1.0-0" }}
+              </span>
+              @if (entry.IsMultiHit) {
+                [
+                @for (tag of entry.Damage; track tag) {
+                  <span
+                    class="log-damage"
+                    [class.log-multi]="!tag.IsCritical"
+                    [class.log-critical]="tag.IsCritical">
+                    {{ tag.Amount | number: "1.0-0" }}
+                  </span>
+                }
+                ]
+              }
+            </div>
+          </div>
+        }
+        <!-- MISS -->
+        @case ("Miss") {
+          <app-combat-actor-icon
+            [Actor]="entry.Actor"
+            Size="md"
+            class="log-miss"></app-combat-actor-icon>
+          <span class="log-miss">MISS</span>
+          <span class="log-miss">[{{ entry.HitChance | number: "1.0-0" }}%]</span>
+        }
+        <!-- HEAL -->
+        @case ("Heal") {
+          <app-icon combat="heartplus" size="sm" class="log-heal"></app-icon>
+          <app-combat-actor-icon
+            [Actor]="entry.Target"
+            Size="md"
+            class="log-heal"></app-combat-actor-icon>
+          <span class="log-heal">+{{ entry.Amount | number: "1.0-0" }} LIFE</span>
+        }
+        <!-- DEATH -->
+        @case ("Death") {
+          <app-icon combat="hastygrave" size="sm" class="log-death"></app-icon>
+          <app-combat-actor-icon
+            [Actor]="entry.Actor"
+            Size="md"
+            class="log-death"></app-combat-actor-icon>
+        }
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,21 @@
+<div class="gear-slots">
+  @for (itemSlot of ItemSlots; track itemSlot.slot) {
+    @let itemSlotInfo = ItemInfo(itemSlot.slot);
+    <button
+      class="gear-slot"
+      [class]="itemSlot.class"
+      (click)="SelectItemSlot($event, itemSlot.slot)"
+      [class.selected]="itemSlotInfo.IsSelected"
+      [class.empty]="!itemSlotInfo.IsEquipped"
+      [class.equipped]="itemSlotInfo.IsEquipped"
+      [class.common--border]="itemSlotInfo.IsCommon"
+      [class.magic--border]="itemSlotInfo.IsMagic"
+      [class.rare--border]="itemSlotInfo.IsRare"
+      [class.epic--border]="itemSlotInfo.IsEpic"
+      [class.legendary--border]="itemSlotInfo.IsLegendary">
+      <app-icon class="gear-slot__icon" [gear]="itemSlot.icon" size="2x"></app-icon>
+      <!-- <app-enchantment-slot-icon [enchantments]="GetEnchantments(itemSlot.type)" size="12">
+      </app-enchantment-slot-icon> -->
+    </button>
+  }
+</div>

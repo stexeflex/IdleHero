@@ -9,8 +9,8 @@
       <div class="room-value">{{ currentStage() }}</div>
     </div>
   </div>
-  <separator [vertical]="true"></separator>
   @if (showBossHealthBar()) {
+    <separator [vertical]="true"></separator>
     <div class="boss-health">
       <app-health-bar
         [currentHealth]="currentBossHealth()"

@@ -1,68 +1,62 @@
 @use "sass:color";
 @use "index" as *;
 
-.inventory-items {
+.inventory {
   // height: 485px;
-}
 
-.subheader {
-  grid-area: header;
-  @include flexbox($justify: space-between);
-  margin-bottom: $gap;
-}
-
-.gear-slots {
-  width: 340px;
-
-  // Centered horizontally
-  margin: 0 auto;
-}
-
-.enchanting-area {
   display: grid;
+
   grid:
-    "header header"
-    "item-display item-slots"
-    "gear-actions gear-actions"
-    "separator separator"
+    "loadout item-list" 1fr
+    "selected-item item-list" 1fr
     / auto 1fr;
 
   gap: $gap;
 }
 
-.item-preview-area {
-  display: grid;
-  grid:
-    "header"
-    "item-display"
-    "gear-actions"
-    "separator"
-    / 1fr;
+.subheader {
+  text-align: center;
+  margin-bottom: $gap;
+}
 
-  gap: $gap;
+.gear-loadout {
+  grid-area: loadout;
+  // width: 340px;
+}
 
-  > .item-display {
-    // Centered horizontally
-    margin: 0 auto;
-  }
+.inventory-items {
+  grid-area: item-list;
+}
+
+.selected-item {
+  grid-area: selected-item;
+  @include flexbox($dir: column, $align: center, $justify: center);
 }
 
 .item-display {
-  grid-area: item-display;
+  @include flexbox($dir: column, $align: center, $justify: center);
+  @include panel($bg: $clr-ui-bg);
+  @include box-shadow();
+
+  cursor: pointer;
+
+  border-width: 3px;
+  border-style: solid;
+
+  height: 320px;
+  width: 220px;
+
+  display: flex;
 }
 
-.item-slots {
-  grid-area: item-slots;
+.item__icon {
+  flex: 1;
 }
 
-.gear-actions {
-  grid-area: gear-actions;
+.item__name {
 }
 
-.button-cancel {
-  color: $clr-text-primary;
-}
-
-.separator {
-  grid-area: separator;
+.item__name--small {
+  font-size: 1em;
+  line-height: 21px;
 }

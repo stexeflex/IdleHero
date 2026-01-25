@@ -3,6 +3,7 @@ export * from './combat/actors/combat-actor';
 export * from './combat/actors/hero';
 export * from './combat/combat-event.factory';
 export * from './combat/combat-event';
+export * from './combat/combat-log';
 export * from './combat/dungeon-room';
 export * from './combat/stats/armor';
 export * from './combat/stats/attack-interval';

@@ -25,6 +25,7 @@ export class CombatEngine {
   public Start(): void {
     if (this.Running) return;
     this.Running = true;
+    this.CombatState.InProgress.set(true);
 
     this.EventHandling();
     this.ListenOnVisibilityChange();
@@ -36,6 +37,7 @@ export class CombatEngine {
   public Stop(): void {
     if (!this.Running) return;
     this.Running = false;
+    this.CombatState.Prestige();
 
     if (this.TimerId !== null) {
       clearTimeout(this.TimerId);
@@ -61,15 +63,15 @@ export class CombatEngine {
 
     this.Zone.runOutsideAngular(() => {
       this.TimerId = setTimeout(() => {
-        this.Zone.run(() => {
-          this.ProcessDueEvents();
+        this.Zone.run(async () => {
+          await this.ProcessDueEvents();
           this.EventHandling();
         });
       }, delay);
     });
   }
 
-  private ProcessDueEvents(): void {
+  private async ProcessDueEvents(): Promise<void> {
     if (!this.Running) return;
 
     const now: number = performance.now();
@@ -78,7 +80,7 @@ export class CombatEngine {
 
     while (this.EventCanBeProcessed(nextEvent, now, processedEvents)) {
       const eventToProcess: CombatEvent = this.CombatState.Queue.Pop()!;
-      this.EventHandler.HandleEvent(eventToProcess);
+      await this.EventHandler.HandleEvent(eventToProcess);
       processedEvents++;
       nextEvent = this.CombatState.Queue.Peek();
     }

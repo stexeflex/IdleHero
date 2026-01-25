@@ -1,5 +1,13 @@
 import { BehaviorSubject, Subject } from 'rxjs';
-import { Boss, CombatEvent, CreateAttackEvent, Hero, InitialLife } from '../../../models';
+import {
+  Boss,
+  CombatEvent,
+  CreateAttackEvent,
+  Hero,
+  InitialLife,
+  ResetLife
+} from '../../../models';
+import { CombatLogService, CombatStatsService, DungeonRoomService } from '../../../services';
 import {
   ComputeAttackInterval,
   ComputeFirstIntervalMs,
@@ -7,8 +15,6 @@ import {
 } from '../attack-interval-computing';
 import { Injectable, inject, signal } from '@angular/core';
 
-import { BossSelectionService } from '../dungeons/boss-selection.service';
-import { CombatStatsService } from '../../../services';
 import { EventQueue } from './event.queue';
 
 /**
@@ -16,10 +22,15 @@ import { EventQueue } from './event.queue';
  */
 @Injectable({ providedIn: 'root' })
 export class CombatState {
-  private readonly BossSelectionService = inject<BossSelectionService>(BossSelectionService);
-  private readonly CombatStatsService = inject<CombatStatsService>(CombatStatsService);
+  // Services
+  private readonly DungeonRoom = inject<DungeonRoomService>(DungeonRoomService);
+  private readonly CombatStats = inject<CombatStatsService>(CombatStatsService);
+  private readonly Log = inject<CombatLogService>(CombatLogService);
 
   // Combat State
+  public readonly InProgress = signal<boolean>(false);
+
+  // Event Queue
   public readonly Queue = new EventQueue<CombatEvent>();
 
   // Combat Actors: Hero & Boss
@@ -31,33 +42,40 @@ export class CombatState {
   public readonly Hero$ = new BehaviorSubject<Hero | undefined>(undefined);
   public readonly Boss$ = new BehaviorSubject<Boss | undefined>(undefined);
 
+  public Prestige() {
+    this.InProgress.set(false);
+    this.Queue.Clear();
+    this.Hero.set(undefined);
+    this.Boss.set(undefined);
+    this.PublishState();
+  }
+
   /**
    * Setup Combat with Actors
    * @param actors Combat Actors to setup
    */
   public SetupCombat(dungeonId: number) {
-    const computedStats = this.CombatStatsService.Effective();
-
-    const hero: Hero = {
-      Life: InitialLife(100),
-      Stats: computedStats,
-      AttackInterval: ComputeInitialAttackInterval(computedStats.AttackSpeed)
-    };
-
-    const firstBoss: Boss = this.BossSelectionService.GetBoss(dungeonId.toString(), 1);
+    this.Log.Clear();
+    this.Queue.Clear();
 
     // Set Combat Actors
+    const hero: Hero = this.SetupHero();
+    const firstBoss: Boss = this.SetupBoss(dungeonId);
+
     this.Hero.set(hero);
     this.Boss.set(firstBoss);
 
     // Add first Combat Event for Hero
     const now = performance.now();
     const firstAt: number = ComputeFirstIntervalMs(now, hero.AttackInterval);
-    const attackEvent: CombatEvent = CreateAttackEvent(firstAt, 'hero', firstBoss.Id);
+    const attackEvent: CombatEvent = CreateAttackEvent(firstAt, hero, firstBoss);
 
     this.Queue.Push(attackEvent);
 
     this.PublishState();
+
+    // Log combat start
+    this.Log.Info(`${this.DungeonRoom.CurrentDungeon()?.Title.toUpperCase()}: Starting Battle!`);
   }
 
   /**
@@ -68,10 +86,29 @@ export class CombatState {
       if (!hero) return hero;
 
       // Compute Stats for Hero
-      hero.Stats = this.CombatStatsService.Effective();
+      hero.Stats = this.CombatStats.Effective();
       hero.AttackInterval = ComputeAttackInterval(hero.Stats.AttackSpeed, hero.AttackInterval);
     });
 
+    this.PublishState();
+  }
+
+  /**
+   * Advance to the next Boss in the Dungeon Room
+   */
+  public AdvanceToNextBoss(): void {
+    if (this.Boss()?.Life.Alive) return;
+
+    const oldBoss = this.DungeonRoom.CurrentBoss();
+    this.DungeonRoom.AdvanceStage();
+    const nextBoss = this.DungeonRoom.CurrentBoss();
+
+    if (!nextBoss) return;
+
+    this.UpdateEventQueueOnStageAdvance(oldBoss, nextBoss);
+
+    nextBoss.Life = ResetLife(nextBoss.Life);
+    this.Boss.set(nextBoss);
     this.PublishState();
   }
 
@@ -81,5 +118,77 @@ export class CombatState {
   public PublishState() {
     this.Hero$.next(this.Hero());
     this.Boss$.next(this.Boss());
+  }
+
+  private SetupHero(): Hero {
+    const computedStats = this.CombatStats.Effective();
+
+    const hero: Hero = {
+      Name: 'Hero',
+      HeroIcon: 'overlord',
+      Life: InitialLife(100),
+      Stats: computedStats,
+      AttackInterval: ComputeInitialAttackInterval(computedStats.AttackSpeed)
+    };
+
+    return hero;
+  }
+
+  private SetupBoss(dungeonId: number) {
+    const boss: Boss | null = this.DungeonRoom.CurrentBoss();
+
+    if (!boss) {
+      throw new Error(`No boss found for dungeon ID: ${dungeonId}`);
+    }
+
+    boss.Life = ResetLife(boss.Life);
+    return boss;
+  }
+
+  // Clean up/retarget queued events referencing the old boss
+  private UpdateEventQueueOnStageAdvance(oldBoss: Boss | null, nextBoss: Boss): void {
+    if (!oldBoss) return;
+
+    const oldId = oldBoss.Id;
+
+    this.Queue.UpdateAll((event) => {
+      switch (event.Type) {
+        case 'Attack': {
+          const isOldActor = 'Id' in event.Actor && (event.Actor as Boss).Id === oldId;
+          const isOldTarget = 'Id' in event.Target && (event.Target as Boss).Id === oldId;
+          if (isOldActor) return null; // drop attacks from old boss
+          if (isOldTarget) return { ...event, Target: nextBoss };
+          return event;
+        }
+        case 'Miss': {
+          const isOldActor = 'Id' in event.Actor && (event.Actor as Boss).Id === oldId;
+          const isOldTarget = 'Id' in event.Target && (event.Target as Boss).Id === oldId;
+          if (isOldActor) return null; // drop misses from old boss
+          if (isOldTarget) return { ...event, Target: nextBoss };
+          return event;
+        }
+        case 'Damage': {
+          const isOldActor = 'Id' in event.Actor && (event.Actor as Boss).Id === oldId;
+          const isOldTarget = 'Id' in event.Target && (event.Target as Boss).Id === oldId;
+          if (isOldActor) return null; // drop damage from old boss
+          if (isOldTarget) return { ...event, Target: nextBoss };
+          return event;
+        }
+        case 'Heal': {
+          const isOldActor = 'Id' in event.Actor && (event.Actor as Boss).Id === oldId;
+          const isOldTarget = 'Id' in event.Target && (event.Target as Boss).Id === oldId;
+          if (isOldActor) return null; // drop heals cast by old boss
+          if (isOldTarget) return null; // do not heal the new boss from leftover events
+          return event;
+        }
+        case 'Death': {
+          const isOldActor = 'Id' in event.Actor && (event.Actor as Boss).Id === oldId;
+          if (isOldActor) return null; // drop pending death events of old boss
+          return event;
+        }
+        default:
+          return event;
+      }
+    });
   }
 }

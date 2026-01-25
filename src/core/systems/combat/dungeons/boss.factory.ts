@@ -1,4 +1,5 @@
 import {
+  Boss,
   InitialArmor,
   InitialAttackInterval,
   InitialCombatStats,
@@ -6,15 +7,40 @@ import {
   NoArmor
 } from '../../../models';
 
-import { Boss } from '../../../models/combat/actors/boss.';
+export function Gooey(): Boss {
+  return {
+    Id: 'slime-cave-1',
+    Name: 'Gooey Slime',
+    BossIcon: 'gooeydaemon',
+
+    Life: InitialLife(100),
+    Armor: NoArmor(),
+    Stats: InitialCombatStats(0.5, 2, 0.0, 0.0),
+    AttackInterval: InitialAttackInterval(0.5)
+  };
+}
 
 export function Slime(): Boss {
   return {
-    Id: 'slime-001',
+    Id: 'slime-cave-2',
     Name: 'Slime',
+    BossIcon: 'slime',
 
-    Life: InitialLife(10),
+    Life: InitialLife(250),
     Armor: NoArmor(),
+    Stats: InitialCombatStats(0.5, 2, 0.0, 0.0),
+    AttackInterval: InitialAttackInterval(0.5)
+  };
+}
+
+export function Slug(): Boss {
+  return {
+    Id: 'slime-cave-mid',
+    Name: 'Slug',
+    BossIcon: 'graspingslug',
+
+    Life: InitialLife(1000),
+    Armor: InitialArmor(1),
     Stats: InitialCombatStats(0.5, 2, 0.0, 0.0),
     AttackInterval: InitialAttackInterval(0.5)
   };
@@ -22,36 +48,13 @@ export function Slime(): Boss {
 
 export function KingSlime(): Boss {
   return {
-    Id: 'slime-king-020',
-    Name: 'King Slime',
+    Id: 'slime-cave-boss',
+    Name: 'Cylop',
+    BossIcon: 'jawlesscyclop',
 
-    Life: InitialLife(80),
+    Life: InitialLife(2000),
     Armor: InitialArmor(5),
     Stats: InitialCombatStats(0.6, 6, 0.05, 0.02),
     AttackInterval: InitialAttackInterval(0.6)
-  };
-}
-
-export function Goblin(): Boss {
-  return {
-    Id: 'goblin-002',
-    Name: 'Goblin',
-
-    Life: InitialLife(18),
-    Armor: InitialArmor(1),
-    Stats: InitialCombatStats(0.8, 3, 0.1, 0.1),
-    AttackInterval: InitialAttackInterval(0.8)
-  };
-}
-
-export function Wolf(): Boss {
-  return {
-    Id: 'wolf-003',
-    Name: 'Wolf',
-
-    Life: InitialLife(22),
-    Armor: InitialArmor(0),
-    Stats: InitialCombatStats(1.2, 5, 0.2, 0.15),
-    AttackInterval: InitialAttackInterval(1.2)
   };
 }

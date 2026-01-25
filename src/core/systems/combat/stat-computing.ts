@@ -1,3 +1,4 @@
+import { ATTRIBUTES_CONFIG, STATS_CONFIG } from '../../constants';
 import { Attributes, BaseStats, ComputedStats, StatSource } from '../../models';
 import {
   MapDexterityToAccuracy,
@@ -45,17 +46,20 @@ export function ComputeStats(
   const accuracy = ComputeAccuracy(sources, effectiveDex);
   const evasion = ComputeEvasion(sources, effectiveDex);
 
-  return {
+  const stats = {
     AttackSpeed: attackSpeed,
     Damage: damage,
     CriticalHitChance: critChance,
     CriticalHitDamage: critMultiplier,
     MultiHitChance: multiHitChance,
-    MultiHitMultiplier: baseStats.MultiHitMultiplier,
+    MultiHitDamage: baseStats.MultiHitDamage,
     MultiHitChainFactor: multiHitChainFactor,
     Accuracy: accuracy,
     Evasion: evasion
   };
+
+  console.log('Computed Stats:', stats);
+  return stats;
 }
 
 //#region Computing Functions
@@ -63,18 +67,23 @@ function ComputeAttributes(
   attributes: Attributes,
   sources: StatSource[]
 ): { Strength: number; Intelligence: number; Dexterity: number } {
+  // Basis-Attribute ohne Baseline
+  const baseStrength = attributes.Strength - ATTRIBUTES_CONFIG.BASE.STRENGTH;
+  const baseIntelligence = attributes.Intelligence - ATTRIBUTES_CONFIG.BASE.INTELLIGENCE;
+  const baseDexterity = attributes.Dexterity - ATTRIBUTES_CONFIG.BASE.DEXTERITY;
+
   // Effektive Attribute: (base + sum(flat)) * product(1 + multiplier)
   const addStr = sources.reduce((sum, s) => Flat(sum, s.Strength.Flat), 0);
   const multiplyStr = sources.reduce((prod, s) => Multiplier(prod, s.Strength.Multiplier), 1);
-  const effectiveStr = Effective(attributes.Strength, addStr, multiplyStr);
+  const effectiveStr = Effective(baseStrength, addStr, multiplyStr);
 
   const addInt = sources.reduce((sum, s) => Flat(sum, s.Intelligence.Flat), 0);
   const multiplyInt = sources.reduce((prod, s) => Multiplier(prod, s.Intelligence.Multiplier), 1);
-  const effectiveInt = Effective(attributes.Intelligence, addInt, multiplyInt);
+  const effectiveInt = Effective(baseIntelligence, addInt, multiplyInt);
 
   const addDex = sources.reduce((sum, s) => Flat(sum, s.Dexterity.Flat), 0);
   const multiplyDex = sources.reduce((prod, s) => Multiplier(prod, s.Dexterity.Multiplier), 1);
-  const effectiveDex = Effective(attributes.Dexterity, addDex, multiplyDex);
+  const effectiveDex = Effective(baseDexterity, addDex, multiplyDex);
 
   return { Strength: effectiveStr, Intelligence: effectiveInt, Dexterity: effectiveDex };
 }
@@ -114,7 +123,7 @@ function ComputeCriticalHit(
   const critChance = ClampUtils.clamp01((baseCritChance + addCritChance) * multiplyCritChance);
 
   // Crit Damage
-  const baseCritDamage = baseMultiplier ?? 1.5;
+  const baseCritDamage = baseMultiplier ?? STATS_CONFIG.BASE.CRIT_DAMAGE;
   const addCritDamage = sources.reduce((sum, s) => Flat(sum, s.CriticalHit.FlatDamage), 0);
   const multiplyCritDamage = sources.reduce(
     (prod, s) => Multiplier(prod, s.CriticalHit.MultiplierDamage),
@@ -122,7 +131,10 @@ function ComputeCriticalHit(
   );
   const critMultiplier = Effective(baseCritDamage, addCritDamage, multiplyCritDamage, 1);
 
-  return { CriticalHitChance: critChance, CriticalHitDamage: critMultiplier };
+  return {
+    CriticalHitChance: Math.min(critChance, STATS_CONFIG.CAPS.MAX_CRIT_CHANCE),
+    CriticalHitDamage: critMultiplier
+  };
 }
 
 function ComputeMultiHit(
@@ -144,11 +156,14 @@ function ComputeMultiHit(
   );
   const multiHitChainFactor = ClampUtils.clamp(
     (baseChainFactor + addChainFactor) * mulChainFactor,
-    0,
-    0.95
+    STATS_CONFIG.BASE.MULTI_HIT_CHAIN_FACTOR,
+    STATS_CONFIG.CAPS.MAX_MULTI_HIT_CHAIN_FACTOR
   );
 
-  return { MultiHitChance: multiHitChance, MultiHitChainFactor: multiHitChainFactor };
+  return {
+    MultiHitChance: Math.min(multiHitChance, STATS_CONFIG.CAPS.MAX_MULTI_HIT_CHANCE),
+    MultiHitChainFactor: multiHitChainFactor
+  };
 }
 
 function ComputeAccuracy(sources: StatSource[], dexterity: number): number {
@@ -180,6 +195,6 @@ function Multiplier(currentMultiplier: number, additionalMultiplier: number): nu
 }
 
 function Effective(base: number, flat: number, multiplier: number, max: number = 0): number {
-  return Math.max(0, (base + flat) * multiplier);
+  return Math.max(max, (base + flat) * multiplier);
 }
 //#endregion

@@ -1,4 +1,5 @@
 import { CHARACTERS_ICONS, CharactersIconName } from './characters.icons';
+import { COMBAT_ICONS, CombatIconName } from './combat.icons';
 import { CREATURES_ICONS, CreaturesIconName } from './creatures.icons';
 import { Component, HostBinding, OnChanges, inject, input } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -44,6 +45,7 @@ export class IconComponent implements OnChanges {
   readonly ui = input<UiIconName>();
   readonly character = input<CharactersIconName>();
   readonly creatures = input<CreaturesIconName>();
+  readonly combat = input<CombatIconName>();
 
   @HostBinding('style.width.px') get width() {
     return this.sizeMap[this.size()];
@@ -80,6 +82,7 @@ export class IconComponent implements OnChanges {
     const ui = this.ui();
     const character = this.character();
     const creatures = this.creatures();
+    const combat = this.combat();
 
     if (gear !== undefined) {
       path = GEAR_SLOT_ICONS[gear];
@@ -91,6 +94,8 @@ export class IconComponent implements OnChanges {
       path = CHARACTERS_ICONS[character];
     } else if (creatures !== undefined) {
       path = CREATURES_ICONS[creatures];
+    } else if (combat !== undefined) {
+      path = COMBAT_ICONS[combat];
     }
 
     return path;
