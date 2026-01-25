@@ -1,13 +1,12 @@
-import { GearLoadout, createEmptyLoadout } from '../models/items/gear-loadout';
+import { CreateEmptyLoadout, GearLoadout } from '../models/items/gear-loadout';
 import { Injectable, computed, signal } from '@angular/core';
+import { Item, ItemSlot, StatSource } from '../models';
 
-import { Item } from '../models/items/item';
-import { ItemSlot } from '../models/items/item-slot.enum';
-import { StatSource } from '../models';
+import { MapItemToStatSources } from '../systems/items/statsource.utils';
 
 @Injectable({ providedIn: 'root' })
 export class GearLoadoutService {
-  private readonly equipped = signal<GearLoadout>(createEmptyLoadout());
+  private readonly equipped = signal<GearLoadout>(CreateEmptyLoadout());
 
   // All equipped items as array
   public readonly EquippedItems = computed<Item[]>(() => {
@@ -16,7 +15,7 @@ export class GearLoadoutService {
 
   // Stat sources aggregated from equipped items
   public readonly StatSources = computed<StatSource[]>(() => {
-    return this.EquippedItems().map((i) => i);
+    return this.EquippedItems().flatMap((i) => MapItemToStatSources(i));
   });
 
   /**
@@ -56,7 +55,8 @@ export class GearLoadoutService {
    * @returns true if the item can be equipped, false otherwise
    */
   public CanEquip(item: Item): boolean {
-    return true;
+    // TODO: check hero level
+    return item.LevelRequirement >= 1;
   }
 
   /**
@@ -72,7 +72,7 @@ export class GearLoadoutService {
    * Clears all equipped items
    */
   public Clear(): void {
-    this.equipped.set(createEmptyLoadout());
+    this.equipped.set(CreateEmptyLoadout());
   }
 
   /**

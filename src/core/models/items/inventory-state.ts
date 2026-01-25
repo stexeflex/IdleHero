@@ -1,5 +1,5 @@
 import { INVENTORY_CONFIG } from '../../constants';
-import { Item } from './item';
+import { Item } from './items/item';
 
 export interface InventoryState {
   Capacity: number;

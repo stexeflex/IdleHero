@@ -1,7 +1,7 @@
 import { InitialInventoryState, InventoryState } from '../models/items/inventory-state';
 import { Injectable, computed, signal } from '@angular/core';
 
-import { Item } from '../models/items/item';
+import { Item } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class InventoryService {

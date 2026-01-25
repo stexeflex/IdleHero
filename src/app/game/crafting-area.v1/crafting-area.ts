@@ -3,17 +3,17 @@ import { Gear, GearType } from '../../../shared/models';
 import { IconComponent, Separator } from '../../../shared/components';
 import { InventoryService, SelectedGearService } from '../../../shared/services';
 
-import { Enchanting } from '../crafting-area/enchanting/enchanting';
-import { GearActions } from '../crafting-area/gear-actions/gear-actions';
-import { ItemDisplay } from '../crafting-area/item-display/item-display';
+import { Enchanting } from './enchanting/enchanting';
+import { GearActions } from './gear-actions/gear-actions';
+import { ItemDisplay } from './item-display/item-display';
 
 @Component({
-  selector: 'app-crafting-area',
+  selector: 'app-crafting-area.v1',
   imports: [Enchanting, Separator, IconComponent, ItemDisplay, GearActions],
   templateUrl: './crafting-area.html',
   styleUrl: './crafting-area.scss'
 })
-export class CraftingArea {
+export class CraftingAreaV1 {
   private selectedGearService = inject(SelectedGearService);
   private inventoryService = inject(InventoryService);
 

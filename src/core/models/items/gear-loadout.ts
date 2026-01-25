@@ -1,9 +1,9 @@
-import { Item } from './item';
-import { ItemSlot } from './item-slot.enum';
+import { Item } from './items/item';
+import { ItemSlot } from './items/item-slot.enum';
 
 export type GearLoadout = Record<ItemSlot, Item | null>;
 
-export function createEmptyLoadout(): GearLoadout {
+export function CreateEmptyLoadout(): GearLoadout {
   return {
     Weapon: null,
     OffHand: null,

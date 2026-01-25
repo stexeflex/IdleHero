@@ -77,3 +77,30 @@ export type EvasionStatSource = {
   Flat: number;
   Multiplier: number;
 };
+
+export function EmptyStatSource(id: string): StatSource {
+  return {
+    Id: id,
+    Strength: { Flat: 0, Multiplier: 0 },
+    Intelligence: { Flat: 0, Multiplier: 0 },
+    Dexterity: { Flat: 0, Multiplier: 0 },
+    Damage: { Flat: 0, Multiplier: 0 },
+    AttackSpeed: { Flat: 0, Multiplier: 0 },
+    CriticalHit: {
+      FlatChance: 0,
+      MultiplierChance: 0,
+      FlatDamage: 0,
+      MultiplierDamage: 0
+    },
+    MultiHit: {
+      FlatChance: 0,
+      MultiplierChance: 0,
+      FlatChainFactor: 0,
+      MultiplierChainFactor: 0,
+      FlatDamage: 0,
+      MultiplierDamage: 0
+    },
+    Accuracy: { Flat: 0, Multiplier: 0 },
+    Evasion: { Flat: 0, Multiplier: 0 }
+  };
+}
