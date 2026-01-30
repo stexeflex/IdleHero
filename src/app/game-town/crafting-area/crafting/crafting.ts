@@ -1,4 +1,4 @@
-import { Component, LOCALE_ID, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import {
   CraftingService,
   GoldCostProvider,
@@ -8,36 +8,26 @@ import {
 import { GearSlotIconName, Gold, IconComponent } from '../../../../shared/components';
 import { ICONS_CONFIG, ITEM_VARIANTS } from '../../../../core/constants';
 import {
-  ItemRarity,
   ItemSlot,
   ItemTier,
   ItemVariantDefinition,
-  LabelToString,
   OperationResult
 } from '../../../../core/models';
 
-import { DecimalPipe } from '@angular/common';
+import { ItemVariantPreview } from './item-variant-preview/item-variant-preview';
+import { MinRarityForTier } from '../../../../core/systems/items';
 
 @Component({
   selector: 'app-crafting',
-  imports: [Gold, IconComponent],
+  imports: [Gold, IconComponent, ItemVariantPreview],
   templateUrl: './crafting.html',
   styleUrl: './crafting.scss'
 })
 export class Crafting {
-  private static readonly CRAFT_DEFAULT_RARITY: ItemRarity = 'Common';
-
-  private readonly locale = inject(LOCALE_ID);
   private readonly crafting = inject(CraftingService);
   private readonly cost = inject(GoldCostProvider);
   private readonly gold = inject(GoldService);
   private readonly inventory = inject(InventoryService);
-
-  private readonly decimalPipe: DecimalPipe;
-
-  constructor() {
-    this.decimalPipe = new DecimalPipe(this.locale);
-  }
 
   // UI State
   public readonly Slots: ItemSlot[] = ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Boots'];
@@ -57,7 +47,7 @@ export class Crafting {
   public readonly SelectedVariant = computed<ItemVariantDefinition | null>(() => {
     const id = this.SelectedVariantId();
     const list: ItemVariantDefinition[] = this.VariantsForSlot();
-    return id ? (list.find((v) => v.Id === id) ?? list[0] ?? null) : (list[0] ?? null);
+    return id ? (list.find((v) => v.Id === id) ?? null) : null;
   });
 
   // Data
@@ -68,9 +58,10 @@ export class Crafting {
   public readonly CraftCost = computed<number>(() => {
     const variant: ItemVariantDefinition | null = this.SelectedVariant();
     if (!variant) return 0;
-    return this.cost.GetCraftItemCost(variant, Crafting.CRAFT_DEFAULT_RARITY);
+    return this.cost.GetCraftItemCost(variant, MinRarityForTier(variant.Tier));
   });
 
+  // Actions
   public SelectSlot(slot: ItemSlot): void {
     this.SelectedSlot.set(slot);
     this.SelectedVariantId.set(null);
@@ -78,6 +69,7 @@ export class Crafting {
 
   public SelectTier(tier: ItemTier): void {
     this.SelectedTier.set(tier);
+    this.SelectedVariantId.set(null);
   }
 
   public SelectVariant(id: string): void {
@@ -88,20 +80,9 @@ export class Crafting {
     const variant: ItemVariantDefinition | null = this.SelectedVariant();
     if (!variant) return;
 
-    const result: OperationResult = this.crafting.CraftNewItem(
-      variant,
-      Crafting.CRAFT_DEFAULT_RARITY,
-      this.cost
-    );
+    const result: OperationResult = this.crafting.CraftNewItem(variant, this.cost);
     if (!result.Success) return;
 
     this.inventory.Add(result.Item);
-  }
-
-  // UI
-  protected VariantLabel(variant: ItemVariantDefinition): string {
-    const innateValue = variant.Innate.ValuesByLevel[1];
-    const innateLabel = variant.Innate.ToLabel(innateValue);
-    return LabelToString(innateLabel, this.decimalPipe);
   }
 }

@@ -1,0 +1,45 @@
+<button
+  class="variant"
+  [class.active]="Selected()"
+  [class.common--border]="Rarity() === 'Common'"
+  [class.magic--border]="Rarity() === 'Magic'"
+  [class.rare--border]="Rarity() === 'Rare'"
+  [class.epic--border]="Rarity() === 'Epic'"
+  [class.legendary--border]="Rarity() === 'Legendary'"
+  (click)="SelectVariant(Variant().Id)">
+  <div class="variant-icon">
+    <app-icon [gear]="Variant().Icon" size="3x"></app-icon>
+  </div>
+  <div class="variant-info">
+    <!-- ITEM NAME -->
+    <span class="item-name common--font">{{ Variant().Name.toUpperCase() }}</span>
+
+    <!-- ITEM TYPE -->
+    <span class="item-type">{{ Rarity() }} {{ Variant().Type }} [{{ Level() }}]</span>
+
+    <separator class="ih-separator"></separator>
+
+    <!-- WEAPON STATS -->
+    @if (Variant().WeaponBaseDamage && Variant().WeaponBaseAttackSpeed) {
+      <div class="variant-weapon-stats">
+        <span class="weapon-stat">
+          <span class="value"> {{ WeaponBaseDamage() | number: "1.0-0" }}</span>
+          <span class="label">Damage</span>
+        </span>
+        <span class="separator">•</span>
+        <span class="weapon-stat">
+          <span class="value">
+            {{ WeaponBaseAttackSpeed() | number: "1.2-2" : "en-en" }}
+          </span>
+          <span class="label">APS</span>
+        </span>
+      </div>
+    }
+  </div>
+
+  <!-- INNATE -->
+  <div class="variant-innate">
+    <app-icon class="icon" symbol="beveledstar" size="mini"></app-icon>
+    <span class="label">{{ VariantLabel() }}</span>
+  </div>
+</button>

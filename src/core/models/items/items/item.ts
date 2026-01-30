@@ -30,8 +30,10 @@ export interface InnateSpec {
 /** Item variant with its innate spec and slot constraints. */
 export interface ItemVariantDefinition {
   Id: string;
+
   Name: string;
   Icon: GearSlotIconName;
+
   Slot: ItemSlot;
   Type: ItemType;
   Tier: ItemTier;
@@ -42,7 +44,7 @@ export interface ItemVariantDefinition {
    * Example: 15 for broadsword, 25 for battleaxe.
    * Increased by weapon level.
    */
-  WeaponBaseDamage?: number;
+  WeaponBaseDamage?: Record<ItemLevel, number>;
 
   /**
    * Weapon-only multiplier that defines the base attack speed identity of the weapon.
@@ -62,11 +64,9 @@ export interface Item {
   Icon: GearSlotIconName;
 
   Slot: ItemSlot;
-  Rarity: ItemRarity;
+  Type: ItemType;
+  Tier: ItemTier;
   Level: ItemLevel;
-
-  /** Weapon-only base damage after level scaling. */
-  WeaponDamage?: number;
 
   /** Rolled/enchanted affixes currently on the item */
   Affixes: Affix[];

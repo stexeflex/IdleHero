@@ -11,7 +11,7 @@ import {
   RuneQuality
 } from '../../../core/models';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { ClampAffixTier, GetItemRarityRule } from '../../../core/systems/items';
+import { ClampAffixTier, GetItemRarity, GetItemRarityRule } from '../../../core/systems/items';
 import {
   CraftingService,
   GearLoadoutService,
@@ -92,7 +92,8 @@ export class CraftingArea {
   public readonly SelectedItemRules = computed(() => {
     const sel = this.SelectedItem();
     if (!sel) return null;
-    return GetItemRarityRule(sel.item.Rarity);
+    const rarity = GetItemRarity(sel.item.Level);
+    return GetItemRarityRule(rarity);
   });
 
   public readonly AllowedAffixDefinitions = computed<AffixDefinition[]>(() => {
@@ -110,7 +111,8 @@ export class CraftingArea {
   >(() => {
     const sel = this.SelectedItem();
     if (!sel) return [];
-    const rules = GetItemRarityRule(sel.item.Rarity);
+    const rarity = GetItemRarity(sel.item.Level);
+    const rules = GetItemRarityRule(rarity);
     return this.InventoryRunes()
       .map((r, i) => ({
         rune: r,
@@ -134,46 +136,6 @@ export class CraftingArea {
   public RuneDefById(id: string | null | undefined): RuneDefinition | undefined {
     if (!id) return undefined;
     return RUNE_DEFINITIONS.find((d) => d.Id === id);
-  }
-
-  public SelectSlot(slot: ItemSlot): void {
-    this.SelectedSlot.set(slot);
-    this.SelectedVariantId.set(null);
-  }
-
-  public SelectVariant(id: string): void {
-    this.SelectedVariantId.set(id);
-  }
-
-  public SelectItemFromInventory(item: Item): void {
-    this.SelectedItem.set({ item, source: 'Inventory' });
-    this.SelectedAffixIndex.set(null);
-  }
-
-  public SelectItemFromEquipped(item: Item): void {
-    this.SelectedItem.set({ item, source: 'Equipped' });
-    this.SelectedAffixIndex.set(null);
-  }
-
-  public Craft(): void {
-    const variant = this.SelectedVariant();
-    if (!variant) return;
-    const rarity = this.SelectedRarity();
-    const result = this.crafting.CraftNewItem(variant, rarity, this.cost);
-    if (!result.Success) return;
-    this.inventory.Add(result.Item);
-  }
-
-  public EquipSelected(item: Item): void {
-    if (!item) return;
-    if (!this.gear.CanEquip(item)) return;
-    const previous = this.gear.Equip(item);
-    // If we equipped from inventory, remove that instance from inventory
-    this.inventory.RemoveItem(item);
-    // Put previously equipped back to inventory if any
-    if (previous) this.inventory.Add(previous);
-    // Refresh selection to the newly equipped item
-    this.SelectedItem.set({ item, source: 'Equipped' });
   }
 
   public LevelUpSelected(): void {

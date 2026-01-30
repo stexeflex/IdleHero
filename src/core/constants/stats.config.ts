@@ -2,10 +2,10 @@ export const STATS_CONFIG = {
   BASE: {
     HIT_CHANCE: 0.9, // Basis-Trefferchance
     ATTACK_SPEED: 1.0, // Basis-Angriffe pro Sekunde
-    DAMAGE: 10, // Basis-Schaden
+    DAMAGE: 0, // Basis-Schaden
     BLEEDING_CHANCE: 0.0, // 0% Base Bleeding Chance
     BLEEDING_DAMAGE: 0.0, // 0% Base Bleeding Damage
-    CRIT_CHANCE: 0.01, // 1% Base CHC
+    CRIT_CHANCE: 0.0, // 0% Base CHC
     CRIT_DAMAGE: 1.5, // 150% Base CHD
     MULTI_HIT_CHANCE: 0.0, // 0% Base MHC
     MULTI_HIT_DAMAGE: 1.1, // 110% Base MHC

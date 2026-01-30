@@ -18,18 +18,33 @@
     outline: 1px solid $clr-border;
     background: $grad-ui-bg-lighten;
   }
+}
 
-  .info {
-    @include flexbox($dir: column, $justify: center, $align: flex-start);
-    gap: calc($gap / 6);
-  }
+.info {
+  @include flexbox($dir: column, $justify: center, $align: flex-start);
+  gap: calc($gap / 6);
 
   .name {
-    font-weight: 600;
+    font-size: 1.1rem;
+    font-weight: bold;
+    font-family: $font-family-header;
   }
 
   .meta {
-    color: $clr-mute;
-    font-size: 0.8rem;
+    display: flex;
+    gap: calc($gap / 2);
+
+    font-size: 1rem;
+    font-weight: normal;
+
+    .tier {
+      font-weight: bold;
+      font-family: $font-family-title;
+      color: color.scale($clr-accent, $lightness: 15%);
+    }
   }
+}
+
+.actions {
+  margin-left: auto;
 }

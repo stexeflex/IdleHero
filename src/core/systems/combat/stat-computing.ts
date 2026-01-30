@@ -91,11 +91,11 @@ function ComputeAttributes(
 }
 
 function ComputeDamage(sources: StatSource[], baseDamage: number, strength: number): number {
-  const baseDamageFromStr = MapStrengthToBaseDamage(strength, baseDamage);
+  // const baseDamageFromStr = MapStrengthToBaseDamage(strength, baseDamage);
 
   const addDmg = sources.reduce((sum, s) => Flat(sum, s.Damage.Flat), 0);
   const multiplyDmg = sources.reduce((prod, s) => Multiplier(prod, s.Damage.Multiplier), 1);
-  const effectiveDamage = Math.round(Effective(baseDamageFromStr, addDmg, multiplyDmg, 1));
+  const effectiveDamage = Math.round(Effective(0, addDmg, multiplyDmg, 1));
 
   return effectiveDamage;
 }

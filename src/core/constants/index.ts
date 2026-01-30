@@ -7,6 +7,7 @@ export * from './items/affix-tier-specs.config';
 export * from './items/affixes.config';
 export * from './items/icons.config';
 export * from './items/item-rarity-rules.config';
+export * from './items/item-tier-rules.config';
 export * from './items/items.config';
 export * from './items/rune-quality-specs.config';
 export * from './items/runes.config';

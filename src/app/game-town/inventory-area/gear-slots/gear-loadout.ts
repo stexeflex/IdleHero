@@ -3,11 +3,13 @@ import { GearSlotIconName, IconComponent } from '../../../../shared/components';
 import { ItemRarity, ItemSlot } from '../../../../core/models';
 
 import { GearLoadoutService } from '../../../../core/services';
+import { GetItemRarity } from '../../../../core/systems/items';
 import { ICONS_CONFIG } from '../../../../core/constants';
 
 interface ItemSlotInfo {
   IsSelected: boolean;
   IsEquipped: boolean;
+  Icon: GearSlotIconName;
   IsCommon: boolean;
   IsMagic: boolean;
   IsRare: boolean;
@@ -38,11 +40,13 @@ export class GearLoadout {
   }
 
   protected ItemInfo(slot: ItemSlot): ItemSlotInfo {
-    const rarity: ItemRarity | undefined = this.gearLoadoutService.Get(slot)?.Rarity ?? undefined;
+    const item = this.gearLoadoutService.Get(slot);
+    const rarity = item?.Level ? GetItemRarity(item.Level) : undefined;
 
     return {
       IsSelected: false,
       IsEquipped: this.gearLoadoutService.IsEquipped(slot),
+      Icon: item ? item.Icon : this.ItemSlots.find((s) => s.slot === slot)!.icon,
       IsCommon: rarity === 'Common',
       IsMagic: rarity === 'Magic',
       IsRare: rarity === 'Rare',

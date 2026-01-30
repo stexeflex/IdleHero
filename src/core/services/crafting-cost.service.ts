@@ -6,9 +6,9 @@ import {
   RuneDefinition,
   RuneQuality
 } from '../models';
+import { GetItemRarity, QualityIndex, TierIndex } from '../systems/items';
 import { ITEM_RARITY_COST_MULTIPLIER, ITEM_TIER_COST_MULTIPLIER } from '../constants';
 import { Injectable, inject } from '@angular/core';
-import { QualityIndex, TierIndex } from '../systems/items';
 
 import { CraftingCostProvider } from './crafting.service';
 import { GoldService } from './gold.service';
@@ -18,7 +18,8 @@ export class GoldCostProvider implements CraftingCostProvider {
   private readonly Gold = inject(GoldService);
 
   public GetLevelUpCost(item: Item): number {
-    const mult = ITEM_RARITY_COST_MULTIPLIER[item.Rarity];
+    const rarity = GetItemRarity(item.Level);
+    const mult = ITEM_RARITY_COST_MULTIPLIER[rarity];
     // Scale by rarity and current level; modest bump per existing affix
     const affixFactor = 1 + Math.max(0, item.Affixes.length) * 0.15;
     return Math.floor(100 * mult * item.Level * affixFactor);
@@ -33,7 +34,8 @@ export class GoldCostProvider implements CraftingCostProvider {
   }
 
   public GetRerollAffixCost(item: Item, affixIndex: number): number {
-    const mult = ITEM_RARITY_COST_MULTIPLIER[item.Rarity];
+    const rarity = GetItemRarity(item.Level);
+    const mult = ITEM_RARITY_COST_MULTIPLIER[rarity];
     const affix = item.Affixes[affixIndex];
     const tIdx = affix ? TierIndex(affix.Tier) : 0;
     // Cheaper than enchanting; scales with tier
@@ -41,7 +43,8 @@ export class GoldCostProvider implements CraftingCostProvider {
   }
 
   public GetEnchantAffixCost(item: Item, affixIndex: number): number {
-    const mult = ITEM_RARITY_COST_MULTIPLIER[item.Rarity];
+    const rarity = GetItemRarity(item.Level);
+    const mult = ITEM_RARITY_COST_MULTIPLIER[rarity];
     const affix = item.Affixes[affixIndex];
     const tIdx = affix ? TierIndex(affix.Tier) : 0;
     // More expensive; scales stronger with current tier
@@ -49,26 +52,30 @@ export class GoldCostProvider implements CraftingCostProvider {
   }
 
   public GetAddAffixCost(item: Item, definition: AffixDefinition): number {
-    const mult = ITEM_RARITY_COST_MULTIPLIER[item.Rarity];
+    const rarity = GetItemRarity(item.Level);
+    const mult = ITEM_RARITY_COST_MULTIPLIER[rarity];
     // Adding an affix is mid-tier cost; scales with item level
     return Math.floor(90 * mult * (1 + item.Level * 0.2));
   }
 
   public GetRemoveAffixCost(item: Item, affixIndex: number): number {
-    const mult = ITEM_RARITY_COST_MULTIPLIER[item.Rarity];
+    const rarity = GetItemRarity(item.Level);
+    const mult = ITEM_RARITY_COST_MULTIPLIER[rarity];
     // Flat service fee scaled by rarity
     return Math.floor(25 * mult);
   }
 
   public GetSocketRuneCost(item: Item, definition: RuneDefinition, quality: RuneQuality): number {
-    const mult = ITEM_RARITY_COST_MULTIPLIER[item.Rarity];
+    const rarity = GetItemRarity(item.Level);
+    const mult = ITEM_RARITY_COST_MULTIPLIER[rarity];
     const qIdx = QualityIndex(quality);
     // Rune socketing scales with rune quality and item rarity
     return Math.floor(80 * mult * (qIdx + 1));
   }
 
   public GetUnsocketRuneCost(item: Item): number {
-    const mult = ITEM_RARITY_COST_MULTIPLIER[item.Rarity];
+    const rarity = GetItemRarity(item.Level);
+    const mult = ITEM_RARITY_COST_MULTIPLIER[rarity];
     // Small cost to safely extract
     return Math.floor(40 * mult);
   }

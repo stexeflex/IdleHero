@@ -33,19 +33,17 @@
     / auto 1fr;
 
   gap: $gap;
-  // padding: calc($gap / 2);
 }
 
 .slots {
   grid-area: slots;
-  // @include flexbox($dir: column, $justify: flex-start, $align: flex-start);
   display: grid;
   justify-content: start;
   align-content: start;
   gap: $gap;
 }
 
-$slot-size: 75px;
+$slot-size: 80px;
 
 .slot {
   @include button-text-font();
@@ -54,6 +52,7 @@ $slot-size: 75px;
   @include flexbox($dir: column, $justify: center, $align: center);
   @include panel($bg: $clr-ui-bg);
   @include box-shadow();
+  gap: calc($gap / 2);
 
   height: $slot-size;
   width: $slot-size;
@@ -62,15 +61,15 @@ $slot-size: 75px;
 }
 
 .slot.active,
-.tier.active,
-.variant.active {
+.tier.active {
   // border-width: 4px;
   background: $grad-ui-bg-lighten;
 }
 
 .tiers {
   grid-area: tiers;
-  @include flexbox($dir: row, $justify: space-around, $align: center);
+  // @include flexbox($dir: row, $justify: space-around, $align: center);
+  @include flexbox($dir: row, $justify: flex-start, $align: center);
   gap: $gap;
   height: 44px;
 }
@@ -84,40 +83,18 @@ $slot-size: 75px;
   @include box-shadow();
 
   min-width: 80px;
+
+  font-family: $font-family-header;
 }
 
 .variants {
   grid-area: variants;
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: $gap;
 
   @include overflow($display: grid, $max-height: 68vh);
   @include scrollbar($size: 0.8rem);
-  padding: calc($gap / 2);
-}
 
-.variant {
-  @include button-text-font();
-  @include button-focus-visible-outline();
-
-  @include flexbox($dir: column, $justify: center, $align: center);
-  @include panel($bg: $clr-ui-bg);
-  @include box-shadow();
-}
-
-.variant-info {
-  @include flexbox($dir: column, $justify: center, $align: center);
-  font-size: 1rem;
-}
-
-.variant-weapon-stats {
-  font-size: 0.8rem;
-  font-weight: normal;
-}
-
-.variant-innate {
-  font-size: 0.8rem;
-  font-style: italic;
-  color: $clr-mute;
+  padding: $gap;
 }

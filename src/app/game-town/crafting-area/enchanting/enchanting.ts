@@ -9,7 +9,7 @@ import {
   RuneDefinition,
   RuneQuality
 } from '../../../../core/models';
-import { ClampAffixTier, GetItemRarityRule } from '../../../../core/systems/items';
+import { ClampAffixTier, GetItemRarity, GetItemRarityRule } from '../../../../core/systems/items';
 import { Component, computed, inject, signal } from '@angular/core';
 import {
   CraftingService,
@@ -58,7 +58,8 @@ export class Enchanting {
   >(() => {
     const sel = this.SelectedItem();
     if (!sel) return [];
-    const rules = GetItemRarityRule(sel.item.Rarity);
+    const rarity = GetItemRarity(sel.item.Level);
+    const rules = GetItemRarityRule(rarity);
     return this.InventoryRunes()
       .map((r, i) => ({
         rune: r,

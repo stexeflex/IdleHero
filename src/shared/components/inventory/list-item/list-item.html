@@ -3,14 +3,28 @@
   <div class="info">
     <div
       class="name"
-      [class.common--font]="item().Rarity === 'Common'"
-      [class.magic--font]="item().Rarity === 'Magic'"
-      [class.rare--font]="item().Rarity === 'Rare'"
-      [class.epic--font]="item().Rarity === 'Epic'"
-      [class.legendary--font]="item().Rarity === 'Legendary'">
+      [class.common--font]="Rarity() === 'Common'"
+      [class.magic--font]="Rarity() === 'Magic'"
+      [class.rare--font]="Rarity() === 'Rare'"
+      [class.epic--font]="Rarity() === 'Epic'"
+      [class.legendary--font]="Rarity() === 'Legendary'">
       {{ item().Name.toUpperCase() }}
     </div>
-    <!-- <div class="meta">Lvl {{ item().Level }} • {{ item().Slot }}</div> -->
-    <div class="meta">[{{ item().Level }}] • {{ item().Slot }}</div>
+    <div class="meta">
+      <span class="tier">{{ item().Tier }}</span>
+      <span>•</span>
+      <span>{{ Rarity() }} {{ item().Type }}</span>
+      <span
+        [class.common--font]="Rarity() === 'Common'"
+        [class.magic--font]="Rarity() === 'Magic'"
+        [class.rare--font]="Rarity() === 'Rare'"
+        [class.epic--font]="Rarity() === 'Epic'"
+        [class.legendary--font]="Rarity() === 'Legendary'">
+        [{{ item().Level }}]
+      </span>
+    </div>
+  </div>
+  <div class="actions">
+    <ng-content></ng-content>
   </div>
 </div>

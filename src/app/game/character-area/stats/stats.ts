@@ -130,6 +130,10 @@ export class Stats {
         )
       },
       {
+        label: 'Highest Bleeding Tick',
+        value: this.decimalPipe.transform(0, '1.0-0')
+      },
+      {
         label: 'Highest Critical Hit',
         value: this.decimalPipe.transform(
           this.statisticsService.DamageStatistics().HighestCriticalHit,
@@ -142,6 +146,10 @@ export class Stats {
           this.statisticsService.DamageStatistics().HighestMultiHit,
           '1.0-0'
         )
+      },
+      {
+        label: 'Highest Multi Hit Chain',
+        value: this.decimalPipe.transform(0, '1.0-0')
       },
       {
         label: 'Highest Critical Multi Hit',

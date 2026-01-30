@@ -12,11 +12,6 @@
   @include overflow($display: grid, $max-height: 75vh);
   @include scrollbar();
   gap: $gap;
-
-  // Vertical gap between child elements
-  & > *:not(:last-child) {
-    // border-bottom: 1px solid $clr-border;
-  }
 }
 
 .list {
@@ -41,4 +36,17 @@
 
 .button-cancel {
   color: $clr-text-primary;
+}
+
+.list-item {
+  .show-on-hover {
+    display: none;
+  }
+
+  &:hover .show-on-hover,
+  &:focus-within .show-on-hover,
+  &:focus-visible .show-on-hover,
+  .show-on-hover:hover {
+    display: inline-block;
+  }
 }

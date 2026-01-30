@@ -39,23 +39,11 @@
     <!-- VARIANTS -->
     <div class="variants">
       @for (v of VariantsForSlot(); track v.Id) {
-        <button
-          class="variant"
-          [class.active]="SelectedVariant()?.Id === v.Id"
-          (click)="SelectVariant(v.Id)">
-          <app-icon [gear]="v.Icon" size="md"></app-icon>
-          <div class="variant-info">
-            <span>{{ v.Name.toUpperCase() }}</span>
-            @if (v.WeaponBaseDamage && v.WeaponBaseAttackSpeed) {
-              <span class="variant-weapon-stats">
-                DMG: {{ v.WeaponBaseDamage }} | APS: {{ v.WeaponBaseAttackSpeed }}
-              </span>
-            }
-            <span class="variant-innate">
-              {{ VariantLabel(v) }}
-            </span>
-          </div>
-        </button>
+        <app-item-variant-preview
+          [Variant]="v"
+          [Selected]="SelectedVariantId() === v.Id"
+          (OnSelectVariant)="SelectVariant($event)">
+        </app-item-variant-preview>
       }
     </div>
   </div>

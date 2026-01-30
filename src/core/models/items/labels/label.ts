@@ -51,7 +51,7 @@ export function LabelToString(label: Label, decimalPipe: DecimalPipe): string {
   const valueStr =
     label.ValueType === 'Flat'
       ? `${label.Value}`
-      : `${decimalPipe.transform(label.Value, '1.0-0')}%`;
+      : `${decimalPipe.transform(label.Value * 100, '1.0-0')}%`;
 
   // Example output: "+5 Strength" or "×20% Critical Strike Chance"
   return `${typeStr}${valueStr} ${label.Stat}`;

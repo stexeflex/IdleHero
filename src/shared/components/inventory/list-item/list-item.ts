@@ -1,7 +1,8 @@
-import { Component, input, output } from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
+import { Item, ItemRarity } from '../../../../core/models';
 
+import { GetItemRarity } from '../../../../core/systems/items';
 import { IconComponent } from '../../icon/icon.component';
-import { Item } from '../../../../core/models';
 
 @Component({
   selector: 'app-list-item',
@@ -17,4 +18,9 @@ export class ListItem {
   protected SelectItem(): void {
     this.onSelect.emit(this.item());
   }
+
+  protected readonly Rarity = computed<ItemRarity>(() => {
+    const rarity = GetItemRarity(this.item().Level);
+    return rarity;
+  });
 }

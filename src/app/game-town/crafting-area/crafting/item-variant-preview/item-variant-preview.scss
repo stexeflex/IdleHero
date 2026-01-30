@@ -1,0 +1,94 @@
+@use "sass:color";
+@use "index" as *;
+
+.variant.active {
+  // border-width: 4px;
+  background: $grad-ui-bg-lighten;
+}
+
+.variant {
+  @include button-text-font();
+  @include button-focus-visible-outline();
+
+  // @include flexbox($dir: column, $justify: center, $align: center);
+  @include panel($bg: $clr-ui-bg);
+  @include box-shadow();
+
+  display: grid;
+  grid:
+    "info icon" auto
+    "innate innate" auto
+    / 175px 100px;
+
+  gap: $gap;
+  text-align: left;
+}
+
+.variant-icon {
+  grid-area: icon;
+  justify-self: end;
+}
+
+.variant-info {
+  grid-area: info;
+  @include flexbox($dir: column, $justify: center, $align: center);
+
+  .item-name {
+    font-size: 1rem;
+    font-family: $font-family-header;
+    font-weight: bold;
+    color: $clr-highlight;
+  }
+
+  .item-type {
+    font-size: 0.9rem;
+    color: $clr-mute;
+    font-weight: normal;
+  }
+}
+
+.variant-weapon-stats {
+  @include flexbox($dir: row, $justify: center, $align: flex-start);
+  align-self: flex-start;
+
+  .separator {
+    font-size: 1.2rem;
+    margin: 0 calc($gap / 2);
+  }
+
+  .weapon-stat {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: calc($gap / 2);
+    align-items: baseline;
+
+    .value {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: $clr-highlight;
+    }
+
+    .label {
+      font-size: 0.8rem;
+      font-weight: normal;
+      color: $clr-text-primary;
+    }
+  }
+}
+
+.variant-innate {
+  grid-area: innate;
+  display: flex;
+  align-items: center;
+
+  .icon {
+    margin-right: calc($gap / 2);
+  }
+
+  .label {
+    font-size: 0.8rem;
+    font-style: italic;
+    color: $clr-mute;
+    color: $clr-mute;
+  }
+}

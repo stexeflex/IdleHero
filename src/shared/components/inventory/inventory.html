@@ -14,14 +14,20 @@
             </button>
           }
         </div>
-        @for (e of InventoryItems(); track e.Id) {
+        @for (e of EquippedItems(); track e.Id) {
           <app-list-item
+            class="list-item"
             [item]="e"
             [selected]="SelectedItem()?.item?.Id === e.Id"
             (onSelect)="SelectItemFromEquipped($event)">
+            @if (SelectedItem()?.item?.Id === e.Id) {
+              <button class="ih-button-secondary show-on-hover" (click)="UnequipSelected(e)">
+                UNEQUIP
+              </button>
+            }
           </app-list-item>
         }
-        @if (InventoryItems().length == 0) {
+        @if (EquippedItems().length == 0) {
           <div class="empty">
             <div class="name">No items equipped</div>
           </div>
@@ -32,7 +38,7 @@
     <!-- BAG -->
     <div class="list">
       <div class="list-title">
-        <h4>ITEMS</h4>
+        <h4>BAG</h4>
         @if (!ShowEquipped() && SelectedItem()?.item) {
           <button
             class="ih-button-icon button-cancel"
@@ -44,9 +50,15 @@
       </div>
       @for (it of InventoryItems(); track it.Id) {
         <app-list-item
+          class="list-item"
           [item]="it"
           [selected]="SelectedItem()?.item?.Id === it.Id"
           (onSelect)="SelectItemFromInventory($event)">
+          @if (SelectedItem()?.item?.Id === it.Id) {
+            <button class="ih-button-secondary show-on-hover" (click)="EquipSelected(it)">
+              EQUIP
+            </button>
+          }
         </app-list-item>
       }
       @if (InventoryItems().length == 0) {

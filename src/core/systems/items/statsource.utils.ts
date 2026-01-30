@@ -25,7 +25,7 @@ export function MapItemToStatSources(item: Item): StatSource[] {
     const weaponBaseDamage = itemDefinition.WeaponBaseDamage;
     if (weaponBaseDamage !== undefined) {
       const weaponBaseDamageStatSource = EmptyStatSource(`${itemDefinition.Id}_weapon_base_damage`);
-      weaponBaseDamageStatSource.Damage.Flat += weaponBaseDamage;
+      weaponBaseDamageStatSource.Damage.Flat += weaponBaseDamage[item.Level];
       statSources.push(weaponBaseDamageStatSource);
     }
 

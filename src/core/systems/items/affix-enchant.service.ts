@@ -1,5 +1,11 @@
 import { Affix, AffixDefinition, AffixTier, AffixTierSpec, Item, RarityRules } from '../../models';
-import { ExceedsMaxTierForItemLevel, GetItemRarityRule, NextTier, RandomInRange } from '.';
+import {
+  ExceedsMaxTierForItemLevel,
+  GetItemRarity,
+  GetItemRarityRule,
+  NextTier,
+  RandomInRange
+} from '.';
 
 import { Injectable } from '@angular/core';
 
@@ -11,7 +17,8 @@ export class AffixEnchantService {
    * @returns True if current count of Improved affixes is below rarity limit.
    */
   public CanEnchant(item: Item): boolean {
-    const rules: RarityRules = GetItemRarityRule(item.Rarity);
+    const rarity = GetItemRarity(item.Level);
+    const rules: RarityRules = GetItemRarityRule(rarity);
     const improvedCount: number = item.Affixes.filter((a) => a.Improved).length;
     return improvedCount < rules.MaxEnchantableAffixes;
   }

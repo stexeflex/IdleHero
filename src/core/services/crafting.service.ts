@@ -15,8 +15,11 @@ import {
   AffixEnchantService,
   AffixRerollService,
   ClampAffixTier,
+  GetItemRarity,
   GetItemRarityRule,
   ItemLevelService,
+  MinLevelForTier,
+  MinRarityForTier,
   RandomInRange
 } from '../systems/items';
 import { Injectable, inject } from '@angular/core';
@@ -43,15 +46,14 @@ export class CraftingService {
   /**
    * Crafts a brand new item from a variant and rarity at level 1.
    * @param variant The item variant definition.
-   * @param rarity The desired item rarity.
    * @param provider Optional cost provider.
    * @returns Operation result with created item when successful.
    */
   public CraftNewItem(
     variant: ItemVariantDefinition,
-    rarity: ItemRarity,
     provider?: CraftingCostProvider
   ): OperationResult {
+    const rarity = MinRarityForTier(variant.Tier);
     const cost = provider?.GetCraftItemCost(variant, rarity) ?? 0;
     if (provider && !provider.CanAfford(cost)) return { Success: false, Item: null as any };
 
@@ -61,8 +63,9 @@ export class CraftingService {
       Name: variant.Name,
       Icon: variant.Icon,
       Slot: variant.Slot,
-      Rarity: rarity,
-      Level: 1,
+      Type: variant.Type,
+      Tier: variant.Tier,
+      Level: MinLevelForTier(variant.Tier),
       Affixes: [],
       Rune: null
     };
@@ -102,7 +105,8 @@ export class CraftingService {
     definition: AffixDefinition,
     provider?: CraftingCostProvider
   ): OperationResult {
-    const rules: RarityRules = GetItemRarityRule(item.Rarity);
+    const rarity = GetItemRarity(item.Level);
+    const rules: RarityRules = GetItemRarityRule(rarity);
     if (!rules.AllowAffixReroll) return { Success: false, Item: item };
 
     if (affixIndex < 0 || affixIndex >= item.Affixes.length) {
@@ -159,7 +163,8 @@ export class CraftingService {
     desiredTier?: AffixTier,
     provider?: CraftingCostProvider
   ): OperationResult {
-    const rules: RarityRules = GetItemRarityRule(item.Rarity);
+    const rarity = GetItemRarity(item.Level);
+    const rules: RarityRules = GetItemRarityRule(rarity);
     if (item.Affixes.length >= rules.MaxAffixes) return { Success: false, Item: item };
     if (!definition.AllowedSlots.includes(item.Slot)) return { Success: false, Item: item };
 
@@ -231,7 +236,8 @@ export class CraftingService {
     quality: RuneQuality,
     provider?: CraftingCostProvider
   ): OperationResult {
-    const rules: RarityRules = GetItemRarityRule(item.Rarity);
+    const rarity = GetItemRarity(item.Level);
+    const rules: RarityRules = GetItemRarityRule(rarity);
 
     if (!definition.AllowedSlots.includes(item.Slot)) return { Success: false, Item: item };
     if (!rules.AllowedRuneQualities.includes(quality)) return { Success: false, Item: item };
