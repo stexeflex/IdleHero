@@ -14,6 +14,18 @@
   align-content: center;
 }
 
+.visible-in-portrait {
+  @media (min-width: $bp-sm) {
+    display: none;
+  }
+}
+
+.visible-in-landscape {
+  @media (max-width: $bp-sm) {
+    display: none;
+  }
+}
+
 .info-value {
   @include flexbox();
   gap: $gap;

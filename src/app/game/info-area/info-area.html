@@ -2,7 +2,9 @@
   <div class="info-value gold" title="Gold Amount">
     <app-gold [amount]="GoldAmount" size="md"></app-gold>
   </div>
-  <separator class="separator" [vertical]="true"></separator>
+
+  <separator class="separator visible-in-landscape" [vertical]="true"></separator>
+  <separator class="separator visible-in-portrait" [vertical]="false"></separator>
 
   @if (HasAnyKey) {
     <div class="info-value dungeon-key">
@@ -16,7 +18,9 @@
         <app-icon class="rare--font" symbol="skeletonkey" size="sm" title="Golden Key"></app-icon>
       }
     </div>
-    <separator class="separator" [vertical]="true"></separator>
+
+    <separator class="separator visible-in-landscape" [vertical]="true"></separator>
+    <separator class="separator visible-in-portrait" [vertical]="false"></separator>
   }
 
   <div class="info-value" title="Prestiges">
