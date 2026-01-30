@@ -1,50 +1,38 @@
 import { Component, inject, signal } from '@angular/core';
-import { TabDefinition, TabStrip } from '../../shared/components';
+import { Router, RouterOutlet } from '@angular/router';
 
 import { CharacterArea } from './character-area/character-area';
-import { CraftingArea } from './crafting-area/crafting-area';
-import { DungeonArea } from './dungeon-area/dungeon-area';
+import { CombatState } from '../../core/systems/combat';
+import { IconComponent } from '../../shared/components';
 import { InfoArea } from './info-area/info-area';
-import { InventoryArea } from './inventory-area/inventory-area';
 import { Menu } from './menu/menu';
 import { MenuService } from '../../shared/services';
-import { SkillTree } from './skill-tree/skill-tree';
 
 @Component({
   selector: 'app-game',
-  imports: [
-    CharacterArea,
-    InventoryArea,
-    Menu,
-    InfoArea,
-    SkillTree,
-    TabStrip,
-    DungeonArea,
-    CraftingArea
-  ],
+  imports: [CharacterArea, Menu, InfoArea, RouterOutlet, IconComponent],
   templateUrl: './game.html',
   styleUrl: './game.scss'
 })
 export class Game {
+  private router = inject(Router);
   private menuService = inject(MenuService);
+  private combatState = inject(CombatState);
 
   protected readonly title = signal('NOT SO IDLE HERO');
+  protected readonly currentArea = signal<'Town' | 'Dungeon'>('Town');
 
+  // UI State
   protected get IsMenuOpen(): boolean {
     return this.menuService.IsMenuOpen();
   }
 
-  protected get Tabs(): TabDefinition[] {
-    return [
-      { id: 'inventory', label: 'INVENTORY', disabled: false },
-      { id: 'skills', label: 'SKILLS', disabled: false },
-      { id: 'crafting', label: 'BLACKSMITH', disabled: false }
-    ];
+  protected get CanSwitchArea(): boolean {
+    return !this.combatState.InProgress();
   }
 
-  protected SelectedTab = signal<TabDefinition['id']>('inventory');
-
-  protected onTabSelected(tabId: TabDefinition['id']): void {
-    this.SelectedTab.set(tabId);
+  SwitchArea() {
+    this.currentArea.set(this.currentArea() === 'Town' ? 'Dungeon' : 'Town');
+    this.router.navigate([`/game/${this.currentArea().toLowerCase()}`]);
   }
 }

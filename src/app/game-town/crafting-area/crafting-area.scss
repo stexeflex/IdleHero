@@ -3,7 +3,7 @@
 
 .area {
   display: grid;
-  grid-template-columns: 1fr 350px;
+  grid-template-columns: 1fr $size-inventory-width;
   gap: $gap;
 }
 

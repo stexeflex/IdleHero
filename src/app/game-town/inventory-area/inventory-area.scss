@@ -2,14 +2,11 @@
 @use "index" as *;
 
 .inventory {
-  // height: 485px;
-
   display: grid;
 
   grid:
-    "loadout item-list" 1fr
-    "selected-item item-list" 1fr
-    / auto 1fr;
+    "loadout selected-item item-list" 1fr
+    / auto 1fr $size-inventory-width;
 
   gap: $gap;
 }

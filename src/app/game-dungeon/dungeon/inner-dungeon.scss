@@ -7,6 +7,18 @@
   gap: $gap;
 }
 
+.inner-dungeon {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: $gap;
+}
+
+@media (max-width: $bp-lg) {
+  .inner-dungeon {
+    grid-template-columns: 1fr;
+  }
+}
+
 .top-bar {
   @include panel();
   @include panel-shadow($border-width: 2px, $border-color: $clr-border);

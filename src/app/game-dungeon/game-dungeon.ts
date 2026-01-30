@@ -1,17 +1,16 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 
-import { DungeonRoomService } from '../../../core/services/dungeon-room.service';
+import { DungeonRoomService } from '../../core/services';
 import { DungeonRooms } from './dungeon-rooms/dungeon-rooms';
 import { InnerDungeon } from './dungeon/inner-dungeon';
 
 @Component({
-  selector: 'app-dungeon-area',
+  selector: 'app-game-dungeon',
   imports: [DungeonRooms, InnerDungeon],
-  templateUrl: './dungeon-area.html',
-  styleUrl: './dungeon-area.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: './game-dungeon.html',
+  styleUrl: './game-dungeon.scss'
 })
-export class DungeonArea {
+export class GameDungeon {
   private readonly dungeonRoom = inject(DungeonRoomService);
 
   // State

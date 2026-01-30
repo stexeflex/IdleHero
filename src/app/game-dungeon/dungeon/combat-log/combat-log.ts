@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { CombatLogEntry, DamageLogEntry } from '../../../../../core/models';
-import { IconComponent, Separator } from '../../../../../shared/components';
+import { CombatLogEntry, DamageLogEntry } from '../../../../core/models';
+import { IconComponent, Separator } from '../../../../shared/components';
 
 import { CombatActorIcon } from './combat-actor-icon/combat-actor-icon';
-import { CombatLogService } from '../../../../../core/services';
+import { CombatLogService } from '../../../../core/services';
 import { DecimalPipe } from '@angular/common';
 
 interface DamageLogEntryExtended {

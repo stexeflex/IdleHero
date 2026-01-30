@@ -9,9 +9,9 @@
   display: grid;
 
   grid:
-    "header info info" auto
-    "game character sidecontent" 1fr
-    / 1fr 650px 1fr;
+    "header info" auto
+    "character content" 1fr
+    / 650px 1fr;
 
   gap: $gap;
   padding: $gap;
@@ -22,18 +22,16 @@
     grid:
       "header" auto
       "info" auto
-      "game" 1fr
-      "character" auto
-      "sidecontent" auto
+      "character" 1fr
+      "content" 1fr
       / 1fr;
   }
 }
 
 .header,
 .info,
-.game-area,
 .character-area,
-.sidecontent {
+.content {
   @include panel();
   @include panel-shadow();
 }
@@ -50,19 +48,35 @@
 
 .info {
   grid-area: info;
-}
-
-.game-area {
-  grid-area: game;
+  display: flex;
 }
 
 .character-area {
   grid-area: character;
 }
 
-.sidecontent {
-  grid-area: sidecontent;
+.content {
+  grid-area: content;
+}
 
-  display: grid;
-  grid-template-rows: auto auto 1fr;
+.switch-area {
+  padding-right: $gap;
+  align-content: center;
+  justify-content: center;
+}
+
+.button-town {
+  color: $clr-highlight;
+
+  &:hover {
+    color: color.adjust($clr-highlight, $lightness: 10%);
+  }
+}
+
+.button-dungeon {
+  color: $clr-accent;
+
+  &:hover {
+    color: color.adjust($clr-accent, $lightness: 10%);
+  }
 }

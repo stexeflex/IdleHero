@@ -1,6 +1,6 @@
 <app-panel-header [title]="IsInArena() ? 'DUNGEON ARENA' : 'DUNGEON ENTRANCE'"></app-panel-header>
 
-<section class="dungeon">
+<main class="dungeon">
   @let dungeonRoom = CurrentDungeon();
   @if (dungeonRoom) {
     <div class="top-bar">
@@ -31,7 +31,9 @@
     </div>
   }
   @if (IsInArena()) {
-    <app-dungeon-arena></app-dungeon-arena>
-    <app-combat-log></app-combat-log>
+    <div class="inner-dungeon">
+      <app-dungeon-arena></app-dungeon-arena>
+      <app-combat-log></app-combat-log>
+    </div>
   }
-</section>
+</main>

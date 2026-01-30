@@ -1,45 +1,41 @@
 <div class="container" [class.opacity]="IsMenuOpen">
   <!-- HEADER -->
-  <div class="header">
+  <header class="header">
     <app-menu></app-menu>
     <div class="title">
       <h1>{{ title() }}</h1>
     </div>
-  </div>
+  </header>
 
   <!-- INFO AREA -->
-  <div class="info">
+  <section class="info">
+    <div class="switch-area">
+      <button class="ih-button-icon" (click)="SwitchArea()" [disabled]="!CanSwitchArea">
+        @if (currentArea() === "Dungeon") {
+          <app-icon
+            class="button-town"
+            places="barrackstent"
+            size="md"
+            title="Go to Town"></app-icon>
+        } @else {
+          <app-icon
+            class="button-dungeon"
+            places="dungeongate"
+            size="md"
+            title="Go to Dungeon"></app-icon>
+        }
+      </button>
+    </div>
     <app-info-area></app-info-area>
-  </div>
-
-  <!-- BATTLE AREA -->
-  <div class="game-area">
-    <app-dungeon-area></app-dungeon-area>
-  </div>
+  </section>
 
   <!-- CHARACTER AREA -->
-  <div class="character-area">
+  <aside class="character-area">
     <app-character-area></app-character-area>
-  </div>
+  </aside>
 
   <!-- SIDE CONTENT AREA -->
-  <div class="sidecontent">
-    <app-tab-strip
-      [tabs]="Tabs"
-      [selected]="SelectedTab()"
-      (selectedChange)="onTabSelected($event)"></app-tab-strip>
-    <div class="sidecontent__area">
-      @switch (SelectedTab()) {
-        @case ("inventory") {
-          <app-inventory-area></app-inventory-area>
-        }
-        @case ("skills") {
-          <app-skill-tree></app-skill-tree>
-        }
-        @case ("crafting") {
-          <app-crafting-area></app-crafting-area>
-        }
-      }
-    </div>
-  </div>
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
 </div>

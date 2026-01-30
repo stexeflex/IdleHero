@@ -1,5 +1,8 @@
 <section class="blacksmith-area">
-  <app-tab-strip [tabs]="Tabs" (selectedChange)="onTabSelected($event)"></app-tab-strip>
+  <app-tab-strip
+    [tabs]="Tabs"
+    [selected]="SelectedTab()"
+    (selectedChange)="onTabSelected($event)"></app-tab-strip>
   <div class="area">
     <!-- TAB AREA -->
     <div class="tab__area">

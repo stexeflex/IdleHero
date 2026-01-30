@@ -47,6 +47,12 @@ const ICON_CONFIGS = [
     outFile: path.join(workspaceRoot, "src", "shared", "components", "icon", "ui.icons.ts"),
     typeName: "UiIconName",
     constName: "UI_ICONS"
+  },
+  {
+    folder: "places",
+    outFile: path.join(workspaceRoot, "src", "shared", "components", "icon", "places.icons.ts"),
+    typeName: "PlacesIconName",
+    constName: "PLACES_ICONS"
   }
 ];
 

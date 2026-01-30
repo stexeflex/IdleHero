@@ -1,9 +1,9 @@
-import { Boss, DamageEvent, Hero } from '../../../../../core/models';
+import { Boss, DamageEvent, Hero } from '../../../../core/models';
 import { Component, OnDestroy, inject, signal } from '@angular/core';
-import { HealthBar, IconComponent } from '../../../../../shared/components';
+import { HealthBar, IconComponent } from '../../../../shared/components';
 
-import { CombatState } from '../../../../../core/systems/combat';
-import { DELAYS } from '../../../../../shared/constants';
+import { CombatState } from '../../../../core/systems/combat';
+import { DELAYS } from '../../../../shared/constants';
 import { Subscription } from 'rxjs';
 
 @Component({

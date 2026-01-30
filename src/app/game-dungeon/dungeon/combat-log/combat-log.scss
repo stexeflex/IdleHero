@@ -5,7 +5,7 @@
   @include panel();
   @include panel-shadow($border-width: 2px, $border-color: $clr-border);
 
-  @include overflow($display: flex, $max-height: 550px);
+  @include overflow($display: flex, $max-height: 78vh);
   @include scrollbar($size: 25px);
 
   display: flex;

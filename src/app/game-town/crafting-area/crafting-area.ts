@@ -46,7 +46,7 @@ export class CraftingArea {
     ];
   }
 
-  protected SelectedTab = signal<TabDefinition['id'] | null>('crafting');
+  protected SelectedTab = signal<TabDefinition['id']>('crafting');
 
   protected onTabSelected(tabId: TabDefinition['id']): void {
     this.SelectedTab.set(tabId);

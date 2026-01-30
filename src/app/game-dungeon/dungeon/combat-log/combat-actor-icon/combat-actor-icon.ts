@@ -1,10 +1,10 @@
-import { Boss, Hero } from '../../../../../../core/models';
+import { Boss, Hero } from '../../../../../core/models';
 import {
   CharactersIconName,
   CreaturesIconName,
   IconComponent,
   IconSize
-} from '../../../../../../shared/components';
+} from '../../../../../shared/components';
 import { Component, input } from '@angular/core';
 
 @Component({

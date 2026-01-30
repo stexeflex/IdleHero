@@ -1,9 +1,9 @@
 import { Component, computed, inject } from '@angular/core';
-import { IconComponent, PanelHeader } from '../../../../shared/components';
+import { IconComponent, PanelHeader } from '../../../shared/components';
 
-import { DungeonRoomService } from '../../../../core/services';
-import { DungeonType } from '../../../../core/models';
-import { GetAllDungeons } from '../../../../core/constants';
+import { DungeonRoomService } from '../../../core/services';
+import { DungeonType } from '../../../core/models';
+import { GetAllDungeons } from '../../../core/constants';
 
 @Component({
   selector: 'app-dungeon-rooms',

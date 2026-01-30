@@ -1,11 +1,11 @@
-import { CombatEngine, CombatState } from '../../../../core/systems/combat';
+import { CombatEngine, CombatState } from '../../../core/systems/combat';
 import { Component, OnDestroy, computed, inject, signal } from '@angular/core';
-import { IconComponent, PanelHeader } from '../../../../shared/components';
+import { IconComponent, PanelHeader } from '../../../shared/components';
 
 import { CombatLog } from './combat-log/combat-log';
-import { DELAYS } from '../../../../shared/constants';
+import { DELAYS } from '../../../shared/constants';
 import { DungeonArena } from './dungeon-arena/dungeon-arena';
-import { DungeonRoomService } from '../../../../core/services';
+import { DungeonRoomService } from '../../../core/services';
 
 @Component({
   selector: 'app-inner-dungeon',
