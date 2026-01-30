@@ -1,4 +1,4 @@
-import { ItemRarity, RarityRulesMap } from '../../models';
+import { ItemRarity, ItemTier, RarityRulesMap } from '../../models';
 
 export const ITEM_RARITY_RULES: RarityRulesMap = {
   Common: {
@@ -39,4 +39,10 @@ export const ITEM_RARITY_COST_MULTIPLIER: Record<ItemRarity, number> = {
   Rare: 4,
   Epic: 8,
   Legendary: 16
+};
+
+export const ITEM_TIER_COST_MULTIPLIER: Record<ItemTier, number> = {
+  I: 1,
+  II: 5,
+  III: 20
 };

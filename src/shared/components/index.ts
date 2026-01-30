@@ -12,6 +12,7 @@ export * from './icon/icon-size.type';
 export * from './icon/icon.component';
 export * from './icon/symbols.icons';
 export * from './icon/ui.icons';
+export * from './inventory/inventory';
 export * from './number-value/number-value';
 export * from './panel-header/panel-header';
 export * from './separator/separator';

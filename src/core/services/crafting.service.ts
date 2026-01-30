@@ -3,6 +3,8 @@ import {
   AffixDefinition,
   AffixTier,
   Item,
+  ItemRarity,
+  ItemVariantDefinition,
   OperationResult,
   RarityRules,
   Rune,
@@ -20,6 +22,7 @@ import {
 import { Injectable, inject } from '@angular/core';
 
 export interface CraftingCostProvider {
+  GetCraftItemCost(variant: ItemVariantDefinition, rarity: ItemRarity): number;
   GetLevelUpCost(item: Item): number;
   GetRerollAffixCost(item: Item, affixIndex: number): number;
   GetEnchantAffixCost(item: Item, affixIndex: number): number;
@@ -36,6 +39,37 @@ export class CraftingService {
   private readonly Level = inject(ItemLevelService);
   private readonly Reroll = inject(AffixRerollService);
   private readonly Enchant = inject(AffixEnchantService);
+
+  /**
+   * Crafts a brand new item from a variant and rarity at level 1.
+   * @param variant The item variant definition.
+   * @param rarity The desired item rarity.
+   * @param provider Optional cost provider.
+   * @returns Operation result with created item when successful.
+   */
+  public CraftNewItem(
+    variant: ItemVariantDefinition,
+    rarity: ItemRarity,
+    provider?: CraftingCostProvider
+  ): OperationResult {
+    const cost = provider?.GetCraftItemCost(variant, rarity) ?? 0;
+    if (provider && !provider.CanAfford(cost)) return { Success: false, Item: null as any };
+
+    const item: Item = {
+      Id: `item_${Date.now()}_${Math.random().toString(36).slice(2)}`,
+      DefinitionId: variant.Id,
+      Name: variant.Name,
+      Icon: variant.Icon,
+      Slot: variant.Slot,
+      Rarity: rarity,
+      Level: 1,
+      Affixes: [],
+      Rune: null
+    };
+
+    if (provider) provider.Charge(cost);
+    return { Success: true, Item: item, Cost: cost };
+  }
 
   /**
    * Levels up an item by one (max 5). Applies optional cost provider.
@@ -211,6 +245,7 @@ export class CraftingService {
     const rolled = RandomInRange(spec.Value.Min, spec.Value.Max);
 
     const newRune: Rune = {
+      Id: `rune_${Date.now()}_${Math.random().toString(36).slice(2)}`,
       DefinitionId: definition.Id,
       Quality: quality,
       RolledValue: rolled

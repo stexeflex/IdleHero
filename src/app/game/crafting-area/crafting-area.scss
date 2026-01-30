@@ -1,0 +1,79 @@
+@use "sass:color";
+@use "index" as *;
+
+.area {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: $gap;
+}
+
+.panel {
+  @include panel();
+  @include panel-shadow($border-width: 2px, $border-color: $clr-border);
+  @include flexbox($dir: column, $justify: flex-start, $align: stretch);
+  gap: $gap;
+}
+
+.panel-header {
+  text-align: center;
+
+  border-bottom: 1px solid $clr-border;
+  padding: calc($gap / 2);
+}
+
+.panel-body {
+  display: grid;
+  gap: $gap;
+
+  @include overflow($max-height: 75vh);
+  @include scrollbar();
+
+  // Vertical gap between child elements
+  & > *:not(:last-child) {
+    // border-bottom: 1px solid $clr-border;
+  }
+}
+
+.list {
+  display: grid;
+  padding: calc($gap / 3) 2px;
+  gap: calc($gap / 2);
+}
+
+.list-title {
+  border-bottom: 1px solid $clr-border;
+}
+
+.list-item {
+  cursor: pointer;
+  @include disable-text-selection();
+  @include flexbox($dir: column, $justify: space-between, $align: flex-start);
+
+  gap: calc($gap / 3);
+  padding: calc($gap / 3);
+  border-radius: $border-radius;
+
+  &:hover {
+    background: $grad-ui-bg-lighten;
+  }
+
+  &.selected {
+    outline: 1px solid $clr-border;
+    background: $grad-ui-bg-lighten;
+  }
+
+  .name {
+    font-weight: 600;
+  }
+
+  .meta {
+    // color: $clr-mute;
+    font-size: 0.8rem;
+  }
+}
+
+.empty {
+  @include disable-text-selection();
+  color: $clr-mute;
+  font-style: italic;
+}

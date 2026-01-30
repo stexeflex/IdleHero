@@ -10,6 +10,9 @@ import { STATS_CONFIG } from '../../../constants';
 export interface ComputedStats extends BaseStats {}
 
 export interface BaseStats extends CombatStats {
+  BleedingChance: number; // 0..1
+  BleedingDamage: number; // >= 0
+
   CriticalHitChance: number; // 0..1
   CriticalHitDamage: number; // >= 1
 
@@ -30,6 +33,8 @@ export function InitialBaseStats(): BaseStats {
   return {
     AttackSpeed: STATS_CONFIG.BASE.ATTACK_SPEED,
     Damage: STATS_CONFIG.BASE.DAMAGE,
+    BleedingChance: STATS_CONFIG.BASE.BLEEDING_CHANCE,
+    BleedingDamage: STATS_CONFIG.BASE.BLEEDING_DAMAGE,
     CriticalHitChance: STATS_CONFIG.BASE.CRIT_CHANCE,
     CriticalHitDamage: STATS_CONFIG.BASE.CRIT_DAMAGE,
     MultiHitChance: STATS_CONFIG.BASE.MULTI_HIT_CHANCE,

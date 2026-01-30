@@ -1,11 +1,12 @@
 import { Component, ElementRef, HostListener, inject } from '@angular/core';
 
 import { GearLoadout } from './gear-slots/gear-loadout';
+import { Inventory } from '../../../shared/components';
 import { ItemSlot } from '../../../core/models';
 
 @Component({
   selector: 'app-inventory-area',
-  imports: [GearLoadout],
+  imports: [GearLoadout, Inventory],
   templateUrl: './inventory-area.html',
   styleUrl: './inventory-area.scss'
 })

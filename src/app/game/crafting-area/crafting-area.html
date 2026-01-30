@@ -1,0 +1,20 @@
+<section class="blacksmith-area">
+  <app-tab-strip [tabs]="Tabs" (selectedChange)="onTabSelected($event)"></app-tab-strip>
+  <div class="area">
+    <!-- TAB AREA -->
+    <div class="tab__area">
+      @switch (SelectedTab()) {
+        @case ("crafting") {
+          <app-crafting></app-crafting>
+        }
+        @case ("enchanting") {
+          <app-enchanting></app-enchanting>
+        }
+      }
+    </div>
+    <!-- INVENTORY -->
+    <div>
+      <app-inventory [ShowEquipped]="true"></app-inventory>
+    </div>
+  </div>
+</section>

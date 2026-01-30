@@ -3,6 +3,7 @@ import { GearSlotIconName, IconComponent } from '../../../../shared/components';
 import { ItemRarity, ItemSlot } from '../../../../core/models';
 
 import { GearLoadoutService } from '../../../../core/services';
+import { ICONS_CONFIG } from '../../../../core/constants';
 
 interface ItemSlotInfo {
   IsSelected: boolean;
@@ -27,12 +28,12 @@ export class GearLoadout {
 
   protected get ItemSlots(): { slot: ItemSlot; class: string; icon: GearSlotIconName }[] {
     return [
-      { slot: 'Weapon', class: 'weapon gear-slot-large', icon: 'relicblade' },
-      { slot: 'OffHand', class: 'offhand gear-slot-large', icon: 'dragonshield' },
-      { slot: 'Head', class: 'head', icon: 'brutalhelm' },
-      { slot: 'Chest', class: 'chest', icon: 'chestarmor' },
-      { slot: 'Legs', class: 'legs', icon: 'metalskirt' },
-      { slot: 'Boots', class: 'boots', icon: 'legarmor' }
+      { slot: 'Weapon', class: 'weapon gear-slot-large', icon: ICONS_CONFIG['DEFAULT_WEAPON'] },
+      { slot: 'OffHand', class: 'offhand gear-slot-large', icon: ICONS_CONFIG['DEFAULT_OFFHAND'] },
+      { slot: 'Head', class: 'head', icon: ICONS_CONFIG['DEFAULT_HEAD'] },
+      { slot: 'Chest', class: 'chest', icon: ICONS_CONFIG['DEFAULT_CHEST'] },
+      { slot: 'Legs', class: 'legs', icon: ICONS_CONFIG['DEFAULT_LEGS'] },
+      { slot: 'Boots', class: 'boots', icon: ICONS_CONFIG['DEFAULT_BOOTS'] }
     ];
   }
 

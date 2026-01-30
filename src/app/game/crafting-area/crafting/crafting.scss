@@ -1,0 +1,123 @@
+@use "sass:color";
+@use "index" as *;
+
+.panel {
+  @include panel();
+  @include panel-shadow($border-width: 2px, $border-color: $clr-border);
+  @include flexbox($dir: column, $align: stretch);
+  gap: $gap;
+}
+
+.panel-header {
+  @include flexbox($justify: space-between, $align: center);
+  border-bottom: 1px solid $clr-border;
+  padding: calc($gap / 2);
+}
+
+.actions {
+  @include flexbox($align: center);
+  gap: calc($gap / 2);
+}
+
+.action {
+  font-size: 1.1rem;
+  min-height: 35px;
+  min-width: 80px;
+}
+
+.panel-body {
+  display: grid;
+  grid:
+    "slots tiers" auto
+    "slots variants" 1fr
+    / auto 1fr;
+
+  gap: $gap;
+  // padding: calc($gap / 2);
+}
+
+.slots {
+  grid-area: slots;
+  // @include flexbox($dir: column, $justify: flex-start, $align: flex-start);
+  display: grid;
+  justify-content: start;
+  align-content: start;
+  gap: $gap;
+}
+
+$slot-size: 75px;
+
+.slot {
+  @include button-text-font();
+  @include button-focus-visible-outline();
+
+  @include flexbox($dir: column, $justify: center, $align: center);
+  @include panel($bg: $clr-ui-bg);
+  @include box-shadow();
+
+  height: $slot-size;
+  width: $slot-size;
+
+  font-weight: normal;
+}
+
+.slot.active,
+.tier.active,
+.variant.active {
+  // border-width: 4px;
+  background: $grad-ui-bg-lighten;
+}
+
+.tiers {
+  grid-area: tiers;
+  @include flexbox($dir: row, $justify: space-around, $align: center);
+  gap: $gap;
+  height: 44px;
+}
+
+.tier {
+  @include button-text-font();
+  @include button-focus-visible-outline();
+
+  @include flexbox($dir: column, $justify: center, $align: center);
+  @include panel($bg: $clr-ui-bg);
+  @include box-shadow();
+
+  min-width: 80px;
+}
+
+.variants {
+  grid-area: variants;
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: $gap;
+
+  @include overflow($display: grid, $max-height: 68vh);
+  @include scrollbar($size: 0.8rem);
+  padding: calc($gap / 2);
+}
+
+.variant {
+  @include button-text-font();
+  @include button-focus-visible-outline();
+
+  @include flexbox($dir: column, $justify: center, $align: center);
+  @include panel($bg: $clr-ui-bg);
+  @include box-shadow();
+}
+
+.variant-info {
+  @include flexbox($dir: column, $justify: center, $align: center);
+  font-size: 1rem;
+}
+
+.variant-weapon-stats {
+  font-size: 0.8rem;
+  font-weight: normal;
+}
+
+.variant-innate {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: $clr-mute;
+}

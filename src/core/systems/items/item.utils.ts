@@ -6,6 +6,7 @@ export function GetItemRarityRule(rarity: ItemRarity): RarityRules {
 }
 
 export function NextLevel(item: Item): ItemLevel {
+  // TODO: Respect max level per rarity
   const nextLevel: ItemLevel = Math.min(ITEM_CONFIG.LEVEL.MAX, item.Level + 1) as ItemLevel;
   return nextLevel;
 }

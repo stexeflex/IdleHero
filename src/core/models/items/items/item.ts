@@ -1,7 +1,11 @@
 import { Affix } from '../affixes/affix';
+import { GearSlotIconName } from '../../../../shared/components';
 import { ItemLevel } from './item-level.type';
 import { ItemRarity } from './item-rarity.enum';
 import { ItemSlot } from './item-slot.enum';
+import { ItemTier } from './item-tier.type';
+import { ItemType } from './item-type.type';
+import { Label } from '../labels/label';
 import { Rune } from '../runes/rune';
 import { StatSource } from '../../combat/stats/stat-source.type';
 
@@ -10,8 +14,8 @@ import { StatSource } from '../../combat/stats/stat-source.type';
  * Provides per-level values rather than formulas to keep data model simple and tunable.
  */
 export interface InnateSpec {
-  /** Human-readable label, e.g., "Base Damage" */
-  Label: string;
+  /** Human-readable label */
+  ToLabel: (value: number) => Label;
 
   /** Values for each item level (1..5). */
   ValuesByLevel: Record<ItemLevel, number>;
@@ -23,12 +27,28 @@ export interface InnateSpec {
   MapToStatSource: (value: number) => StatSource;
 }
 
-/** Item variant (e.g., Sword vs Wand) with its innate spec and slot constraints. */
+/** Item variant with its innate spec and slot constraints. */
 export interface ItemVariantDefinition {
   Id: string;
   Name: string;
+  Icon: GearSlotIconName;
   Slot: ItemSlot;
+  Type: ItemType;
+  Tier: ItemTier;
   Innate: InnateSpec;
+
+  /**
+   * Weapon-only base damage value used in damage calculations.
+   * Example: 15 for broadsword, 25 for battleaxe.
+   * Increased by weapon level.
+   */
+  WeaponBaseDamage?: number;
+
+  /**
+   * Weapon-only multiplier that defines the base attack speed identity of the weapon.
+   * Example: 0.8 for heavy axe, 1.0 for sword, 1.2 for dagger.
+   */
+  WeaponBaseAttackSpeed?: number;
 }
 
 /** Concrete item instance players own/craft/enchant. */
@@ -39,18 +59,18 @@ export interface Item {
   DefinitionId: string;
 
   Name: string;
-  Description?: string;
-
-  /** Required player level to equip the item */
-  LevelRequirement: number;
+  Icon: GearSlotIconName;
 
   Slot: ItemSlot;
   Rarity: ItemRarity;
   Level: ItemLevel;
 
+  /** Weapon-only base damage after level scaling. */
+  WeaponDamage?: number;
+
   /** Rolled/enchanted affixes currently on the item */
   Affixes: Affix[];
 
-  /** Optional rune socketed */
+  /** Socketed Rune */
   Rune?: Rune | null;
 }

@@ -46,9 +46,11 @@ export function ComputeStats(
   const accuracy = ComputeAccuracy(sources, effectiveDex);
   const evasion = ComputeEvasion(sources, effectiveDex);
 
-  const stats = {
+  const stats: ComputedStats = {
     AttackSpeed: attackSpeed,
     Damage: damage,
+    BleedingChance: baseStats.BleedingChance,
+    BleedingDamage: baseStats.BleedingDamage,
     CriticalHitChance: critChance,
     CriticalHitDamage: critMultiplier,
     MultiHitChance: multiHitChance,

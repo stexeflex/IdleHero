@@ -55,8 +55,7 @@ export class GearLoadoutService {
    * @returns true if the item can be equipped, false otherwise
    */
   public CanEquip(item: Item): boolean {
-    // TODO: check hero level
-    return item.LevelRequirement >= 1;
+    return true;
   }
 
   /**

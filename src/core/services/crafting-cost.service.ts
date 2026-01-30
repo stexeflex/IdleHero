@@ -1,10 +1,17 @@
-import { AffixDefinition, Item, RuneDefinition, RuneQuality } from '../models';
+import {
+  AffixDefinition,
+  Item,
+  ItemRarity,
+  ItemVariantDefinition,
+  RuneDefinition,
+  RuneQuality
+} from '../models';
+import { ITEM_RARITY_COST_MULTIPLIER, ITEM_TIER_COST_MULTIPLIER } from '../constants';
 import { Injectable, inject } from '@angular/core';
 import { QualityIndex, TierIndex } from '../systems/items';
 
 import { CraftingCostProvider } from './crafting.service';
 import { GoldService } from './gold.service';
-import { ITEM_RARITY_COST_MULTIPLIER } from '../constants';
 
 @Injectable({ providedIn: 'root' })
 export class GoldCostProvider implements CraftingCostProvider {
@@ -15,6 +22,14 @@ export class GoldCostProvider implements CraftingCostProvider {
     // Scale by rarity and current level; modest bump per existing affix
     const affixFactor = 1 + Math.max(0, item.Affixes.length) * 0.15;
     return Math.floor(100 * mult * item.Level * affixFactor);
+  }
+
+  public GetCraftItemCost(variant: ItemVariantDefinition, rarity: ItemRarity): number {
+    const rarityMult = ITEM_RARITY_COST_MULTIPLIER[rarity];
+    const tierMult = ITEM_TIER_COST_MULTIPLIER[variant.Tier];
+    // Base by slot type; weapons a bit pricier than armor
+    const slotBase = variant.Slot === 'Weapon' ? 200 : 120;
+    return Math.floor(slotBase * rarityMult * tierMult);
   }
 
   public GetRerollAffixCost(item: Item, affixIndex: number): number {

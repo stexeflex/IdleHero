@@ -1,0 +1,44 @@
+@use "sass:color";
+@use "index" as *;
+
+.panel {
+  @include panel();
+  @include panel-shadow($border-width: 2px, $border-color: $clr-border);
+  @include flexbox($dir: column, $justify: flex-start, $align: stretch);
+  gap: $gap;
+}
+
+.panel-body {
+  @include overflow($display: grid, $max-height: 75vh);
+  @include scrollbar();
+  gap: $gap;
+
+  // Vertical gap between child elements
+  & > *:not(:last-child) {
+    // border-bottom: 1px solid $clr-border;
+  }
+}
+
+.list {
+  display: grid;
+  // List Items have outlines of 1px
+  padding: 1px;
+  gap: calc($gap / 2);
+}
+
+.list-title {
+  @include flexbox($dir: row, $justify: space-between, $align: center);
+  border-bottom: 1px solid $clr-border;
+  padding-bottom: calc($gap / 3);
+  min-height: 30px;
+}
+
+.empty {
+  @include disable-text-selection();
+  color: $clr-mute;
+  font-style: italic;
+}
+
+.button-cancel {
+  color: $clr-text-primary;
+}

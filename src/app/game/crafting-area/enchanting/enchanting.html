@@ -1,0 +1,86 @@
+<div class="panel">
+  <div class="panel-header">Item bearbeiten</div>
+  <div class="panel-body">
+    @if (SelectedItem() === null) {
+      <div class="empty">Wähle ein Item zum Bearbeiten.</div>
+    } @else {
+      @let it = SelectedItem()!.item;
+
+      <div class="item-header">
+        <div class="title">{{ it.Name }}</div>
+        <div class="badge">{{ it.Rarity }}</div>
+        <div class="spacer"></div>
+        <button class="primary" (click)="LevelUpSelected()">
+          Level Up ({{ cost.GetLevelUpCost(it) }})
+        </button>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Affixes</div>
+        @if (it.Affixes.length === 0) {
+          <div class="empty">Keine Affixes vorhanden.</div>
+        }
+        @for (a of it.Affixes; track $index) {
+          @let idx = $index;
+          <div class="affix-row">
+            <div class="affix-name">
+              {{ AffixDefById(a.DefinitionId)?.Name || a.DefinitionId }}
+              <span class="tier">[{{ a.Tier }}]</span>
+            </div>
+            <div class="affix-value">{{ a.RolledValue }}</div>
+            <div class="row-actions">
+              <button class="tiny" (click)="RerollAffixOnSelected(idx)">
+                Reroll ({{ cost.GetRerollAffixCost(it, idx) }})
+              </button>
+              <button class="tiny" (click)="EnchantAffixOnSelected(idx)">
+                Enchant ({{ cost.GetEnchantAffixCost(it, idx) }})
+              </button>
+            </div>
+          </div>
+        }
+        <div class="add-affix">
+          <div class="label">Affix hinzufügen</div>
+          <div class="choices wrap">
+            @for (d of AllowedAffixDefinitions(); track d.Id) {
+              <button class="choice" (click)="AddAffixToSelected(d.Id)">
+                {{ d.Name }} ({{ cost.GetAddAffixCost(SelectedItem()!.item, d) }})
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Rune</div>
+        @if (!it.Rune) {
+          <div class="empty">Keine Rune gesockelt.</div>
+          <div class="list">
+            <div class="list-title">Aus Inventar socketen</div>
+            @for (r of EligibleRunesFromInventory(); track r.index) {
+              <div class="list-item">
+                <div class="name">{{ r.definition?.Name }} ({{ r.rune.Quality }})</div>
+                <div class="meta">Wert: {{ r.rune.RolledValue }}</div>
+                <div class="row-actions">
+                  <button class="tiny" (click)="SocketRuneFromInventory(r.index)">
+                    Socket ({{ cost.GetSocketRuneCost(it, r.definition!, r.rune.Quality) }})
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          @let rDef = RuneDefById(it.Rune!.DefinitionId);
+          <div class="rune-row">
+            <div class="name">{{ rDef?.Name }} ({{ it.Rune!.Quality }})</div>
+            <div class="meta">Wert: {{ it.Rune!.RolledValue }}</div>
+            <div class="row-actions">
+              <button class="tiny" (click)="UnsocketRuneFromSelected()">
+                Unsocket ({{ cost.GetUnsocketRuneCost(it) }})
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

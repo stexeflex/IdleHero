@@ -1,0 +1,59 @@
+<div class="panel">
+  <div class="panel-body">
+    @if (ShowEquipped()) {
+      <!-- EQUIPPED -->
+      <div class="list">
+        <div class="list-title">
+          <h4>EQUIPPED</h4>
+          @if (SelectedItem()?.item) {
+            <button
+              class="ih-button-icon button-cancel"
+              (click)="DeselectGear()"
+              title="Clear Selection">
+              <app-icon ui="cancel" size="sm"></app-icon>
+            </button>
+          }
+        </div>
+        @for (e of InventoryItems(); track e.Id) {
+          <app-list-item
+            [item]="e"
+            [selected]="SelectedItem()?.item?.Id === e.Id"
+            (onSelect)="SelectItemFromEquipped($event)">
+          </app-list-item>
+        }
+        @if (InventoryItems().length == 0) {
+          <div class="empty">
+            <div class="name">No items equipped</div>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- BAG -->
+    <div class="list">
+      <div class="list-title">
+        <h4>ITEMS</h4>
+        @if (!ShowEquipped() && SelectedItem()?.item) {
+          <button
+            class="ih-button-icon button-cancel"
+            (click)="DeselectGear()"
+            title="Clear Selection">
+            <app-icon ui="cancel" size="sm"></app-icon>
+          </button>
+        }
+      </div>
+      @for (it of InventoryItems(); track it.Id) {
+        <app-list-item
+          [item]="it"
+          [selected]="SelectedItem()?.item?.Id === it.Id"
+          (onSelect)="SelectItemFromInventory($event)">
+        </app-list-item>
+      }
+      @if (InventoryItems().length == 0) {
+        <div class="empty">
+          <div class="name">No items in bag</div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

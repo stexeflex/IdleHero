@@ -1,0 +1,99 @@
+@use "sass:color";
+@use "index" as *;
+
+.panel {
+  @include panel();
+  @include panel-shadow($border-width: 2px, $border-color: $clr-border);
+  @include flexbox($dir: column, $justify: flex-start, $align: stretch);
+  gap: $gap;
+}
+
+.panel-header {
+  text-align: center;
+
+  border-bottom: 1px solid $clr-border;
+  padding: calc($gap / 2);
+}
+
+.panel-body {
+  display: grid;
+  gap: $gap;
+
+  @include overflow($max-height: 75vh);
+  @include scrollbar();
+
+  // Vertical gap between child elements
+  & > *:not(:last-child) {
+    // border-bottom: 1px solid $clr-border;
+  }
+}
+
+.item-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+
+  .title {
+    font-weight: 700;
+  }
+
+  .badge {
+    background: $grad-ui-bg-lighten;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: $border-radius;
+    padding: 0.1rem 0.4rem;
+    font-size: 0.8rem;
+  }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+}
+
+.section {
+  margin-top: 0.75rem;
+}
+
+.section-title {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.empty {
+  @include disable-text-selection();
+  color: $clr-mute;
+  font-style: italic;
+}
+
+.affix-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+
+  .affix-name {
+    .tier {
+      color: $clr-mute;
+      font-size: 0.8rem;
+    }
+  }
+}
+
+.add-affix {
+  margin-top: 0.5rem;
+
+  .label {
+    color: $clr-mute;
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+  }
+}
+
+.rune-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.25rem 0;
+}

@@ -21,6 +21,7 @@ export class ItemLevelService {
    */
   public LevelUp(item: Item): Item {
     const nextLevel: ItemLevel = NextLevel(item);
+    // TODO: Increase WeaponDamage based on some formula involving base damage and level
     return { ...item, Level: nextLevel };
   }
 

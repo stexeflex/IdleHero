@@ -23,7 +23,7 @@ export class Stats {
   private readonly decimalPipe: DecimalPipe;
   private readonly percentPipe: PercentPipe;
 
-  protected AttributesExpanded = signal<boolean>(false);
+  protected AttributesExpanded = signal<boolean>(true);
   protected StatsExpanded = signal<boolean>(true);
   protected UtilityStatsExpanded = signal<boolean>(true);
   protected StatisticsExpanded = signal<boolean>(false);
@@ -66,17 +66,21 @@ export class Stats {
     ];
   }
 
-  get Stats(): { label: string; value: string | null }[] {
+  get Stats(): { label: string; value: any | null }[] {
     const combatStats = this.statsService.Effective();
 
     return [
       {
-        label: 'Attack Speed',
-        value: this.percentPipe.transform(combatStats.AttackSpeed, '1.0-0')
+        label: 'Bleeding Chance',
+        value: this.percentPipe.transform(0.0, '1.0-0')
+      },
+      {
+        label: 'Bleeding Damage',
+        value: this.percentPipe.transform(0.25, '1.0-0')
       },
       {
         label: 'Critical Hit Chance',
-        value: this.percentPipe.transform(combatStats.CriticalHitChance, '1.0-1')
+        value: this.percentPipe.transform(combatStats.CriticalHitChance, '1.0-0')
       },
       {
         label: 'Critical Hit Damage',
@@ -84,11 +88,11 @@ export class Stats {
       },
       {
         label: 'Multi Hit Chance',
-        value: this.percentPipe.transform(combatStats.MultiHitChance, '1.0-1')
+        value: this.percentPipe.transform(combatStats.MultiHitChance, '1.0-0')
       },
       {
         label: 'Multi Hit Chain',
-        value: this.percentPipe.transform(combatStats.MultiHitChainFactor, '1.0-1')
+        value: this.percentPipe.transform(combatStats.MultiHitChainFactor, '1.0-0')
       },
       {
         label: 'Multi Hit Damage',
@@ -102,12 +106,16 @@ export class Stats {
 
     return [
       {
+        label: 'Attack Speed',
+        value: this.percentPipe.transform(combatStats.AttackSpeed, '1.0-0')
+      },
+      {
         label: 'Accuracy',
-        value: this.percentPipe.transform(combatStats.Accuracy, '1.0-1')
+        value: this.percentPipe.transform(combatStats.Accuracy, '1.0-0')
       },
       {
         label: 'Evasion',
-        value: this.percentPipe.transform(combatStats.Evasion, '1.0-1')
+        value: this.percentPipe.transform(combatStats.Evasion, '1.0-0')
       }
     ];
   }

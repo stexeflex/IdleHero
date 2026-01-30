@@ -1,0 +1,16 @@
+<div class="list-item" [class.selected]="selected()" (click)="SelectItem()">
+  <app-icon class="gear-slot__icon" [gear]="item().Icon" size="md"></app-icon>
+  <div class="info">
+    <div
+      class="name"
+      [class.common--font]="item().Rarity === 'Common'"
+      [class.magic--font]="item().Rarity === 'Magic'"
+      [class.rare--font]="item().Rarity === 'Rare'"
+      [class.epic--font]="item().Rarity === 'Epic'"
+      [class.legendary--font]="item().Rarity === 'Legendary'">
+      {{ item().Name.toUpperCase() }}
+    </div>
+    <!-- <div class="meta">Lvl {{ item().Level }} • {{ item().Slot }}</div> -->
+    <div class="meta">[{{ item().Level }}] • {{ item().Slot }}</div>
+  </div>
+</div>

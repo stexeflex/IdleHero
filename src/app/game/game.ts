@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { TabDefinition, TabStrip } from '../../shared/components';
 
 import { CharacterArea } from './character-area/character-area';
-import { CraftingArea } from './crafting-area/crafting-area/crafting-area';
+import { CraftingArea } from './crafting-area/crafting-area';
 import { DungeonArea } from './dungeon-area/dungeon-area';
 import { InfoArea } from './info-area/info-area';
 import { InventoryArea } from './inventory-area/inventory-area';
@@ -28,7 +28,7 @@ import { SkillTree } from './skill-tree/skill-tree';
 export class Game {
   private menuService = inject(MenuService);
 
-  protected readonly title = signal('IDLE HERO');
+  protected readonly title = signal('NOT SO IDLE HERO');
 
   protected get IsMenuOpen(): boolean {
     return this.menuService.IsMenuOpen();
@@ -38,11 +38,11 @@ export class Game {
     return [
       { id: 'inventory', label: 'INVENTORY', disabled: false },
       { id: 'skills', label: 'SKILLS', disabled: false },
-      { id: 'crafting', label: 'CRAFTING', disabled: false }
+      { id: 'crafting', label: 'BLACKSMITH', disabled: false }
     ];
   }
 
-  protected SelectedTab = signal<TabDefinition['id'] | null>('inventory');
+  protected SelectedTab = signal<TabDefinition['id']>('inventory');
 
   protected onTabSelected(tabId: TabDefinition['id']): void {
     this.SelectedTab.set(tabId);

@@ -46,6 +46,8 @@ export interface RuneDefinition {
 
 /** Concrete rune instance socketed on an item. */
 export interface Rune {
+  Id: string;
+
   /** References the RuneDefinition.Id this rune is based on. */
   DefinitionId: string;
 

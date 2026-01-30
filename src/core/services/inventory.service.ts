@@ -1,15 +1,20 @@
 import { InitialInventoryState, InventoryState } from '../models/items/inventory-state';
 import { Injectable, computed, signal } from '@angular/core';
-
-import { Item } from '../models';
+import { Item, Rune } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class InventoryService {
   private readonly State = signal<InventoryState>(InitialInventoryState());
 
   public readonly Capacity = computed<number>(() => this.State().Capacity);
+
   public readonly Items = computed<Item[]>(() => this.State().Items);
-  public readonly SlotsUsed = computed<number>(() => this.State().Items.length);
+  public readonly Runes = computed<Rune[]>(() => this.State().Runes);
+
+  public readonly SlotsUsed = computed<number>(() => {
+    const state = this.State();
+    return state.Items.length + state.Runes.length;
+  });
   public readonly SlotsFree = computed<number>(() =>
     Math.max(0, this.State().Capacity - this.SlotsUsed())
   );
@@ -121,7 +126,7 @@ export class InventoryService {
    * Clears all items from the inventory.
    */
   public Clear(): void {
-    this.State.update((s) => ({ ...s, Items: [] }));
+    this.State.update((s) => ({ ...s, Items: [], Runes: [] }));
   }
 
   /**
@@ -130,5 +135,69 @@ export class InventoryService {
    */
   public GetItems(): Item[] {
     return [...this.State().Items];
+  }
+
+  /**
+   * Adds a rune to the inventory if there is space.
+   * @param rune The rune to add.
+   * @returns True if added; false if full or invalid.
+   */
+  public AddRune(rune: Rune): boolean {
+    if (!rune) return false;
+    if (this.IsFull()) return false;
+    this.State.update((state) => ({ ...state, Runes: [...state.Runes, rune] }));
+    return true;
+  }
+
+  /**
+   * Removes the first rune matching DefinitionId and Quality (and optionally RolledValue) from inventory.
+   * @param rune The rune to remove.
+   * @returns True if removed; false otherwise.
+   */
+  public RemoveRune(rune: Rune): boolean {
+    if (!rune) return false;
+    let removed = false;
+
+    this.State.update((state) => {
+      const idx = state.Runes.findIndex((r) => r.Id === rune.Id);
+
+      if (idx < 0) return state;
+
+      const nextRunes = state.Runes.slice();
+      nextRunes.splice(idx, 1);
+      removed = true;
+
+      return { ...state, Runes: nextRunes };
+    });
+
+    return removed;
+  }
+
+  /**
+   * Removes a rune by index.
+   * @param index The index to remove.
+   * @returns The removed rune or null.
+   */
+  public RemoveRuneAt(index: number): Rune | null {
+    let removed: Rune | null = null;
+
+    this.State.update((state) => {
+      if (index < 0 || index >= state.Runes.length) return state;
+
+      const nextRunes = state.Runes.slice();
+      removed = nextRunes.splice(index, 1)[0] ?? null;
+
+      return { ...state, Runes: nextRunes };
+    });
+
+    return removed;
+  }
+
+  /**
+   * Snapshot of runes.
+   * @returns A copy of the rune list.
+   */
+  public GetRunes(): Rune[] {
+    return [...this.State().Runes];
   }
 }

@@ -20,34 +20,34 @@ export function MaxAffixTierForLevel(level: ItemLevel): AffixTier {
 }
 
 export const AFFIX_DEFINITIONS: AffixDefinition[] = [
-  {
-    Id: 'affix_strength_flat',
-    Name: '+Strength',
-    Groups: ['Offense'],
-    AllowedSlots: ['Weapon', 'Head', 'Chest', 'Legs', 'Boots', 'OffHand'],
-    Tiers: STRENGTH_TIERS,
-    Effect: {
-      Description: '+X Strength',
-      MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('affix_str_flat');
-        s.Strength.Flat = Math.floor(value);
-        return s;
-      }
-    }
-  },
-  {
-    Id: 'affix_damage_percent',
-    Name: '% Damage',
-    Groups: ['Offense'],
-    AllowedSlots: ['Weapon'],
-    Tiers: DAMAGE_PCT_TIERS,
-    Effect: {
-      Description: '+X% Damage',
-      MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('affix_dmg_pct');
-        s.Damage.Multiplier = Math.max(0, value / 100);
-        return s;
-      }
-    }
-  }
+  //   {
+  //     Id: 'affix_strength_flat',
+  //     Name: '+Strength',
+  //     Groups: ['Offense'],
+  //     AllowedSlots: ['Weapon', 'Head', 'Chest', 'Legs', 'Boots', 'OffHand'],
+  //     Tiers: STRENGTH_TIERS,
+  //     Effect: {
+  //       Description: '+X Strength',
+  //       MapToStatSource: (value: number): StatSource => {
+  //         const s = EmptyStatSource('affix_str_flat');
+  //         s.Strength.Flat = Math.floor(value);
+  //         return s;
+  //       }
+  //     }
+  //   },
+  //   {
+  //     Id: 'affix_damage_percent',
+  //     Name: '% Damage',
+  //     Groups: ['Offense'],
+  //     AllowedSlots: ['Weapon'],
+  //     Tiers: DAMAGE_PCT_TIERS,
+  //     Effect: {
+  //       Description: '+X% Damage',
+  //       MapToStatSource: (value: number): StatSource => {
+  //         const s = EmptyStatSource('affix_dmg_pct');
+  //         s.Damage.Multiplier = Math.max(0, value / 100);
+  //         return s;
+  //       }
+  //     }
+  //   }
 ];

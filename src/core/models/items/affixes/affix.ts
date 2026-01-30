@@ -1,6 +1,7 @@
 import { AffixGroup } from './affix-group.enum';
 import { AffixTier } from './affix-tier.enum';
 import { ItemSlot } from '../items/item-slot.enum';
+import { Label } from '../labels/label';
 import { StatSource } from '../../combat/stats/stat-source.type';
 
 /** Specifies the value range for an affix. */
@@ -20,8 +21,8 @@ export interface AffixTierSpec {
  * For example, a "+X Strength" affix maps its rolled value X into StatSource.Strength.Flat.
  */
 export interface AffixEffectMapping {
-  /** Human-readable description, e.g., "+X Strength" */
-  Description: string;
+  /** Human-readable label */
+  ToLabel: (value: number) => Label;
 
   /**
    * A function that maps a rolled numeric value to a StatSource contribution.

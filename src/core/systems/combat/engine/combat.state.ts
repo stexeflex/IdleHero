@@ -5,6 +5,7 @@ import {
   CreateAttackEvent,
   Hero,
   InitialLife,
+  NoArmor,
   ResetLife
 } from '../../../models';
 import { CombatLogService, CombatStatsService, DungeonRoomService } from '../../../services';
@@ -128,6 +129,7 @@ export class CombatState {
       Name: 'Hero',
       HeroIcon: 'overlord',
       Life: InitialLife(100),
+      Armor: NoArmor(),
       Stats: computedStats,
       AttackInterval: ComputeInitialAttackInterval(computedStats.AttackSpeed)
     };

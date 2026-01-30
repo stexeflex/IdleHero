@@ -24,7 +24,10 @@
 
   <!-- SIDE CONTENT AREA -->
   <div class="sidecontent">
-    <app-tab-strip [tabs]="Tabs" (selectedChange)="onTabSelected($event)"></app-tab-strip>
+    <app-tab-strip
+      [tabs]="Tabs"
+      [selected]="SelectedTab()"
+      (selectedChange)="onTabSelected($event)"></app-tab-strip>
     <div class="sidecontent__area">
       @switch (SelectedTab()) {
         @case ("inventory") {
