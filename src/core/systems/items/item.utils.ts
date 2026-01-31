@@ -1,5 +1,16 @@
-import { ITEM_CONFIG, ITEM_RARITY_RULES, ITEM_TIER_RULES } from '../../constants';
-import { Item, ItemLevel, ItemRarity, ItemTier, RarityRules } from '../../models';
+import { ITEM_CONFIG, ITEM_RARITY_RULES, ITEM_TIER_RULES, ITEM_VARIANTS } from '../../constants';
+import {
+  Item,
+  ItemLevel,
+  ItemRarity,
+  ItemTier,
+  ItemVariantDefinition,
+  RarityRules
+} from '../../models';
+
+export function GetItemVariant(definitionId: string): ItemVariantDefinition {
+  return ITEM_VARIANTS.find((v) => v.Id === definitionId)!;
+}
 
 export function GetItemRarityRule(rarity: ItemRarity): RarityRules {
   return ITEM_RARITY_RULES[rarity];

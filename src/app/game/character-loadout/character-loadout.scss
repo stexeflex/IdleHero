@@ -1,6 +1,13 @@
 @use "sass:color";
 @use "index" as *;
 
+.loadout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $gap;
+}
+
 .gear-slots {
   display: grid;
 
@@ -13,7 +20,6 @@
 
   gap: $gap;
   align-items: end;
-  justify-content: left;
 }
 
 .gear-slot {

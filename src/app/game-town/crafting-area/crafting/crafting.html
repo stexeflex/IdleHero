@@ -39,11 +39,13 @@
     <!-- VARIANTS -->
     <div class="variants">
       @for (v of VariantsForSlot(); track v.Id) {
-        <app-item-variant-preview
-          [Variant]="v"
-          [Selected]="SelectedVariantId() === v.Id"
-          (OnSelectVariant)="SelectVariant($event)">
-        </app-item-variant-preview>
+        <div class="variant">
+          <app-item-variant-preview
+            [Variant]="v"
+            [Selected]="SelectedVariantId() === v.Id"
+            (OnSelectVariant)="SelectVariant($event)">
+          </app-item-variant-preview>
+        </div>
       }
     </div>
   </div>

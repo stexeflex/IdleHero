@@ -2,58 +2,131 @@
 @use "index" as *;
 
 .inventory {
-  display: grid;
-
-  grid:
-    "loadout selected-item item-list" 1fr
-    / auto 1fr $size-inventory-width;
+  @include panel();
+  @include panel-shadow($border-width: 2px, $border-color: $clr-border);
+  @include flexbox($dir: column, $justify: flex-start, $align: stretch);
 
   gap: $gap;
 }
 
-.subheader {
-  text-align: center;
-  margin-bottom: $gap;
+.header {
+  @include flexbox($dir: row, $justify: space-between, $align: center);
+  gap: $gap;
 }
 
-.gear-loadout {
-  grid-area: loadout;
-  // width: 340px;
+.title {
+  @include flexbox($dir: row, $justify: center, $align: flex-start);
+  gap: $gap;
+
+  .meta {
+    @include disable-text-selection();
+    color: $clr-mute;
+    font-size: 0.95rem;
+    font-weight: 500;
+
+    .separator {
+      margin: 0 $gap;
+    }
+  }
 }
 
-.inventory-items {
-  grid-area: item-list;
+.filters {
+  @include panel($bg: rgba(0, 0, 0, 0.2));
+  @include flexbox($dir: column, $justify: flex-start, $align: stretch);
+  gap: $gap;
 }
 
-.selected-item {
-  grid-area: selected-item;
-  @include flexbox($dir: column, $align: center, $justify: center);
+.filter-group {
+  display: grid;
+  grid-template-columns: 65px 1fr;
+  align-items: start;
+  gap: $gap;
 }
 
-.item-display {
-  @include flexbox($dir: column, $align: center, $justify: center);
-  @include panel($bg: $clr-ui-bg);
-  @include box-shadow();
+.filter-title {
+  @include disable-text-selection();
+  font-family: $font-family-header;
+  font-size: 1rem;
+  font-weight: bold;
+  align-self: center;
+}
 
-  cursor: pointer;
-
-  border-width: 3px;
-  border-style: solid;
-
-  height: 320px;
-  width: 220px;
-
+.chip-row {
   display: flex;
+  flex-wrap: wrap;
+  gap: calc($gap / 2);
 }
 
-.item__icon {
-  flex: 1;
+.chip {
+  @include button-text-font($weight: 700);
+  @include button-sizing($font-size: 0.9rem, $min-width: auto);
+  @include button-focus-visible-outline();
+  @include button-style($bg-color: rgba(0, 0, 0, 0.25), $border: 1px solid $clr-border);
+
+  display: inline-flex;
+  align-items: center;
+  gap: calc($gap / 2);
+
+  min-height: 40px;
+
+  transition:
+    transform 120ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease;
+
+  &:hover {
+    background: $grad-ui-bg-lighten;
+    transform: translateY(-1px);
+  }
+
+  &.is-active {
+    border-color: color.scale($clr-accent, $lightness: 10%);
+    background: color.scale($clr-accent, $lightness: -70%);
+  }
 }
 
-.item__name {
+.grid {
+  min-height: $size-inventory-grid-height;
+  @include overflow($display: flex, $max-height: $size-inventory-grid-height);
+  @include scrollbar();
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: $gap;
+  padding: $gap;
 }
 
-.item__name--small {
-  font-size: 1em;
-  line-height: 21px;
+.empty {
+  @include panel($bg: rgba(0, 0, 0, 0.2));
+  @include flexbox($dir: column, $justify: center, $align: center);
+  gap: calc($gap / 2);
+
+  text-align: center;
+
+  .headline {
+    font-family: $font-family-header;
+    color: $clr-text-primary;
+    font-size: 1.2rem;
+  }
+
+  .hint {
+    font-family: $font-family-header;
+    color: $clr-mute;
+    font-size: 1.1rem;
+    font-style: italic;
+  }
+}
+
+.button-equip {
+  @include button-text-font($shadow: false);
+  @include button-sizing($font-size: 0.9rem, $min-width: auto);
+  @include button-focus-visible-outline();
+  @include button-style(
+    $bg-color: color.scale($clr-ui-bg-invert, $lightness: -20%),
+    $color: $clr-text-invert,
+    $border: 1px solid $clr-border
+  );
+  @include button-hover-active(
+    $bg-color: color.scale($clr-ui-bg-invert, $lightness: -40%),
+    $bg-color-active: color.scale($clr-ui-bg-invert, $lightness: -60%)
+  );
 }

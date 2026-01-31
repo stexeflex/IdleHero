@@ -9,7 +9,12 @@ import {
   RuneDefinition,
   RuneQuality
 } from '../../../../core/models';
-import { ClampAffixTier, GetItemRarity, GetItemRarityRule } from '../../../../core/systems/items';
+import {
+  ClampAffixTier,
+  GetItemRarity,
+  GetItemRarityRule,
+  MinRarityForTier
+} from '../../../../core/systems/items';
 import { Component, computed, inject, signal } from '@angular/core';
 import {
   CraftingService,
@@ -41,6 +46,10 @@ export class Enchanting {
   public readonly SelectedAffixIndex = signal<number | null>(null);
   public readonly SelectedAffixDefinitionId = signal<string | null>(null);
   public readonly SelectedRuneIndex = signal<number | null>(null);
+  // protected readonly Rarity = computed<ItemRarity>(() => {
+  //     const tier = this.Variant().Tier;
+  //     return MinRarityForTier(tier);
+  //   });
 
   // Data
   public readonly InventoryItems = this.inventory.Items;

@@ -1,22 +1,73 @@
-<!-- INVENTORY -->
 <div class="inventory">
-  <!-- GEAR LOADOUT -->
-  <div class="gear-loadout">
-    <div class="subheader">
-      <h3>LOADOUT</h3>
+  <div class="header">
+    <div class="title">
+      <h3>BAG</h3>
+      <div class="meta">
+        <span class="count">{{ FilteredCount() }} / {{ TotalItems() }} Items</span>
+        <span class="separator">•</span>
+        <span class="capacity">{{ SlotsUsed() }} / {{ Capacity() }} Capacity</span>
+      </div>
     </div>
-    <app-gear-loadout
-      (ItemSlotSelected)="OnItemSlotSelected($event.event, $event.slot)"></app-gear-loadout>
+
+    <div class="actions">
+      <button
+        type="button"
+        class="ih-button-secondary"
+        [disabled]="!HasActiveFilters()"
+        (click)="ResetFilters()">
+        RESET FILTERS
+      </button>
+    </div>
   </div>
 
-  <!-- INVENTORY ITEMS -->
-  <div class="inventory-items">
-    <div class="subheader">
-      <h3>STASH</h3>
+  <div class="filters">
+    <div class="filter-group">
+      <div class="filter-title">SLOTS</div>
+      <div class="chip-row">
+        @for (slot of AllSlots; track slot) {
+          <button
+            type="button"
+            class="chip"
+            [class.is-active]="IsSlotSelected(slot)"
+            (click)="ToggleSlot(slot)">
+            <app-icon [gear]="DefaultSlotIcons[slot]" size="sm"></app-icon>
+            {{ slot.toUpperCase() }}
+          </button>
+        }
+      </div>
     </div>
-    <app-inventory [ShowEquipped]="false"></app-inventory>
+
+    <div class="filter-group">
+      <div class="filter-title">TIERS</div>
+      <div class="chip-row">
+        @for (tier of AllTiers; track tier) {
+          <button
+            type="button"
+            class="chip"
+            [class.is-active]="IsTierSelected(tier)"
+            (click)="ToggleTier(tier)">
+            TIER {{ tier }}
+          </button>
+        }
+      </div>
+    </div>
   </div>
 
-  <!-- SELECTED ITEM -->
-  <div class="selected-item"></div>
+  @if (FilteredItemCards().length === 0) {
+    <div class="empty">
+      <div class="headline">Nothing to show</div>
+      <div class="hint">Adjust your filters or craft new gear.</div>
+    </div>
+  } @else {
+    <div class="grid">
+      @for (card of FilteredItemCards(); track card.Item.Id) {
+        <div class="grid-cell">
+          <app-item-preview [Item]="card.Item" [Variant]="card.Variant">
+            <separator class="ih-separator"></separator>
+            <button class="button-equip" (click)="EquipItem(card.Item)">EQUIP</button>
+          </app-item-preview>
+        </div>
+      }
+    </div>
+  }
 </div>

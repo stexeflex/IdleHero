@@ -1,16 +1,17 @@
 import { Component, inject, signal } from '@angular/core';
+import { IconComponent, TabDefinition, TabStrip } from '../../shared/components';
 import { Router, RouterOutlet } from '@angular/router';
 
 import { CharacterArea } from './character-area/character-area';
+import { CharacterLoadout } from './character-loadout/character-loadout';
 import { CombatState } from '../../core/systems/combat';
-import { IconComponent } from '../../shared/components';
 import { InfoArea } from './info-area/info-area';
 import { Menu } from './menu/menu';
 import { MenuService } from '../../shared/services';
 
 @Component({
   selector: 'app-game',
-  imports: [CharacterArea, Menu, InfoArea, RouterOutlet, IconComponent],
+  imports: [CharacterArea, Menu, InfoArea, RouterOutlet, IconComponent, TabStrip, CharacterLoadout],
   templateUrl: './game.html',
   styleUrl: './game.scss'
 })
@@ -21,6 +22,20 @@ export class Game {
 
   protected readonly title = signal('NOT SO IDLE HERO');
   protected readonly currentArea = signal<'Town' | 'Dungeon'>('Town');
+
+  // Tabs
+  protected get Tabs(): TabDefinition[] {
+    return [
+      { id: 'character', label: 'CHARACTER', disabled: false },
+      { id: 'loadout', label: 'LOADOUT', disabled: false }
+    ];
+  }
+
+  protected SelectedTab = signal<TabDefinition['id']>('character');
+
+  protected onTabSelected(tabId: TabDefinition['id']): void {
+    this.SelectedTab.set(tabId);
+  }
 
   // UI State
   protected get IsMenuOpen(): boolean {

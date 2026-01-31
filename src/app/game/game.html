@@ -31,7 +31,19 @@
 
   <!-- CHARACTER AREA -->
   <aside class="character-area">
-    <app-character-area></app-character-area>
+    <app-tab-strip
+      [tabs]="Tabs"
+      [selected]="SelectedTab()"
+      (selectedChange)="onTabSelected($event)"></app-tab-strip>
+
+    @switch (SelectedTab()) {
+      @case ("character") {
+        <app-character-area></app-character-area>
+      }
+      @case ("loadout") {
+        <app-character-loadout></app-character-loadout>
+      }
+    }
   </aside>
 
   <!-- SIDE CONTENT AREA -->

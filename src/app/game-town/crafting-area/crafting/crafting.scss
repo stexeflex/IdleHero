@@ -35,29 +35,16 @@
   gap: $gap;
 }
 
-.slots {
-  grid-area: slots;
-  display: grid;
-  justify-content: start;
-  align-content: start;
-  gap: $gap;
-}
-
-$slot-size: 80px;
-
-.slot {
+.slot,
+.tier {
   @include button-text-font();
+  @include button-sizing($font-size: 0.9rem, $min-width: auto);
+  @include button-style($bg-color: rgba(0, 0, 0, 0.25), $border: 1px solid $clr-border);
   @include button-focus-visible-outline();
 
   @include flexbox($dir: column, $justify: center, $align: center);
   @include panel($bg: $clr-ui-bg);
   @include box-shadow();
-  gap: calc($gap / 2);
-
-  height: $slot-size;
-  width: $slot-size;
-
-  font-weight: normal;
 }
 
 .slot.active,
@@ -66,35 +53,41 @@ $slot-size: 80px;
   background: $grad-ui-bg-lighten;
 }
 
+$slot-size: 80px;
+
+.slots {
+  grid-area: slots;
+  display: grid;
+  justify-content: start;
+  align-content: start;
+  gap: $gap;
+}
+
+.slot {
+  gap: calc($gap / 2);
+
+  height: $slot-size;
+  width: $slot-size;
+}
+
 .tiers {
   grid-area: tiers;
-  // @include flexbox($dir: row, $justify: space-around, $align: center);
-  @include flexbox($dir: row, $justify: flex-start, $align: center);
+  display: inline-flex;
+  align-items: center;
   gap: $gap;
   height: 44px;
 }
 
 .tier {
-  @include button-text-font();
-  @include button-focus-visible-outline();
-
-  @include flexbox($dir: column, $justify: center, $align: center);
-  @include panel($bg: $clr-ui-bg);
-  @include box-shadow();
-
   min-width: 80px;
-
-  font-family: $font-family-header;
 }
 
 .variants {
   grid-area: variants;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: $gap;
-
-  @include overflow($display: grid, $max-height: 68vh);
+  @include overflow($display: flex, $max-height: $size-crafting-variants-height);
   @include scrollbar($size: 0.8rem);
-
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: $gap;
   padding: $gap;
 }

@@ -1,0 +1,50 @@
+<div
+  class="item"
+  [class.common--border]="Rarity() === 'Common'"
+  [class.magic--border]="Rarity() === 'Magic'"
+  [class.rare--border]="Rarity() === 'Rare'"
+  [class.epic--border]="Rarity() === 'Epic'"
+  [class.legendary--border]="Rarity() === 'Legendary'">
+  <div class="item-icon">
+    <app-icon [gear]="Item().Icon" size="3x"></app-icon>
+  </div>
+  <div class="item-info">
+    <!-- ITEM NAME -->
+    <span class="item-name common--font">{{ Item().Name.toUpperCase() }}</span>
+    <!-- ITEM TYPE -->
+    <span class="item-type">{{ Rarity() }} {{ Variant().Type }} [{{ Item().Level }}]</span>
+
+    <separator class="ih-separator"></separator>
+
+    <!-- WEAPON STATS -->
+    @if (WeaponBaseDamage() && WeaponBaseAttackSpeed()) {
+      <div class="item-weapon-stats">
+        <span class="weapon-stat">
+          <span class="value"> {{ WeaponBaseDamage() | number: "1.0-0" }}</span>
+          <span class="label">Damage</span>
+        </span>
+        <span class="separator">•</span>
+        <span class="weapon-stat">
+          <span class="value">
+            {{ WeaponBaseAttackSpeed() | number: "1.2-2" : "en-en" }}
+          </span>
+          <span class="label">APS</span>
+        </span>
+      </div>
+    }
+  </div>
+
+  <!-- INNATE -->
+  <div class="item-innate">
+    <app-icon class="icon" symbol="beveledstar" size="mini"></app-icon>
+    <span class="label">{{ VariantLabel() }}</span>
+  </div>
+
+  <!-- AFFIXES -->
+  <div class="item-affixes"></div>
+
+  <!-- ACTIONS -->
+  <div class="actions">
+    <ng-content></ng-content>
+  </div>
+</div>
