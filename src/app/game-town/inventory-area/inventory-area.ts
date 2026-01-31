@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { GearLoadoutService, InventoryService } from '../../../core/services';
 import {
   GearSlotIconName,
   IconComponent,
   ItemPreview,
   Separator
 } from '../../../shared/components';
+import { InventoryService, ItemManagementService } from '../../../core/services';
 import { Item, ItemSlot, ItemTier, ItemVariantDefinition } from '../../../core/models';
 
 import { GetItemVariant } from '../../../core/systems/items';
@@ -24,8 +24,8 @@ interface ItemCard {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InventoryArea {
-  private readonly Loadout = inject(GearLoadoutService);
   private readonly Inventory = inject(InventoryService);
+  private readonly ItemManagement = inject(ItemManagementService);
 
   // Constants
   protected readonly AllSlots: ItemSlot[] = ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Boots'];
@@ -147,12 +147,6 @@ export class InventoryArea {
   // Item Actions
   protected EquipItem(item: Item): void {
     if (!item) return;
-    if (!this.Loadout.CanEquip(item)) return;
-
-    const previous = this.Loadout.Equip(item);
-    // If we equipped from inventory, remove that instance from inventory
-    this.Inventory.RemoveItem(item);
-    // Put previously equipped back to inventory if any
-    if (previous) this.Inventory.Add(previous);
+    this.ItemManagement.EquipItem(item);
   }
 }
