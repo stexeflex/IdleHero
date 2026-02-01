@@ -6,7 +6,7 @@ import {
   Separator
 } from '../../../shared/components';
 import { GetItemRarity, GetItemVariant } from '../../../core/systems/items';
-import { Item, ItemSlot } from '../../../core/models';
+import { Item, ItemSlot, ItemVariantDefinition } from '../../../core/models';
 
 import { GearLoadoutService } from '../../../core/services';
 import { ICONS_CONFIG } from '../../../core/constants';
@@ -68,12 +68,17 @@ export class CharacterLoadout {
 
   protected SelectItemSlot(event: MouseEvent, slot: ItemSlot): void {
     this.ItemSlotSelected.emit({ event, slot });
-    this.SelectedItem.set(this.gearLoadoutService.Get(slot));
+    this.SelectedSlot.set(slot);
   }
 
   // Selected Item
-  protected SelectedItem = signal<Item | null>(null);
-  protected SelectedVariant = computed(() => {
+  protected SelectedSlot = signal<ItemSlot | null>(null);
+  protected SelectedItem = computed<Item | null>(() => {
+    const slot = this.SelectedSlot();
+    if (!slot) return null;
+    return this.gearLoadoutService.Get(slot);
+  });
+  protected SelectedVariant = computed<ItemVariantDefinition | null>(() => {
     const item = this.SelectedItem();
     if (!item) return null;
     return GetItemVariant(item.DefinitionId);
