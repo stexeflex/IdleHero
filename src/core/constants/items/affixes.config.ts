@@ -4,6 +4,9 @@ import {
   ATTRIBUTE_TIERS,
   BLEEDING_DAMAGE_TIERS,
   CHANCE_TIERS,
+  CHARGED_DURATION_TIERS,
+  CHARGING_STRIKE_DAMAGE_TIERS,
+  CHARGING_STRIKE_GAIN_TIERS,
   CRIT_DAMAGE_TIERS,
   DAMAGE_FLAT_TIERS,
   DAMAGE_PCT_TIERS,
@@ -15,6 +18,7 @@ import {
   AffixDefinition,
   EmptyStatSource,
   FlatAdditiveLabel,
+  PercentageAdditiveLabel,
   PercentageMultiplicativeLabel
 } from '../../models';
 
@@ -153,7 +157,7 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
     AllowedSlots: ['Weapon', 'OffHand', 'Chest', 'Legs'],
     Tiers: CRIT_DAMAGE_TIERS,
     Effect: {
-      ToLabel: (value: number) => FlatAdditiveLabel('Crit Damage', value),
+      ToLabel: (value: number) => PercentageAdditiveLabel('Crit Damage', value),
       MapToStatSource: (source: string, value: number) => {
         const s = EmptyStatSource(source + `_affix_crit_damage_flat_${performance.now()}`);
         s.CriticalHit.FlatDamage = value;
@@ -167,7 +171,7 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
     AllowedSlots: ['Weapon', 'OffHand', 'Chest', 'Legs'],
     Tiers: MULTIHIT_DAMAGE_TIERS,
     Effect: {
-      ToLabel: (value: number) => FlatAdditiveLabel('Multi Hit Damage', value),
+      ToLabel: (value: number) => PercentageAdditiveLabel('Multi Hit Damage', value),
       MapToStatSource: (source: string, value: number) => {
         const s = EmptyStatSource(source + `_affix_multihit_damage_flat_${performance.now()}`);
         s.MultiHit.FlatDamage = value;
@@ -252,9 +256,59 @@ const UTILITY_AFFIX_DEFINITIONS: AffixDefinition[] = [
   }
 ];
 
+const CHARGING_STRIKE_AFFIX_DEFINITIONS: AffixDefinition[] = [
+  {
+    Id: 'affix_charging_strike_gain_flat',
+    Groups: ['Charging Strike'],
+    AllowedSlots: ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs'],
+    Tiers: CHARGING_STRIKE_GAIN_TIERS,
+    Effect: {
+      ToLabel: (value: number) => FlatAdditiveLabel('Charge Gain per Hit', value),
+      MapToStatSource: (source: string, value: number) => {
+        const s = EmptyStatSource(source + `_affix_charging_strike_gain_flat_${performance.now()}`);
+        s.ChargingStrike.ChargeGain = value;
+        return s;
+      }
+    }
+  },
+  {
+    Id: 'affix_charging_strike_damage_percent',
+    Groups: ['Charging Strike'],
+    AllowedSlots: ['Weapon', 'OffHand', 'Chest', 'Legs'],
+    Tiers: CHARGING_STRIKE_DAMAGE_TIERS,
+    Effect: {
+      ToLabel: (value: number) => PercentageAdditiveLabel('Charging Strike Damage', value),
+      MapToStatSource: (source: string, value: number) => {
+        const s = EmptyStatSource(
+          source + `_affix_charging_strike_damage_percent_${performance.now()}`
+        );
+        s.ChargingStrike.ChargeDamage = value;
+        return s;
+      }
+    }
+  },
+  {
+    Id: 'affix_charging_strike_duration_flat',
+    Groups: ['Charging Strike'],
+    AllowedSlots: ['OffHand', 'Head', 'Boots'],
+    Tiers: CHARGED_DURATION_TIERS,
+    Effect: {
+      ToLabel: (value: number) => FlatAdditiveLabel('s Charge Duration', value),
+      MapToStatSource: (source: string, value: number) => {
+        const s = EmptyStatSource(
+          source + `_affix_charging_strike_duration_flat_${performance.now()}`
+        );
+        s.ChargingStrike.ChargeDuration = value;
+        return s;
+      }
+    }
+  }
+];
+
 export const AFFIX_DEFINITIONS: AffixDefinition[] = [
   ...ATTRIBUTES_AFFIX_DEFINITIONS,
   ...OFFENSE_AFFIX_DEFINITIONS,
   ...DEFENSE_AFFIX_DEFINITIONS,
-  ...UTILITY_AFFIX_DEFINITIONS
+  ...UTILITY_AFFIX_DEFINITIONS,
+  ...CHARGING_STRIKE_AFFIX_DEFINITIONS
 ];

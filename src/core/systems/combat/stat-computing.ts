@@ -50,6 +50,11 @@ export function ComputeStats(
   const armorPenetration = ComputeArmorPenetration(sources, effectiveStr);
   const resistancePenetration = ComputeResistancePenetration(sources, effectiveInt);
 
+  // Charging Strike
+  const chargeGain = baseStats.ChargeGain;
+  const chargeDamage = baseStats.ChargeDamage;
+  const chargeDuration = baseStats.ChargeDuration;
+
   const stats: ComputedHeroStats = {
     AttackSpeed: attackSpeed,
     Damage: damage,
@@ -62,7 +67,10 @@ export function ComputeStats(
     MultiHitChainFactor: multiHitChainFactor,
     Accuracy: accuracy,
     ArmorPenetration: armorPenetration,
-    ResistancePenetration: resistancePenetration
+    ResistancePenetration: resistancePenetration,
+    ChargeGain: chargeGain,
+    ChargeDamage: chargeDamage,
+    ChargeDuration: chargeDuration
   };
 
   console.log('Computed Stats:', stats);

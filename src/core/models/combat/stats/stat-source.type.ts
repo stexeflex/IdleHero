@@ -25,6 +25,8 @@ export type StatSource = {
   Accuracy: AccuracyStatSource;
   ArmorPenetration: ArmorPenetrationStatSource;
   ResistancePenetration: ResistancePenetrationStatSource;
+
+  ChargingStrike: ChargingStrikeStatSource;
 };
 
 export type LifeStatSource = {
@@ -104,6 +106,12 @@ export type ResistancePenetrationStatSource = {
   Multiplier: number;
 };
 
+export type ChargingStrikeStatSource = {
+  ChargeGain: number;
+  ChargeDamage: number;
+  ChargeDuration: number;
+};
+
 export function EmptyStatSource(id: string): StatSource {
   return {
     Id: id,
@@ -136,6 +144,7 @@ export function EmptyStatSource(id: string): StatSource {
     },
     Accuracy: { Flat: 0, Multiplier: 0 },
     ArmorPenetration: { Flat: 0, Multiplier: 0 },
-    ResistancePenetration: { Flat: 0, Multiplier: 0 }
+    ResistancePenetration: { Flat: 0, Multiplier: 0 },
+    ChargingStrike: { ChargeGain: 0, ChargeDamage: 0, ChargeDuration: 0 }
   };
 }

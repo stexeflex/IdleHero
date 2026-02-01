@@ -1,10 +1,21 @@
 import { AttributesService, CombatStatsService, LevelService } from '../../../../core/services';
-import { Component, LOCALE_ID, inject, signal } from '@angular/core';
+import { Component, LOCALE_ID, computed, inject, signal } from '@angular/core';
 import { DecimalPipe, PercentPipe } from '@angular/common';
 
 import { AttributesSpecifications } from '../../../../shared/specifications';
 import { IconComponent } from '../../../../shared/components';
 import { StatisticsService } from '../../../../shared/services';
+
+interface StatsItem {
+  label: string;
+  value: any | null;
+}
+
+interface StatsGrid {
+  title: string;
+  items: StatsItem[];
+  expanded: boolean;
+}
 
 @Component({
   selector: 'app-stats',
@@ -24,7 +35,8 @@ export class Stats {
   private readonly percentPipe: PercentPipe;
 
   protected AttributesExpanded = signal<boolean>(true);
-  protected StatsExpanded = signal<boolean>(true);
+  protected ChargingStrikeStatsExpanded = signal<boolean>(true);
+  protected OffenseStatsExpanded = signal<boolean>(true);
   protected UtilityStatsExpanded = signal<boolean>(true);
   protected StatisticsExpanded = signal<boolean>(false);
 
@@ -47,7 +59,30 @@ export class Stats {
     return this.canChangeAttributes.CanIncrease();
   }
 
-  get Attributes(): { label: string; value: string | null }[] {
+  protected readonly AllStats = computed<StatsGrid[]>(() => [
+    {
+      title: 'CHARGING STRIKE',
+      items: this.ChargingStrikeStats,
+      expanded: this.ChargingStrikeStatsExpanded()
+    },
+    {
+      title: 'OFFENSE',
+      items: this.OffenseStats,
+      expanded: this.OffenseStatsExpanded()
+    },
+    {
+      title: 'UTILITY',
+      items: this.UtilityStats,
+      expanded: this.UtilityStatsExpanded()
+    },
+    {
+      title: 'STATISTICS',
+      items: this.Statistics,
+      expanded: this.StatisticsExpanded()
+    }
+  ]);
+
+  get Attributes(): StatsItem[] {
     const attributes = this.attributesService.Effective();
 
     return [
@@ -66,17 +101,36 @@ export class Stats {
     ];
   }
 
-  get Stats(): { label: string; value: any | null }[] {
+  get ChargingStrikeStats(): StatsItem[] {
+    const combatStats = this.statsService.Effective();
+
+    return [
+      {
+        label: 'Charge Gain',
+        value: this.decimalPipe.transform(combatStats.ChargeGain, '1.0-0') + ' / Hit'
+      },
+      {
+        label: 'Charging Strike Damage',
+        value: this.percentPipe.transform(combatStats.ChargeDamage, '1.0-0')
+      },
+      {
+        label: 'Charged Duration',
+        value: this.decimalPipe.transform(combatStats.ChargeDuration, '1.1-1', 'en-en') + ' s'
+      }
+    ];
+  }
+
+  get OffenseStats(): StatsItem[] {
     const combatStats = this.statsService.Effective();
 
     return [
       {
         label: 'Bleeding Chance',
-        value: this.percentPipe.transform(0.0, '1.0-0')
+        value: this.percentPipe.transform(combatStats.BleedingChance, '1.0-0')
       },
       {
         label: 'Bleeding Damage',
-        value: this.percentPipe.transform(0.25, '1.0-0')
+        value: this.percentPipe.transform(combatStats.BleedingDamage, '1.0-0')
       },
       {
         label: 'Critical Hit Chance',
@@ -101,7 +155,7 @@ export class Stats {
     ];
   }
 
-  get UtilityStats(): { label: string; value: string | null }[] {
+  get UtilityStats(): StatsItem[] {
     const combatStats = this.statsService.Effective();
 
     return [
@@ -124,7 +178,7 @@ export class Stats {
     ];
   }
 
-  get Statistics(): { label: string; value: string | null }[] {
+  get Statistics(): StatsItem[] {
     return [
       {
         label: 'Highest Single Hit',

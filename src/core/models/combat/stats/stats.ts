@@ -23,6 +23,10 @@ export interface HeroStats extends CombatStats {
   Accuracy: number; // 0..1
   ArmorPenetration: number; // 0..1
   ResistancePenetration: number; // 0..1
+
+  ChargeGain: number; // >= 0
+  ChargeDamage: number; // >= 1
+  ChargeDuration: number; // in Sekunden
 }
 
 export interface BossStats extends CombatStats {
@@ -47,7 +51,10 @@ export function InitialHeroStats(): HeroStats {
     MultiHitChainFactor: STATS_CONFIG.BASE.MULTI_HIT_CHAIN_FACTOR,
     Accuracy: STATS_CONFIG.BASE.ACCURACY,
     ArmorPenetration: STATS_CONFIG.BASE.ARMOR_PENETRATION,
-    ResistancePenetration: STATS_CONFIG.BASE.RESISTANCE_PENETRATION
+    ResistancePenetration: STATS_CONFIG.BASE.RESISTANCE_PENETRATION,
+    ChargeGain: STATS_CONFIG.BASE.CHARGE_GAIN,
+    ChargeDamage: STATS_CONFIG.BASE.CHARGE_DAMAGE,
+    ChargeDuration: STATS_CONFIG.BASE.CHARGE_DURATION
   };
 }
 

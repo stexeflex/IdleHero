@@ -24,7 +24,7 @@
           @let idx = $index;
           <div class="affix-row">
             <div class="affix-name">
-              {{ AffixDefById(a.DefinitionId)?.Name || a.DefinitionId }}
+              {{ AffixDefById(a.DefinitionId) }}
               <span class="tier">[{{ a.Tier }}]</span>
             </div>
             <div class="affix-value">{{ a.RolledValue }}</div>
@@ -43,7 +43,7 @@
           <div class="choices wrap">
             @for (d of AllowedAffixDefinitions(); track d.Id) {
               <button class="choice" (click)="AddAffixToSelected(d.Id)">
-                {{ d.Name }} ({{ cost.GetAddAffixCost(SelectedItem()!.item, d) }})
+                {{ d.Id }} ({{ cost.GetAddAffixCost(SelectedItem()!.item, d) }})
               </button>
             }
           </div>
@@ -58,7 +58,7 @@
             <div class="list-title">Aus Inventar socketen</div>
             @for (r of EligibleRunesFromInventory(); track r.index) {
               <div class="list-item">
-                <div class="name">{{ r.definition?.Name }} ({{ r.rune.Quality }})</div>
+                <div class="name">{{ r.definition?.Id }} ({{ r.rune.Quality }})</div>
                 <div class="meta">Wert: {{ r.rune.RolledValue }}</div>
                 <div class="row-actions">
                   <button class="tiny" (click)="SocketRuneFromInventory(r.index)">
@@ -71,7 +71,7 @@
         } @else {
           @let rDef = RuneDefById(it.Rune!.DefinitionId);
           <div class="rune-row">
-            <div class="name">{{ rDef?.Name }} ({{ it.Rune!.Quality }})</div>
+            <div class="name">{{ rDef?.Id }} ({{ it.Rune!.Quality }})</div>
             <div class="meta">Wert: {{ it.Rune!.RolledValue }}</div>
             <div class="row-actions">
               <button class="tiny" (click)="UnsocketRuneFromSelected()">

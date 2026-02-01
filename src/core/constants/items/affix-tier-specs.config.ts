@@ -87,3 +87,27 @@ export const PENETRATION_TIERS: AffixTierSpec[] = [
   { Tier: 'Epic', Value: { Min: 0.08, Max: 0.12 } },
   { Tier: 'Legendary', Value: { Min: 0.12, Max: 0.15 } }
 ];
+
+export const CHARGING_STRIKE_GAIN_TIERS: AffixTierSpec[] = [
+  { Tier: 'Common', Value: { Min: 1, Max: 3 } },
+  { Tier: 'Magic', Value: { Min: 3, Max: 5 } },
+  { Tier: 'Rare', Value: { Min: 5, Max: 8 } },
+  { Tier: 'Epic', Value: { Min: 8, Max: 11 } },
+  { Tier: 'Legendary', Value: { Min: 11, Max: 15 } }
+];
+
+export const CHARGING_STRIKE_DAMAGE_TIERS: AffixTierSpec[] = [
+  { Tier: 'Common', Value: { Min: 0.05, Max: 0.25 } },
+  { Tier: 'Magic', Value: { Min: 0.25, Max: 0.5 } },
+  { Tier: 'Rare', Value: { Min: 0.5, Max: 1.0 } },
+  { Tier: 'Epic', Value: { Min: 1.0, Max: 2.0 } },
+  { Tier: 'Legendary', Value: { Min: 2.0, Max: 4.0 } }
+];
+
+export const CHARGED_DURATION_TIERS: AffixTierSpec[] = [
+  { Tier: 'Common', Value: { Min: 0.5, Max: 1.0 } },
+  { Tier: 'Magic', Value: { Min: 1.0, Max: 1.5 } },
+  { Tier: 'Rare', Value: { Min: 1.5, Max: 2.5 } },
+  { Tier: 'Epic', Value: { Min: 2.5, Max: 3.5 } },
+  { Tier: 'Legendary', Value: { Min: 3.5, Max: 5.0 } }
+];
