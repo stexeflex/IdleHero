@@ -4,10 +4,21 @@ import {
   ItemLevel,
   ItemVariantDefinition,
   PercentageAdditiveLabel,
-  PercentageMultiplicativeLabel,
   StatSource
 } from '../../models';
 
+function ScaleLinearValueCurve(
+  baseValue: number,
+  incrementPerLevel: number
+): Record<ItemLevel, number> {
+  const values: Partial<Record<ItemLevel, number>> = {};
+  for (let level = 1 as ItemLevel; level <= 25; level++) {
+    values[level] = baseValue + incrementPerLevel * (level - 1);
+  }
+  return values as Record<ItemLevel, number>;
+}
+
+//#region WEAPONS
 const WEAPON_BASE_DAMAGE_REFERENCE_BASE10: Record<ItemLevel, number> = {
   1: 10,
   2: 12,
@@ -65,28 +76,18 @@ export const WEAPON_BASE_DAMAGE_CONFIG = {
   BASE_DAMAGE_BASE30: ScaleWeaponBaseDamageCurve(30)
 };
 
-function ScaleLinearAttributeCurve(
-  baseValue: number,
-  incrementPerLevel: number
-): Record<ItemLevel, number> {
-  const values: Partial<Record<ItemLevel, number>> = {};
-  for (let level = 1 as ItemLevel; level <= 25; level++) {
-    values[level] = baseValue + incrementPerLevel * (level - 1);
-  }
-  return values as Record<ItemLevel, number>;
-}
-
 export const WEAPON_INNATE_CONFIG = {
-  DAMAGE_BASE1: ScaleLinearAttributeCurve(1, 1),
+  DAMAGE_BASE1: ScaleLinearValueCurve(1, 1),
 
-  BLEED_CHANCE_BASE1: ScaleLinearAttributeCurve(0.01, 0.01),
-  CRIT_CHANCE_BASE1: ScaleLinearAttributeCurve(0.01, 0.01),
-  MULTI_HIT_CHANCE_BASE1: ScaleLinearAttributeCurve(0.01, 0.01),
+  BLEED_CHANCE_BASE1: ScaleLinearValueCurve(0.01, 0.01),
+  CRIT_CHANCE_BASE1: ScaleLinearValueCurve(0.01, 0.01),
+  MULTI_HIT_CHANCE_BASE1: ScaleLinearValueCurve(0.01, 0.01),
 
-  BLEED_CHANCE_BASE6: ScaleLinearAttributeCurve(0.06, 0.01),
-  CRIT_CHANCE_BASE6: ScaleLinearAttributeCurve(0.06, 0.01),
-  MULTI_HIT_CHANCE_BASE6: ScaleLinearAttributeCurve(0.06, 0.01),
+  BLEED_CHANCE_BASE6: ScaleLinearValueCurve(0.06, 0.01),
+  CRIT_CHANCE_BASE6: ScaleLinearValueCurve(0.06, 0.01),
+  MULTI_HIT_CHANCE_BASE6: ScaleLinearValueCurve(0.06, 0.01),
 
+  CRIT_DAMAGE_BASE10: ScaleLinearValueCurve(0.11, 0.01),
   CRIT_DAMAGE_BASE25: {
     1: 0.25,
     2: 0.26,
@@ -118,7 +119,7 @@ export const WEAPON_INNATE_CONFIG = {
 
 const WEAPON_SWORDS_VARIANTS: ItemVariantDefinition[] = [
   {
-    Id: 'weapon_sword_starter',
+    Id: 't1_weapon_sword_starter',
     Name: 'Short Sword',
     Icon: 'gladius',
     Slot: 'Weapon',
@@ -137,7 +138,7 @@ const WEAPON_SWORDS_VARIANTS: ItemVariantDefinition[] = [
     }
   },
   {
-    Id: 'weapon_sword_bleed',
+    Id: 't2_weapon_sword_bleed',
     Name: 'Shard Sword',
     Icon: 'shardsword',
     Slot: 'Weapon',
@@ -156,7 +157,7 @@ const WEAPON_SWORDS_VARIANTS: ItemVariantDefinition[] = [
     }
   },
   {
-    Id: 'weapon_sword_crit',
+    Id: 't2_weapon_sword_crit',
     Name: 'Broadsword',
     Icon: 'broadsword',
     Slot: 'Weapon',
@@ -175,7 +176,7 @@ const WEAPON_SWORDS_VARIANTS: ItemVariantDefinition[] = [
     }
   },
   {
-    Id: 'weapon_sword_fast',
+    Id: 't2_weapon_sword_fast',
     Name: 'Katana',
     Icon: 'katana',
     Slot: 'Weapon',
@@ -194,7 +195,7 @@ const WEAPON_SWORDS_VARIANTS: ItemVariantDefinition[] = [
     }
   },
   {
-    Id: 'weapon_sword_heavy',
+    Id: 't3_weapon_sword_heavy',
     Name: 'Claymore',
     Icon: 'piercingsword',
     Slot: 'Weapon',
@@ -213,7 +214,7 @@ const WEAPON_SWORDS_VARIANTS: ItemVariantDefinition[] = [
     }
   },
   {
-    Id: 'weapon_sword_powerful',
+    Id: 't3_weapon_sword_powerful',
     Name: 'Relic Blade',
     Icon: 'relicblade',
     Slot: 'Weapon',
@@ -234,7 +235,7 @@ const WEAPON_SWORDS_VARIANTS: ItemVariantDefinition[] = [
 ];
 const WEAPON_AXES_VARIANTS: ItemVariantDefinition[] = [
   {
-    Id: 'weapon_axe_bleed',
+    Id: 't2_weapon_axe_bleed',
     Name: 'Marauder Axe',
     Icon: 'sharpaxe',
     Slot: 'Weapon',
@@ -253,7 +254,7 @@ const WEAPON_AXES_VARIANTS: ItemVariantDefinition[] = [
     }
   },
   {
-    Id: 'weapon_axe_crit',
+    Id: 't2_weapon_axe_crit',
     Name: 'Battle Axe',
     Icon: 'battleaxe',
     Slot: 'Weapon',
@@ -272,7 +273,7 @@ const WEAPON_AXES_VARIANTS: ItemVariantDefinition[] = [
     }
   },
   {
-    Id: 'weapon_axe_heavy',
+    Id: 't3_weapon_axe_heavy',
     Name: 'War Axe',
     Icon: 'waraxe',
     Slot: 'Weapon',
@@ -291,7 +292,7 @@ const WEAPON_AXES_VARIANTS: ItemVariantDefinition[] = [
     }
   },
   {
-    Id: 'weapon_axe_halberd',
+    Id: 't3_weapon_axe_halberd',
     Name: 'Halberd',
     Icon: 'halberd',
     Slot: 'Weapon',
@@ -312,7 +313,7 @@ const WEAPON_AXES_VARIANTS: ItemVariantDefinition[] = [
 ];
 const WEAPON_BOWS_VARIANTS: ItemVariantDefinition[] = [
   {
-    Id: 'weapon_bow_starter',
+    Id: 't1_weapon_bow_starter',
     Name: 'Short Bow',
     Icon: 'highshot',
     Slot: 'Weapon',
@@ -331,7 +332,7 @@ const WEAPON_BOWS_VARIANTS: ItemVariantDefinition[] = [
     }
   },
   {
-    Id: 'weapon_bow_bleed',
+    Id: 't2_weapon_bow_bleed',
     Name: 'Siege Crossbow',
     Icon: 'crossbow',
     Slot: 'Weapon',
@@ -350,7 +351,7 @@ const WEAPON_BOWS_VARIANTS: ItemVariantDefinition[] = [
     }
   },
   {
-    Id: 'weapon_bow_crit',
+    Id: 't2_weapon_bow_crit',
     Name: 'Hunting Bow',
     Icon: 'pocketbow',
     Slot: 'Weapon',
@@ -369,7 +370,7 @@ const WEAPON_BOWS_VARIANTS: ItemVariantDefinition[] = [
     }
   },
   {
-    Id: 'weapon_bow_multi',
+    Id: 't2_weapon_bow_multi',
     Name: 'Double Shot',
     Icon: 'doubleshot',
     Slot: 'Weapon',
@@ -388,7 +389,7 @@ const WEAPON_BOWS_VARIANTS: ItemVariantDefinition[] = [
     }
   },
   {
-    Id: 'weapon_bow_heavy',
+    Id: 't3_weapon_bow_heavy',
     Name: 'Battle Bow',
     Icon: 'heavyarrow',
     Slot: 'Weapon',
@@ -409,7 +410,7 @@ const WEAPON_BOWS_VARIANTS: ItemVariantDefinition[] = [
 ];
 const WEAPON_DAGGER_VARIANTS: ItemVariantDefinition[] = [
   {
-    Id: 'weapon_dagger_starter',
+    Id: 't1_weapon_dagger_starter',
     Name: 'Simple Dagger',
     Icon: 'bowieknife',
     Slot: 'Weapon',
@@ -428,7 +429,7 @@ const WEAPON_DAGGER_VARIANTS: ItemVariantDefinition[] = [
     }
   },
   {
-    Id: 'weapon_dagger_bleed',
+    Id: 't2_weapon_dagger_bleed',
     Name: 'Curvy Dagger',
     Icon: 'curvyknife',
     Slot: 'Weapon',
@@ -447,7 +448,7 @@ const WEAPON_DAGGER_VARIANTS: ItemVariantDefinition[] = [
     }
   },
   {
-    Id: 'weapon_dagger_crit',
+    Id: 't2_weapon_dagger_crit',
     Name: 'Jagged Dagger',
     Icon: 'knifethrust',
     Slot: 'Weapon',
@@ -466,7 +467,7 @@ const WEAPON_DAGGER_VARIANTS: ItemVariantDefinition[] = [
     }
   },
   {
-    Id: 'weapon_dagger_multi',
+    Id: 't2_weapon_dagger_multi',
     Name: 'Deadly Dagger',
     Icon: 'plaindagger',
     Slot: 'Weapon',
@@ -485,7 +486,7 @@ const WEAPON_DAGGER_VARIANTS: ItemVariantDefinition[] = [
     }
   },
   {
-    Id: 'weapon_dagger_powerful',
+    Id: 't3_weapon_dagger_powerful',
     Name: 'Obsidian Dagger',
     Icon: 'broaddagger',
     Slot: 'Weapon',
@@ -506,7 +507,7 @@ const WEAPON_DAGGER_VARIANTS: ItemVariantDefinition[] = [
 ];
 const WEAPON_STAFF_WAND_VARIANTS: ItemVariantDefinition[] = [
   {
-    Id: 'weapon_wand_crit',
+    Id: 't2_weapon_wand_crit',
     Name: 'Orb Wand',
     Icon: 'orbwand',
     Slot: 'Weapon',
@@ -525,7 +526,26 @@ const WEAPON_STAFF_WAND_VARIANTS: ItemVariantDefinition[] = [
     }
   },
   {
-    Id: 'weapon_wand_crit_damage',
+    Id: 't2_weapon_staff_crit_damage',
+    Name: 'Mentor Staff',
+    Icon: 'flangedmace',
+    Slot: 'Weapon',
+    Type: 'Staff',
+    Tier: 'II',
+    WeaponBaseDamage: WEAPON_BASE_DAMAGE_CONFIG.BASE_DAMAGE_BASE9,
+    WeaponBaseAttackSpeed: 1.4,
+    Innate: {
+      ToLabel: (value: number) => PercentageAdditiveLabel('Crit Damage', value),
+      ValuesByLevel: WEAPON_INNATE_CONFIG.CRIT_DAMAGE_BASE10,
+      MapToStatSource: (value: number): StatSource => {
+        const s = EmptyStatSource('weapon_staff_crit_damage_innate');
+        s.CriticalHit.FlatDamage = value;
+        return s;
+      }
+    }
+  },
+  {
+    Id: 't3_weapon_wand_crit_damage',
     Name: 'Lunar Wand',
     Icon: 'lunarwand',
     Slot: 'Weapon',
@@ -544,7 +564,7 @@ const WEAPON_STAFF_WAND_VARIANTS: ItemVariantDefinition[] = [
     }
   },
   {
-    Id: 'weapon_staff_crit',
+    Id: 't3_weapon_staff_crit',
     Name: 'Wizard Staff',
     Icon: 'wizardstaff',
     Slot: 'Weapon',
@@ -571,5 +591,116 @@ const WEAPON_VARIANTS: ItemVariantDefinition[] = [
   ...WEAPON_DAGGER_VARIANTS,
   ...WEAPON_STAFF_WAND_VARIANTS
 ];
+//#endregion WEAPONS
 
-export const ITEM_VARIANTS: ItemVariantDefinition[] = [...WEAPON_VARIANTS];
+//#region OFFHANDS
+const OFFHAND_SHIELDS_VARIANTS: ItemVariantDefinition[] = [
+  {
+    Id: 't1_offhand_shield_starter',
+    Name: 'Wooden Shield',
+    Icon: 'roundshield',
+    Slot: 'OffHand',
+    Type: 'Shield',
+    Tier: 'I',
+    Innate: {
+      ToLabel: (value: number) => FlatAdditiveLabel('Strength', value),
+      ValuesByLevel: ScaleLinearValueCurve(1, 1),
+      MapToStatSource: (value: number): StatSource => {
+        const s = EmptyStatSource('offhand_shield_starter_innate');
+        s.Strength.Flat = value;
+        return s;
+      }
+    }
+  }
+];
+
+const OFFHAND_ORBS_VARIANTS: ItemVariantDefinition[] = [
+  {
+    Id: 't2_offhand_orb_starter',
+    Name: 'Spellbook',
+    Icon: 'bookmarklet',
+    Slot: 'OffHand',
+    Type: 'Orb',
+    Tier: 'II',
+    Innate: {
+      ToLabel: (value: number) => FlatAdditiveLabel('Intelligence', value),
+      ValuesByLevel: ScaleLinearValueCurve(1, 1),
+      MapToStatSource: (value: number): StatSource => {
+        const s = EmptyStatSource('offhand_orb_starter_innate');
+        s.Intelligence.Flat = value;
+        return s;
+      }
+    }
+  }
+];
+
+const OFFHAND_QUIVERS_VARIANTS: ItemVariantDefinition[] = [
+  {
+    Id: 't1_offhand_quiver_starter',
+    Name: 'Leather Quiver',
+    Icon: 'quiver',
+    Slot: 'OffHand',
+    Type: 'Quiver',
+    Tier: 'I',
+    Innate: {
+      ToLabel: (value: number) => FlatAdditiveLabel('Dexterity', value),
+      ValuesByLevel: ScaleLinearValueCurve(1, 1),
+      MapToStatSource: (value: number): StatSource => {
+        const s = EmptyStatSource('offhand_quiver_starter_innate');
+        s.Dexterity.Flat = value;
+        return s;
+      }
+    }
+  }
+];
+
+const OFFHAND_DAGGERS_VARIANTS: ItemVariantDefinition[] = [
+  {
+    Id: 't1_offhand_dagger_starter',
+    Name: 'Throwing Daggers',
+    Icon: 'daggers',
+    Slot: 'OffHand',
+    Type: 'Dagger',
+    Tier: 'I',
+    Innate: {
+      ToLabel: (value: number) => FlatAdditiveLabel('Intelligence', value),
+      ValuesByLevel: ScaleLinearValueCurve(1, 1),
+      MapToStatSource: (value: number): StatSource => {
+        const s = EmptyStatSource('offhand_dagger_starter_innate');
+        s.Intelligence.Flat = value;
+        return s;
+      }
+    }
+  }
+];
+
+const OFFHAND_VARIANTS: ItemVariantDefinition[] = [
+  ...OFFHAND_SHIELDS_VARIANTS,
+  ...OFFHAND_ORBS_VARIANTS,
+  ...OFFHAND_QUIVERS_VARIANTS,
+  ...OFFHAND_DAGGERS_VARIANTS
+];
+//#endregion OFFHANDS
+
+//#region HEAD
+const HEAD_HELMET_VARIANTS: ItemVariantDefinition[] = [];
+const HEAD_HOOD_VARIANTS: ItemVariantDefinition[] = [];
+const HEAD_HAT_VARIANTS: ItemVariantDefinition[] = [];
+
+export const HEAD_VARIANTS: ItemVariantDefinition[] = [
+  ...HEAD_HELMET_VARIANTS,
+  ...HEAD_HOOD_VARIANTS,
+  ...HEAD_HAT_VARIANTS
+];
+//#endregion HEAD
+
+//#region CHEST
+export const CHEST_VARIANTS: ItemVariantDefinition[] = [];
+//#endregion CHEST
+
+export const ITEM_VARIANTS: ItemVariantDefinition[] = [
+  ...WEAPON_VARIANTS,
+  ...OFFHAND_VARIANTS,
+  ...HEAD_VARIANTS,
+  ...CHEST_VARIANTS
+];

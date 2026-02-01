@@ -1,5 +1,5 @@
 type WeaponType = 'Sword' | 'Axe' | 'Bow' | 'Dagger' | 'Staff' | 'Wand';
-type OffhandType = 'Shield' | 'Quiver' | 'Orb' | 'Dagger';
+type OffhandType = 'Shield' | 'Orb' | 'Quiver' | 'Dagger';
 type HeadType = 'Helmet' | 'Hood' | 'Hat';
 type ArmorType = 'Chest' | 'Legs' | 'Boots';
 
