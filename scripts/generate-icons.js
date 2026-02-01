@@ -90,10 +90,13 @@ function escapeSingleQuotes(str) {
 
 function readSvgFiles(dir) {
   if (!fs.existsSync(dir)) return [];
+
   const files = fs
-    .readdirSync(dir, { withFileTypes: true })
+    .readdirSync(dir, { withFileTypes: true, recursive: true })
     .filter((d) => d.isFile() && d.name.toLowerCase().endsWith(".svg"))
-    .map((d) => path.join(dir, d.name));
+    .map((d) => path.join(d.parentPath, d.name));
+
+  console.log(`[icons] Found ${files.length} SVG files in ${dir}`);
   return files;
 }
 
@@ -120,28 +123,35 @@ function ensureDirForFile(filePath) {
 function generateForConfig(cfg) {
   const srcDir = path.join(assetsRoot, cfg.folder);
   const svgFiles = readSvgFiles(srcDir);
+
   if (svgFiles.length === 0) {
     console.warn(`[icons] No SVG files found in ${srcDir}`);
   }
 
   const seen = new Set();
   const entries = [];
+
   for (const file of svgFiles) {
     const name = sanitizeName(path.basename(file));
+
     if (!name) {
       console.warn(`[icons] Skipping ${file}: sanitized name is empty`);
       continue;
     }
+
     if (seen.has(name)) {
       console.warn(`[icons] Duplicate key '${name}' in ${srcDir}, skipping ${file}`);
       continue;
     }
+
     const svgText = fs.readFileSync(file, "utf8");
     const pathMarkup = extractPathMarkup(svgText).trim();
+
     if (!pathMarkup) {
       console.warn(`[icons] No <path> content in ${file}, skipping`);
       continue;
     }
+
     seen.add(name);
     entries.push({ name, content: pathMarkup });
   }
