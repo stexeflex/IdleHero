@@ -1,13 +1,13 @@
 import { CombatStatsService, LevelService } from '../../../../../core/services';
-import { Component, LOCALE_ID, inject, signal } from '@angular/core';
+import { Component, LOCALE_ID, inject } from '@angular/core';
+import { IconComponent, NumberValue } from '../../../../../shared/components';
 
 import { DecimalPipe } from '@angular/common';
 import { HeroService } from '../../../../../shared/services';
-import { NumberValue } from '../../../../../shared/components';
 
 @Component({
   selector: 'app-info',
-  imports: [NumberValue],
+  imports: [NumberValue, IconComponent],
   templateUrl: './info.html',
   styleUrl: './info.scss'
 })

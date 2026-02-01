@@ -22,58 +22,58 @@
 }
 
 .category {
-  border-radius: $border-radius;
-  box-shadow: 0 2px 8px $clr-box-shadow;
-  background: $grad-accent-darken;
-  padding: 0 0.5rem;
+  @include panel($bg: $grad-accent-darken, $padding: 0 calc($gap / 2));
+  @include panel-shadow($border-width: 0px);
 }
 
-$grid-header-padding: 0.5rem 0.5rem;
+$grid-header-padding: calc($gap / 2);
 
 .grid-header {
   @include disable-text-selection();
   @include flexbox($dir: row, $align: stretch, $justify: space-between);
-
   padding: $grid-header-padding;
+  align-items: center;
+
+  .grid-header__toggle {
+    border: 2px solid $clr-border;
+    border-radius: 50%;
+    padding: calc($gap / 4);
+
+    .toggle-icon {
+      font-size: 1.2em;
+      line-height: 1em;
+    }
+  }
 }
 
 .grid-header--expanded {
   @include divider($margin: 0, $padding: $grid-header-padding);
 }
 
-.grid-header__toggle {
-  border: 2px solid $clr-border;
-  border-radius: 50%;
-  padding: 0.25rem;
-}
-
-.toggle-icon {
-  font-size: 1.2em;
-  line-height: 1em;
-}
-
 .grid {
   @include disable-text-selection();
   display: grid;
   grid-template-columns: auto 1fr;
-  padding: 0.25rem 0.5rem;
-}
+  gap: calc($gap / 2);
+  padding: calc($gap / 2) calc($gap / 2);
 
-.grid__label {
-  text-align: left;
-  font-weight: bold;
-}
+  align-items: center;
 
-.grid__value {
-  @include flexbox($align: top, $justify: flex-end);
-  text-align: center;
-}
+  .grid__label {
+    text-align: left;
+    font-weight: bold;
+  }
 
-.grid__label,
-.grid__value {
-  font-size: 1.2em;
-  color: $clr-text-primary;
-  padding: calc($gap / 3) 0;
+  .grid__value {
+    @include flexbox($align: top, $justify: flex-end);
+    text-align: center;
+  }
+
+  .grid__label,
+  .grid__value {
+    font-size: 1.05rem;
+    color: $clr-text-primary;
+  }
 }
 
 .skill-points {
@@ -87,11 +87,11 @@ $grid-header-padding: 0.5rem 0.5rem;
     1px -1px 0 $clr-text-shadow,
     -1px 1px 0 $clr-text-shadow,
     1px 1px 0 $clr-text-shadow;
-}
 
-.skill-points__icon {
-  vertical-align: top;
-  margin: 0 0.25rem;
+  .skill-points__icon {
+    vertical-align: top;
+    margin: 0 0.25rem;
+  }
 }
 
 .attribute-value {
