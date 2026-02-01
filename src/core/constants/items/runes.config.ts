@@ -12,8 +12,8 @@ export const RUNE_DEFINITIONS: RuneDefinition[] = [
     Qualities: RUNE_CRIT_QUALITY,
     Effect: {
       Description: '+X% Critical Hit Damage',
-      MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('rune_berserker');
+      MapToStatSource: (source: string, value: number): StatSource => {
+        const s = EmptyStatSource(source + '_rune_berserker');
         s.CriticalHit.MultiplierDamage = Math.max(0, value / 100);
         return s;
       }

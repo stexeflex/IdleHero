@@ -4,14 +4,15 @@ export const STATS_CONFIG = {
     ATTACK_SPEED: 1.0, // Basis-Angriffe pro Sekunde
     DAMAGE: 0, // Basis-Schaden
     BLEEDING_CHANCE: 0.0, // 0% Base Bleeding Chance
-    BLEEDING_DAMAGE: 0.0, // 0% Base Bleeding Damage
+    BLEEDING_DAMAGE: 0.25, // 25% Base Bleeding Damage
     CRIT_CHANCE: 0.0, // 0% Base CHC
     CRIT_DAMAGE: 1.5, // 150% Base CHD
     MULTI_HIT_CHANCE: 0.0, // 0% Base MHC
-    MULTI_HIT_DAMAGE: 1.1, // 110% Base MHC
+    MULTI_HIT_DAMAGE: 0.5, // 50% Base MHC
     MULTI_HIT_CHAIN_FACTOR: 0.4, // 40% Base Chain Factor
-    ACCURACY: 0.9, // Basis-Accuracy
-    EVASION: 0.05 // Basis-Evasion
+    ACCURACY: 0.7, // Basis-Accuracy
+    ARMOR_PENETRATION: 0.0, // 0% Basis Armor Penetration
+    RESISTANCE_PENETRATION: 0.0 // 0% Basis Magic Penetration
   },
   LIMITS: {
     INT_TO_CRIT_CHANCE: 0.5, // Maximal +50% CHC durch INT
@@ -41,6 +42,9 @@ export const STATS_CONFIG = {
     DEX_ACCURACY_A: 0.03, // Skalierungsfaktor für DEX zu Accuracy
 
     DEX_BASE_EVASION: 0.0, // Basis-Evasion durch DEX
-    DEX_EVASION_A: 0.02 // Skalierungsfaktor für DEX zu Evasion
+    DEX_EVASION_A: 0.02, // Skalierungsfaktor für DEX zu Evasion
+
+    STR_ARMOR_PENETRATION_K: 100, // Skalierungskonstante für STR to Armor Penetration
+    INT_RESISTANCE_PENETRATION_K: 100 // Skalierungskonstante für INT to Magic Penetration
   }
 };

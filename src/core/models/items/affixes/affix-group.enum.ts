@@ -1,1 +1,1 @@
-export type AffixGroup = 'Offense' | 'Defense' | 'Utility';
+export type AffixGroup = 'Attributes' | 'Offense' | 'Defense' | 'Utility';

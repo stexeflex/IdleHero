@@ -1,43 +1,12 @@
 import {
-  CommonItemLevel,
   EmptyStatSource,
-  EpicItemLevel,
   FlatAdditiveLabel,
   ItemLevel,
   ItemVariantDefinition,
-  LegendaryItemLevel,
-  MagicItemLevel,
   PercentageAdditiveLabel,
-  RareItemLevel,
+  PercentageMultiplicativeLabel,
   StatSource
 } from '../../models';
-
-export const ITEM_CONFIG = {
-  LEVEL: {
-    MIN: 1 as ItemLevel,
-    MAX: 25 as ItemLevel,
-    COMMON: {
-      MIN: 1 as CommonItemLevel,
-      MAX: 4 as CommonItemLevel
-    },
-    MAGIC: {
-      MIN: 5 as MagicItemLevel,
-      MAX: 9 as MagicItemLevel
-    },
-    RARE: {
-      MIN: 10 as RareItemLevel,
-      MAX: 14 as RareItemLevel
-    },
-    EPIC: {
-      MIN: 15 as EpicItemLevel,
-      MAX: 19 as EpicItemLevel
-    },
-    LEGENDARY: {
-      MIN: 20 as LegendaryItemLevel,
-      MAX: 25 as LegendaryItemLevel
-    }
-  }
-};
 
 const WEAPON_BASE_DAMAGE_REFERENCE_BASE10: Record<ItemLevel, number> = {
   1: 10,

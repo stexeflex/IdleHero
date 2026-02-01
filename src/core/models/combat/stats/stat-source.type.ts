@@ -4,8 +4,6 @@
  * Definiert die Quellen der verschiedenen Stats.
  * Jede Quelle kann flache Werte und Multiplikatoren bereitstellen,
  * die zur Berechnung der endgültigen Stats verwendet werden.
- *
- * Beispiel: Ein Item könnte +10 Stärke (flatStr) und +5% Stärke (multStr) bieten.
  */
 export type StatSource = {
   Id: string;
@@ -25,7 +23,8 @@ export type StatSource = {
   MultiHit: MultiHitStatSource;
 
   Accuracy: AccuracyStatSource;
-  Evasion: EvasionStatSource;
+  ArmorPenetration: ArmorPenetrationStatSource;
+  ResistancePenetration: ResistancePenetrationStatSource;
 };
 
 export type LifeStatSource = {
@@ -95,7 +94,12 @@ export type AccuracyStatSource = {
   Multiplier: number;
 };
 
-export type EvasionStatSource = {
+export type ArmorPenetrationStatSource = {
+  Flat: number;
+  Multiplier: number;
+};
+
+export type ResistancePenetrationStatSource = {
   Flat: number;
   Multiplier: number;
 };
@@ -131,6 +135,7 @@ export function EmptyStatSource(id: string): StatSource {
       MultiplierDamage: 0
     },
     Accuracy: { Flat: 0, Multiplier: 0 },
-    Evasion: { Flat: 0, Multiplier: 0 }
+    ArmorPenetration: { Flat: 0, Multiplier: 0 },
+    ResistancePenetration: { Flat: 0, Multiplier: 0 }
   };
 }

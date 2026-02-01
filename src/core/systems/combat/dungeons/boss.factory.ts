@@ -2,7 +2,7 @@ import {
   Boss,
   InitialArmor,
   InitialAttackInterval,
-  InitialCombatStats,
+  InitialBossStats,
   InitialLife,
   NoArmor
 } from '../../../models';
@@ -15,7 +15,7 @@ export function Gooey(): Boss {
 
     Life: InitialLife(100),
     Armor: NoArmor(),
-    Stats: InitialCombatStats(0.5, 2, 0.0, 0.0),
+    Stats: InitialBossStats(0.5, 2, 0.0),
     AttackInterval: InitialAttackInterval(0.5)
   };
 }
@@ -28,7 +28,7 @@ export function Slime(): Boss {
 
     Life: InitialLife(250),
     Armor: NoArmor(),
-    Stats: InitialCombatStats(0.5, 2, 0.0, 0.0),
+    Stats: InitialBossStats(0.5, 2, 0.0),
     AttackInterval: InitialAttackInterval(0.5)
   };
 }
@@ -41,7 +41,7 @@ export function Slug(): Boss {
 
     Life: InitialLife(1000),
     Armor: InitialArmor(1),
-    Stats: InitialCombatStats(0.5, 2, 0.0, 0.0),
+    Stats: InitialBossStats(0.5, 2, 0.0),
     AttackInterval: InitialAttackInterval(0.5)
   };
 }
@@ -54,7 +54,7 @@ export function KingSlime(): Boss {
 
     Life: InitialLife(2000),
     Armor: InitialArmor(5),
-    Stats: InitialCombatStats(0.6, 6, 0.05, 0.02),
+    Stats: InitialBossStats(0.6, 6, 0.02),
     AttackInterval: InitialAttackInterval(0.6)
   };
 }

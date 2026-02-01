@@ -26,7 +26,7 @@ export interface RuneEffectMapping {
    * Maps a rolled numeric value to a StatSource contribution.
    * Implementations will apply the numeric value to the appropriate StatSource fields.
    */
-  MapToStatSource: (value: number) => StatSource;
+  MapToStatSource: (source: string, value: number) => StatSource;
 }
 
 /** Template for runes. */

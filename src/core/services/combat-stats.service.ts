@@ -1,4 +1,4 @@
-import { BaseStats, CombatStats, ComputedStats, InitialBaseStats } from '../models';
+import { ComputedHeroStats, HeroStats, InitialHeroStats } from '../models';
 import { Injectable, computed, inject, signal } from '@angular/core';
 
 import { AttributesService } from './attributes.service';
@@ -10,12 +10,12 @@ export class CombatStatsService {
   private readonly Attributes = inject<AttributesService>(AttributesService);
   private readonly GearLoadout = inject<GearLoadoutService>(GearLoadoutService);
 
-  private readonly BaseStats = signal<BaseStats>(InitialBaseStats());
+  private readonly BaseStats = signal<HeroStats>(InitialHeroStats());
 
   /**
    * The effective combat stats, computed from the current stats
    */
-  public readonly Effective = computed<ComputedStats>(() => {
+  public readonly Effective = computed<ComputedHeroStats>(() => {
     const baseStats = this.BaseStats();
     const attributes = this.Attributes.Effective();
     const statSources = this.GearLoadout.StatSources();
@@ -44,7 +44,7 @@ export class CombatStatsService {
    * Sets the combat stats
    * @param stats the combat stats to set
    */
-  public SetBaseStats(stats: BaseStats): void {
+  public SetBaseStats(stats: HeroStats): void {
     this.BaseStats.set({ ...stats });
   }
 
@@ -52,7 +52,7 @@ export class CombatStatsService {
    * Gets a copy of the current combat stats
    * @returns the current combat stats
    */
-  public GetBaseStats(): BaseStats {
+  public GetBaseStats(): HeroStats {
     return { ...this.BaseStats() };
   }
 }

@@ -1,4 +1,4 @@
-import { AFFIX_TIER_ORDER, MaxAffixTierForLevel } from '../../constants';
+import { AFFIX_TIER_ORDER, MAX_AFFIX_TIER_FOR_LEVEL } from '../../constants';
 import { AffixTier, ItemLevel } from '../../models';
 
 /** Returns the index of the given affix tier in the order array. */
@@ -14,7 +14,7 @@ export function TierIndex(tier: string): number {
  * @returns The clamped affix tier.
  */
 export function ClampAffixTier(itemLevel: ItemLevel, targetTier?: AffixTier): AffixTier {
-  const maxTierAllowed: AffixTier = MaxAffixTierForLevel(itemLevel);
+  const maxTierAllowed: AffixTier = MAX_AFFIX_TIER_FOR_LEVEL[itemLevel];
   targetTier = targetTier ?? maxTierAllowed;
 
   const allowedIndex = AFFIX_TIER_ORDER.indexOf(maxTierAllowed);
@@ -43,7 +43,7 @@ export function NextTier(current: AffixTier): AffixTier | null {
  * @returns True if the affix tier is above the max allowed for the item level; false otherwise.
  */
 export function ExceedsMaxTierForItemLevel(affixTier: AffixTier, itemLevel: ItemLevel): boolean {
-  const maxTierAllowed: AffixTier = MaxAffixTierForLevel(itemLevel);
+  const maxTierAllowed: AffixTier = MAX_AFFIX_TIER_FOR_LEVEL[itemLevel];
   const affixIndex = AFFIX_TIER_ORDER.indexOf(affixTier);
   const maxIndex = AFFIX_TIER_ORDER.indexOf(maxTierAllowed);
   const overMax = affixIndex > maxIndex;

@@ -1,5 +1,5 @@
 import { ATTRIBUTES_CONFIG, STATS_CONFIG } from '../../constants';
-import { Attributes, BaseStats, ComputedStats, StatSource } from '../../models';
+import { Attributes, ComputedHeroStats, HeroStats, StatSource } from '../../models';
 import {
   MapDexterityToAccuracy,
   MapDexterityToChainFactor,
@@ -7,16 +7,17 @@ import {
   MapDexterityToHaste,
   MapDexterityToMultiHitChance,
   MapIntelligenceToCritChance,
-  MapStrengthToBaseDamage
+  MapIntelligenceToResistancePenetration,
+  MapStrengthToArmorPenetration
 } from './stat-scalings';
 
 import { ClampUtils } from '../../../shared/utils';
 
 export function ComputeStats(
   attributes: Attributes,
-  baseStats: BaseStats,
+  baseStats: HeroStats,
   statSources: StatSource[]
-): ComputedStats {
+): ComputedHeroStats {
   const sources: StatSource[] = statSources ?? [];
 
   // Attributes
@@ -42,11 +43,14 @@ export function ComputeStats(
   const { MultiHitChance: multiHitChance, MultiHitChainFactor: multiHitChainFactor } =
     ComputeMultiHit(sources, baseStats.MultiHitChance, effectiveDex);
 
-  // Accuracy & Evasion
+  // Accuracy
   const accuracy = ComputeAccuracy(sources, effectiveDex);
-  const evasion = ComputeEvasion(sources, effectiveDex);
 
-  const stats: ComputedStats = {
+  // Penetrations
+  const armorPenetration = ComputeArmorPenetration(sources, effectiveStr);
+  const resistancePenetration = ComputeResistancePenetration(sources, effectiveInt);
+
+  const stats: ComputedHeroStats = {
     AttackSpeed: attackSpeed,
     Damage: damage,
     BleedingChance: baseStats.BleedingChance,
@@ -57,7 +61,8 @@ export function ComputeStats(
     MultiHitDamage: baseStats.MultiHitDamage,
     MultiHitChainFactor: multiHitChainFactor,
     Accuracy: accuracy,
-    Evasion: evasion
+    ArmorPenetration: armorPenetration,
+    ResistancePenetration: resistancePenetration
   };
 
   console.log('Computed Stats:', stats);
@@ -177,13 +182,25 @@ function ComputeAccuracy(sources: StatSource[], dexterity: number): number {
   return accuracy;
 }
 
-function ComputeEvasion(sources: StatSource[], dexterity: number): number {
-  const baseEva = MapDexterityToEvasion(dexterity);
-  const addEva = sources.reduce((sum, s) => Flat(sum, s.Evasion.Flat), 0);
-  const mulEva = sources.reduce((prod, s) => Multiplier(prod, s.Evasion.Multiplier), 1);
-  const evasion = ClampUtils.clamp01((baseEva + addEva) * mulEva);
+function ComputeArmorPenetration(sources: StatSource[], strength: number): number {
+  const baseAcc = MapStrengthToArmorPenetration(strength);
+  const addAcc = sources.reduce((sum, s) => Flat(sum, s.ArmorPenetration.Flat), 0);
+  const mulAcc = sources.reduce((prod, s) => Multiplier(prod, s.ArmorPenetration.Multiplier), 1);
+  const accuracy = ClampUtils.clamp01((baseAcc + addAcc) * mulAcc);
 
-  return evasion;
+  return accuracy;
+}
+
+function ComputeResistancePenetration(sources: StatSource[], intelligence: number): number {
+  const baseAcc = MapIntelligenceToResistancePenetration(intelligence);
+  const addAcc = sources.reduce((sum, s) => Flat(sum, s.ResistancePenetration.Flat), 0);
+  const mulAcc = sources.reduce(
+    (prod, s) => Multiplier(prod, s.ResistancePenetration.Multiplier),
+    1
+  );
+  const accuracy = ClampUtils.clamp01((baseAcc + addAcc) * mulAcc);
+
+  return accuracy;
 }
 //#endregion
 

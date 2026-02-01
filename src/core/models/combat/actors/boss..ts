@@ -1,5 +1,5 @@
+import { BossStats } from '../stats/stats';
 import { CombatActor } from './combat-actor';
-import { CombatStats } from '../stats/stats';
 import { CreaturesIconName } from '../../../../shared/components';
 
 /**
@@ -9,5 +9,5 @@ export interface Boss extends CombatActor {
   Id: string;
   Name: string;
   BossIcon: CreaturesIconName;
-  Stats: CombatStats;
+  Stats: BossStats;
 }

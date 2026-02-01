@@ -58,7 +58,7 @@ export class CraftingService {
     if (provider && !provider.CanAfford(cost)) return { Success: false, Item: null as any };
 
     const item: Item = {
-      Id: `item_${Date.now()}_${Math.random().toString(36).slice(2)}`,
+      Id: `item_${variant.Id}_${performance.now()}`,
       DefinitionId: variant.Id,
       Name: variant.Name,
       Icon: variant.Icon,

@@ -114,8 +114,12 @@ export class Stats {
         value: this.percentPipe.transform(combatStats.Accuracy, '1.0-0')
       },
       {
-        label: 'Evasion',
-        value: this.percentPipe.transform(combatStats.Evasion, '1.0-0')
+        label: 'Armor Penetration',
+        value: this.percentPipe.transform(combatStats.ArmorPenetration, '1.0-0')
+      },
+      {
+        label: 'Resistance Penetration',
+        value: this.percentPipe.transform(combatStats.ResistancePenetration, '1.0-0')
       }
     ];
   }

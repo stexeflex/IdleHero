@@ -24,7 +24,7 @@ export function MapItemToStatSources(item: Item): StatSource[] {
     // If the weapon has a base damage, apply it
     const weaponBaseDamage = itemDefinition.WeaponBaseDamage;
     if (weaponBaseDamage !== undefined) {
-      const weaponBaseDamageStatSource = EmptyStatSource(`${itemDefinition.Id}_weapon_base_damage`);
+      const weaponBaseDamageStatSource = EmptyStatSource(`${item.Id}_weapon_base_damage`);
       weaponBaseDamageStatSource.Damage.Flat += weaponBaseDamage[item.Level];
       statSources.push(weaponBaseDamageStatSource);
     }
@@ -34,7 +34,7 @@ export function MapItemToStatSources(item: Item): StatSource[] {
       itemDefinition.WeaponBaseAttackSpeed ?? STATS_CONFIG.BASE.ATTACK_SPEED;
 
     if (weaponBaseAttackSpeedMultiplier !== 1) {
-      const weaponBaseAttackSpeed = EmptyStatSource(`${itemDefinition.Id}_weapon_base_attackspeed`);
+      const weaponBaseAttackSpeed = EmptyStatSource(`${item.Id}_weapon_base_attackspeed`);
 
       weaponBaseAttackSpeed.AttackSpeed.Multiplier = weaponBaseAttackSpeedMultiplier - 1.0;
 
@@ -52,7 +52,10 @@ export function MapItemToStatSources(item: Item): StatSource[] {
       continue;
     }
 
-    const affixStatSource: StatSource = affixDefinition.Effect.MapToStatSource(affix.RolledValue);
+    const affixStatSource: StatSource = affixDefinition.Effect.MapToStatSource(
+      item.Id,
+      affix.RolledValue
+    );
     statSources.push(affixStatSource);
   }
 
@@ -64,6 +67,7 @@ export function MapItemToStatSources(item: Item): StatSource[] {
 
     if (runeDefinition) {
       const runeStatSource: StatSource = runeDefinition.Effect.MapToStatSource(
+        item.Id,
         item.Rune.RolledValue
       );
       statSources.push(runeStatSource);

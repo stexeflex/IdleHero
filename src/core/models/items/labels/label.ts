@@ -19,6 +19,7 @@ export function FlatAdditiveLabel(stat: string, value: number): Label {
     Stat: stat
   };
 }
+
 export function PercentageAdditiveLabel(stat: string, value: number): Label {
   return {
     Type: 'Additive',

@@ -28,13 +28,12 @@ export interface AffixEffectMapping {
    * A function that maps a rolled numeric value to a StatSource contribution.
    * Implementations will apply the numeric value to the appropriate StatSource fields.
    */
-  MapToStatSource: (value: number) => StatSource;
+  MapToStatSource: (source: string, value: number) => StatSource;
 }
 
 /** Affix definition template used to roll actual affixes on items. */
 export interface AffixDefinition {
   Id: string;
-  Name: string;
   Groups: AffixGroup[];
   AllowedSlots: ItemSlot[];
 

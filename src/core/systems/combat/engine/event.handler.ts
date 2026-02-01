@@ -1,6 +1,7 @@
 import {
   AttackEvent,
   Boss,
+  BossStats,
   CombatEvent,
   CreateAttackEvent,
   CreateDamageEvent,
@@ -10,6 +11,7 @@ import {
   DeathEvent,
   HealEvent,
   Hero,
+  HeroStats,
   MissEvent,
   ResetLife
 } from '../../../models';
@@ -77,8 +79,8 @@ export class EventHandler {
     // 1) Hit-Check mit Accuracy/Evasion
     const { hitChance, isHit } = this.CalculateHit(
       STATS_CONFIG.BASE.HIT_CHANCE,
-      actor.Stats.Accuracy,
-      target.Stats.Evasion
+      (actor.Stats as HeroStats).Accuracy,
+      (target.Stats as BossStats).Evasion
     );
 
     // Miss-Event
