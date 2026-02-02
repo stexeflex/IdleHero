@@ -10,6 +10,6 @@ export function CreateEmptyLoadout(): GearLoadout {
     Head: null,
     Chest: null,
     Legs: null,
-    Boots: null
+    Feet: null
   };
 }

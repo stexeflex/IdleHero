@@ -1,1 +1,1 @@
-export type ItemSlot = 'Weapon' | 'OffHand' | 'Head' | 'Chest' | 'Legs' | 'Boots';
+export type ItemSlot = 'Weapon' | 'OffHand' | 'Head' | 'Chest' | 'Legs' | 'Feet';

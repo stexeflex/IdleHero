@@ -53,7 +53,7 @@ export class CraftingArea {
   }
 
   // UI State
-  public readonly Slots = ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Boots'] as ItemSlot[];
+  public readonly Slots = ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Feet'] as ItemSlot[];
   public readonly Rarities = ['Common', 'Magic', 'Rare', 'Epic', 'Legendary'] as ItemRarity[];
 
   public readonly SelectedSlot = signal<ItemSlot>('Weapon');

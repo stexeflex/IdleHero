@@ -46,7 +46,7 @@ export class CharacterLoadout {
       { slot: 'Head', class: 'head', icon: ICONS_CONFIG['DEFAULT_HEAD'] },
       { slot: 'Chest', class: 'chest', icon: ICONS_CONFIG['DEFAULT_CHEST'] },
       { slot: 'Legs', class: 'legs', icon: ICONS_CONFIG['DEFAULT_LEGS'] },
-      { slot: 'Boots', class: 'boots', icon: ICONS_CONFIG['DEFAULT_BOOTS'] }
+      { slot: 'Feet', class: 'feet', icon: ICONS_CONFIG['DEFAULT_FEET'] }
     ];
   }
 

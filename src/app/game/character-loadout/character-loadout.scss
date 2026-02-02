@@ -15,7 +15,7 @@
     "weapon head offhand"
     "weapon chest offhand"
     "weapon legs offhand"
-    "weapon boots offhand"
+    "weapon feet offhand"
     / auto auto auto;
 
   gap: $gap;
@@ -59,8 +59,8 @@
 .legs {
   grid-area: legs;
 }
-.boots {
-  grid-area: boots;
+.feet {
+  grid-area: feet;
 }
 
 .empty {

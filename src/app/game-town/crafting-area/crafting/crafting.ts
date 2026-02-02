@@ -30,7 +30,7 @@ export class Crafting {
   private readonly inventory = inject(InventoryService);
 
   // UI State
-  public readonly Slots: ItemSlot[] = ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Boots'];
+  public readonly Slots: ItemSlot[] = ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Feet'];
   public readonly Tiers: ItemTier[] = ['I', 'II', 'III'];
   public readonly SlotIcons: Record<ItemSlot, GearSlotIconName> = {
     Weapon: ICONS_CONFIG['DEFAULT_WEAPON'],
@@ -38,7 +38,7 @@ export class Crafting {
     Head: ICONS_CONFIG['DEFAULT_HEAD'],
     Chest: ICONS_CONFIG['DEFAULT_CHEST'],
     Legs: ICONS_CONFIG['DEFAULT_LEGS'],
-    Boots: ICONS_CONFIG['DEFAULT_BOOTS']
+    Feet: ICONS_CONFIG['DEFAULT_FEET']
   };
 
   public readonly SelectedSlot = signal<ItemSlot>('Weapon');

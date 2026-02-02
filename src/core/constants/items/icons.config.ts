@@ -6,5 +6,5 @@ export const ICONS_CONFIG: Record<any, GearSlotIconName> = {
   DEFAULT_HEAD: 'brutalhelm',
   DEFAULT_CHEST: 'chestarmor',
   DEFAULT_LEGS: 'metalskirt',
-  DEFAULT_BOOTS: 'legarmor'
+  DEFAULT_FEET: 'legarmor'
 };

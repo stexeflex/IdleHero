@@ -1,7 +1,6 @@
 import { Affix } from '../affixes/affix';
 import { GearSlotIconName } from '../../../../shared/components';
 import { ItemLevel } from './item-level.type';
-import { ItemRarity } from './item-rarity.enum';
 import { ItemSlot } from './item-slot.enum';
 import { ItemTier } from './item-tier.type';
 import { ItemType } from './item-type.type';

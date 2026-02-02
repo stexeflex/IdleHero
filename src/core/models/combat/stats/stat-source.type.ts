@@ -8,9 +8,6 @@
 export type StatSource = {
   Id: string;
 
-  Life: LifeStatSource;
-  Armor: ArmorStatSource;
-
   Strength: StrengthStatSource;
   Intelligence: IntelligenceStatSource;
   Dexterity: DexterityStatSource;
@@ -115,8 +112,6 @@ export type ChargingStrikeStatSource = {
 export function EmptyStatSource(id: string): StatSource {
   return {
     Id: id,
-    Life: { Flat: 0, Multiplier: 0 },
-    Armor: { Flat: 0, Multiplier: 0 },
     Strength: { Flat: 0, Multiplier: 0 },
     Intelligence: { Flat: 0, Multiplier: 0 },
     Dexterity: { Flat: 0, Multiplier: 0 },

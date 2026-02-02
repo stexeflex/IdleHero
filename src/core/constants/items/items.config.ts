@@ -4,6 +4,7 @@ import {
   ItemLevel,
   ItemVariantDefinition,
   PercentageAdditiveLabel,
+  PercentageMultiplicativeLabel,
   StatSource
 } from '../../models';
 
@@ -131,7 +132,7 @@ const WEAPON_SWORDS_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => PercentageAdditiveLabel('Bleed Chance', value),
       ValuesByLevel: WEAPON_INNATE_CONFIG.BLEED_CHANCE_BASE1,
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('weapon_sword_starter_innate');
+        const s = EmptyStatSource('t1_weapon_sword_starter_innate');
         s.Bleeding.FlatChance = value;
         return s;
       }
@@ -150,7 +151,7 @@ const WEAPON_SWORDS_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => PercentageAdditiveLabel('Bleed Chance', value),
       ValuesByLevel: WEAPON_INNATE_CONFIG.BLEED_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('weapon_sword_bleed_innate');
+        const s = EmptyStatSource('t2_weapon_sword_bleed_innate');
         s.Bleeding.FlatChance = value;
         return s;
       }
@@ -169,7 +170,7 @@ const WEAPON_SWORDS_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => PercentageAdditiveLabel('Crit Chance', value),
       ValuesByLevel: WEAPON_INNATE_CONFIG.CRIT_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('weapon_sword_crit_innate');
+        const s = EmptyStatSource('t2_weapon_sword_crit_innate');
         s.CriticalHit.FlatChance = value;
         return s;
       }
@@ -188,7 +189,7 @@ const WEAPON_SWORDS_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => PercentageAdditiveLabel('Multi Hit Chance', value),
       ValuesByLevel: WEAPON_INNATE_CONFIG.MULTI_HIT_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('weapon_sword_fast_innate');
+        const s = EmptyStatSource('t2_weapon_sword_fast_innate');
         s.MultiHit.FlatChance = value;
         return s;
       }
@@ -207,7 +208,7 @@ const WEAPON_SWORDS_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => FlatAdditiveLabel('Damage', value),
       ValuesByLevel: WEAPON_INNATE_CONFIG.DAMAGE_BASE1,
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('weapon_sword_heavy_innate');
+        const s = EmptyStatSource('t3_weapon_sword_heavy_innate');
         s.Damage.Flat = value;
         return s;
       }
@@ -226,7 +227,7 @@ const WEAPON_SWORDS_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => FlatAdditiveLabel('Damage', value),
       ValuesByLevel: WEAPON_INNATE_CONFIG.DAMAGE_BASE1,
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('weapon_sword_powerful_innate');
+        const s = EmptyStatSource('t3_weapon_sword_powerful_innate');
         s.Damage.Flat = value;
         return s;
       }
@@ -247,7 +248,7 @@ const WEAPON_AXES_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => PercentageAdditiveLabel('Bleed Chance', value),
       ValuesByLevel: WEAPON_INNATE_CONFIG.BLEED_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('weapon_axe_bleed_innate');
+        const s = EmptyStatSource('t2_weapon_axe_bleed_innate');
         s.Bleeding.FlatChance = value;
         return s;
       }
@@ -266,7 +267,7 @@ const WEAPON_AXES_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => PercentageAdditiveLabel('Crit Chance', value),
       ValuesByLevel: WEAPON_INNATE_CONFIG.CRIT_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('weapon_axe_crit_innate');
+        const s = EmptyStatSource('t2_weapon_axe_crit_innate');
         s.CriticalHit.FlatChance = value;
         return s;
       }
@@ -285,7 +286,7 @@ const WEAPON_AXES_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => FlatAdditiveLabel('Damage', value),
       ValuesByLevel: WEAPON_INNATE_CONFIG.DAMAGE_BASE1,
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('weapon_axe_heavy_innate');
+        const s = EmptyStatSource('t3_weapon_axe_heavy_innate');
         s.Damage.Flat = value;
         return s;
       }
@@ -304,7 +305,7 @@ const WEAPON_AXES_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => PercentageAdditiveLabel('Bleed Chance', value),
       ValuesByLevel: WEAPON_INNATE_CONFIG.BLEED_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('weapon_axe_halberd_innate');
+        const s = EmptyStatSource('t3_weapon_axe_halberd_innate');
         s.Bleeding.FlatChance = value;
         return s;
       }
@@ -325,7 +326,7 @@ const WEAPON_BOWS_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => PercentageAdditiveLabel('Multi Hit Chance', value),
       ValuesByLevel: WEAPON_INNATE_CONFIG.MULTI_HIT_CHANCE_BASE1,
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('weapon_bow_multi_hit_innate');
+        const s = EmptyStatSource('t1_weapon_bow_multi_hit_innate');
         s.MultiHit.FlatChance = value;
         return s;
       }
@@ -344,7 +345,7 @@ const WEAPON_BOWS_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => PercentageAdditiveLabel('Bleed Chance', value),
       ValuesByLevel: WEAPON_INNATE_CONFIG.BLEED_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('weapon_bow_bleed_innate');
+        const s = EmptyStatSource('t2_weapon_bow_bleed_innate');
         s.Bleeding.FlatChance = value;
         return s;
       }
@@ -363,7 +364,7 @@ const WEAPON_BOWS_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => PercentageAdditiveLabel('Crit Chance', value),
       ValuesByLevel: WEAPON_INNATE_CONFIG.CRIT_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('weapon_bow_crit_innate');
+        const s = EmptyStatSource('t2_weapon_bow_crit_innate');
         s.CriticalHit.FlatChance = value;
         return s;
       }
@@ -382,7 +383,7 @@ const WEAPON_BOWS_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => PercentageAdditiveLabel('Multi Hit Chance', value),
       ValuesByLevel: WEAPON_INNATE_CONFIG.MULTI_HIT_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('weapon_bow_multi_innate');
+        const s = EmptyStatSource('t2_weapon_bow_multi_innate');
         s.MultiHit.FlatChance = value;
         return s;
       }
@@ -401,7 +402,7 @@ const WEAPON_BOWS_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => FlatAdditiveLabel('Damage', value),
       ValuesByLevel: WEAPON_INNATE_CONFIG.DAMAGE_BASE1,
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('weapon_bow_heavy_innate');
+        const s = EmptyStatSource('t3_weapon_bow_heavy_innate');
         s.Damage.Flat = value;
         return s;
       }
@@ -422,7 +423,7 @@ const WEAPON_DAGGER_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => PercentageAdditiveLabel('Crit Chance', value),
       ValuesByLevel: WEAPON_INNATE_CONFIG.CRIT_CHANCE_BASE1,
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('weapon_dagger_starter_innate');
+        const s = EmptyStatSource('t1_weapon_dagger_starter_innate');
         s.CriticalHit.FlatChance = value;
         return s;
       }
@@ -441,7 +442,7 @@ const WEAPON_DAGGER_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => PercentageAdditiveLabel('Bleed Chance', value),
       ValuesByLevel: WEAPON_INNATE_CONFIG.BLEED_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('weapon_dagger_bleed_innate');
+        const s = EmptyStatSource('t2_weapon_dagger_bleed_innate');
         s.Bleeding.FlatChance = value;
         return s;
       }
@@ -460,7 +461,7 @@ const WEAPON_DAGGER_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => PercentageAdditiveLabel('Crit Chance', value),
       ValuesByLevel: WEAPON_INNATE_CONFIG.CRIT_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('weapon_dagger_crit_innate');
+        const s = EmptyStatSource('t2_weapon_dagger_crit_innate');
         s.CriticalHit.FlatChance = value;
         return s;
       }
@@ -479,7 +480,7 @@ const WEAPON_DAGGER_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => PercentageAdditiveLabel('Multi Hit Chance', value),
       ValuesByLevel: WEAPON_INNATE_CONFIG.MULTI_HIT_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('weapon_dagger_multi_innate');
+        const s = EmptyStatSource('t2_weapon_dagger_multi_innate');
         s.MultiHit.FlatChance = value;
         return s;
       }
@@ -498,7 +499,7 @@ const WEAPON_DAGGER_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => FlatAdditiveLabel('Damage', value),
       ValuesByLevel: WEAPON_INNATE_CONFIG.DAMAGE_BASE1,
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('weapon_dagger_powerful_innate');
+        const s = EmptyStatSource('t3_weapon_dagger_powerful_innate');
         s.Damage.Flat = value;
         return s;
       }
@@ -519,7 +520,7 @@ const WEAPON_STAFF_WAND_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => PercentageAdditiveLabel('Crit Chance', value),
       ValuesByLevel: WEAPON_INNATE_CONFIG.CRIT_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('weapon_wand_crit_innate');
+        const s = EmptyStatSource('t2_weapon_wand_crit_innate');
         s.CriticalHit.FlatChance = value;
         return s;
       }
@@ -538,7 +539,7 @@ const WEAPON_STAFF_WAND_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => PercentageAdditiveLabel('Crit Damage', value),
       ValuesByLevel: WEAPON_INNATE_CONFIG.CRIT_DAMAGE_BASE10,
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('weapon_staff_crit_damage_innate');
+        const s = EmptyStatSource('t2_weapon_staff_crit_damage_innate');
         s.CriticalHit.FlatDamage = value;
         return s;
       }
@@ -557,7 +558,7 @@ const WEAPON_STAFF_WAND_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => PercentageAdditiveLabel('Crit Damage', value),
       ValuesByLevel: WEAPON_INNATE_CONFIG.CRIT_DAMAGE_BASE25,
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('weapon_wand_crit_damage_innate');
+        const s = EmptyStatSource('t3_weapon_wand_crit_damage_innate');
         s.CriticalHit.FlatDamage = value;
         return s;
       }
@@ -576,7 +577,7 @@ const WEAPON_STAFF_WAND_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => PercentageAdditiveLabel('Crit Chance', value),
       ValuesByLevel: WEAPON_INNATE_CONFIG.CRIT_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('weapon_staff_crit_innate');
+        const s = EmptyStatSource('t3_weapon_staff_crit_innate');
         s.CriticalHit.FlatChance = value;
         return s;
       }
@@ -606,7 +607,7 @@ const OFFHAND_SHIELDS_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => FlatAdditiveLabel('Strength', value),
       ValuesByLevel: ScaleLinearValueCurve(1, 1),
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('offhand_shield_starter_innate');
+        const s = EmptyStatSource('t1_offhand_shield_starter_innate');
         s.Strength.Flat = value;
         return s;
       }
@@ -626,7 +627,7 @@ const OFFHAND_ORBS_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => FlatAdditiveLabel('Intelligence', value),
       ValuesByLevel: ScaleLinearValueCurve(1, 1),
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('offhand_orb_starter_innate');
+        const s = EmptyStatSource('t2_offhand_orb_starter_innate');
         s.Intelligence.Flat = value;
         return s;
       }
@@ -646,7 +647,7 @@ const OFFHAND_QUIVERS_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => FlatAdditiveLabel('Dexterity', value),
       ValuesByLevel: ScaleLinearValueCurve(1, 1),
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('offhand_quiver_starter_innate');
+        const s = EmptyStatSource('t1_offhand_quiver_starter_innate');
         s.Dexterity.Flat = value;
         return s;
       }
@@ -666,7 +667,7 @@ const OFFHAND_DAGGERS_VARIANTS: ItemVariantDefinition[] = [
       ToLabel: (value: number) => FlatAdditiveLabel('Intelligence', value),
       ValuesByLevel: ScaleLinearValueCurve(1, 1),
       MapToStatSource: (value: number): StatSource => {
-        const s = EmptyStatSource('offhand_dagger_starter_innate');
+        const s = EmptyStatSource('t1_offhand_dagger_starter_innate');
         s.Intelligence.Flat = value;
         return s;
       }
@@ -683,9 +684,80 @@ const OFFHAND_VARIANTS: ItemVariantDefinition[] = [
 //#endregion OFFHANDS
 
 //#region HEAD
-const HEAD_HELMET_VARIANTS: ItemVariantDefinition[] = [];
-const HEAD_HOOD_VARIANTS: ItemVariantDefinition[] = [];
-const HEAD_HAT_VARIANTS: ItemVariantDefinition[] = [];
+const HEAD_HELMET_VARIANTS: ItemVariantDefinition[] = [
+  {
+    Id: 't1_head_helmet_warrior_starter',
+    Name: 'Iron Helmet',
+    Icon: 'closedbarbute',
+    Slot: 'Head',
+    Type: 'Helmet',
+    Tier: 'I',
+    Innate: {
+      ToLabel: (value: number) => PercentageMultiplicativeLabel('Accuracy', value),
+      ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
+      MapToStatSource: (value: number): StatSource => {
+        const s = EmptyStatSource('t1_head_helmet_warrior_starter_innate');
+        s.Accuracy.Multiplier = value;
+        return s;
+      }
+    }
+  }
+];
+const HEAD_HOOD_VARIANTS: ItemVariantDefinition[] = [
+  {
+    Id: 't1_head_hood_rogue_starter',
+    Name: 'Cloth Hood',
+    Icon: 'hood',
+    Slot: 'Head',
+    Type: 'Hood',
+    Tier: 'I',
+    Innate: {
+      ToLabel: (value: number) => PercentageMultiplicativeLabel('Accuracy', value),
+      ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
+      MapToStatSource: (value: number): StatSource => {
+        const s = EmptyStatSource('t1_head_hood_rogue_starter_innate');
+        s.Accuracy.Multiplier = value;
+        return s;
+      }
+    }
+  }
+];
+const HEAD_HAT_VARIANTS: ItemVariantDefinition[] = [
+  {
+    Id: 't1_head_hat_mage_starter',
+    Name: 'Apprentice Hat',
+    Icon: 'pilgrimhat',
+    Slot: 'Head',
+    Type: 'Hat',
+    Tier: 'I',
+    Innate: {
+      ToLabel: (value: number) => PercentageMultiplicativeLabel('Accuracy', value),
+      ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
+      MapToStatSource: (value: number): StatSource => {
+        const s = EmptyStatSource('t1_head_hat_mage_starter_innate');
+        s.Accuracy.Multiplier = value;
+        return s;
+      }
+    }
+  },
+  {
+    Id: 't1_head_hat_bowman_starter',
+    Name: 'Bycocket',
+    Icon: 'robinhoodhat',
+    Slot: 'Head',
+    Type: 'Hat',
+    Tier: 'I',
+    Innate: {
+      ToLabel: (value: number) => PercentageMultiplicativeLabel('Accuracy', value),
+      ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
+      MapToStatSource: (value: number): StatSource => {
+        const s = EmptyStatSource('t1_head_hat_bowman_starter_innate');
+        s.Accuracy.Multiplier = value;
+        return s;
+      }
+    }
+  }
+];
 
 export const HEAD_VARIANTS: ItemVariantDefinition[] = [
   ...HEAD_HELMET_VARIANTS,
@@ -695,12 +767,200 @@ export const HEAD_VARIANTS: ItemVariantDefinition[] = [
 //#endregion HEAD
 
 //#region CHEST
-export const CHEST_VARIANTS: ItemVariantDefinition[] = [];
+const CHEST_CHESTPLATE_VARIANTS: ItemVariantDefinition[] = [
+  {
+    Id: 't1_chest_chestplate_chain_mail_armor',
+    Name: 'Chain Mail',
+    Icon: 'chestarmor',
+    Slot: 'Chest',
+    Type: 'Chestplate',
+    Tier: 'I',
+    Innate: {
+      ToLabel: (value: number) => PercentageMultiplicativeLabel('Armor Penetration', value),
+      ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
+      MapToStatSource: (value: number): StatSource => {
+        const s = EmptyStatSource('t1_chest_chestplate_chain_mail_armor_innate');
+        s.ArmorPenetration.Multiplier = value;
+        return s;
+      }
+    }
+  }
+];
+const CHEST_TUNIC_VARIANTS: ItemVariantDefinition[] = [
+  {
+    Id: 't1_chest_tunic_leather_armor',
+    Name: 'Leather Tunic',
+    Icon: 'leatherarmor',
+    Slot: 'Chest',
+    Type: 'Tunic',
+    Tier: 'I',
+    Innate: {
+      ToLabel: (value: number) => PercentageMultiplicativeLabel('Armor Penetration', value),
+      ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
+      MapToStatSource: (value: number): StatSource => {
+        const s = EmptyStatSource('t1_chest_tunic_leather_armor_innate');
+        s.ArmorPenetration.Multiplier = value;
+        return s;
+      }
+    }
+  }
+];
+const CHEST_SHIRT_VARIANTS: ItemVariantDefinition[] = [
+  {
+    Id: 't1_chest_shirt_buttoned_shirt',
+    Name: 'Buttoned Shirt',
+    Icon: 'shirt',
+    Slot: 'Chest',
+    Type: 'Shirt',
+    Tier: 'I',
+    Innate: {
+      ToLabel: (value: number) => PercentageMultiplicativeLabel('Resistance Penetration', value),
+      ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
+      MapToStatSource: (value: number): StatSource => {
+        const s = EmptyStatSource('t1_chest_shirt_buttoned_shirt_innate');
+        s.ResistancePenetration.Multiplier = value;
+        return s;
+      }
+    }
+  },
+  {
+    Id: 't1_chest_shirt_light_top',
+    Name: 'Light Top',
+    Icon: 'sleevelesstop',
+    Slot: 'Chest',
+    Type: 'Shirt',
+    Tier: 'I',
+    Innate: {
+      ToLabel: (value: number) => PercentageMultiplicativeLabel('Resistance Penetration', value),
+      ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
+      MapToStatSource: (value: number): StatSource => {
+        const s = EmptyStatSource('t1_chest_shirt_light_top_innate');
+        s.ResistancePenetration.Multiplier = value;
+        return s;
+      }
+    }
+  }
+];
+export const CHEST_VARIANTS: ItemVariantDefinition[] = [
+  ...CHEST_CHESTPLATE_VARIANTS,
+  ...CHEST_TUNIC_VARIANTS,
+  ...CHEST_SHIRT_VARIANTS
+];
 //#endregion CHEST
+
+//#region LEGS
+const LEGS_PANTS_VARIANTS: ItemVariantDefinition[] = [
+  {
+    Id: 't1_legs_pants_trousers',
+    Name: 'Trousers',
+    Icon: 'trousers',
+    Slot: 'Legs',
+    Type: 'Pants',
+    Tier: 'I',
+    Innate: {
+      ToLabel: (value: number) => FlatAdditiveLabel('Charge Gain', value),
+      ValuesByLevel: ScaleLinearValueCurve(1, 1),
+      MapToStatSource: (value: number): StatSource => {
+        const s = EmptyStatSource('t1_legs_pants_trousers_innate');
+        s.ChargingStrike.ChargeGain = value;
+        return s;
+      }
+    }
+  },
+  {
+    Id: 't1_legs_pants_shorts',
+    Name: 'Shorts',
+    Icon: 'underwearshorts',
+    Slot: 'Legs',
+    Type: 'Pants',
+    Tier: 'I',
+    Innate: {
+      ToLabel: (value: number) => FlatAdditiveLabel('Charge Gain', value),
+      ValuesByLevel: ScaleLinearValueCurve(1, 1),
+      MapToStatSource: (value: number): StatSource => {
+        const s = EmptyStatSource('t1_legs_pants_shorts_innate');
+        s.ChargingStrike.ChargeGain = value;
+        return s;
+      }
+    }
+  }
+];
+const LEGS_SKIRT_VARIANTS: ItemVariantDefinition[] = [
+  {
+    Id: 't1_legs_skirt_skirt',
+    Name: 'Skirt',
+    Icon: 'skirt',
+    Slot: 'Legs',
+    Type: 'Skirt',
+    Tier: 'I',
+    Innate: {
+      ToLabel: (value: number) => FlatAdditiveLabel('Charge Gain', value),
+      ValuesByLevel: ScaleLinearValueCurve(1, 1),
+      MapToStatSource: (value: number): StatSource => {
+        const s = EmptyStatSource('t1_legs_skirt_skirt_innate');
+        s.ChargingStrike.ChargeGain = value;
+        return s;
+      }
+    }
+  }
+];
+
+export const LEGS_VARIANTS: ItemVariantDefinition[] = [
+  ...LEGS_PANTS_VARIANTS,
+  ...LEGS_SKIRT_VARIANTS
+];
+//#endregion LEGS
+
+//#region FEET
+const FEET_BOOTS_VARIANTS: ItemVariantDefinition[] = [
+  {
+    Id: 't1_feet_boots_leather_boots',
+    Name: 'Leather Boots',
+    Icon: 'boots',
+    Slot: 'Feet',
+    Type: 'Boots',
+    Tier: 'I',
+    Innate: {
+      ToLabel: (value: number) => PercentageMultiplicativeLabel('Accuracy', value),
+      ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
+      MapToStatSource: (value: number): StatSource => {
+        const s = EmptyStatSource('t1_feet_boots_leather_boots_innate');
+        s.Accuracy.Multiplier = value;
+        return s;
+      }
+    }
+  }
+];
+const FEET_SHOES_VARIANTS: ItemVariantDefinition[] = [
+  {
+    Id: 't1_feet_boots_leather_shoes',
+    Name: 'Leather Shoes',
+    Icon: 'sonicshoes',
+    Slot: 'Feet',
+    Type: 'Shoes',
+    Tier: 'I',
+    Innate: {
+      ToLabel: (value: number) => PercentageMultiplicativeLabel('Accuracy', value),
+      ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
+      MapToStatSource: (value: number): StatSource => {
+        const s = EmptyStatSource('t1_feet_boots_leather_shoes_innate');
+        s.Accuracy.Multiplier = value;
+        return s;
+      }
+    }
+  }
+];
+export const FEET_VARIANTS: ItemVariantDefinition[] = [
+  ...FEET_BOOTS_VARIANTS,
+  ...FEET_SHOES_VARIANTS
+];
+//#endregion FEET
 
 export const ITEM_VARIANTS: ItemVariantDefinition[] = [
   ...WEAPON_VARIANTS,
   ...OFFHAND_VARIANTS,
   ...HEAD_VARIANTS,
-  ...CHEST_VARIANTS
+  ...CHEST_VARIANTS,
+  ...LEGS_VARIANTS,
+  ...FEET_VARIANTS
 ];

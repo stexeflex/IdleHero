@@ -28,7 +28,7 @@ export class InventoryArea {
   private readonly ItemManagement = inject(ItemManagementService);
 
   // Constants
-  protected readonly AllSlots: ItemSlot[] = ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Boots'];
+  protected readonly AllSlots: ItemSlot[] = ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Feet'];
   protected readonly AllTiers: ItemTier[] = ['I', 'II', 'III'];
   protected readonly DefaultSlotIcons: Record<ItemSlot, GearSlotIconName> = {
     Weapon: ICONS_CONFIG['DEFAULT_WEAPON'],
@@ -36,7 +36,7 @@ export class InventoryArea {
     Head: ICONS_CONFIG['DEFAULT_HEAD'],
     Chest: ICONS_CONFIG['DEFAULT_CHEST'],
     Legs: ICONS_CONFIG['DEFAULT_LEGS'],
-    Boots: ICONS_CONFIG['DEFAULT_BOOTS']
+    Feet: ICONS_CONFIG['DEFAULT_FEET']
   };
 
   // Inventory Properties

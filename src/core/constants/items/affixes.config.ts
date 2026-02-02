@@ -26,7 +26,7 @@ const ATTRIBUTES_AFFIX_DEFINITIONS: AffixDefinition[] = [
   {
     Id: 'affix_strength_flat',
     Groups: ['Attributes'],
-    AllowedSlots: ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Boots'],
+    AllowedSlots: ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Feet'],
     Tiers: ATTRIBUTE_TIERS,
     Effect: {
       ToLabel: (value: number) => FlatAdditiveLabel('Strength', value),
@@ -40,7 +40,7 @@ const ATTRIBUTES_AFFIX_DEFINITIONS: AffixDefinition[] = [
   {
     Id: 'affix_intelligence_flat',
     Groups: ['Attributes'],
-    AllowedSlots: ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Boots'],
+    AllowedSlots: ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Feet'],
     Tiers: ATTRIBUTE_TIERS,
     Effect: {
       ToLabel: (value: number) => FlatAdditiveLabel('Intelligence', value),
@@ -54,7 +54,7 @@ const ATTRIBUTES_AFFIX_DEFINITIONS: AffixDefinition[] = [
   {
     Id: 'affix_dexterity_flat',
     Groups: ['Attributes'],
-    AllowedSlots: ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Boots'],
+    AllowedSlots: ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Feet'],
     Tiers: ATTRIBUTE_TIERS,
     Effect: {
       ToLabel: (value: number) => FlatAdditiveLabel('Dexterity', value),
@@ -98,7 +98,7 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
   {
     Id: 'affix_bleed_chance_percent',
     Groups: ['Offense'],
-    AllowedSlots: ['Head', 'Chest', 'Legs', 'Boots'],
+    AllowedSlots: ['Head', 'Chest', 'Legs', 'Feet'],
     Tiers: CHANCE_TIERS,
     Effect: {
       ToLabel: (value: number) => PercentageMultiplicativeLabel('Bleeding Chance', value),
@@ -112,7 +112,7 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
   {
     Id: 'affix_crit_chance_percent',
     Groups: ['Offense'],
-    AllowedSlots: ['Head', 'Chest', 'Legs', 'Boots'],
+    AllowedSlots: ['Head', 'Chest', 'Legs', 'Feet'],
     Tiers: CHANCE_TIERS,
     Effect: {
       ToLabel: (value: number) => PercentageMultiplicativeLabel('Crit Chance', value),
@@ -126,7 +126,7 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
   {
     Id: 'affix_multihit_chance_percent',
     Groups: ['Offense'],
-    AllowedSlots: ['Head', 'Chest', 'Legs', 'Boots'],
+    AllowedSlots: ['Head', 'Chest', 'Legs', 'Feet'],
     Tiers: CHANCE_TIERS,
     Effect: {
       ToLabel: (value: number) => PercentageMultiplicativeLabel('Multi Hit Chance', value),
@@ -182,7 +182,7 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
   {
     Id: 'affix_multihit_chain_percent',
     Groups: ['Offense'],
-    AllowedSlots: ['Head', 'Boots'],
+    AllowedSlots: ['Head', 'Feet'],
     Tiers: MULTIHIT_CHAIN_TIERS,
     Effect: {
       ToLabel: (value: number) => PercentageMultiplicativeLabel('Multi Hit Chain', value),
@@ -199,7 +199,7 @@ const UTILITY_AFFIX_DEFINITIONS: AffixDefinition[] = [
   {
     Id: 'affix_attack_speed_percent',
     Groups: ['Utility'],
-    AllowedSlots: ['Weapon', 'OffHand', 'Boots'],
+    AllowedSlots: ['Weapon', 'OffHand', 'Feet'],
     Tiers: ATTACK_SPEED_TIERS,
     Effect: {
       ToLabel: (value: number) => PercentageMultiplicativeLabel('Attack Speed', value),
@@ -213,7 +213,7 @@ const UTILITY_AFFIX_DEFINITIONS: AffixDefinition[] = [
   {
     Id: 'affix_accuracy_percent',
     Groups: ['Utility'],
-    AllowedSlots: ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Boots'],
+    AllowedSlots: ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Feet'],
     Tiers: ACCURACY_TIERS,
     Effect: {
       ToLabel: (value: number) => PercentageMultiplicativeLabel('Accuracy', value),
@@ -227,7 +227,7 @@ const UTILITY_AFFIX_DEFINITIONS: AffixDefinition[] = [
   {
     Id: 'affix_armor_penetration_percent',
     Groups: ['Utility'],
-    AllowedSlots: ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Boots'],
+    AllowedSlots: ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Feet'],
     Tiers: PENETRATION_TIERS,
     Effect: {
       ToLabel: (value: number) => PercentageMultiplicativeLabel('Armor Penetration', value),
@@ -241,7 +241,7 @@ const UTILITY_AFFIX_DEFINITIONS: AffixDefinition[] = [
   {
     Id: 'affix_resistance_penetration_percent',
     Groups: ['Utility'],
-    AllowedSlots: ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Boots'],
+    AllowedSlots: ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Feet'],
     Tiers: PENETRATION_TIERS,
     Effect: {
       ToLabel: (value: number) => PercentageMultiplicativeLabel('Resistance Penetration', value),
@@ -290,7 +290,7 @@ const CHARGING_STRIKE_AFFIX_DEFINITIONS: AffixDefinition[] = [
   {
     Id: 'affix_charging_strike_duration_flat',
     Groups: ['Charging Strike'],
-    AllowedSlots: ['OffHand', 'Head', 'Boots'],
+    AllowedSlots: ['OffHand', 'Head', 'Feet'],
     Tiers: CHARGED_DURATION_TIERS,
     Effect: {
       ToLabel: (value: number) => FlatAdditiveLabel('s Charge Duration', value),
