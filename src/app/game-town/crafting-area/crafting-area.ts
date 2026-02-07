@@ -47,7 +47,7 @@ export class CraftingArea {
     return [
       { id: 'crafting', label: 'CRAFTING', disabled: false },
       { id: 'enchanting', label: 'ENCHANTING', disabled: false },
-      { id: 'dismantling', label: 'DISMANTLING', disabled: false }
+      { id: 'socketing', label: 'SOCKETING', disabled: false }
     ];
   }
 

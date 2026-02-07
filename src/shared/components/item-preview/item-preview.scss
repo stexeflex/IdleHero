@@ -2,6 +2,7 @@
 @use "index" as *;
 
 .item {
+  @include disable-text-selection();
   @include button-text-font();
   @include button-focus-visible-outline();
   @include panel($bg: $clr-ui-bg);

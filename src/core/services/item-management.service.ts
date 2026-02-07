@@ -34,4 +34,12 @@ export class ItemManagementService {
     if (unequipped) this.Inventory.Add(unequipped);
     return true;
   }
+
+  public DismantleItem(itemId: string): boolean {
+    if (!itemId) return false;
+    const item = this.Inventory.Items().find((i) => i.Id === itemId);
+    if (!item) return false;
+    this.Inventory.RemoveItem(item);
+    return true;
+  }
 }

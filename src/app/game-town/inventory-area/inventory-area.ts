@@ -149,4 +149,9 @@ export class InventoryArea {
     if (!item) return;
     this.ItemManagement.EquipItem(item.Id);
   }
+
+  protected DismantleItem(item: Item) {
+    if (!item) return;
+    this.ItemManagement.DismantleItem(item.Id);
+  }
 }

@@ -115,3 +115,9 @@
     font-style: italic;
   }
 }
+
+.item-preview-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: $gap;
+}

@@ -15,8 +15,8 @@ export class GameTown {
   protected get Tabs(): TabDefinition[] {
     return [
       { id: 'inventory', label: 'INVENTORY', disabled: false },
-      { id: 'skills', label: 'SKILLS', disabled: false },
-      { id: 'crafting', label: 'BLACKSMITH', disabled: false }
+      { id: 'crafting', label: 'BLACKSMITH', disabled: false },
+      { id: 'skills', label: 'SKILL TREE', disabled: true }
     ];
   }
 
