@@ -7,6 +7,6 @@
 }
 
 .stats {
-  @include overflow($max-height: 60vh);
+  @include overflow($max-height: $size-character-stats-height);
   @include scrollbar($size: 0.75rem);
 }

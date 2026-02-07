@@ -1,4 +1,9 @@
-import { BossFactory, DUNGEON_BOSS_CONFIGS, DungeonBossConfig } from '../../../constants';
+import {
+  BOSS_CONFIG,
+  BossFactory,
+  DUNGEON_BOSS_CONFIGS,
+  DungeonBossConfig
+} from '../../../constants';
 
 import { Boss } from '../../../models';
 import { Injectable } from '@angular/core';
@@ -15,17 +20,32 @@ export class BossSelectionService {
   public GetBoss(dungeonId: string, stageId: number): Boss {
     const dungeonConfig = this.GetDungeonConfig(dungeonId);
 
+    let boss = null;
+
     // Stage specific Boss
     if (dungeonConfig.StageSpecific.has(stageId)) {
       const factory = dungeonConfig.StageSpecific.get(stageId)!;
-      return factory();
+      boss = factory();
     }
     // Random Boss from Pool
     else {
       const pool = this.ResolvePoolForStage(dungeonConfig, stageId);
       const idx = RandomUtils.stableIndex(`${dungeonId}:${stageId}`, pool.length);
-      return pool[idx]();
+      boss = pool[idx]();
     }
+
+    const hpForStage = Math.floor(
+      boss.Life.MaxHp * (1 + BOSS_CONFIG.LIFE.INCREASE_PER_STAGE * (stageId - 1))
+    );
+
+    return {
+      ...boss,
+      Life: {
+        ...boss.Life,
+        Hp: hpForStage,
+        MaxHp: hpForStage
+      }
+    };
   }
 
   private GetDungeonConfig(dungeonId: string): DungeonBossConfig {

@@ -146,7 +146,12 @@ export class EventHandler {
     else if (totalHits > 1) {
       const damages: DamageResult[] = [];
 
-      for (let hitNumber = 0; hitNumber < totalHits; hitNumber++) {
+      // First default Hit
+      const damageResult: DamageResult = this.CalculateHeroDamage(actor, false);
+      damages.push(damageResult);
+
+      // Additional Hits with Multi-Hit Bonus
+      for (let hitNumber = 1; hitNumber < totalHits; hitNumber++) {
         const damageResult: DamageResult = this.CalculateHeroDamage(actor, true);
         damages.push(damageResult);
       }
