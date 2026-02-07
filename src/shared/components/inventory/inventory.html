@@ -19,9 +19,11 @@
             class="list-item"
             [item]="e"
             [selected]="SelectedItem()?.Id === e.Id"
-            (onSelect)="SelectItemFromEquipped($event)">
+            (onSelect)="SelectItemFromEquipped(e)">
             @if (SelectedItem()?.Id === e.Id) {
-              <button class="ih-button-secondary show-on-hover" (click)="UnequipSelected(e)">
+              <button
+                class="ih-button-secondary show-on-hover"
+                (click)="UnequipSelected($event, e)">
                 UNEQUIP
               </button>
             }
@@ -53,9 +55,9 @@
           class="list-item"
           [item]="it"
           [selected]="SelectedItem()?.Id === it.Id"
-          (onSelect)="SelectItemFromInventory($event)">
+          (onSelect)="SelectItemFromInventory(it)">
           @if (SelectedItem()?.Id === it.Id) {
-            <button class="ih-button-secondary show-on-hover" (click)="EquipSelected(it)">
+            <button class="ih-button-secondary show-on-hover" (click)="EquipSelected($event, it)">
               EQUIP
             </button>
           }

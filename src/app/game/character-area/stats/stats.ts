@@ -62,27 +62,27 @@ export class Stats {
   protected readonly AllStats = computed<StatsGrid[]>(() => [
     {
       title: 'CHARGING STRIKE',
-      items: this.ChargingStrikeStats,
+      items: this.ChargingStrikeStats(),
       expanded: this.ChargingStrikeStatsExpanded()
     },
     {
       title: 'OFFENSE',
-      items: this.OffenseStats,
+      items: this.OffenseStats(),
       expanded: this.OffenseStatsExpanded()
     },
     {
       title: 'UTILITY',
-      items: this.UtilityStats,
+      items: this.UtilityStats(),
       expanded: this.UtilityStatsExpanded()
     },
     {
       title: 'STATISTICS',
-      items: this.Statistics,
+      items: this.Statistics(),
       expanded: this.StatisticsExpanded()
     }
   ]);
 
-  get Attributes(): StatsItem[] {
+  protected Attributes = computed<StatsItem[]>(() => {
     const attributes = this.attributesService.Effective();
 
     return [
@@ -99,9 +99,9 @@ export class Stats {
         value: this.decimalPipe.transform(attributes.Dexterity, '1.0-0')
       }
     ];
-  }
+  });
 
-  get ChargingStrikeStats(): StatsItem[] {
+  private ChargingStrikeStats = computed<StatsItem[]>(() => {
     const combatStats = this.statsService.Effective();
 
     return [
@@ -118,9 +118,9 @@ export class Stats {
         value: this.decimalPipe.transform(combatStats.ChargeDuration, '1.1-1', 'en-en') + ' s'
       }
     ];
-  }
+  });
 
-  get OffenseStats(): StatsItem[] {
+  private OffenseStats = computed<StatsItem[]>(() => {
     const combatStats = this.statsService.Effective();
 
     return [
@@ -153,9 +153,9 @@ export class Stats {
         value: this.percentPipe.transform(combatStats.MultiHitDamage, '1.0-0')
       }
     ];
-  }
+  });
 
-  get UtilityStats(): StatsItem[] {
+  private UtilityStats = computed<StatsItem[]>(() => {
     const combatStats = this.statsService.Effective();
 
     return [
@@ -176,9 +176,9 @@ export class Stats {
         value: this.percentPipe.transform(combatStats.ResistancePenetration, '1.0-0')
       }
     ];
-  }
+  });
 
-  get Statistics(): StatsItem[] {
+  private Statistics = computed<StatsItem[]>(() => {
     return [
       {
         label: 'Highest Single Hit',
@@ -224,7 +224,7 @@ export class Stats {
         )
       }
     ];
-  }
+  });
 
   protected CanDecreaseAttribute(attribute: string): boolean {
     return this.attributesService.CanDeallocate(

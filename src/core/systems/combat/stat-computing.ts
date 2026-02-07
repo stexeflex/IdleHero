@@ -3,7 +3,6 @@ import { Attributes, ComputedHeroStats, HeroStats, StatSource } from '../../mode
 import {
   MapDexterityToAccuracy,
   MapDexterityToChainFactor,
-  MapDexterityToEvasion,
   MapDexterityToHaste,
   MapDexterityToMultiHitChance,
   MapIntelligenceToCritChance,
@@ -31,6 +30,12 @@ export function ComputeStats(
   const damage = ComputeDamage(sources, baseStats.Damage, effectiveStr);
   const attackSpeed = ComputeAttackSpeed(sources, baseStats.AttackSpeed, effectiveDex);
 
+  // Bleeding Chance & Damage
+  const bleedingChance =
+    baseStats.BleedingChance + sources.reduce((sum, s) => Flat(sum, s.Bleeding.FlatChance), 0);
+  const bleedingDamage =
+    baseStats.BleedingDamage + sources.reduce((sum, s) => Flat(sum, s.Bleeding.FlatDamage), 0);
+
   // Crit Chance & Damage
   const { CriticalHitChance: critChance, CriticalHitDamage: critMultiplier } = ComputeCriticalHit(
     sources,
@@ -40,8 +45,11 @@ export function ComputeStats(
   );
 
   // Multi-Hit Chance
-  const { MultiHitChance: multiHitChance, MultiHitChainFactor: multiHitChainFactor } =
-    ComputeMultiHit(sources, baseStats.MultiHitChance, effectiveDex);
+  const {
+    MultiHitChance: multiHitChance,
+    MultiHitDamage: multiHitDamage,
+    MultiHitChainFactor: multiHitChainFactor
+  } = ComputeMultiHit(sources, baseStats.MultiHitChance, baseStats.MultiHitDamage, effectiveDex);
 
   // Accuracy
   const accuracy = ComputeAccuracy(sources, effectiveDex);
@@ -51,19 +59,24 @@ export function ComputeStats(
   const resistancePenetration = ComputeResistancePenetration(sources, effectiveInt);
 
   // Charging Strike
-  const chargeGain = baseStats.ChargeGain;
-  const chargeDamage = baseStats.ChargeDamage;
-  const chargeDuration = baseStats.ChargeDuration;
+  const chargeGain =
+    baseStats.ChargeGain + sources.reduce((sum, s) => Flat(sum, s.ChargingStrike.ChargeGain), 0);
+  const chargeDamage =
+    baseStats.ChargeDamage +
+    sources.reduce((sum, s) => Flat(sum, s.ChargingStrike.ChargeDamage), 0);
+  const chargeDuration =
+    baseStats.ChargeDuration +
+    sources.reduce((sum, s) => Flat(sum, s.ChargingStrike.ChargeDuration), 0);
 
   const stats: ComputedHeroStats = {
     AttackSpeed: attackSpeed,
     Damage: damage,
-    BleedingChance: baseStats.BleedingChance,
-    BleedingDamage: baseStats.BleedingDamage,
+    BleedingChance: bleedingChance,
+    BleedingDamage: bleedingDamage,
     CriticalHitChance: critChance,
     CriticalHitDamage: critMultiplier,
     MultiHitChance: multiHitChance,
-    MultiHitDamage: baseStats.MultiHitDamage,
+    MultiHitDamage: multiHitDamage,
     MultiHitChainFactor: multiHitChainFactor,
     Accuracy: accuracy,
     ArmorPenetration: armorPenetration,
@@ -155,12 +168,23 @@ function ComputeCriticalHit(
 function ComputeMultiHit(
   sources: StatSource[],
   baseChance: number,
+  baseMultiplier: number,
   dexterity: number
-): { MultiHitChance: number; MultiHitChainFactor: number } {
+): { MultiHitChance: number; MultiHitChainFactor: number; MultiHitDamage: number } {
+  // Multi-Hit Chance
   const baseMulti = Flat(baseChance ?? 0, MapDexterityToMultiHitChance(dexterity));
   const addMulti = sources.reduce((sum, s) => Flat(sum, s.MultiHit.FlatChance), 0);
   const mulMulti = sources.reduce((prod, s) => Multiplier(prod, s.MultiHit.MultiplierChance), 1);
   const multiHitChance = ClampUtils.clamp01((baseMulti + addMulti) * mulMulti);
+
+  // Multi-Hit Damage
+  const baseMultiHitDamage = baseMultiplier ?? STATS_CONFIG.BASE.MULTI_HIT_DAMAGE;
+  const addMultiHitDamage = sources.reduce((sum, s) => Flat(sum, s.MultiHit.FlatDamage), 0);
+  const mulMultiHitDamage = sources.reduce(
+    (prod, s) => Multiplier(prod, s.MultiHit.MultiplierDamage),
+    1
+  );
+  const multiHitDamage = Effective(baseMultiHitDamage, addMultiHitDamage, mulMultiHitDamage, 0);
 
   // Multi-Hit Chain Factor
   const baseChainFactor = MapDexterityToChainFactor(dexterity);
@@ -177,7 +201,8 @@ function ComputeMultiHit(
 
   return {
     MultiHitChance: Math.min(multiHitChance, STATS_CONFIG.CAPS.MAX_MULTI_HIT_CHANCE),
-    MultiHitChainFactor: multiHitChainFactor
+    MultiHitChainFactor: multiHitChainFactor,
+    MultiHitDamage: multiHitDamage
   };
 }
 
@@ -194,9 +219,9 @@ function ComputeArmorPenetration(sources: StatSource[], strength: number): numbe
   const baseAcc = MapStrengthToArmorPenetration(strength);
   const addAcc = sources.reduce((sum, s) => Flat(sum, s.ArmorPenetration.Flat), 0);
   const mulAcc = sources.reduce((prod, s) => Multiplier(prod, s.ArmorPenetration.Multiplier), 1);
-  const accuracy = ClampUtils.clamp01((baseAcc + addAcc) * mulAcc);
+  const armorPenetration = ClampUtils.clamp01((baseAcc + addAcc) * mulAcc);
 
-  return accuracy;
+  return armorPenetration;
 }
 
 function ComputeResistancePenetration(sources: StatSource[], intelligence: number): number {
@@ -206,9 +231,9 @@ function ComputeResistancePenetration(sources: StatSource[], intelligence: numbe
     (prod, s) => Multiplier(prod, s.ResistancePenetration.Multiplier),
     1
   );
-  const accuracy = ClampUtils.clamp01((baseAcc + addAcc) * mulAcc);
+  const resistancePenetration = ClampUtils.clamp01((baseAcc + addAcc) * mulAcc);
 
-  return accuracy;
+  return resistancePenetration;
 }
 //#endregion
 

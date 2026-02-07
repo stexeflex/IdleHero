@@ -49,23 +49,19 @@ export function MapDexterityToMultiHitDamage(dex: number): number {
 }
 
 export function MapDexterityToAccuracy(dex: number): number {
-  const base = STATS_CONFIG.MAPPINGS.DEX_BASE_ACCURACY;
+  const base = STATS_CONFIG.BASE.ACCURACY;
   const A = STATS_CONFIG.MAPPINGS.DEX_ACCURACY_A;
   return ClampUtils.clamp01(base + A * Math.log(1 + dex));
 }
 
-export function MapDexterityToEvasion(dex: number): number {
-  const base = STATS_CONFIG.MAPPINGS.DEX_BASE_EVASION;
-  const A = STATS_CONFIG.MAPPINGS.DEX_EVASION_A;
-  return ClampUtils.clamp01(base + A * Math.log(1 + dex));
-}
-
 export function MapStrengthToArmorPenetration(str: number): number {
+  const base = STATS_CONFIG.BASE.ARMOR_PENETRATION;
   const K = STATS_CONFIG.MAPPINGS.STR_ARMOR_PENETRATION_K;
-  return ClampUtils.clamp01(1 - Math.exp(-str / K));
+  return ClampUtils.clamp01(base + (1 - Math.exp(-str / K)));
 }
 
 export function MapIntelligenceToResistancePenetration(int: number): number {
+  const base = STATS_CONFIG.BASE.RESISTANCE_PENETRATION;
   const K = STATS_CONFIG.MAPPINGS.INT_RESISTANCE_PENETRATION_K;
-  return ClampUtils.clamp01(1 - Math.exp(-int / K));
+  return ClampUtils.clamp01(base + (1 - Math.exp(-int / K)));
 }

@@ -20,7 +20,7 @@
     </div>
     @if (AttributesExpanded()) {
       <div class="grid">
-        @for (attribute of Attributes; track attribute.label) {
+        @for (attribute of Attributes(); track attribute.label) {
           <div class="grid__label">{{ attribute.label }}</div>
           <div class="grid__value">
             <button

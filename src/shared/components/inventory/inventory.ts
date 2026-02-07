@@ -44,11 +44,13 @@ export class Inventory {
   });
 
   protected SelectItemFromInventory(item: Item): void {
+    event?.stopPropagation();
     this.SelectedItemContext.set({ itemId: item.Id, source: 'Inventory' });
     this.ItemSelected.emit({ itemId: item.Id, source: 'Inventory' });
   }
 
   protected SelectItemFromEquipped(item: Item): void {
+    event?.stopPropagation();
     this.SelectedItemContext.set({ itemId: item.Id, source: 'Equipped' });
     this.ItemSelected.emit({ itemId: item.Id, source: 'Equipped' });
   }
@@ -57,18 +59,20 @@ export class Inventory {
     this.SelectedItemContext.set(null);
   }
 
-  protected EquipSelected(item: Item): void {
+  protected EquipSelected(event: Event, item: Item): void {
+    event?.stopPropagation();
     if (!item) return;
     if (this.itemManagement.EquipItem(item.Id)) {
       // Refresh selection to the newly equipped item
-      this.SelectedItemContext.set({ itemId: item.Id, source: 'Equipped' });
+      this.SelectItemFromEquipped(item);
     }
   }
 
-  protected UnequipSelected(item: Item): void {
+  protected UnequipSelected(event: Event, item: Item): void {
+    event?.stopPropagation();
     if (!item) return;
     if (this.itemManagement.UnequipItem(item.Id)) {
-      this.SelectedItemContext.set({ itemId: item.Id, source: 'Inventory' });
+      this.SelectItemFromInventory(item);
     }
   }
 }

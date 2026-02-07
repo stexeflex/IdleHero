@@ -10,9 +10,9 @@ export const STATS_CONFIG = {
     MULTI_HIT_CHANCE: 0.0, // 0% Base MHC
     MULTI_HIT_DAMAGE: 0.5, // 50% Base MHC
     MULTI_HIT_CHAIN_FACTOR: 0.4, // 40% Base Chain Factor
-    ACCURACY: 0.7, // Basis-Accuracy
-    ARMOR_PENETRATION: 0.0, // 0% Basis Armor Penetration
-    RESISTANCE_PENETRATION: 0.0, // 0% Basis Magic Penetration
+    ACCURACY: 0.5, // Basis-Accuracy
+    ARMOR_PENETRATION: 0.1, // 10% Basis Armor Penetration
+    RESISTANCE_PENETRATION: 0.1, // 10% Basis Magic Penetration
     CHARGE_GAIN: 1, // Basis Charge Gain
     CHARGE_DAMAGE: 1.5, // 150% Basis Charge Damage
     CHARGE_DURATION: 5 // Basis Charge Dauer in Sekunden
