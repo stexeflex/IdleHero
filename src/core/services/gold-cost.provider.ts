@@ -55,7 +55,7 @@ export class GoldCostProvider implements CraftingCostProvider {
     const rarity = GetItemRarity(item.Level);
     const mult = ITEM_RARITY_COST_MULTIPLIER[rarity];
     // Adding an affix is mid-tier cost; scales with item level
-    return Math.floor(90 * mult * (1 + item.Level * 0.2));
+    return Math.floor(100 * mult * (1 + item.Level * 0.2));
   }
 
   public GetRemoveAffixCost(item: Item, affixIndex: number): number {

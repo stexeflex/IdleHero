@@ -116,7 +116,7 @@ export class CraftingService {
     const cost = provider?.GetRerollAffixCost(item, affixIndex) ?? 0;
     if (provider && !provider.CanAfford(cost)) return { Success: false, Item: item };
 
-    const next = this.Reroll.RerollAffix(item, affixIndex, definition);
+    const next = this.Reroll.RerollAffix(item, affixIndex);
     if (provider) provider.Charge(cost);
 
     return { Success: true, Item: next, Cost: cost };
@@ -136,7 +136,7 @@ export class CraftingService {
     definition: AffixDefinition,
     provider?: CraftingCostProvider
   ): OperationResult {
-    if (!this.Enchant.CanEnchant(item)) return { Success: false, Item: item };
+    if (!this.Enchant.CanEnchant(item, affixIndex)) return { Success: false, Item: item };
 
     const cost = provider?.GetEnchantAffixCost(item, affixIndex) ?? 0;
     if (provider && !provider.CanAfford(cost)) return { Success: false, Item: item };
@@ -153,14 +153,12 @@ export class CraftingService {
    * Adds a new affix to the item if allowed by rarity and slot, respecting level tier gating.
    * @param item The item instance.
    * @param definition The affix template to apply.
-   * @param desiredTier Optional desired tier; will be clamped by level gating.
    * @param provider Optional cost provider.
    * @returns Operation result with success flag and updated item.
    */
   public AddAffix(
     item: Item,
     definition: AffixDefinition,
-    desiredTier?: AffixTier,
     provider?: CraftingCostProvider
   ): OperationResult {
     const rarity = GetItemRarity(item.Level);
@@ -171,9 +169,8 @@ export class CraftingService {
     const cost = provider?.GetAddAffixCost(item, definition) ?? 0;
     if (provider && !provider.CanAfford(cost)) return { Success: false, Item: item };
 
-    // Clamp desired tier to level gating and available tiers
-    const finalTier = ClampAffixTier(item.Level, desiredTier);
-    const tierSpec = definition.Tiers.find((t) => t.Tier === finalTier);
+    const baseTier: AffixTier = 'Common';
+    const tierSpec = definition.Tiers.find((t) => t.Tier === baseTier);
 
     if (!tierSpec) return { Success: false, Item: item };
 
@@ -181,7 +178,7 @@ export class CraftingService {
 
     const newAffix: Affix = {
       DefinitionId: definition.Id,
-      Tier: finalTier,
+      Tier: baseTier,
       RolledValue: rolled,
       Improved: false
     };

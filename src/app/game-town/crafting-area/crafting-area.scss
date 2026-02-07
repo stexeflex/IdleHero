@@ -7,6 +7,12 @@
   gap: $gap;
 }
 
+@media (max-width: $bp-xl) {
+  .area {
+    grid-template-columns: 1fr;
+  }
+}
+
 .panel {
   @include panel();
   @include panel-shadow($border-width: 2px, $border-color: $clr-border);

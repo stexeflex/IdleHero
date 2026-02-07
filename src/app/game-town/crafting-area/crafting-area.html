@@ -11,7 +11,15 @@
           <app-crafting></app-crafting>
         }
         @case ("enchanting") {
-          <app-enchanting></app-enchanting>
+          @if (SelectedItem()) {
+            <app-enchanting
+              [Item]="SelectedItem()!"
+              (ItemChange)="OnEnchantingItemChange($event)"></app-enchanting>
+          } @else {
+            <div class="panel" style="padding: 16px">
+              <span class="empty">Select an item in your inventory to enchant.</span>
+            </div>
+          }
         }
         @case ("dismantling") {
           Nothing to see here
@@ -20,7 +28,9 @@
     </div>
     <!-- INVENTORY -->
     <div>
-      <app-inventory [ShowEquipped]="true"></app-inventory>
+      <app-inventory
+        [ShowEquipped]="true"
+        (ItemSelected)="onInventoryItemSelected($event)"></app-inventory>
     </div>
   </div>
 </section>

@@ -9,7 +9,9 @@ export class ItemManagementService {
   private readonly Loadout = inject(GearLoadoutService);
   private readonly Inventory = inject(InventoryService);
 
-  public EquipItem(item: Item): boolean {
+  public EquipItem(itemId: string): boolean {
+    if (!itemId) return false;
+    const item = this.Inventory.Items().find((i) => i.Id === itemId);
     if (!item) return false;
     if (!this.Loadout.CanEquip(item)) return false;
 
@@ -22,8 +24,11 @@ export class ItemManagementService {
     return true;
   }
 
-  public UnequipItem(item: Item): boolean {
+  public UnequipItem(itemId: string): boolean {
+    if (!itemId) return false;
+    const item = this.Loadout.EquippedItems().find((i) => i.Id === itemId);
     if (!item) return false;
+
     const unequipped = this.Loadout.Unequip(item.Slot);
     // If an item was unequipped, add it back to inventory
     if (unequipped) this.Inventory.Add(unequipped);

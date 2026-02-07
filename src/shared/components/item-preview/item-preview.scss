@@ -14,7 +14,7 @@
     "innate innate" auto
     "affix affix" auto
     "actions actions" auto
-    / 175px 100px;
+    / 250px 100px;
 
   gap: $gap;
 
@@ -32,14 +32,14 @@
   @include flexbox($dir: column, $justify: center, $align: center);
 
   .item-name {
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-family: $font-family-header;
     font-weight: bold;
     color: $clr-highlight;
   }
 
   .item-type {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: $clr-mute;
     font-weight: normal;
   }
@@ -84,9 +84,8 @@
   }
 
   .label {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     font-style: italic;
-    color: $clr-mute;
     color: $clr-mute;
   }
 }
@@ -97,17 +96,21 @@
   flex-direction: column;
   gap: calc($gap / 2);
 
-  .affix {
+  .item-affix {
     display: flex;
-    align-items: center;
 
     .icon {
       margin-right: calc($gap / 2);
     }
 
     .label {
-      font-size: 0.8rem;
+      font-size: 0.95rem;
       color: $clr-text-primary;
+    }
+
+    .min-max-roll {
+      font-size: 0.8rem;
+      color: $clr-mute;
     }
   }
 }

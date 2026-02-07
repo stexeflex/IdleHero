@@ -1,86 +1,129 @@
 <div class="panel">
-  <div class="panel-header">Item bearbeiten</div>
-  <div class="panel-body">
-    @if (SelectedItem() === null) {
-      <div class="empty">Wähle ein Item zum Bearbeiten.</div>
-    } @else {
-      @let it = SelectedItem()!.item;
-
-      <div class="item-header">
-        <div class="title">{{ it.Name }}</div>
-        <!-- <div class="badge">{{ it.Rarity }}</div> -->
-        <div class="spacer"></div>
-        <button class="primary" (click)="LevelUpSelected()">
-          Level Up ({{ cost.GetLevelUpCost(it) }})
-        </button>
+  <div class="panel-header">
+    <div class="title">
+      <h3>ITEM ENCHANTING</h3>
+      <div class="subtitle">
+        <span class="rarity">{{ Rarity() }}</span>
+        <span class="dot">•</span>
+        <span class="muted">Affixes: {{ Item().Affixes.length }}/{{ MaxAffixSlots() }}</span>
+        <span class="dot">•</span>
+        <span class="muted">
+          Enchanted Affixes: {{ EnchantedAffixes() }}/{{ MaxEnchantedAffixes() }}
+        </span>
+        <span class="dot">•</span>
+        <span class="muted">Max Affix Tier: {{ MaxAffixTier() }}</span>
       </div>
+    </div>
 
-      <div class="section">
-        <div class="section-title">Affixes</div>
-        @if (it.Affixes.length === 0) {
-          <div class="empty">Keine Affixes vorhanden.</div>
-        }
-        @for (a of it.Affixes; track $index) {
-          @let idx = $index;
-          <div class="affix-row">
-            <div class="affix-name">
-              {{ AffixDefById(a.DefinitionId) }}
-              <span class="tier">[{{ a.Tier }}]</span>
-            </div>
-            <div class="affix-value">{{ a.RolledValue }}</div>
-            <div class="row-actions">
-              <button class="tiny" (click)="RerollAffixOnSelected(idx)">
-                Reroll ({{ cost.GetRerollAffixCost(it, idx) }})
-              </button>
-              <button class="tiny" (click)="EnchantAffixOnSelected(idx)">
-                Enchant ({{ cost.GetEnchantAffixCost(it, idx) }})
-              </button>
-            </div>
+    <div class="actions">
+      <!-- <button class="ih-button-secondary">DISMANTLE</button> -->
+      @if (CanUpgradeItem()) {
+        <div class="action-info">
+          <span>Upgrade</span>
+          <app-gold [amount]="UpgradeCost()" [size]="'md'" [fontSize]="'1rem'"></app-gold>
+        </div>
+      }
+      @if (SelectedAffixIndex() !== null && HasAffix(SelectedAffixIndex()!)) {
+        @if (!IsMaxedSlot(SelectedAffixIndex()!)) {
+          <div class="action-info">
+            <span>Enchant</span>
+            <app-gold
+              [amount]="EnchantCost(SelectedAffixIndex()!)"
+              [size]="'md'"
+              [fontSize]="'1rem'"></app-gold>
           </div>
         }
-        <div class="add-affix">
-          <div class="label">Affix hinzufügen</div>
-          <div class="choices wrap">
-            @for (d of AllowedAffixDefinitions(); track d.Id) {
-              <button class="choice" (click)="AddAffixToSelected(d.Id)">
-                {{ d.Id }} ({{ cost.GetAddAffixCost(SelectedItem()!.item, d) }})
+        <div class="action-info">
+          <span>Reroll</span>
+          <app-gold
+            [amount]="RerollCost(SelectedAffixIndex()!)"
+            [size]="'md'"
+            [fontSize]="'1rem'"></app-gold>
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="panel-body">
+    <div class="preview">
+      <app-item-preview [Item]="Item()" [Variant]="Variant()"> </app-item-preview>
+      @if (CanUpgradeItem()) {
+        <button class="ih-button-tertiary" (click)="UpgradeItem()">UPGRADE ITEM</button>
+      }
+    </div>
+
+    <div class="affixes">
+      @if (MaxAffixSlots() === 0) {
+        <div class="empty-state">
+          <span class="muted">This item rarity cannot have affixes.</span>
+        </div>
+      } @else {
+        @for (slotIndex of VisibleSlotIndices(); track slotIndex) {
+          <div class="affix-actions">
+            @if (SelectedAffixIndex() === slotIndex && HasAffix(slotIndex)) {
+              <button
+                class="ih-button-icon ih-button-icon-border"
+                (click)="RerollSlot(slotIndex)"
+                title="Reroll Affix">
+                <app-icon ui="cycle" size="sm"></app-icon>
               </button>
             }
           </div>
-        </div>
-      </div>
-
-      <div class="section">
-        <div class="section-title">Rune</div>
-        @if (!it.Rune) {
-          <div class="empty">Keine Rune gesockelt.</div>
-          <div class="list">
-            <div class="list-title">Aus Inventar socketen</div>
-            @for (r of EligibleRunesFromInventory(); track r.index) {
-              <div class="list-item">
-                <div class="name">{{ r.definition?.Id }} ({{ r.rune.Quality }})</div>
-                <div class="meta">Wert: {{ r.rune.RolledValue }}</div>
-                <div class="row-actions">
-                  <button class="tiny" (click)="SocketRuneFromInventory(r.index)">
-                    Socket ({{ cost.GetSocketRuneCost(it, r.definition!, r.rune.Quality) }})
+          <div class="affix-content">
+            <button
+              class="affix"
+              (click)="SelectSlot(slotIndex)"
+              [class.selected]="SelectedAffixIndex() === slotIndex">
+              @if (HasAffix(slotIndex)) {
+                @let affixInfo = GetAffixInfo(slotIndex);
+                <div
+                  class="affix-header"
+                  [class.common--font]="affixInfo.Tier === 'Common'"
+                  [class.magic--font]="affixInfo.Tier === 'Magic'"
+                  [class.rare--font]="affixInfo.Tier === 'Rare'"
+                  [class.epic--font]="affixInfo.Tier === 'Epic'"
+                  [class.legendary--font]="affixInfo.Tier === 'Legendary'">
+                  <app-icon symbol="polarstar" size="sm"></app-icon>
+                  <div class="affix-title">{{ affixInfo.Tier.toUpperCase() }} AFFIX</div>
+                </div>
+                <div class="affix-label">
+                  {{ affixInfo.Label }}
+                  <span class="affix-range">
+                    [
+                    <span>{{ affixInfo.MinRoll }}</span>
+                    -
+                    <span>{{ affixInfo.MaxRoll }}</span>
+                    ]
+                  </span>
+                </div>
+              } @else {
+                <div class="empty-slot">
+                  <app-gold [amount]="AddAffixCost()" [size]="'md'" [fontSize]="'1rem'"></app-gold>
+                  <button
+                    class="ih-button-tertiary"
+                    (click)="EnchantSlot(slotIndex)"
+                    [disabled]="!CanEnchantSlot(slotIndex)">
+                    ADD AFFIX
                   </button>
                 </div>
-              </div>
+              }
+            </button>
+          </div>
+          <div class="affix-actions">
+            @if (
+              SelectedAffixIndex() === slotIndex && HasAffix(slotIndex) && !IsMaxedSlot(slotIndex)
+            ) {
+              <button
+                class="ih-button-icon ih-button-icon-border"
+                (click)="UpgradeSlot(slotIndex)"
+                [disabled]="!CanUpgradeSlot(slotIndex)"
+                title="Upgrade Affix">
+                <app-icon class="rotate-180" ui="arrow" size="sm"></app-icon>
+              </button>
             }
           </div>
-        } @else {
-          @let rDef = RuneDefById(it.Rune!.DefinitionId);
-          <div class="rune-row">
-            <div class="name">{{ rDef?.Id }} ({{ it.Rune!.Quality }})</div>
-            <div class="meta">Wert: {{ it.Rune!.RolledValue }}</div>
-            <div class="row-actions">
-              <button class="tiny" (click)="UnsocketRuneFromSelected()">
-                Unsocket ({{ cost.GetUnsocketRuneCost(it) }})
-              </button>
-            </div>
-          </div>
         }
-      </div>
-    }
+      }
+    </div>
   </div>
 </div>

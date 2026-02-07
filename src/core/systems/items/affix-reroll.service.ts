@@ -1,7 +1,7 @@
-import { Affix, AffixDefinition, Item } from '../../models';
+import { Affix, AffixDefinition, AffixTier, Item } from '../../models';
+import { GetAffixPool, RandomInRange } from '.';
 
 import { Injectable } from '@angular/core';
-import { RandomInRange } from '.';
 
 @Injectable({ providedIn: 'root' })
 export class AffixRerollService {
@@ -9,22 +9,59 @@ export class AffixRerollService {
    * Rerolls the value of a single affix within its current tier.
    * @param item The item instance containing the affix.
    * @param affixIndex The index of the affix to reroll.
-   * @param definition The affix definition used to obtain tier ranges.
    * @returns A new item instance with the rerolled affix value.
    */
-  public RerollAffix(item: Item, affixIndex: number, definition: AffixDefinition): Item {
+  public RerollAffix(item: Item, affixIndex: number): Item {
     if (affixIndex < 0 || affixIndex >= item.Affixes.length) return item;
 
     const affix = item.Affixes[affixIndex];
-    const tierSpec = definition.Tiers.find((t) => t.Tier === affix.Tier);
-    if (!tierSpec) return item;
+    const pool = this.PickPool(item);
+    const definition = this.PickRandomDefinition(pool);
 
-    const newValue = RandomInRange(tierSpec.Value.Min, tierSpec.Value.Max);
-    const newAffix: Affix = { ...affix, RolledValue: newValue };
+    if (!definition) return item;
+
+    const rolledValue = this.RollValue(definition, affix.Tier);
+    if (rolledValue === null) return item;
+
+    const newAffix: Affix = {
+      ...affix,
+      DefinitionId: definition.Id,
+      RolledValue: rolledValue
+    };
 
     const nextAffixes = item.Affixes.slice();
     nextAffixes[affixIndex] = newAffix;
 
     return { ...item, Affixes: nextAffixes };
+  }
+
+  private AllowedAffixPool(item: Item): AffixDefinition[] {
+    return GetAffixPool(item.Slot);
+  }
+
+  private PickPool(item: Item): AffixDefinition[] {
+    const basePool = this.AllowedAffixPool(item);
+    if (basePool.length === 0) return [];
+
+    const existingIds = new Set(item.Affixes.map((a) => a.DefinitionId));
+
+    const poolWithoutDuplicates = basePool.filter((definition) => !existingIds.has(definition.Id));
+    if (poolWithoutDuplicates.length > 0) {
+      return poolWithoutDuplicates;
+    }
+
+    return basePool;
+  }
+
+  private PickRandomDefinition(pool: AffixDefinition[]): AffixDefinition | null {
+    if (pool.length === 0) return null;
+    const index = Math.floor(Math.random() * pool.length);
+    return pool[index] ?? null;
+  }
+
+  private RollValue(definition: AffixDefinition, tier: AffixTier): number | null {
+    const tierSpec = definition.Tiers.find((t) => t.Tier === tier);
+    if (!tierSpec) return null;
+    return RandomInRange(tierSpec.Value.Min, tierSpec.Value.Max);
   }
 }

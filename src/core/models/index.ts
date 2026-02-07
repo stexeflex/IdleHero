@@ -15,6 +15,7 @@ export * from './economy/ascension-crystals-state';
 export * from './economy/gold-state';
 export * from './economy/rewards';
 export * from './items/affixes/affix-group.enum';
+export * from './items/affixes/affix-info';
 export * from './items/affixes/affix-tier.enum';
 export * from './items/affixes/affix';
 export * from './items/crafting-operation.type';

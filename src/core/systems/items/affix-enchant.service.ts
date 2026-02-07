@@ -14,9 +14,14 @@ export class AffixEnchantService {
   /**
    * Checks if the item can enchant one more affix according to its rarity rules.
    * @param item The item instance.
+   * @param affixIndex The index of the affix to check for enchant eligibility.
    * @returns True if current count of Improved affixes is below rarity limit.
    */
-  public CanEnchant(item: Item): boolean {
+  public CanEnchant(item: Item, affixIndex: number): boolean {
+    if (affixIndex < 0 || affixIndex >= item.Affixes.length) return false;
+
+    if (item.Affixes[affixIndex].Improved) return true;
+
     const rarity = GetItemRarity(item.Level);
     const rules: RarityRules = GetItemRarityRule(rarity);
     const improvedCount: number = item.Affixes.filter((a) => a.Improved).length;
@@ -31,7 +36,7 @@ export class AffixEnchantService {
    * @returns A new item with the affix tier increased and marked as Improved; original if not allowed.
    */
   public EnchantAffix(item: Item, affixIndex: number, definition: AffixDefinition): Item {
-    if (!this.CanEnchant(item)) return item;
+    if (!this.CanEnchant(item, affixIndex)) return item;
     if (affixIndex < 0 || affixIndex >= item.Affixes.length) return item;
 
     const affix: Affix = item.Affixes[affixIndex];

@@ -115,18 +115,3 @@
     font-style: italic;
   }
 }
-
-.button-equip {
-  @include button-text-font($shadow: false);
-  @include button-sizing($font-size: 0.9rem, $min-width: auto);
-  @include button-focus-visible-outline();
-  @include button-style(
-    $bg-color: color.scale($clr-ui-bg-invert, $lightness: -20%),
-    $color: $clr-text-invert,
-    $border: 1px solid $clr-border
-  );
-  @include button-hover-active(
-    $bg-color: color.scale($clr-ui-bg-invert, $lightness: -40%),
-    $bg-color-active: color.scale($clr-ui-bg-invert, $lightness: -60%)
-  );
-}

@@ -36,12 +36,32 @@
 
   <!-- INNATE -->
   <div class="item-innate">
-    <app-icon class="icon" symbol="beveledstar" size="mini"></app-icon>
+    <span class="icon">
+      <app-icon symbol="beveledstar" size="mini"></app-icon>
+    </span>
     <span class="label">{{ VariantLabel() }}</span>
   </div>
 
   <!-- AFFIXES -->
-  <div class="item-affixes"></div>
+  <div class="item-affixes">
+    @for (affix of AffixesInfo(); track affix.Label) {
+      <div class="item-affix">
+        <span
+          class="icon"
+          [class.common--font]="affix.Tier === 'Common'"
+          [class.magic--font]="affix.Tier === 'Magic'"
+          [class.rare--font]="affix.Tier === 'Rare'"
+          [class.epic--font]="affix.Tier === 'Epic'"
+          [class.legendary--font]="affix.Tier === 'Legendary'">
+          <app-icon symbol="polarstar" size="mini"></app-icon>
+        </span>
+        <span class="label">
+          {{ affix.Label }}
+          <span class="min-max-roll">[{{ affix.MinRoll }} - {{ affix.MaxRoll }}]</span>
+        </span>
+      </div>
+    }
+  </div>
 
   <!-- ACTIONS -->
   <div class="actions">

@@ -1,13 +1,18 @@
 import {
+  AFFIX_DEFINITIONS,
   ITEM_LEVEL_CONFIG,
   ITEM_RARITY_RULES,
   ITEM_TIER_RULES,
-  ITEM_VARIANTS
+  ITEM_VARIANTS,
+  MAX_AFFIX_TIER_FOR_LEVEL
 } from '../../constants';
 import {
+  AffixDefinition,
+  AffixTier,
   Item,
   ItemLevel,
   ItemRarity,
+  ItemSlot,
   ItemTier,
   ItemVariantDefinition,
   RarityRules
@@ -19,6 +24,11 @@ export function GetItemVariant(definitionId: string): ItemVariantDefinition {
 
 export function GetItemRarityRule(rarity: ItemRarity): RarityRules {
   return ITEM_RARITY_RULES[rarity];
+}
+
+export function GetMaxAffixTier(itemLevel: ItemLevel): AffixTier {
+  const rules = MAX_AFFIX_TIER_FOR_LEVEL;
+  return rules[itemLevel];
 }
 
 export function GetItemRarity(itemLevel: ItemLevel): ItemRarity {
@@ -39,6 +49,10 @@ export function MinRarityForTier(tier: ItemTier): ItemRarity {
   return rules.MinRarity;
 }
 
+export function GetAffixPool(itemSlot: ItemSlot): AffixDefinition[] {
+  return AFFIX_DEFINITIONS.filter((definition) => definition.AllowedSlots.includes(itemSlot));
+}
+
 export function MinLevelForTier(tier: ItemTier): ItemLevel {
   const rules = ITEM_TIER_RULES[tier];
   return rules.MinItemLevel;
@@ -51,5 +65,6 @@ export function NextLevel(item: Item): ItemLevel {
 }
 
 export function IsMaxLevel(item: Item): boolean {
-  return item.Level >= ITEM_LEVEL_CONFIG.LEVEL.MAX;
+  const tierRules = ITEM_TIER_RULES[item.Tier];
+  return item.Level >= tierRules.MaxItemLevel;
 }

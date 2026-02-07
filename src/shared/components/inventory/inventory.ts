@@ -1,4 +1,4 @@
-import { Component, inject, input, output, signal } from '@angular/core';
+import { Component, computed, inject, input, output, signal } from '@angular/core';
 import {
   GearLoadoutService,
   InventoryService,
@@ -9,6 +9,11 @@ import { IconComponent } from '../icon/icon.component';
 import { Item } from '../../../core/models';
 import { ListItem } from './list-item/list-item';
 
+interface SelectedItemContext {
+  itemId: string;
+  source: 'Inventory' | 'Equipped';
+}
+
 @Component({
   selector: 'app-inventory',
   imports: [ListItem, IconComponent],
@@ -17,7 +22,7 @@ import { ListItem } from './list-item/list-item';
 })
 export class Inventory {
   public readonly ShowEquipped = input.required<boolean>();
-  public readonly ItemSelected = output<{ item: Item; source: 'Inventory' | 'Equipped' }>();
+  public readonly ItemSelected = output<SelectedItemContext>();
 
   // Services
   private readonly loadout = inject(GearLoadoutService);
@@ -27,34 +32,43 @@ export class Inventory {
   // UI State
   protected readonly EquippedItems = this.loadout.EquippedItems;
   protected readonly InventoryItems = this.inventory.Items;
-  protected readonly SelectedItem = signal<{ item: Item; source: 'Inventory' | 'Equipped' } | null>(
-    null
-  );
+  protected readonly SelectedItemContext = signal<SelectedItemContext | null>(null);
+  protected readonly SelectedItem = computed<Item | null>(() => {
+    const sel = this.SelectedItemContext();
+    if (!sel) return null;
+    if (sel.source === 'Inventory') {
+      return this.inventory.Items().find((i) => i.Id === sel.itemId) || null;
+    } else {
+      return this.loadout.EquippedItems().find((i) => i.Id === sel.itemId) || null;
+    }
+  });
 
   protected SelectItemFromInventory(item: Item): void {
-    this.SelectedItem.set({ item, source: 'Inventory' });
+    this.SelectedItemContext.set({ itemId: item.Id, source: 'Inventory' });
+    this.ItemSelected.emit({ itemId: item.Id, source: 'Inventory' });
   }
 
   protected SelectItemFromEquipped(item: Item): void {
-    this.SelectedItem.set({ item, source: 'Equipped' });
+    this.SelectedItemContext.set({ itemId: item.Id, source: 'Equipped' });
+    this.ItemSelected.emit({ itemId: item.Id, source: 'Equipped' });
   }
 
   protected DeselectGear() {
-    this.SelectedItem.set(null);
+    this.SelectedItemContext.set(null);
   }
 
   protected EquipSelected(item: Item): void {
     if (!item) return;
-    if (this.itemManagement.EquipItem(item)) {
+    if (this.itemManagement.EquipItem(item.Id)) {
       // Refresh selection to the newly equipped item
-      this.SelectedItem.set({ item, source: 'Equipped' });
+      this.SelectedItemContext.set({ itemId: item.Id, source: 'Equipped' });
     }
   }
 
   protected UnequipSelected(item: Item): void {
     if (!item) return;
-    if (this.itemManagement.UnequipItem(item)) {
-      this.SelectedItem.set({ item, source: 'Inventory' });
+    if (this.itemManagement.UnequipItem(item.Id)) {
+      this.SelectedItemContext.set({ itemId: item.Id, source: 'Inventory' });
     }
   }
 }

@@ -5,7 +5,7 @@
       <div class="list">
         <div class="list-title">
           <h4>EQUIPPED</h4>
-          @if (SelectedItem()?.item) {
+          @if (SelectedItem()) {
             <button
               class="ih-button-icon button-cancel"
               (click)="DeselectGear()"
@@ -18,9 +18,9 @@
           <app-list-item
             class="list-item"
             [item]="e"
-            [selected]="SelectedItem()?.item?.Id === e.Id"
+            [selected]="SelectedItem()?.Id === e.Id"
             (onSelect)="SelectItemFromEquipped($event)">
-            @if (SelectedItem()?.item?.Id === e.Id) {
+            @if (SelectedItem()?.Id === e.Id) {
               <button class="ih-button-secondary show-on-hover" (click)="UnequipSelected(e)">
                 UNEQUIP
               </button>
@@ -39,7 +39,7 @@
     <div class="list">
       <div class="list-title">
         <h4>BAG</h4>
-        @if (!ShowEquipped() && SelectedItem()?.item) {
+        @if (!ShowEquipped() && SelectedItem()) {
           <button
             class="ih-button-icon button-cancel"
             (click)="DeselectGear()"
@@ -52,9 +52,9 @@
         <app-list-item
           class="list-item"
           [item]="it"
-          [selected]="SelectedItem()?.item?.Id === it.Id"
+          [selected]="SelectedItem()?.Id === it.Id"
           (onSelect)="SelectItemFromInventory($event)">
-          @if (SelectedItem()?.item?.Id === it.Id) {
+          @if (SelectedItem()?.Id === it.Id) {
             <button class="ih-button-secondary show-on-hover" (click)="EquipSelected(it)">
               EQUIP
             </button>

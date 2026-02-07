@@ -18,7 +18,7 @@
   grid:
     "info icon" auto
     "innate innate" auto
-    / 175px 100px;
+    / 180px 100px;
 
   gap: $gap;
   text-align: left;
@@ -34,14 +34,14 @@
   @include flexbox($dir: column, $justify: center, $align: center);
 
   .item-name {
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-family: $font-family-header;
     font-weight: bold;
     color: $clr-highlight;
   }
 
   .item-type {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: $clr-mute;
     font-weight: normal;
   }
@@ -86,9 +86,8 @@
   }
 
   .label {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     font-style: italic;
-    color: $clr-mute;
     color: $clr-mute;
   }
 }

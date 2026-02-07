@@ -1,193 +1,206 @@
-import { AFFIX_DEFINITIONS, RUNE_DEFINITIONS } from '../../../../core/constants';
 import {
+  Affix,
   AffixDefinition,
+  AffixInfo,
   AffixTier,
   Item,
   ItemRarity,
-  ItemSlot,
-  Rune,
-  RuneDefinition,
-  RuneQuality
+  ItemVariantDefinition
 } from '../../../../core/models';
 import {
-  ClampAffixTier,
+  ChangeDetectionStrategy,
+  Component,
+  LOCALE_ID,
+  computed,
+  inject,
+  input,
+  output,
+  signal
+} from '@angular/core';
+import { CraftingService, GoldCostProvider } from '../../../../core/services';
+import {
+  ExceedsMaxTierForItemLevel,
+  ExceedsMaximumEnchantableAffixes,
+  GetAffixDefinition,
+  GetAffixInfo,
+  GetAffixPool,
   GetItemRarity,
   GetItemRarityRule,
-  MinRarityForTier
+  GetItemVariant,
+  GetMaxAffixTier,
+  IsMaxLevel,
+  NextTier,
+  RandomInRange
 } from '../../../../core/systems/items';
-import { Component, computed, inject, signal } from '@angular/core';
-import {
-  CraftingService,
-  GearLoadoutService,
-  GoldCostProvider,
-  InventoryService
-} from '../../../../core/services';
+import { Gold, IconComponent, ItemPreview } from '../../../../shared/components';
+
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-enchanting',
-  imports: [],
+  imports: [ItemPreview, Gold, IconComponent],
   templateUrl: './enchanting.html',
-  styleUrl: './enchanting.scss'
+  styleUrl: './enchanting.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Enchanting {
-  private readonly crafting = inject(CraftingService);
-  public readonly cost = inject(GoldCostProvider);
-  private readonly inventory = inject(InventoryService);
-  private readonly gear = inject(GearLoadoutService);
+  private readonly locale = inject(LOCALE_ID);
+  private readonly craftingService = inject(CraftingService);
+  private readonly goldCostProvider = inject(GoldCostProvider);
+  private readonly decimalPipe = new DecimalPipe(this.locale);
 
-  // UI State
-  public readonly SelectedSlot = signal<ItemSlot>('Weapon');
-  public readonly SelectedRarity = signal<ItemRarity>('Magic');
-  public readonly SelectedVariantId = signal<string | null>(null);
+  public readonly Item = input.required<Item>();
+  public readonly ItemChange = output<Item>();
 
-  public readonly SelectedItem = signal<{ item: Item; source: 'Inventory' | 'Equipped' } | null>(
-    null
+  protected readonly Variant = computed<ItemVariantDefinition>(() =>
+    GetItemVariant(this.Item().DefinitionId)
   );
-  public readonly SelectedAffixIndex = signal<number | null>(null);
-  public readonly SelectedAffixDefinitionId = signal<string | null>(null);
-  public readonly SelectedRuneIndex = signal<number | null>(null);
-  // protected readonly Rarity = computed<ItemRarity>(() => {
-  //     const tier = this.Variant().Tier;
-  //     return MinRarityForTier(tier);
-  //   });
 
-  // Data
-  public readonly InventoryItems = this.inventory.Items;
-  public readonly InventoryRunes = this.inventory.Runes;
-  public readonly EquippedItems = this.gear.EquippedItems;
+  protected readonly Rarity = computed<ItemRarity>(() => GetItemRarity(this.Item().Level));
+  protected readonly Rules = computed(() => GetItemRarityRule(this.Rarity()));
 
-  public readonly AllowedAffixDefinitions = computed<AffixDefinition[]>(() => {
-    const sel = this.SelectedItem();
-    if (!sel) return [];
-    return AFFIX_DEFINITIONS.filter((d) => d.AllowedSlots.includes(sel.item.Slot));
+  protected readonly EnchantedAffixes = computed<number>(
+    () => this.Item().Affixes.filter((a) => a.Improved).length
+  );
+  protected readonly MaxEnchantedAffixes = computed<number>(
+    () => this.Rules().MaxEnchantableAffixes
+  );
+  protected readonly MaxAffixSlots = computed<number>(() => this.Rules().MaxAffixes);
+  protected readonly MaxAffixTier = computed<AffixTier>(() => GetMaxAffixTier(this.Item().Level));
+
+  protected readonly VisibleSlotIndices = computed<number[]>(() => {
+    const item = this.Item();
+    const maxSlots = this.MaxAffixSlots();
+    const filled = item.Affixes.length;
+    const visibleSlots = Math.min(filled + 1, maxSlots);
+    return Array.from({ length: visibleSlots }, (_, index) => index);
   });
 
-  public readonly EligibleRunesFromInventory = computed<
-    { rune: Rune; index: number; definition: RuneDefinition | undefined }[]
-  >(() => {
-    const sel = this.SelectedItem();
-    if (!sel) return [];
-    const rarity = GetItemRarity(sel.item.Level);
-    const rules = GetItemRarityRule(rarity);
-    return this.InventoryRunes()
-      .map((r, i) => ({
-        rune: r,
-        index: i,
-        definition: RUNE_DEFINITIONS.find((d) => d.Id === r.DefinitionId)
-      }))
-      .filter(
-        (x) =>
-          !!x.definition &&
-          x.definition!.AllowedSlots.includes(sel.item.Slot) &&
-          rules.AllowedRuneQualities.includes(x.rune.Quality)
-      );
-  });
-
-  // Lookup helpers for template
-  public AffixDefById(id: string | null | undefined): AffixDefinition | undefined {
-    if (!id) return undefined;
-    return AFFIX_DEFINITIONS.find((d) => d.Id === id);
+  protected readonly SelectedAffixIndex = signal<number | null>(null);
+  protected SelectSlot(index: number): void {
+    this.SelectedAffixIndex.set(index);
   }
 
-  public RuneDefById(id: string | null | undefined): RuneDefinition | undefined {
-    if (!id) return undefined;
-    return RUNE_DEFINITIONS.find((d) => d.Id === id);
+  protected UpgradeCost(): number {
+    return this.goldCostProvider.GetLevelUpCost(this.Item());
   }
 
-  public SelectSlot(slot: ItemSlot): void {
-    this.SelectedSlot.set(slot);
-    this.SelectedVariantId.set(null);
+  protected AddAffixCost(): number {
+    return this.goldCostProvider.GetAddAffixCost(this.Item(), {} as AffixDefinition);
   }
 
-  public SelectVariant(id: string): void {
-    this.SelectedVariantId.set(id);
+  protected EnchantCost(slotIndex: number): number {
+    return this.goldCostProvider.GetEnchantAffixCost(this.Item(), slotIndex);
   }
 
-  public SelectItemFromInventory(item: Item): void {
-    this.SelectedItem.set({ item, source: 'Inventory' });
-    this.SelectedAffixIndex.set(null);
+  protected RerollCost(slotIndex: number): number {
+    return this.goldCostProvider.GetRerollAffixCost(this.Item(), slotIndex);
   }
 
-  public SelectItemFromEquipped(item: Item): void {
-    this.SelectedItem.set({ item, source: 'Equipped' });
-    this.SelectedAffixIndex.set(null);
+  protected HasAffix(slotIndex: number): boolean {
+    return slotIndex >= 0 && slotIndex < this.Item().Affixes.length;
   }
 
-  public LevelUpSelected(): void {
-    const sel = this.SelectedItem();
-    if (!sel) return;
-    const outcome = this.crafting.LevelUp(sel.item, this.cost);
-    if (!outcome.Success) return;
-    this.ApplyItemUpdate(sel, outcome.Item);
+  protected GetAffixInfo(slotIndex: number): AffixInfo {
+    const affix = this.Item().Affixes[slotIndex];
+    return GetAffixInfo(affix, this.decimalPipe);
   }
 
-  public AddAffixToSelected(defId: string, desiredTier?: AffixTier): void {
-    const sel = this.SelectedItem();
-    if (!sel) return;
-    const def = AFFIX_DEFINITIONS.find((d) => d.Id === defId);
-    if (!def) return;
-    const tier = desiredTier ? ClampAffixTier(sel.item.Level, desiredTier) : undefined;
-    const outcome = this.crafting.AddAffix(sel.item, def, tier, this.cost);
-    if (!outcome.Success) return;
-    this.ApplyItemUpdate(sel, outcome.Item);
+  protected CanUpgradeItem(): boolean {
+    const item = this.Item();
+    return !IsMaxLevel(item);
   }
 
-  public RerollAffixOnSelected(index: number): void {
-    const sel = this.SelectedItem();
-    if (!sel) return;
-    const affix = sel.item.Affixes[index];
-    if (!affix) return;
-    const def = AFFIX_DEFINITIONS.find((d) => d.Id === affix.DefinitionId);
-    if (!def) return;
-    const outcome = this.crafting.RerollAffix(sel.item, index, def, this.cost);
-    if (!outcome.Success) return;
-    this.ApplyItemUpdate(sel, outcome.Item);
-  }
+  protected UpgradeItem(): void {
+    const item = this.Item();
+    const result = this.craftingService.LevelUp(item, this.goldCostProvider);
 
-  public EnchantAffixOnSelected(index: number): void {
-    const sel = this.SelectedItem();
-    if (!sel) return;
-    const affix = sel.item.Affixes[index];
-    if (!affix) return;
-    const def = AFFIX_DEFINITIONS.find((d) => d.Id === affix.DefinitionId);
-    if (!def) return;
-    const outcome = this.crafting.EnchantAffix(sel.item, index, def, this.cost);
-    if (!outcome.Success) return;
-    this.ApplyItemUpdate(sel, outcome.Item);
-  }
-
-  public SocketRuneFromInventory(index: number): void {
-    const sel = this.SelectedItem();
-    if (!sel) return;
-    const rune = this.inventory.GetRunes()[index];
-    if (!rune) return;
-    const def = RUNE_DEFINITIONS.find((d) => d.Id === rune.DefinitionId);
-    if (!def) return;
-    const outcome = this.crafting.SocketRune(sel.item, def, rune.Quality as RuneQuality, this.cost);
-    if (!outcome.Success) return;
-    // Remove used rune from inventory
-    this.inventory.RemoveRune(rune);
-    this.ApplyItemUpdate(sel, outcome.Item);
-  }
-
-  public UnsocketRuneFromSelected(): void {
-    const sel = this.SelectedItem();
-    if (!sel || !sel.item.Rune) return;
-    const outcome = this.crafting.UnsocketRune(sel.item, this.cost);
-    if (!outcome.Success) return;
-    // Note: current behavior does not return rune to inventory
-    this.ApplyItemUpdate(sel, outcome.Item);
-  }
-
-  private ApplyItemUpdate(sel: { item: Item; source: 'Inventory' | 'Equipped' }, next: Item): void {
-    if (sel.source === 'Inventory') {
-      this.inventory.RemoveItem(sel.item);
-      this.inventory.Add(next);
-      this.SelectedItem.set({ item: next, source: 'Inventory' });
-    } else {
-      // Equipped: replace in loadout
-      this.gear.Equip(next);
-      this.SelectedItem.set({ item: next, source: 'Equipped' });
+    if (result.Success) {
+      this.ItemChange.emit(result.Item);
     }
+  }
+
+  protected CanEnchantSlot(slotIndex: number): boolean {
+    const item = this.Item();
+    return slotIndex === item.Affixes.length && slotIndex < this.MaxAffixSlots();
+  }
+
+  protected IsMaxedSlot(slotIndex: number): boolean {
+    if (!this.HasAffix(slotIndex)) return false;
+    const item = this.Item();
+    const affix = item.Affixes[slotIndex];
+    const maxTier = GetMaxAffixTier(item.Level);
+    return affix.Tier === maxTier;
+  }
+
+  protected CanUpgradeSlot(slotIndex: number): boolean {
+    if (!this.HasAffix(slotIndex)) return false;
+    const item = this.Item();
+    const affix = item.Affixes[slotIndex];
+    const next = NextTier(affix.Tier);
+    if (!next) return false;
+    if (ExceedsMaxTierForItemLevel(next, item.Level)) return false;
+
+    if (!affix.Improved) {
+      if (ExceedsMaximumEnchantableAffixes(item)) return false;
+    }
+
+    return true;
+  }
+
+  public EnchantSlot(slotIndex: number): void {
+    if (!this.CanEnchantSlot(slotIndex)) return;
+
+    const item = this.Item();
+    const pool = GetAffixPool(item.Slot);
+    const definition = this.PickRandomDefinition(pool);
+    const result = this.craftingService.AddAffix(item, definition!, this.goldCostProvider);
+
+    if (!result.Success) return;
+
+    const next = result.Item;
+    this.ItemChange.emit({ ...next });
+  }
+
+  private PickRandomDefinition(pool: AffixDefinition[]): AffixDefinition | null {
+    if (pool.length === 0) return null;
+    const index = Math.floor(Math.random() * pool.length);
+    return pool[index] ?? null;
+  }
+
+  public RerollSlot(slotIndex: number): void {
+    if (!this.HasAffix(slotIndex)) return;
+
+    let item = this.Item();
+    const current = item.Affixes[slotIndex];
+    const result = this.craftingService.RerollAffix(
+      item,
+      slotIndex,
+      GetAffixDefinition(current.DefinitionId)!,
+      this.goldCostProvider
+    );
+
+    if (!result.Success) return;
+
+    item = result.Item;
+    this.ItemChange.emit({ ...item });
+  }
+
+  public UpgradeSlot(slotIndex: number): void {
+    if (!this.CanUpgradeSlot(slotIndex)) return;
+
+    const item = this.Item();
+    const current = item.Affixes[slotIndex];
+    const result = this.craftingService.EnchantAffix(
+      item,
+      slotIndex,
+      GetAffixDefinition(current.DefinitionId)!,
+      this.goldCostProvider
+    );
+
+    if (!result.Success) return;
+
+    const next = result.Item;
+    this.ItemChange.emit({ ...next });
   }
 }

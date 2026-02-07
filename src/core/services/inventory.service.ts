@@ -75,6 +75,31 @@ export class InventoryService {
   }
 
   /**
+   * Updates an existing item in the inventory by Id match.
+   * @param updated The updated item.
+   * @returns True if the item was found and updated; false otherwise.
+   */
+  public Update(updated: Item): boolean {
+    if (!updated) return false;
+    let found = false;
+
+    this.State.update((state) => {
+      const idx = state.Items.findIndex((i) => i.Id === updated.Id);
+      if (idx < 0) return state;
+      found = true;
+
+      const nextItems = state.Items.slice();
+      nextItems[idx] = updated;
+      return {
+        ...state,
+        Items: nextItems
+      };
+    });
+
+    return found;
+  }
+
+  /**
    * Removes the first item with the specified Id.
    * @param itemId The Id of the item to remove.
    * @returns The removed item, or null if not found.

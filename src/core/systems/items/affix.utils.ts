@@ -1,5 +1,55 @@
-import { AFFIX_TIER_ORDER, MAX_AFFIX_TIER_FOR_LEVEL } from '../../constants';
-import { AffixTier, ItemLevel } from '../../models';
+import {
+  AFFIX_DEFINITIONS,
+  AFFIX_TIER_ORDER,
+  ITEM_RARITY_RULES,
+  MAX_AFFIX_TIER_FOR_LEVEL
+} from '../../constants';
+import {
+  Affix,
+  AffixDefinition,
+  AffixInfo,
+  AffixTier,
+  Item,
+  ItemLevel,
+  LabelToString
+} from '../../models';
+
+import { DecimalPipe } from '@angular/common';
+import { GetItemRarity } from './item.utils';
+
+export function GetAffixInfo(affix: Affix, decimalPipe: DecimalPipe): AffixInfo {
+  const definition: AffixDefinition = GetAffixDefinition(affix.DefinitionId);
+  const minMax: { min: number; max: number } = GetMinMaxRoll(definition, affix.Tier);
+  const label: string = LabelToString(definition.Effect.ToLabel(affix.RolledValue), decimalPipe);
+
+  return {
+    Tier: affix.Tier,
+    Label: label,
+    Value: affix.RolledValue,
+    MinRoll: minMax.min,
+    MaxRoll: minMax.max,
+    Improved: affix.Improved
+  };
+}
+
+export function GetAffixDefinition(definitionId: string): AffixDefinition {
+  return AFFIX_DEFINITIONS.find((a) => a.Id === definitionId)!;
+}
+
+export function GetMinMaxRoll(
+  definition: AffixDefinition,
+  tier: AffixTier
+): { min: number; max: number } {
+  const tierSpec = definition.Tiers.find((t) => t.Tier === tier)!;
+  const min = Number.isInteger(tierSpec.Value.Min)
+    ? tierSpec.Value.Min
+    : Math.round(tierSpec.Value.Min * 100);
+  const max = Number.isInteger(tierSpec.Value.Max)
+    ? tierSpec.Value.Max
+    : Math.round(tierSpec.Value.Max * 100);
+
+  return { min: min, max: max };
+}
 
 /** Returns the index of the given affix tier in the order array. */
 export function TierIndex(tier: string): number {
@@ -50,6 +100,12 @@ export function ExceedsMaxTierForItemLevel(affixTier: AffixTier, itemLevel: Item
   return overMax;
 }
 
+export function ExceedsMaximumEnchantableAffixes(item: Item): boolean {
+  const rules = ITEM_RARITY_RULES[GetItemRarity(item.Level)];
+  const enchantedCount = item.Affixes.filter((a) => a.Improved).length;
+  return enchantedCount >= rules.MaxEnchantableAffixes;
+}
+
 /**
  * Generates a random integer within the specified range [min, max].
  * @param min the minimum value (inclusive).
@@ -59,6 +115,15 @@ export function ExceedsMaxTierForItemLevel(affixTier: AffixTier, itemLevel: Item
 export function RandomInRange(min: number, max: number): number {
   const lo = Math.min(min, max);
   const hi = Math.max(min, max);
+
+  const isIntegerRange = Number.isInteger(lo) && Number.isInteger(hi);
+
+  // Inclusive integer roll
+  if (isIntegerRange) {
+    return Math.floor(lo + Math.random() * (hi - lo + 1));
+  }
+
+  // Keep decimals
   const val = lo + Math.random() * (hi - lo);
-  return Math.round(val);
+  return Math.round(val * 100) / 100;
 }

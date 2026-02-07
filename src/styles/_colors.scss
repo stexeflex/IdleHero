@@ -66,6 +66,12 @@ $grad-ui-bg-lighten: linear-gradient(
   color.scale($clr-ui-bg, $lightness: 30%) 100%
 );
 
+$grad-ui-bg-lighten-revert: linear-gradient(
+  $gradient-bottom-right,
+  $clr-ui-bg 0%,
+  color.scale($clr-ui-bg, $lightness: 30%) 100%
+);
+
 $grad-ui-bg-invert: linear-gradient(
   $gradient-bottom,
   color.scale($clr-ui-bg-invert, $lightness: -20%) 0%,

@@ -147,6 +147,6 @@ export class InventoryArea {
   // Item Actions
   protected EquipItem(item: Item): void {
     if (!item) return;
-    this.ItemManagement.EquipItem(item);
+    this.ItemManagement.EquipItem(item.Id);
   }
 }

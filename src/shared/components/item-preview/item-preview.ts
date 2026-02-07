@@ -1,8 +1,14 @@
+import {
+  AffixInfo,
+  Item,
+  ItemRarity,
+  ItemVariantDefinition,
+  LabelToString
+} from '../../../core/models';
 import { Component, LOCALE_ID, computed, inject, input } from '@angular/core';
-import { Item, ItemRarity, ItemVariantDefinition, LabelToString } from '../../../core/models';
+import { GetAffixInfo, GetItemRarity } from '../../../core/systems/items';
 
 import { DecimalPipe } from '@angular/common';
-import { GetItemRarity } from '../../../core/systems/items';
 import { IconComponent } from '../icon/icon.component';
 import { Separator } from '../separator/separator';
 
@@ -40,5 +46,11 @@ export class ItemPreview {
     const innateValue = this.Variant().Innate.ValuesByLevel[this.Item().Level];
     const innateLabel = this.Variant().Innate.ToLabel(innateValue);
     return LabelToString(innateLabel, this.decimalPipe);
+  });
+
+  protected readonly AffixesInfo = computed<AffixInfo[]>(() => {
+    return this.Item().Affixes.map((affix) => {
+      return GetAffixInfo(affix, this.decimalPipe);
+    });
   });
 }

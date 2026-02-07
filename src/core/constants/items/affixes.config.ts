@@ -138,43 +138,43 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
     }
   },
   {
-    Id: 'affix_bleeding_damage_flat',
+    Id: 'affix_bleeding_damage_percent',
     Groups: ['Offense'],
     AllowedSlots: ['Weapon', 'OffHand', 'Chest', 'Legs'],
     Tiers: BLEEDING_DAMAGE_TIERS,
     Effect: {
-      ToLabel: (value: number) => FlatAdditiveLabel('Bleeding Damage', value),
+      ToLabel: (value: number) => PercentageAdditiveLabel('Bleeding Damage', value),
       MapToStatSource: (source: string, value: number) => {
-        const s = EmptyStatSource(source + `_affix_bleeding_damage_flat_${performance.now()}`);
-        s.Bleeding.FlatDamage = value;
+        const s = EmptyStatSource(source + `_affix_bleeding_damage_percent_${performance.now()}`);
+        s.Bleeding.MultiplierDamage = value;
         return s;
       }
     }
   },
   {
-    Id: 'affix_crit_damage_flat',
+    Id: 'affix_crit_damage_percent',
     Groups: ['Offense'],
     AllowedSlots: ['Weapon', 'OffHand', 'Chest', 'Legs'],
     Tiers: CRIT_DAMAGE_TIERS,
     Effect: {
       ToLabel: (value: number) => PercentageAdditiveLabel('Crit Damage', value),
       MapToStatSource: (source: string, value: number) => {
-        const s = EmptyStatSource(source + `_affix_crit_damage_flat_${performance.now()}`);
-        s.CriticalHit.FlatDamage = value;
+        const s = EmptyStatSource(source + `_affix_crit_damage_percent_${performance.now()}`);
+        s.CriticalHit.MultiplierDamage = value;
         return s;
       }
     }
   },
   {
-    Id: 'affix_multihit_damage_flat',
+    Id: 'affix_multihit_damage_percent',
     Groups: ['Offense'],
     AllowedSlots: ['Weapon', 'OffHand', 'Chest', 'Legs'],
     Tiers: MULTIHIT_DAMAGE_TIERS,
     Effect: {
       ToLabel: (value: number) => PercentageAdditiveLabel('Multi Hit Damage', value),
       MapToStatSource: (source: string, value: number) => {
-        const s = EmptyStatSource(source + `_affix_multihit_damage_flat_${performance.now()}`);
-        s.MultiHit.FlatDamage = value;
+        const s = EmptyStatSource(source + `_affix_multihit_damage_percent_${performance.now()}`);
+        s.MultiHit.MultiplierDamage = value;
         return s;
       }
     }
@@ -216,7 +216,7 @@ const UTILITY_AFFIX_DEFINITIONS: AffixDefinition[] = [
     AllowedSlots: ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Feet'],
     Tiers: ACCURACY_TIERS,
     Effect: {
-      ToLabel: (value: number) => PercentageMultiplicativeLabel('Accuracy', value),
+      ToLabel: (value: number) => PercentageAdditiveLabel('Accuracy', value),
       MapToStatSource: (source: string, value: number) => {
         const s = EmptyStatSource(source + `_affix_accuracy_percent_${performance.now()}`);
         s.Accuracy.Multiplier = value;
@@ -230,7 +230,7 @@ const UTILITY_AFFIX_DEFINITIONS: AffixDefinition[] = [
     AllowedSlots: ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Feet'],
     Tiers: PENETRATION_TIERS,
     Effect: {
-      ToLabel: (value: number) => PercentageMultiplicativeLabel('Armor Penetration', value),
+      ToLabel: (value: number) => PercentageAdditiveLabel('Armor Penetration', value),
       MapToStatSource: (source: string, value: number) => {
         const s = EmptyStatSource(source + `_affix_armor_penetration_percent_${performance.now()}`);
         s.ArmorPenetration.Multiplier = value;
@@ -244,7 +244,7 @@ const UTILITY_AFFIX_DEFINITIONS: AffixDefinition[] = [
     AllowedSlots: ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Feet'],
     Tiers: PENETRATION_TIERS,
     Effect: {
-      ToLabel: (value: number) => PercentageMultiplicativeLabel('Resistance Penetration', value),
+      ToLabel: (value: number) => PercentageAdditiveLabel('Resistance Penetration', value),
       MapToStatSource: (source: string, value: number) => {
         const s = EmptyStatSource(
           source + `_affix_resistance_penetration_percent_${performance.now()}`
