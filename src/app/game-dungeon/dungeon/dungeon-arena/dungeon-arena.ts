@@ -1,10 +1,15 @@
 import { Boss, DamageEvent, Hero } from '../../../../core/models';
-import { Component, OnDestroy, inject, signal } from '@angular/core';
+import { Component, OnDestroy, computed, inject, signal } from '@angular/core';
 import { HealthBar, IconComponent } from '../../../../shared/components';
 
 import { CombatState } from '../../../../core/systems/combat';
 import { DELAYS } from '../../../../shared/constants';
 import { Subscription } from 'rxjs';
+
+interface BleedingTick {
+  Tick: number;
+  IsActive: boolean;
+}
 
 @Component({
   selector: 'app-dungeon-arena',
@@ -23,6 +28,21 @@ export class DungeonArena implements OnDestroy {
   // State
   protected Hero = signal<Hero | undefined>(undefined);
   protected Boss = signal<Boss | undefined>(undefined);
+
+  protected BleedingTicks = computed<BleedingTick[]>(() => {
+    const boss = this.Boss();
+    if (!boss) return [];
+    if (!boss.State.IsBleeding || !boss.State.BleedingState) return [];
+
+    const ticks: BleedingTick[] = [];
+    for (let i = 1; i <= boss.State.BleedingState.TotalTicks; i++) {
+      ticks.push({
+        Tick: i,
+        IsActive: i > boss.State.BleedingState.Tick
+      });
+    }
+    return ticks.reverse();
+  });
 
   // Animation state
   protected readonly isAttacking = signal(false);

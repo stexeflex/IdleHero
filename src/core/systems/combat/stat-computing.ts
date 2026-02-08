@@ -7,7 +7,8 @@ import {
   MapDexterityToMultiHitChance,
   MapIntelligenceToCritChance,
   MapIntelligenceToResistancePenetration,
-  MapStrengthToArmorPenetration
+  MapStrengthToArmorPenetration,
+  MapStrengthToBleedChance
 } from './stat-scalings';
 
 import { ClampUtils } from '../../../shared/utils';
@@ -48,10 +49,12 @@ export function ComputeStats(
   const attackSpeed = ComputeAttackSpeed(sources, baseStats.AttackSpeed, attributes.Dexterity);
 
   // Bleeding Chance & Damage
-  const bleedingChance =
-    baseStats.BleedingChance + sources.reduce((sum, s) => Flat(sum, s.Bleeding.FlatChance), 0);
-  const bleedingDamage =
-    baseStats.BleedingDamage + sources.reduce((sum, s) => Flat(sum, s.Bleeding.FlatDamage), 0);
+  const { BleedingChance: bleedingChance, BleedingDamage: bleedingDamage } = ComputeBleeding(
+    sources,
+    baseStats.BleedingChance,
+    baseStats.BleedingDamage,
+    attributes.Strength
+  );
 
   // Crit Chance & Damage
   const { CriticalHitChance: critChance, CriticalHitDamage: critMultiplier } = ComputeCriticalHit(
@@ -130,6 +133,36 @@ function ComputeAttackSpeed(sources: StatSource[], baseSpeed: number, dexterity:
 
   const effectiveAttackSpeed = Effective(baseAPS, addAPS, multiplyAPS, 0.1);
   return effectiveAttackSpeed;
+}
+
+function ComputeBleeding(
+  sources: StatSource[],
+  baseChance: number,
+  baseMultiplier: number,
+  strength: number
+): { BleedingChance: number; BleedingDamage: number } {
+  // Bleeding Chance
+  const baseBleedChance = Flat(baseChance ?? 0, MapStrengthToBleedChance(strength));
+  const addBleedChance = sources.reduce((sum, s) => Flat(sum, s.Bleeding.FlatChance), 0);
+  const multiplyBleedChance = sources.reduce(
+    (prod, s) => Multiplier(prod, s.Bleeding.MultiplierChance),
+    1
+  );
+  const bleedChance = ClampUtils.clamp01((baseBleedChance + addBleedChance) * multiplyBleedChance);
+
+  // Bleeding Damage
+  const baseBleedDamage = baseMultiplier ?? STATS_CONFIG.BASE.BLEEDING_DAMAGE;
+  const addBleedDamage = sources.reduce((sum, s) => Flat(sum, s.Bleeding.FlatDamage), 0);
+  const multiplyBleedDamage = sources.reduce(
+    (prod, s) => Multiplier(prod, s.Bleeding.MultiplierDamage),
+    1
+  );
+  const bleedMultiplier = Effective(baseBleedDamage, addBleedDamage, multiplyBleedDamage, 0);
+
+  return {
+    BleedingChance: Math.min(bleedChance, STATS_CONFIG.CAPS.MAX_BLEEDING_CHANCE),
+    BleedingDamage: bleedMultiplier
+  };
 }
 
 function ComputeCriticalHit(

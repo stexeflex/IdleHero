@@ -1,3 +1,4 @@
+export * from './combat/actors/actor-state';
 export * from './combat/actors/boss.';
 export * from './combat/actors/combat-actor';
 export * from './combat/actors/hero';

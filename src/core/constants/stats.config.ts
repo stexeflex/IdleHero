@@ -5,6 +5,8 @@ export const STATS_CONFIG = {
     DAMAGE: 0, // Basis-Schaden
     BLEEDING_CHANCE: 0.0, // 0% Base Bleeding Chance
     BLEEDING_DAMAGE: 0.25, // 25% Base Bleeding Damage
+    BLEEDING_TICKS: 5, // Basis Anzahl Bleeding Ticks
+    BLEEDING_TICK_INTERVAL_MS: 1000, // Basis Intervall zwischen Bleeding Ticks in Millisekunden
     CRIT_CHANCE: 0.0, // 0% Base CHC
     CRIT_DAMAGE: 1.5, // 150% Base CHD
     MULTI_HIT_CHANCE: 0.0, // 0% Base MHC
@@ -14,10 +16,11 @@ export const STATS_CONFIG = {
     ARMOR_PENETRATION: 0.1, // 10% Basis Armor Penetration
     RESISTANCE_PENETRATION: 0.1, // 10% Basis Magic Penetration
     CHARGE_GAIN: 1, // Basis Charge Gain
-    CHARGE_DAMAGE: 1.5, // 150% Basis Charge Damage
+    CHARGE_DAMAGE: 2.5, // 250% Basis Charge Damage
     CHARGE_DURATION: 5 // Basis Charge Dauer in Sekunden
   },
   LIMITS: {
+    STR_TO_BLEED_CHANCE: 0.5, // Maximal +50% BHC durch STR
     INT_TO_CRIT_CHANCE: 0.5, // Maximal +50% CHC durch INT
     DEX_TO_HASTE: 0.25, // Maximal +25% Haste durch DEX
     DEX_TO_MULTI_HIT_CHANCE: 0.35, // Maximal +35% MHC durch DEX
@@ -25,6 +28,7 @@ export const STATS_CONFIG = {
     DEX_TO_CHAIN_FACTOR: 0.8 // Maximale Chain Factor durch DEX
   },
   CAPS: {
+    MAX_BLEEDING_CHANCE: 0.9, // Maximal 90% BHC
     MAX_CRIT_CHANCE: 0.9, // Maximal 90% CHC
     MAX_MULTI_HIT_CHANCE: 0.9, // Maximal 90% MHC
     MAX_MULTI_HIT_CHAIN_FACTOR: 0.9, // Maximal 90% Chain Factor
@@ -34,6 +38,7 @@ export const STATS_CONFIG = {
     STR_A: 0.02, // Skalierungsfaktor für STR zu Damage
     STR_B: 0.005, // Skalierungs-DR für STR zu Damage
 
+    STR_K: 80, // Skalierungskonstante für STR
     INT_K: 80, // Skalierungskonstante für INT
 
     DEX_HASTE_K: 120, // Skalierungskonstante für DEX to Haste

@@ -9,6 +9,18 @@
           [currentHealth]="boss.Life.Hp"
           [maxHealth]="boss.Life.MaxHp"
           [showHealthValues]="true"></app-health-bar>
+        @if (boss.State.IsBleeding) {
+          <div class="bleed-info">
+            <div class="bleeding-icon" title="Bleeding">
+              <app-icon combat="bleedingwound" size="md"></app-icon>
+            </div>
+            <div class="bleeding-ticks">
+              @for (tick of BleedingTicks(); track tick.Tick) {
+                <div class="bleed-tick" [class.active]="tick.IsActive"></div>
+              }
+            </div>
+          </div>
+        }
       </div>
 
       <div
@@ -40,10 +52,10 @@
       </div>
       <div class="actor-info bottom">
         <h2 class="actor-name right">{{ hero.Name }}</h2>
-        <app-health-bar
+        <!-- <app-health-bar
           [currentHealth]="hero.Life.Hp"
           [maxHealth]="hero.Life.MaxHp"
-          [showHealthValues]="true"></app-health-bar>
+          [showHealthValues]="true"></app-health-bar> -->
       </div>
     }
   </div>

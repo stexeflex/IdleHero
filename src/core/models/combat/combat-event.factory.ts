@@ -1,8 +1,10 @@
 import {
   Actor,
   AttackEvent,
+  ClearDamageOverTimeEvent,
   CombatEvent,
   DamageEvent,
+  DamageOverTimeEvent,
   DeathEvent,
   HealEvent,
   MissEvent,
@@ -54,6 +56,38 @@ export function CreateDamageEvent(
     Target: target,
     Damage: damage,
     IsMultiHit: damage.length > 1
+  };
+}
+
+export function CreateDamageOverTimeEvent(
+  atMs: number,
+  dotType: 'Bleed',
+  target: Target,
+  damage: DamageResult,
+  tickCount: number,
+  totalTicks: number
+): DamageOverTimeEvent {
+  return {
+    Type: 'DamageOverTime',
+    DotType: dotType,
+    AtMs: atMs,
+    Target: target,
+    Damage: damage,
+    Tick: tickCount,
+    TotalTicks: totalTicks
+  };
+}
+
+export function CreateClearDamageOverTimeEvent(
+  atMs: number,
+  dotType: 'Bleed',
+  target: Target
+): ClearDamageOverTimeEvent {
+  return {
+    Type: 'ClearDamageOverTime',
+    DotType: dotType,
+    AtMs: atMs,
+    Target: target
   };
 }
 

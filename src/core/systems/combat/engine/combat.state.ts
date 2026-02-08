@@ -4,6 +4,7 @@ import {
   CombatEvent,
   CreateAttackEvent,
   Hero,
+  InitialActorState,
   InitialLife,
   NoArmor,
   ResetLife
@@ -68,12 +69,7 @@ export class CombatState {
     this.Boss.set(firstBoss);
 
     // Add first Combat Event for Hero
-    const now = performance.now();
-    const firstAt: number = ComputeFirstIntervalMs(now, hero.AttackInterval);
-    const attackEvent: CombatEvent = CreateAttackEvent(firstAt, hero, firstBoss);
-
-    this.Queue.Push(attackEvent);
-
+    this.SetFirstEvent(hero, firstBoss);
     this.PublishState();
 
     // Log combat start
@@ -101,13 +97,15 @@ export class CombatState {
   public AdvanceToNextBoss(): void {
     if (this.Boss()?.Life.Alive) return;
 
-    const oldBoss = this.DungeonRoom.CurrentBoss();
+    // const oldBoss = this.DungeonRoom.CurrentBoss();
     this.DungeonRoom.AdvanceStage();
     const nextBoss = this.DungeonRoom.CurrentBoss();
 
     if (!nextBoss) return;
 
-    this.UpdateEventQueueOnStageAdvance(oldBoss, nextBoss);
+    // this.UpdateEventQueueOnStageAdvance(oldBoss, nextBoss);
+    this.Queue.Clear();
+    this.SetFirstEvent(this.Hero()!, nextBoss);
 
     nextBoss.Life = ResetLife(nextBoss.Life);
     this.Boss.set(nextBoss);
@@ -131,7 +129,8 @@ export class CombatState {
       Life: InitialLife(100),
       Armor: NoArmor(),
       Stats: computedStats,
-      AttackInterval: ComputeInitialAttackInterval(computedStats.AttackSpeed)
+      AttackInterval: ComputeInitialAttackInterval(computedStats.AttackSpeed),
+      State: InitialActorState()
     };
 
     return hero;
@@ -146,6 +145,14 @@ export class CombatState {
 
     boss.Life = ResetLife(boss.Life);
     return boss;
+  }
+
+  private SetFirstEvent(hero: Hero, boss: Boss): void {
+    const now = performance.now();
+    const firstAt: number = ComputeFirstIntervalMs(now, hero.AttackInterval);
+    const attackEvent: CombatEvent = CreateAttackEvent(firstAt, hero, boss);
+
+    this.Queue.Push(attackEvent);
   }
 
   // Clean up/retarget queued events referencing the old boss
@@ -167,7 +174,7 @@ export class CombatState {
           const isOldActor = 'Id' in event.Actor && (event.Actor as Boss).Id === oldId;
           const isOldTarget = 'Id' in event.Target && (event.Target as Boss).Id === oldId;
           if (isOldActor) return null; // drop misses from old boss
-          if (isOldTarget) return { ...event, Target: nextBoss };
+          if (isOldTarget) return null; // do not apply leftover misses to the new boss
           return event;
         }
         case 'Damage': {
@@ -175,6 +182,11 @@ export class CombatState {
           const isOldTarget = 'Id' in event.Target && (event.Target as Boss).Id === oldId;
           if (isOldActor) return null; // drop damage from old boss
           if (isOldTarget) return { ...event, Target: nextBoss };
+          return event;
+        }
+        case 'DamageOverTime': {
+          const isOldTarget = 'Id' in event.Target && (event.Target as Boss).Id === oldId;
+          if (isOldTarget) return null; // do not apply leftover DoTs to the new boss
           return event;
         }
         case 'Heal': {

@@ -5,6 +5,7 @@ import { DamageResult } from '../../systems/combat';
 export enum CombatLogType {
   Info = 'Info',
   Damage = 'Damage',
+  Bleed = 'Bleed',
   Miss = 'Miss',
   Heal = 'Heal',
   Death = 'Death'
@@ -26,6 +27,14 @@ export interface DamageLogEntry extends BaseCombatLogEntry {
   Target: Target;
   Damage: DamageResult[];
   IsMultiHit: boolean;
+}
+
+export interface BleedLogEntry extends BaseCombatLogEntry {
+  Type: CombatLogType.Bleed;
+  Target: Target;
+  Damage: DamageResult;
+  Tick: number;
+  TotalTicks: number;
 }
 
 export interface MissLogEntry extends BaseCombatLogEntry {
@@ -50,6 +59,7 @@ export interface DeathLogEntry extends BaseCombatLogEntry {
 export type CombatLogEntry =
   | InfoLogEntry
   | DamageLogEntry
+  | BleedLogEntry
   | MissLogEntry
   | HealLogEntry
   | DeathLogEntry;

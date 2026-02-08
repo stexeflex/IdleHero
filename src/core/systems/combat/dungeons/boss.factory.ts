@@ -1,5 +1,6 @@
 import {
   Boss,
+  InitialActorState,
   InitialArmor,
   InitialAttackInterval,
   InitialBossStats,
@@ -7,54 +8,55 @@ import {
   NoArmor
 } from '../../../models';
 
-export function Gooey(): Boss {
+function DefaultBoss(): Partial<Boss> {
   return {
+    Armor: NoArmor(),
+    Stats: InitialBossStats(0, 0, 0),
+    AttackInterval: InitialAttackInterval(0),
+    State: InitialActorState()
+  };
+}
+
+export function Gooey(): Boss {
+  const boss = DefaultBoss() as Boss;
+  return {
+    ...boss,
     Id: 'slime-cave-1',
     Name: 'Gooey Slime',
     BossIcon: 'gooeydaemon',
-
-    Life: InitialLife(100),
-    Armor: NoArmor(),
-    Stats: InitialBossStats(0.5, 2, 0.0),
-    AttackInterval: InitialAttackInterval(0.5)
+    Life: InitialLife(100)
   };
 }
 
 export function Slime(): Boss {
+  const boss = DefaultBoss() as Boss;
   return {
+    ...boss,
     Id: 'slime-cave-2',
     Name: 'Slime',
     BossIcon: 'slime',
-
-    Life: InitialLife(250),
-    Armor: NoArmor(),
-    Stats: InitialBossStats(0.5, 2, 0.0),
-    AttackInterval: InitialAttackInterval(0.5)
+    Life: InitialLife(250)
   };
 }
 
 export function Slug(): Boss {
+  const boss = DefaultBoss() as Boss;
   return {
+    ...boss,
     Id: 'slime-cave-mid',
     Name: 'Slug',
     BossIcon: 'graspingslug',
-
-    Life: InitialLife(1000),
-    Armor: InitialArmor(1),
-    Stats: InitialBossStats(0.5, 2, 0.0),
-    AttackInterval: InitialAttackInterval(0.5)
+    Life: InitialLife(1000)
   };
 }
 
 export function KingSlime(): Boss {
+  const boss = DefaultBoss() as Boss;
   return {
+    ...boss,
     Id: 'slime-cave-boss',
     Name: 'Cylop',
     BossIcon: 'jawlesscyclop',
-
-    Life: InitialLife(5000),
-    Armor: InitialArmor(5),
-    Stats: InitialBossStats(0.6, 6, 0.02),
-    AttackInterval: InitialAttackInterval(0.6)
+    Life: InitialLife(5000)
   };
 }

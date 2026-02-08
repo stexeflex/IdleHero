@@ -9,6 +9,12 @@ export function MapStrengthToBaseDamage(str: number, baseWeapon: number): number
   return Math.max(1, Math.round(scaled));
 }
 
+export function MapStrengthToBleedChance(str: number): number {
+  const cap = STATS_CONFIG.LIMITS.STR_TO_BLEED_CHANCE;
+  const K = STATS_CONFIG.MAPPINGS.STR_K;
+  return ClampUtils.clamp01(cap * (1 - Math.exp(-str / K)));
+}
+
 export function MapIntelligenceToCritChance(int: number): number {
   const cap = STATS_CONFIG.LIMITS.INT_TO_CRIT_CHANCE;
   const K = STATS_CONFIG.MAPPINGS.INT_K;

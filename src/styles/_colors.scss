@@ -42,6 +42,7 @@ $clr-stage-label: color.scale($clr-highlight, $lightness: 30%);
 $clr-log-info: color.scale($clr-exp-green, $lightness: 20%);
 $clr-log-other: $clr-common;
 $clr-log-damage: #ee4444;
+$clr-log-bleed: #8a0303;
 $clr-log-crit: $clr-rare;
 $clr-log-multi: $clr-epic;
 $clr-log-crit-multi: $clr-legendary;

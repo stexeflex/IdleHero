@@ -62,6 +62,21 @@
             </div>
           </div>
         }
+        @case ("Bleed") {
+          <div class="log-damage-entry">
+            <div class="log-damage-header">
+              <app-icon combat="bleedingwound" size="sm" class="log-bleed"></app-icon>
+              <app-combat-actor-icon
+                [Actor]="entry.Target"
+                Size="md"
+                class="log-damage"></app-combat-actor-icon>
+              <span class="log-bleed"> [{{ entry.Tick }} / {{ entry.TotalTicks }}] </span>
+            </div>
+            <span class="log-bleed">
+              {{ entry.Damage.Amount | number: "1.0-0" }}
+            </span>
+          </div>
+        }
         <!-- MISS -->
         @case ("Miss") {
           <app-combat-actor-icon

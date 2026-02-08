@@ -59,6 +59,45 @@
   font-weight: 900;
 }
 
+.bleed-info {
+  display: inline-flex;
+  gap: $gap;
+
+  .bleeding-icon {
+    color: $clr-log-bleed;
+
+    border-radius: 50%;
+    border-style: solid;
+    border-color: $clr-log-bleed;
+
+    padding: calc($gap / 3);
+
+    background-color: $clr-border;
+  }
+
+  .bleeding-ticks {
+    display: inline-flex;
+    align-items: center;
+    gap: calc($gap / 4);
+
+    .bleed-tick {
+      width: 50px;
+      height: 25px;
+
+      border-radius: $gap;
+      border-style: solid;
+      border-color: $clr-black;
+
+      background-color: $clr-log-bleed;
+      opacity: 0.5;
+
+      &.active {
+        opacity: 1;
+      }
+    }
+  }
+}
+
 /* Idle animations */
 .icon {
   animation: idle-bob 3s ease-in-out infinite;
