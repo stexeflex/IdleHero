@@ -18,7 +18,8 @@ import { IconSize } from './icon-size.type';
       [innerHTML]="safeSvgContent"
       viewBox="0 0 512 512"
       fill="currentColor"
-      xmlns="http://www.w3.org/2000/svg"></svg>
+      xmlns="http://www.w3.org/2000/svg"
+      [class.rotate-y-180]="rotate()"></svg>
   `,
   styles: [
     `
@@ -40,6 +41,7 @@ export class IconComponent implements OnChanges {
   private sanitizer = inject(DomSanitizer);
 
   readonly size = input<IconSize>('lg');
+  readonly rotate = input<boolean>(false);
 
   readonly gear = input<GearSlotIconName>();
   readonly symbol = input<SymbolsIconName>();

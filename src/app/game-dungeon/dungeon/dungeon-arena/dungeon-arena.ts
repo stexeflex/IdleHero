@@ -29,6 +29,7 @@ export class DungeonArena implements OnDestroy {
   protected Hero = signal<Hero | undefined>(undefined);
   protected Boss = signal<Boss | undefined>(undefined);
 
+  // UI
   protected BleedingTicks = computed<BleedingTick[]>(() => {
     const boss = this.Boss();
     if (!boss) return [];
@@ -42,6 +43,10 @@ export class DungeonArena implements OnDestroy {
       });
     }
     return ticks.reverse();
+  });
+  protected readonly RotateBossIcon = computed(() => {
+    const boss = this.Boss();
+    return boss?.BossIcon?.Rotate ?? false;
   });
 
   // Animation state

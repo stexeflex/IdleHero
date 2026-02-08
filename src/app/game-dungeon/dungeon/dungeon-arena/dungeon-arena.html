@@ -27,7 +27,11 @@
         class="boss-icon"
         [class.taking-hit]="isBossTakingHit()"
         [class.defeated]="isBossDefeated()">
-        <app-icon class="icon" [creatures]="boss.BossIcon" size="5x"></app-icon>
+        <app-icon
+          class="icon"
+          [creatures]="boss.BossIcon.Icon"
+          [rotate]="boss.BossIcon.Rotate"
+          size="5x"></app-icon>
       </div>
     }
   </div>

@@ -14,7 +14,7 @@ import { Component, input } from '@angular/core';
     @if (ActorIsHero) {
       <app-icon [character]="HeroIcon" [size]="Size()"></app-icon>
     } @else if (ActorIsBoss) {
-      <app-icon [creatures]="BossIcon" [size]="Size()"></app-icon>
+      <app-icon [creatures]="BossIcon" [size]="Size()" [rotate]="Rotate"></app-icon>
     }
   `
 })
@@ -39,6 +39,11 @@ export class CombatActorIcon {
 
   protected get BossIcon(): CreaturesIconName | undefined {
     const actor = this.Actor();
-    return (actor as Boss).BossIcon || undefined;
+    return (actor as Boss).BossIcon.Icon || undefined;
+  }
+
+  protected get Rotate(): boolean {
+    const actor = this.Actor();
+    return (actor as Boss)?.BossIcon?.Rotate || false;
   }
 }
