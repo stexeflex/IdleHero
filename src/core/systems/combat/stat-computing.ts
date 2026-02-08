@@ -12,6 +12,30 @@ import {
 
 import { ClampUtils } from '../../../shared/utils';
 
+export function ComputeAttributes(attributes: Attributes, statSources: StatSource[]): Attributes {
+  const sources: StatSource[] = statSources ?? [];
+
+  // Basis-Attribute ohne Baseline
+  const baseStrength = attributes.Strength - ATTRIBUTES_CONFIG.BASE.STRENGTH;
+  const baseIntelligence = attributes.Intelligence - ATTRIBUTES_CONFIG.BASE.INTELLIGENCE;
+  const baseDexterity = attributes.Dexterity - ATTRIBUTES_CONFIG.BASE.DEXTERITY;
+
+  // Effektive Attribute: (base + sum(flat)) * product(1 + multiplier)
+  const addStr = sources.reduce((sum, s) => Flat(sum, s.Strength.Flat), 0);
+  const multiplyStr = sources.reduce((prod, s) => Multiplier(prod, s.Strength.Multiplier), 1);
+  const effectiveStr = Effective(baseStrength, addStr, multiplyStr);
+
+  const addInt = sources.reduce((sum, s) => Flat(sum, s.Intelligence.Flat), 0);
+  const multiplyInt = sources.reduce((prod, s) => Multiplier(prod, s.Intelligence.Multiplier), 1);
+  const effectiveInt = Effective(baseIntelligence, addInt, multiplyInt);
+
+  const addDex = sources.reduce((sum, s) => Flat(sum, s.Dexterity.Flat), 0);
+  const multiplyDex = sources.reduce((prod, s) => Multiplier(prod, s.Dexterity.Multiplier), 1);
+  const effectiveDex = Effective(baseDexterity, addDex, multiplyDex);
+
+  return { Strength: effectiveStr, Intelligence: effectiveInt, Dexterity: effectiveDex };
+}
+
 export function ComputeStats(
   attributes: Attributes,
   baseStats: HeroStats,
@@ -19,16 +43,9 @@ export function ComputeStats(
 ): ComputedHeroStats {
   const sources: StatSource[] = statSources ?? [];
 
-  // Attributes
-  const {
-    Strength: effectiveStr,
-    Intelligence: effectiveInt,
-    Dexterity: effectiveDex
-  } = ComputeAttributes(attributes, sources);
-
   // Damage & Attack Speed
-  const damage = ComputeDamage(sources, baseStats.Damage, effectiveStr);
-  const attackSpeed = ComputeAttackSpeed(sources, baseStats.AttackSpeed, effectiveDex);
+  const damage = ComputeDamage(sources, baseStats.Damage, attributes.Strength);
+  const attackSpeed = ComputeAttackSpeed(sources, baseStats.AttackSpeed, attributes.Dexterity);
 
   // Bleeding Chance & Damage
   const bleedingChance =
@@ -41,7 +58,7 @@ export function ComputeStats(
     sources,
     baseStats.CriticalHitChance,
     baseStats.CriticalHitDamage,
-    effectiveInt
+    attributes.Intelligence
   );
 
   // Multi-Hit Chance
@@ -49,14 +66,19 @@ export function ComputeStats(
     MultiHitChance: multiHitChance,
     MultiHitDamage: multiHitDamage,
     MultiHitChainFactor: multiHitChainFactor
-  } = ComputeMultiHit(sources, baseStats.MultiHitChance, baseStats.MultiHitDamage, effectiveDex);
+  } = ComputeMultiHit(
+    sources,
+    baseStats.MultiHitChance,
+    baseStats.MultiHitDamage,
+    attributes.Dexterity
+  );
 
   // Accuracy
-  const accuracy = ComputeAccuracy(sources, effectiveDex);
+  const accuracy = ComputeAccuracy(sources, attributes.Dexterity);
 
   // Penetrations
-  const armorPenetration = ComputeArmorPenetration(sources, effectiveStr);
-  const resistancePenetration = ComputeResistancePenetration(sources, effectiveInt);
+  const armorPenetration = ComputeArmorPenetration(sources, attributes.Strength);
+  const resistancePenetration = ComputeResistancePenetration(sources, attributes.Intelligence);
 
   // Charging Strike
   const chargeGain =
@@ -91,31 +113,6 @@ export function ComputeStats(
 }
 
 //#region Computing Functions
-function ComputeAttributes(
-  attributes: Attributes,
-  sources: StatSource[]
-): { Strength: number; Intelligence: number; Dexterity: number } {
-  // Basis-Attribute ohne Baseline
-  const baseStrength = attributes.Strength - ATTRIBUTES_CONFIG.BASE.STRENGTH;
-  const baseIntelligence = attributes.Intelligence - ATTRIBUTES_CONFIG.BASE.INTELLIGENCE;
-  const baseDexterity = attributes.Dexterity - ATTRIBUTES_CONFIG.BASE.DEXTERITY;
-
-  // Effektive Attribute: (base + sum(flat)) * product(1 + multiplier)
-  const addStr = sources.reduce((sum, s) => Flat(sum, s.Strength.Flat), 0);
-  const multiplyStr = sources.reduce((prod, s) => Multiplier(prod, s.Strength.Multiplier), 1);
-  const effectiveStr = Effective(baseStrength, addStr, multiplyStr);
-
-  const addInt = sources.reduce((sum, s) => Flat(sum, s.Intelligence.Flat), 0);
-  const multiplyInt = sources.reduce((prod, s) => Multiplier(prod, s.Intelligence.Multiplier), 1);
-  const effectiveInt = Effective(baseIntelligence, addInt, multiplyInt);
-
-  const addDex = sources.reduce((sum, s) => Flat(sum, s.Dexterity.Flat), 0);
-  const multiplyDex = sources.reduce((prod, s) => Multiplier(prod, s.Dexterity.Multiplier), 1);
-  const effectiveDex = Effective(baseDexterity, addDex, multiplyDex);
-
-  return { Strength: effectiveStr, Intelligence: effectiveInt, Dexterity: effectiveDex };
-}
-
 function ComputeDamage(sources: StatSource[], baseDamage: number, strength: number): number {
   // const baseDamageFromStr = MapStrengthToBaseDamage(strength, baseDamage);
 

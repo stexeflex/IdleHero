@@ -2,7 +2,10 @@ import { AttributesService, CombatStatsService, LevelService } from '../../../..
 import { Component, LOCALE_ID, computed, inject, signal } from '@angular/core';
 import { DecimalPipe, PercentPipe } from '@angular/common';
 
+import { ATTRIBUTES_CONFIG } from '../../../../core/constants';
+import { Attributes } from '../../../../core/models';
 import { AttributesSpecifications } from '../../../../shared/specifications';
+import { CombatState } from '../../../../core/systems/combat';
 import { IconComponent } from '../../../../shared/components';
 import { StatisticsService } from '../../../../shared/services';
 
@@ -25,11 +28,11 @@ interface StatsGrid {
 })
 export class Stats {
   private readonly locale = inject(LOCALE_ID);
+  private readonly combatState = inject(CombatState);
   private readonly attributesService = inject(AttributesService);
   private readonly statsService = inject(CombatStatsService);
   private readonly levelService = inject(LevelService);
   private readonly statisticsService = inject(StatisticsService);
-  private readonly canChangeAttributes = inject(AttributesSpecifications);
 
   private readonly decimalPipe: DecimalPipe;
   private readonly percentPipe: PercentPipe;
@@ -45,19 +48,23 @@ export class Stats {
     this.percentPipe = new PercentPipe(this.locale);
   }
 
-  get ShowAttributePoints(): boolean {
-    return this.levelService.UnspentAttributePoints() > 0;
-  }
+  protected readonly ShowAttributePoints = computed<boolean>(
+    () => this.levelService.UnspentAttributePoints() > 0
+  );
 
-  get AttributePoints(): string | undefined {
-    return this.attributesService.AllocatedTotal() > 0
-      ? this.levelService.UnspentAttributePoints() + ' / ' + this.attributesService.AllocatedTotal()
-      : undefined;
-  }
+  protected readonly AttributePoints = computed<string>(() => {
+    const unspent: number = this.levelService.UnspentAttributePoints();
+    const total: number =
+      this.attributesService.AllocatedTotal() + this.levelService.UnspentAttributePoints();
+    return `${unspent} / ${total}`;
+  });
 
-  get CanIncreaseAttributes(): boolean {
-    return this.canChangeAttributes.CanIncrease();
-  }
+  protected readonly CanIncreaseAttributes = computed<boolean>(() => {
+    const battleInProgress = this.combatState.InProgress();
+    const hasUnspentPoints = this.levelService.UnspentAttributePoints() > 0;
+
+    return !battleInProgress && hasUnspentPoints;
+  });
 
   protected readonly AllStats = computed<StatsGrid[]>(() => [
     {
@@ -83,20 +90,25 @@ export class Stats {
   ]);
 
   protected Attributes = computed<StatsItem[]>(() => {
-    const attributes = this.attributesService.Effective();
+    const attributes: Attributes = this.statsService.EffectiveAttributes();
+    const displayValues: Attributes = {
+      Strength: attributes.Strength + ATTRIBUTES_CONFIG.BASE.STRENGTH,
+      Intelligence: attributes.Intelligence + ATTRIBUTES_CONFIG.BASE.INTELLIGENCE,
+      Dexterity: attributes.Dexterity + ATTRIBUTES_CONFIG.BASE.DEXTERITY
+    };
 
     return [
       {
         label: 'Strength',
-        value: this.decimalPipe.transform(attributes.Strength, '1.0-0')
+        value: this.decimalPipe.transform(displayValues.Strength, '1.0-0')
       },
       {
         label: 'Intelligence',
-        value: this.decimalPipe.transform(attributes.Intelligence, '1.0-0')
+        value: this.decimalPipe.transform(displayValues.Intelligence, '1.0-0')
       },
       {
         label: 'Dexterity',
-        value: this.decimalPipe.transform(attributes.Dexterity, '1.0-0')
+        value: this.decimalPipe.transform(displayValues.Dexterity, '1.0-0')
       }
     ];
   });
@@ -166,15 +178,15 @@ export class Stats {
       {
         label: 'Accuracy',
         value: this.percentPipe.transform(combatStats.Accuracy, '1.0-0')
-      },
-      {
-        label: 'Armor Penetration',
-        value: this.percentPipe.transform(combatStats.ArmorPenetration, '1.0-0')
-      },
-      {
-        label: 'Resistance Penetration',
-        value: this.percentPipe.transform(combatStats.ResistancePenetration, '1.0-0')
       }
+      // {
+      //   label: 'Armor Penetration',
+      //   value: this.percentPipe.transform(combatStats.ArmorPenetration, '1.0-0')
+      // },
+      // {
+      //   label: 'Resistance Penetration',
+      //   value: this.percentPipe.transform(combatStats.ResistancePenetration, '1.0-0')
+      // }
     ];
   });
 

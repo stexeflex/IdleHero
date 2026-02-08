@@ -3,9 +3,9 @@
   <div class="category">
     <div class="grid-header" [class.grid-header--expanded]="AttributesExpanded()">
       <h3>ATTRIBUTES</h3>
-      @if (ShowAttributePoints) {
+      @if (ShowAttributePoints()) {
         <div class="skill-points">
-          {{ AttributePoints }}
+          {{ AttributePoints() }}
           <app-icon class="skill-points__icon" symbol="orb" size="sm"></app-icon>
         </div>
       }
@@ -33,7 +33,7 @@
             <button
               class="attribute-modifier-button"
               (click)="increaseAttribute(attribute.label)"
-              [disabled]="!CanIncreaseAttributes">
+              [disabled]="!CanIncreaseAttributes()">
               +
             </button>
           </div>

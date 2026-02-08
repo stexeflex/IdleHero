@@ -1,23 +1,34 @@
-import { ComputedHeroStats, HeroStats, InitialHeroStats } from '../models';
+import { Attributes, ComputedHeroStats, HeroStats, InitialHeroStats } from '../models';
+import { ComputeAttributes, ComputeStats } from '../systems/combat';
 import { Injectable, computed, inject, signal } from '@angular/core';
 
 import { AttributesService } from './attributes.service';
-import { ComputeStats } from '../systems/combat';
 import { GearLoadoutService } from './gear-loadout.service';
 
 @Injectable({ providedIn: 'root' })
 export class CombatStatsService {
-  private readonly Attributes = inject<AttributesService>(AttributesService);
+  private readonly AttributesService = inject<AttributesService>(AttributesService);
   private readonly GearLoadout = inject<GearLoadoutService>(GearLoadoutService);
 
   private readonly BaseStats = signal<HeroStats>(InitialHeroStats());
+
+  /**
+   * The effective attributes, computed from base attributes, allocated points and gear bonuses.
+   */
+  public readonly EffectiveAttributes = computed<Attributes>(() => {
+    const attributes = this.AttributesService.Effective();
+    const statSources = this.GearLoadout.StatSources();
+
+    // Compute effective attributes
+    return ComputeAttributes(attributes, statSources);
+  });
 
   /**
    * The effective combat stats, computed from the current stats
    */
   public readonly Effective = computed<ComputedHeroStats>(() => {
     const baseStats = this.BaseStats();
-    const attributes = this.Attributes.Effective();
+    const attributes = this.EffectiveAttributes();
     const statSources = this.GearLoadout.StatSources();
 
     // Compute effective combat stats
