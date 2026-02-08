@@ -16,6 +16,7 @@ export * from './icon/ui.icons';
 export * from './inventory/inventory';
 export * from './inventory/list-item/list-item';
 export * from './item-preview/item-preview';
+export * from './item-preview/item-variant-preview';
 export * from './number-value/number-value';
 export * from './panel-header/panel-header';
 export * from './separator/separator';

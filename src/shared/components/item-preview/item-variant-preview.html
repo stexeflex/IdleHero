@@ -7,10 +7,10 @@
   [class.epic--border]="Rarity() === 'Epic'"
   [class.legendary--border]="Rarity() === 'Legendary'"
   (click)="SelectVariant(Variant().Id)">
-  <div class="variant-icon">
+  <div class="item-icon">
     <app-icon [gear]="Variant().Icon" size="3x"></app-icon>
   </div>
-  <div class="variant-info">
+  <div class="item-info">
     <!-- ITEM NAME -->
     <span class="item-name common--font">{{ Variant().Name.toUpperCase() }}</span>
 
@@ -21,7 +21,7 @@
 
     <!-- WEAPON STATS -->
     @if (Variant().WeaponBaseDamage && Variant().WeaponBaseAttackSpeed) {
-      <div class="variant-weapon-stats">
+      <div class="item-weapon-stats">
         <span class="weapon-stat">
           <span class="value"> {{ WeaponBaseDamage() | number: "1.0-0" }}</span>
           <span class="label">Damage</span>
@@ -38,7 +38,7 @@
   </div>
 
   <!-- INNATE -->
-  <div class="variant-innate">
+  <div class="item-innate">
     <app-icon class="icon" symbol="beveledstar" size="mini"></app-icon>
     <span class="label">{{ VariantLabel() }}</span>
   </div>

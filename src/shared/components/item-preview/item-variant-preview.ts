@@ -1,20 +1,16 @@
 import { Component, LOCALE_ID, computed, inject, input, output } from '@angular/core';
-import { IconComponent, Separator } from '../../../../../shared/components';
-import {
-  ItemLevel,
-  ItemRarity,
-  ItemVariantDefinition,
-  LabelToString
-} from '../../../../../core/models';
-import { MinLevelForTier, MinRarityForTier } from '../../../../../core/systems/items';
+import { ItemLevel, ItemRarity, ItemVariantDefinition, LabelToString } from '../../../core/models';
+import { MinLevelForTier, MinRarityForTier } from '../../../core/systems/items';
 
 import { DecimalPipe } from '@angular/common';
+import { IconComponent } from '../icon/icon.component';
+import { Separator } from '../separator/separator';
 
 @Component({
   selector: 'app-item-variant-preview',
   imports: [IconComponent, Separator, DecimalPipe],
   templateUrl: './item-variant-preview.html',
-  styleUrl: './item-variant-preview.scss'
+  styleUrl: './item-preview.scss'
 })
 export class ItemVariantPreview {
   private readonly locale = inject(LOCALE_ID);

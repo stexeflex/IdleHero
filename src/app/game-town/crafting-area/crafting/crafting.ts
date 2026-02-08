@@ -5,7 +5,12 @@ import {
   GoldService,
   InventoryService
 } from '../../../../core/services';
-import { GearSlotIconName, Gold, IconComponent } from '../../../../shared/components';
+import {
+  GearSlotIconName,
+  Gold,
+  IconComponent,
+  ItemVariantPreview
+} from '../../../../shared/components';
 import { ICONS_CONFIG, ITEM_VARIANTS } from '../../../../core/constants';
 import {
   ItemSlot,
@@ -14,7 +19,6 @@ import {
   OperationResult
 } from '../../../../core/models';
 
-import { ItemVariantPreview } from './item-variant-preview/item-variant-preview';
 import { MinRarityForTier } from '../../../../core/systems/items';
 
 @Component({

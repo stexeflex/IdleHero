@@ -1,7 +1,8 @@
 @use "sass:color";
 @use "index" as *;
 
-.item {
+.item,
+.variant {
   @include disable-text-selection();
   @include button-text-font();
   @include button-focus-visible-outline();
@@ -10,17 +11,33 @@
   @include box-shadow();
 
   display: grid;
+  gap: $gap;
+
+  border-width: 2px;
+  border-style: solid;
+
+  min-height: 152px;
+}
+
+.variant {
+  grid:
+    "info icon" auto
+    "innate innate" auto
+    / 190px 100px;
+
+  &.active {
+    // border-width: 4px;
+    background: $grad-ui-bg-lighten;
+  }
+}
+
+.item {
   grid:
     "info icon" auto
     "innate innate" auto
     "affix affix" auto
     "actions actions" auto
     / 250px 100px;
-
-  gap: $gap;
-
-  border-width: 2px;
-  border-style: solid;
 }
 
 .item-icon {
@@ -30,7 +47,7 @@
 
 .item-info {
   grid-area: info;
-  @include flexbox($dir: column, $justify: center, $align: center);
+  @include flexbox($dir: column, $justify: flex-start, $align: center);
 
   .item-name {
     font-size: 1.1rem;
