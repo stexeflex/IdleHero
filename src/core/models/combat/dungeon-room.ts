@@ -32,6 +32,8 @@ export interface DungeonRoom {
   BossBaseHealth: number;
   XpBase: number;
   GoldBase: number;
+
+  Locked: boolean;
 }
 
 export interface NormalDungeonRoom extends DungeonRoom {

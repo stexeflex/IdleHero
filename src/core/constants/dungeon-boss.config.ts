@@ -1,4 +1,14 @@
-import { Gooey, KingSlime, Slime, Slug } from '../systems/combat/dungeons/boss.factory';
+import {
+  Brute,
+  BullyMinion,
+  EvilMinion,
+  Gooey,
+  KingSlime,
+  Minotaur,
+  Slime,
+  Slug,
+  Troglodyte
+} from '../systems/combat/dungeons/boss.factory';
 
 import { Boss } from '../models';
 
@@ -33,6 +43,23 @@ export const DUNGEON_BOSS_CONFIGS: Record<string, DungeonBossConfig> = {
       [10, [Gooey, Slime]],
       [20, [Slime, Slug]],
       [30, [Slug]]
+    ])
+  },
+  D2: {
+    LifeIncreasePerStage: 0.25,
+    StageSpecific: new Map<number, BossFactory>([
+      [1, Troglodyte],
+      [20, BullyMinion],
+      [40, Brute],
+      [60, Minotaur]
+    ]),
+    BossPools: new Map<number, BossFactory[]>([
+      [1, [Troglodyte]],
+      [10, [Troglodyte, EvilMinion]],
+      [20, [EvilMinion, BullyMinion]],
+      [30, [BullyMinion]],
+      [40, [BullyMinion, Brute]],
+      [50, [Brute]]
     ])
   }
 };

@@ -58,7 +58,7 @@ export class DungeonRoomService {
     }
 
     // Normal dungeons have no prerequisites
-    return true;
+    return dungeon.Locked === false;
   }
 
   private CanEnterCapstoneDungeon(dungeon: CapstoneDungeonRoom): boolean {

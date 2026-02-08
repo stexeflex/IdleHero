@@ -16,96 +16,103 @@ export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
     StagesBase: 1,
     MidStages: [20],
     StagesMax: 40,
-    BossBaseHealth: 80,
+    BossBaseHealth: 100,
     XpBase: 8,
-    GoldBase: 12
+    GoldBase: 12,
+    Locked: false
   },
   {
     Id: 'D2',
-    Title: 'Goblin Caves',
-    Description: 'A dank cave infested with mischievous goblins.',
+    Title: 'Brute Lair',
+    Description: 'A dark cave infested with mischievous brutes.',
     Icon: 'brute',
     Type: DungeonType.Normal,
     StagesBase: 1,
     MidStages: [20, 40],
     StagesMax: 60,
-    BossBaseHealth: 100,
+    BossBaseHealth: 250,
     XpBase: 10,
-    GoldBase: 15
+    GoldBase: 15,
+    Locked: false
   },
   {
     Id: 'D3',
-    Title: 'Wolf Den',
-    Description: 'A frozen den where hungry wolves lurk.',
-    Icon: 'werewolf',
+    Title: 'Snake Den',
+    Description: 'A winding den crawling with venomous snakes.',
+    Icon: 'snake',
     Type: DungeonType.Normal,
     StagesBase: 1,
     MidStages: [20, 40, 60],
     StagesMax: 80,
     BossBaseHealth: 150,
     XpBase: 14,
-    GoldBase: 20
+    GoldBase: 20,
+    Locked: true
   },
   {
     Id: 'D4',
-    Title: 'Ghostly Crypt',
-    Description: 'A dark crypt teeming with the spectral.',
-    Icon: 'spectre',
+    Title: 'Golem Quarry',
+    Description: 'A rocky quarry guarded by stone golems.',
+    Icon: 'rockgolem',
     Type: DungeonType.Normal,
     StagesBase: 1,
     MidStages: [20, 40, 60, 80],
     StagesMax: 100,
     BossBaseHealth: 200,
     XpBase: 18,
-    GoldBase: 25
+    GoldBase: 25,
+    Locked: true
   }
 ];
 
 export const CAPSTONE_DUNGEONS: CapstoneDungeonRoom[] = [
   {
     Id: 'C1',
-    Title: 'Trial of Silver',
-    Description: 'Prove your worth in the trial of Silver.',
-    Icon: 'wyvern',
+    Title: 'Trial of the Spectres',
+    Description: 'Prove your worth against the spectral guardians.',
+    Icon: 'spectre',
     Type: DungeonType.Capstone,
     StagesBase: 1,
     MidStages: [20, 40],
     StagesMax: 60,
-    BossBaseHealth: 300,
+    BossBaseHealth: 3000,
     XpBase: 25,
     GoldBase: 40,
     Prerequisites: { Gold: 500, Key: null },
-    Rewards: { Gold: 2500, Key: 'Silver Key' as DungeonRoomKey }
+    Rewards: { Gold: 2500, Key: 'Silver Key' as DungeonRoomKey },
+    Locked: true
   },
   {
     Id: 'C2',
     Title: 'Trial of Arcana',
-    Description: 'Arcane guardians test your mastery.',
-    Icon: 'evilbat',
+    Description: 'Arcane creatures test your mastery.',
+    Icon: 'harpy',
     Type: DungeonType.Capstone,
     StagesBase: 1,
     MidStages: [20, 40],
     StagesMax: 60,
-    BossBaseHealth: 450,
+    BossBaseHealth: 4500,
     XpBase: 30,
     GoldBase: 60,
     Prerequisites: { Gold: 2500, Key: 'Silver Key' as DungeonRoomKey },
-    Rewards: { Gold: 10000, Key: 'Magic Key' as DungeonRoomKey }
+    Rewards: { Gold: 10000, Key: 'Magic Key' as DungeonRoomKey },
+    Locked: true
   },
   {
     Id: 'C3',
-    Title: 'Trial of Gold',
-    Description: 'The final trial, guarded by golden sentinels.',
-    Icon: 'gargoyle',
+    Title: 'Trial of the Dragons',
+    Description: 'The final trial guarded by ancient dragons.',
+    Icon: 'hydra',
     Type: DungeonType.Capstone,
     StagesBase: 1,
     MidStages: [20, 40],
     StagesMax: 60,
-    BossBaseHealth: 600,
+    BossBaseHealth: 6000,
     XpBase: 35,
     GoldBase: 80,
     Prerequisites: { Gold: 10000, Key: 'Magic Key' as DungeonRoomKey },
-    Rewards: { Gold: 50000, Key: 'Golden Key' as DungeonRoomKey }
+    Rewards: { Gold: 50000, Key: 'Golden Key' as DungeonRoomKey },
+    Locked: true
   }
 ];
 
