@@ -34,7 +34,7 @@ export class EventHandler {
   private readonly CombatState: CombatState = inject<CombatState>(CombatState);
   private readonly Logger: CombatLogService = inject<CombatLogService>(CombatLogService);
 
-  private readonly DelayMs = 10;
+  private readonly EventDelayMs = 10;
 
   /**
    * Handles a combat event
@@ -86,7 +86,7 @@ export class EventHandler {
     // Miss-Event
     if (!isHit) {
       const missEvent: MissEvent = CreateMissEvent(
-        event.AtMs + this.DelayMs,
+        event.AtMs + this.EventDelayMs,
         actor,
         target,
         hitChance
@@ -101,16 +101,15 @@ export class EventHandler {
         this.HandleHeroHitEvent(hero, event);
       }
 
-      const boss = event.Actor as Boss;
-
-      if (boss) {
-        // HandleBossHitEvent(boss, event);
-      }
+      // const boss = event.Actor as Boss;
+      // if (boss) {
+      //   this.HandleBossHitEvent(boss, event);
+      // }
     }
 
     // Nächsten Angriff des Actors planen
     actor.AttackInterval.CooldownProgressMs = 0;
-    const nextAttackAt = ComputeNextIntervalMs(event.AtMs, actor.AttackInterval);
+    const nextAttackAt = ComputeNextIntervalMs(performance.now(), actor.AttackInterval);
     const nextAttackEvent: AttackEvent = CreateAttackEvent(nextAttackAt, actor, target);
 
     this.CombatState.Queue.Push(nextAttackEvent);
@@ -134,7 +133,7 @@ export class EventHandler {
       damages.push(damageResult);
 
       const damageEvent: DamageEvent = CreateDamageEvent(
-        event.AtMs + this.DelayMs,
+        event.AtMs + this.EventDelayMs,
         actor,
         target,
         damages
@@ -157,7 +156,7 @@ export class EventHandler {
       }
 
       const damageEvent: DamageEvent = CreateDamageEvent(
-        event.AtMs + this.DelayMs,
+        event.AtMs + this.EventDelayMs,
         actor,
         target,
         damages
