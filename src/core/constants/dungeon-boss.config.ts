@@ -2,15 +2,11 @@ import { Gooey, KingSlime, Slime, Slug } from '../systems/combat/dungeons/boss.f
 
 import { Boss } from '../models';
 
-export const BOSS_CONFIG = {
-  LIFE: {
-    INCREASE_PER_STAGE: 0.1
-  }
-};
-
 export type BossFactory = () => Boss;
 
 export interface DungeonBossConfig {
+  LifeIncreasePerStage: number;
+
   /**
    * Stage specific Bosses
    * e.g., key=1 means "at stage 1, spawn this Boss"
@@ -26,6 +22,7 @@ export interface DungeonBossConfig {
 
 export const DUNGEON_BOSS_CONFIGS: Record<string, DungeonBossConfig> = {
   D1: {
+    LifeIncreasePerStage: 0.25,
     StageSpecific: new Map<number, BossFactory>([
       [1, Gooey],
       [20, Slug],

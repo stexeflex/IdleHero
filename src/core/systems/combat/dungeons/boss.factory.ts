@@ -52,7 +52,7 @@ export function KingSlime(): Boss {
     Name: 'Cylop',
     BossIcon: 'jawlesscyclop',
 
-    Life: InitialLife(2000),
+    Life: InitialLife(5000),
     Armor: InitialArmor(5),
     Stats: InitialBossStats(0.6, 6, 0.02),
     AttackInterval: InitialAttackInterval(0.6)
