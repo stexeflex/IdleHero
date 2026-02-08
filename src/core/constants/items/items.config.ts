@@ -4,7 +4,6 @@ import {
   ItemLevel,
   ItemVariantDefinition,
   PercentageAdditiveLabel,
-  PercentageMultiplicativeLabel,
   StatSource
 } from '../../models';
 
@@ -693,7 +692,7 @@ const HEAD_HELMET_VARIANTS: ItemVariantDefinition[] = [
     Type: 'Helmet',
     Tier: 'I',
     Innate: {
-      ToLabel: (value: number) => PercentageMultiplicativeLabel('Accuracy', value),
+      ToLabel: (value: number) => PercentageAdditiveLabel('Accuracy', value),
       ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_head_helmet_warrior_starter_innate');
@@ -712,7 +711,7 @@ const HEAD_HOOD_VARIANTS: ItemVariantDefinition[] = [
     Type: 'Hood',
     Tier: 'I',
     Innate: {
-      ToLabel: (value: number) => PercentageMultiplicativeLabel('Accuracy', value),
+      ToLabel: (value: number) => PercentageAdditiveLabel('Accuracy', value),
       ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_head_hood_rogue_starter_innate');
@@ -731,7 +730,7 @@ const HEAD_HAT_VARIANTS: ItemVariantDefinition[] = [
     Type: 'Hat',
     Tier: 'I',
     Innate: {
-      ToLabel: (value: number) => PercentageMultiplicativeLabel('Accuracy', value),
+      ToLabel: (value: number) => PercentageAdditiveLabel('Accuracy', value),
       ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_head_hat_mage_starter_innate');
@@ -748,7 +747,7 @@ const HEAD_HAT_VARIANTS: ItemVariantDefinition[] = [
     Type: 'Hat',
     Tier: 'I',
     Innate: {
-      ToLabel: (value: number) => PercentageMultiplicativeLabel('Accuracy', value),
+      ToLabel: (value: number) => PercentageAdditiveLabel('Accuracy', value),
       ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_head_hat_bowman_starter_innate');
@@ -770,17 +769,17 @@ export const HEAD_VARIANTS: ItemVariantDefinition[] = [
 const CHEST_CHESTPLATE_VARIANTS: ItemVariantDefinition[] = [
   {
     Id: 't1_chest_chestplate_chain_mail_armor',
-    Name: 'Chain Mail',
+    Name: 'Plate Mail',
     Icon: 'chestarmor',
     Slot: 'Chest',
     Type: 'Chestplate',
     Tier: 'I',
     Innate: {
-      ToLabel: (value: number) => PercentageMultiplicativeLabel('Armor Penetration', value),
-      ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
+      ToLabel: (value: number) => FlatAdditiveLabel('Charge Gain', value),
+      ValuesByLevel: ScaleLinearValueCurve(1, 1),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_chest_chestplate_chain_mail_armor_innate');
-        s.ArmorPenetration.Multiplier = value;
+        s.ChargingStrike.ChargeGain = value;
         return s;
       }
     }
@@ -795,11 +794,11 @@ const CHEST_TUNIC_VARIANTS: ItemVariantDefinition[] = [
     Type: 'Tunic',
     Tier: 'I',
     Innate: {
-      ToLabel: (value: number) => PercentageMultiplicativeLabel('Armor Penetration', value),
-      ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
+      ToLabel: (value: number) => FlatAdditiveLabel('Charge Gain', value),
+      ValuesByLevel: ScaleLinearValueCurve(1, 1),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_chest_tunic_leather_armor_innate');
-        s.ArmorPenetration.Multiplier = value;
+        s.ChargingStrike.ChargeGain = value;
         return s;
       }
     }
@@ -814,11 +813,11 @@ const CHEST_SHIRT_VARIANTS: ItemVariantDefinition[] = [
     Type: 'Shirt',
     Tier: 'I',
     Innate: {
-      ToLabel: (value: number) => PercentageMultiplicativeLabel('Resistance Penetration', value),
-      ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
+      ToLabel: (value: number) => FlatAdditiveLabel('Charge Gain', value),
+      ValuesByLevel: ScaleLinearValueCurve(1, 1),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_chest_shirt_buttoned_shirt_innate');
-        s.ResistancePenetration.Multiplier = value;
+        s.ChargingStrike.ChargeGain = value;
         return s;
       }
     }
@@ -831,11 +830,11 @@ const CHEST_SHIRT_VARIANTS: ItemVariantDefinition[] = [
     Type: 'Shirt',
     Tier: 'I',
     Innate: {
-      ToLabel: (value: number) => PercentageMultiplicativeLabel('Resistance Penetration', value),
-      ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
+      ToLabel: (value: number) => FlatAdditiveLabel('Charge Gain', value),
+      ValuesByLevel: ScaleLinearValueCurve(1, 1),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_chest_shirt_light_top_innate');
-        s.ResistancePenetration.Multiplier = value;
+        s.ChargingStrike.ChargeGain = value;
         return s;
       }
     }
@@ -921,7 +920,7 @@ const FEET_BOOTS_VARIANTS: ItemVariantDefinition[] = [
     Type: 'Boots',
     Tier: 'I',
     Innate: {
-      ToLabel: (value: number) => PercentageMultiplicativeLabel('Accuracy', value),
+      ToLabel: (value: number) => PercentageAdditiveLabel('Accuracy', value),
       ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_feet_boots_leather_boots_innate');
@@ -940,7 +939,7 @@ const FEET_SHOES_VARIANTS: ItemVariantDefinition[] = [
     Type: 'Shoes',
     Tier: 'I',
     Innate: {
-      ToLabel: (value: number) => PercentageMultiplicativeLabel('Accuracy', value),
+      ToLabel: (value: number) => PercentageAdditiveLabel('Accuracy', value),
       ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_feet_boots_leather_shoes_innate');

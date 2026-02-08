@@ -4,7 +4,6 @@ import { DecimalPipe, PercentPipe } from '@angular/common';
 
 import { ATTRIBUTES_CONFIG } from '../../../../core/constants';
 import { Attributes } from '../../../../core/models';
-import { AttributesSpecifications } from '../../../../shared/specifications';
 import { CombatState } from '../../../../core/systems/combat';
 import { IconComponent } from '../../../../shared/components';
 import { StatisticsService } from '../../../../shared/services';
@@ -34,20 +33,17 @@ export class Stats {
   private readonly levelService = inject(LevelService);
   private readonly statisticsService = inject(StatisticsService);
 
-  private readonly decimalPipe: DecimalPipe;
-  private readonly percentPipe: PercentPipe;
+  private readonly decimalPipe: DecimalPipe = new DecimalPipe(this.locale);
+  private readonly percentPipe: PercentPipe = new PercentPipe(this.locale);
 
+  // UI State
   protected AttributesExpanded = signal<boolean>(true);
   protected ChargingStrikeStatsExpanded = signal<boolean>(true);
   protected OffenseStatsExpanded = signal<boolean>(true);
   protected UtilityStatsExpanded = signal<boolean>(true);
   protected StatisticsExpanded = signal<boolean>(false);
 
-  constructor() {
-    this.decimalPipe = new DecimalPipe(this.locale);
-    this.percentPipe = new PercentPipe(this.locale);
-  }
-
+  //#region ATTRIBUTES
   protected readonly ShowAttributePoints = computed<boolean>(
     () => this.levelService.UnspentAttributePoints() > 0
   );
@@ -66,6 +62,22 @@ export class Stats {
     return !battleInProgress && hasUnspentPoints;
   });
 
+  protected CanDecreaseAttribute(attribute: string): boolean {
+    return this.attributesService.CanDeallocate(
+      attribute as 'Strength' | 'Intelligence' | 'Dexterity'
+    );
+  }
+
+  protected increaseAttribute(attribute: string) {
+    this.attributesService.Allocate(attribute as 'Strength' | 'Intelligence' | 'Dexterity', 1);
+  }
+
+  protected decreaseAttribute(attribute: string) {
+    this.attributesService.Deallocate(attribute as 'Strength' | 'Intelligence' | 'Dexterity', 1);
+  }
+  //#endregion ATTRIBUTES
+
+  //#region STATS
   protected readonly AllStats = computed<StatsGrid[]>(() => [
     {
       title: 'CHARGING STRIKE',
@@ -237,18 +249,5 @@ export class Stats {
       }
     ];
   });
-
-  protected CanDecreaseAttribute(attribute: string): boolean {
-    return this.attributesService.CanDeallocate(
-      attribute as 'Strength' | 'Intelligence' | 'Dexterity'
-    );
-  }
-
-  protected increaseAttribute(attribute: string) {
-    this.attributesService.Allocate(attribute as 'Strength' | 'Intelligence' | 'Dexterity', 1);
-  }
-
-  protected decreaseAttribute(attribute: string) {
-    this.attributesService.Deallocate(attribute as 'Strength' | 'Intelligence' | 'Dexterity', 1);
-  }
+  //#endregion STATS
 }

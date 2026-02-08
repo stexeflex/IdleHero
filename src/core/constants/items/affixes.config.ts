@@ -18,8 +18,7 @@ import {
   AffixDefinition,
   EmptyStatSource,
   FlatAdditiveLabel,
-  PercentageAdditiveLabel,
-  PercentageMultiplicativeLabel
+  PercentageAdditiveLabel
 } from '../../models';
 
 const ATTRIBUTES_AFFIX_DEFINITIONS: AffixDefinition[] = [
@@ -87,7 +86,7 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
     AllowedSlots: ['Weapon'],
     Tiers: DAMAGE_PCT_TIERS,
     Effect: {
-      ToLabel: (value: number) => PercentageMultiplicativeLabel('Damage', value),
+      ToLabel: (value: number) => PercentageAdditiveLabel('Damage', value),
       MapToStatSource: (source: string, value: number) => {
         const s = EmptyStatSource(source + `_affix_damage_percent_${performance.now()}`);
         s.Damage.Multiplier = value;
@@ -101,7 +100,7 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
     AllowedSlots: ['Head', 'Chest', 'Legs', 'Feet'],
     Tiers: CHANCE_TIERS,
     Effect: {
-      ToLabel: (value: number) => PercentageMultiplicativeLabel('Bleeding Chance', value),
+      ToLabel: (value: number) => PercentageAdditiveLabel('Bleeding Chance', value),
       MapToStatSource: (source: string, value: number) => {
         const s = EmptyStatSource(source + `_affix_bleed_chance_percent_${performance.now()}`);
         s.Bleeding.MultiplierChance = value;
@@ -115,7 +114,7 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
     AllowedSlots: ['Head', 'Chest', 'Legs', 'Feet'],
     Tiers: CHANCE_TIERS,
     Effect: {
-      ToLabel: (value: number) => PercentageMultiplicativeLabel('Crit Chance', value),
+      ToLabel: (value: number) => PercentageAdditiveLabel('Crit Chance', value),
       MapToStatSource: (source: string, value: number) => {
         const s = EmptyStatSource(source + `_affix_crit_chance_percent_${performance.now()}`);
         s.CriticalHit.MultiplierChance = value;
@@ -129,7 +128,7 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
     AllowedSlots: ['Head', 'Chest', 'Legs', 'Feet'],
     Tiers: CHANCE_TIERS,
     Effect: {
-      ToLabel: (value: number) => PercentageMultiplicativeLabel('Multi Hit Chance', value),
+      ToLabel: (value: number) => PercentageAdditiveLabel('Multi Hit Chance', value),
       MapToStatSource: (source: string, value: number) => {
         const s = EmptyStatSource(source + `_affix_multihit_chance_percent_${performance.now()}`);
         s.MultiHit.MultiplierChance = value;
@@ -185,7 +184,7 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
     AllowedSlots: ['Head', 'Feet'],
     Tiers: MULTIHIT_CHAIN_TIERS,
     Effect: {
-      ToLabel: (value: number) => PercentageMultiplicativeLabel('Multi Hit Chain', value),
+      ToLabel: (value: number) => PercentageAdditiveLabel('Multi Hit Chain', value),
       MapToStatSource: (source: string, value: number) => {
         const s = EmptyStatSource(source + `_affix_multihit_chain_percent_${performance.now()}`);
         s.MultiHit.MultiplierChainFactor = value;
@@ -202,7 +201,7 @@ const UTILITY_AFFIX_DEFINITIONS: AffixDefinition[] = [
     AllowedSlots: ['Weapon', 'OffHand', 'Feet'],
     Tiers: ATTACK_SPEED_TIERS,
     Effect: {
-      ToLabel: (value: number) => PercentageMultiplicativeLabel('Attack Speed', value),
+      ToLabel: (value: number) => PercentageAdditiveLabel('Attack Speed', value),
       MapToStatSource: (source: string, value: number) => {
         const s = EmptyStatSource(source + `_affix_attack_speed_percent_${performance.now()}`);
         s.AttackSpeed.Multiplier = value;
@@ -223,37 +222,37 @@ const UTILITY_AFFIX_DEFINITIONS: AffixDefinition[] = [
         return s;
       }
     }
-  },
-  {
-    Id: 'affix_armor_penetration_percent',
-    Groups: ['Utility'],
-    AllowedSlots: ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Feet'],
-    Tiers: PENETRATION_TIERS,
-    Effect: {
-      ToLabel: (value: number) => PercentageAdditiveLabel('Armor Penetration', value),
-      MapToStatSource: (source: string, value: number) => {
-        const s = EmptyStatSource(source + `_affix_armor_penetration_percent_${performance.now()}`);
-        s.ArmorPenetration.Multiplier = value;
-        return s;
-      }
-    }
-  },
-  {
-    Id: 'affix_resistance_penetration_percent',
-    Groups: ['Utility'],
-    AllowedSlots: ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Feet'],
-    Tiers: PENETRATION_TIERS,
-    Effect: {
-      ToLabel: (value: number) => PercentageAdditiveLabel('Resistance Penetration', value),
-      MapToStatSource: (source: string, value: number) => {
-        const s = EmptyStatSource(
-          source + `_affix_resistance_penetration_percent_${performance.now()}`
-        );
-        s.ResistancePenetration.Multiplier = value;
-        return s;
-      }
-    }
   }
+  // {
+  //   Id: 'affix_armor_penetration_percent',
+  //   Groups: ['Utility'],
+  //   AllowedSlots: ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Feet'],
+  //   Tiers: PENETRATION_TIERS,
+  //   Effect: {
+  //     ToLabel: (value: number) => PercentageAdditiveLabel('Armor Penetration', value),
+  //     MapToStatSource: (source: string, value: number) => {
+  //       const s = EmptyStatSource(source + `_affix_armor_penetration_percent_${performance.now()}`);
+  //       s.ArmorPenetration.Multiplier = value;
+  //       return s;
+  //     }
+  //   }
+  // },
+  // {
+  //   Id: 'affix_resistance_penetration_percent',
+  //   Groups: ['Utility'],
+  //   AllowedSlots: ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Feet'],
+  //   Tiers: PENETRATION_TIERS,
+  //   Effect: {
+  //     ToLabel: (value: number) => PercentageAdditiveLabel('Resistance Penetration', value),
+  //     MapToStatSource: (source: string, value: number) => {
+  //       const s = EmptyStatSource(
+  //         source + `_affix_resistance_penetration_percent_${performance.now()}`
+  //       );
+  //       s.ResistancePenetration.Multiplier = value;
+  //       return s;
+  //     }
+  //   }
+  // }
 ];
 
 const CHARGING_STRIKE_AFFIX_DEFINITIONS: AffixDefinition[] = [
