@@ -8,7 +8,7 @@ import { GoldService } from '../../../core/services';
 
 @Component({
   selector: 'app-info-area',
-  imports: [DecimalPipe, Gold, Separator, IconComponent],
+  imports: [Gold, Separator, IconComponent],
   templateUrl: './info-area.html',
   styleUrl: './info-area.scss'
 })
@@ -19,10 +19,6 @@ export class InfoArea {
 
   protected get GoldAmount(): number {
     return this.goldService.Balance();
-  }
-
-  protected get PrestigeLevel(): number {
-    return this.statisticsService.Prestiges();
   }
 
   protected get MaxStages(): string {

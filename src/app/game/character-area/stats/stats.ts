@@ -6,7 +6,6 @@ import { ATTRIBUTES_CONFIG } from '../../../../core/constants';
 import { Attributes } from '../../../../core/models';
 import { CombatState } from '../../../../core/systems/combat';
 import { IconComponent } from '../../../../shared/components';
-import { StatisticsService } from '../../../../shared/services';
 
 interface StatsItem {
   label: string;
@@ -31,7 +30,6 @@ export class Stats {
   private readonly attributesService = inject(AttributesService);
   private readonly statsService = inject(CombatStatsService);
   private readonly levelService = inject(LevelService);
-  private readonly statisticsService = inject(StatisticsService);
 
   private readonly decimalPipe: DecimalPipe = new DecimalPipe(this.locale);
   private readonly percentPipe: PercentPipe = new PercentPipe(this.locale);
@@ -41,7 +39,6 @@ export class Stats {
   protected ChargingStrikeStatsExpanded = signal<boolean>(true);
   protected OffenseStatsExpanded = signal<boolean>(true);
   protected UtilityStatsExpanded = signal<boolean>(true);
-  protected StatisticsExpanded = signal<boolean>(false);
 
   //#region ATTRIBUTES
   protected readonly ShowAttributePoints = computed<boolean>(
@@ -93,11 +90,6 @@ export class Stats {
       title: 'UTILITY',
       items: this.UtilityStats(),
       expanded: this.UtilityStatsExpanded()
-    },
-    {
-      title: 'STATISTICS',
-      items: this.Statistics(),
-      expanded: this.StatisticsExpanded()
     }
   ]);
 
@@ -199,54 +191,6 @@ export class Stats {
       //   label: 'Resistance Penetration',
       //   value: this.percentPipe.transform(combatStats.ResistancePenetration, '1.0-0')
       // }
-    ];
-  });
-
-  private Statistics = computed<StatsItem[]>(() => {
-    return [
-      {
-        label: 'Highest Single Hit',
-        value: this.decimalPipe.transform(
-          this.statisticsService.DamageStatistics().HighestSingleHit,
-          '1.0-0'
-        )
-      },
-      {
-        label: 'Highest Bleeding Tick',
-        value: this.decimalPipe.transform(0, '1.0-0')
-      },
-      {
-        label: 'Highest Critical Hit',
-        value: this.decimalPipe.transform(
-          this.statisticsService.DamageStatistics().HighestCriticalHit,
-          '1.0-0'
-        )
-      },
-      {
-        label: 'Highest Multi Hit',
-        value: this.decimalPipe.transform(
-          this.statisticsService.DamageStatistics().HighestMultiHit,
-          '1.0-0'
-        )
-      },
-      {
-        label: 'Highest Multi Hit Chain',
-        value: this.decimalPipe.transform(0, '1.0-0')
-      },
-      {
-        label: 'Highest Critical Multi Hit',
-        value: this.decimalPipe.transform(
-          this.statisticsService.DamageStatistics().HighestCriticalMultiHit,
-          '1.0-0'
-        )
-      },
-      {
-        label: 'Highest Splash Hit',
-        value: this.decimalPipe.transform(
-          this.statisticsService.DamageStatistics().HighestSplashHit,
-          '1.0-0'
-        )
-      }
     ];
   });
   //#endregion STATS

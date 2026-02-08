@@ -1,0 +1,13 @@
+<div class="container">
+  <button class="flyout-button" (click)="ToggleFlyout()">STATISTICS</button>
+  <div class="flyout" [class.open]="IsOpen()">
+    <div class="flyout-content">
+      <div class="grid">
+        @for (statistic of Statistics(); track statistic.label) {
+          <div class="grid__label">{{ statistic.label }}</div>
+          <div class="grid__value">{{ statistic.value }}</div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

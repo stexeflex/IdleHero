@@ -2,8 +2,9 @@
 @use "index" as *;
 
 .container {
-  display: flex;
+  display: inline-flex;
   gap: $gap;
+  width: 100%;
 
   @media (max-width: $bp-sm) {
     flex-direction: column;
@@ -12,17 +13,17 @@
 
 .separator {
   align-content: center;
-}
 
-.visible-in-portrait {
-  @media (min-width: $bp-sm) {
-    display: none;
+  &.visible-in-portrait {
+    @media (min-width: $bp-sm) {
+      display: none;
+    }
   }
-}
 
-.visible-in-landscape {
-  @media (max-width: $bp-sm) {
-    display: none;
+  &.visible-in-landscape {
+    @media (max-width: $bp-sm) {
+      display: none;
+    }
   }
 }
 
@@ -36,12 +37,12 @@
   border: 2px solid $clr-border;
   border-radius: calc($border-radius * 2);
   padding: calc($gap / 4) $gap;
-}
 
-.gold {
-  min-width: 150px;
-}
+  &.gold {
+    min-width: 150px;
+  }
 
-.dungeon-key {
-  min-width: 60px;
+  &.dungeon-key {
+    min-width: 60px;
+  }
 }

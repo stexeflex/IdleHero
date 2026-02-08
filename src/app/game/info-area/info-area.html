@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="info-value gold" title="Gold Amount">
+  <div class="info-value gold" title="Gold Balance">
     <app-gold [amount]="GoldAmount" size="md"></app-gold>
   </div>
 
@@ -23,10 +23,8 @@
     <separator class="separator visible-in-portrait" [vertical]="false"></separator>
   }
 
-  <div class="info-value" title="Prestiges">
-    <h3>🏆 {{ PrestigeLevel | number }}</h3>
-  </div>
-  <div class="info-value" title="Highest Stages">
-    <h3>🚩 {{ MaxStages }}</h3>
+  <div class="info-value" title="Highest Capstone Dungeon Stages">
+    <app-icon symbol="achievement" size="sm"></app-icon>
+    <h3>{{ MaxStages }}</h3>
   </div>
 </div>

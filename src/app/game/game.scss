@@ -48,7 +48,36 @@
 
 .info {
   grid-area: info;
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: $gap;
+
+  .switch-area {
+    align-content: center;
+    justify-content: center;
+
+    .button-town {
+      color: $clr-highlight;
+
+      &:hover {
+        color: color.adjust($clr-highlight, $lightness: 10%);
+      }
+    }
+
+    .button-dungeon {
+      color: $clr-accent;
+
+      &:hover {
+        color: color.adjust($clr-accent, $lightness: 10%);
+      }
+    }
+  }
+
+  .statistics-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .character-area {
@@ -57,26 +86,4 @@
 
 .content {
   grid-area: content;
-}
-
-.switch-area {
-  padding-right: $gap;
-  align-content: center;
-  justify-content: center;
-}
-
-.button-town {
-  color: $clr-highlight;
-
-  &:hover {
-    color: color.adjust($clr-highlight, $lightness: 10%);
-  }
-}
-
-.button-dungeon {
-  color: $clr-accent;
-
-  &:hover {
-    color: color.adjust($clr-accent, $lightness: 10%);
-  }
 }

@@ -8,10 +8,20 @@ import { CombatState } from '../../core/systems/combat';
 import { InfoArea } from './info-area/info-area';
 import { Menu } from './menu/menu';
 import { MenuService } from '../../shared/services';
+import { StatisticsFlyout } from './statistics-flyout/statistics-flyout';
 
 @Component({
   selector: 'app-game',
-  imports: [CharacterArea, Menu, InfoArea, RouterOutlet, IconComponent, TabStrip, CharacterLoadout],
+  imports: [
+    CharacterArea,
+    Menu,
+    InfoArea,
+    RouterOutlet,
+    IconComponent,
+    TabStrip,
+    CharacterLoadout,
+    StatisticsFlyout
+  ],
   templateUrl: './game.html',
   styleUrl: './game.scss'
 })

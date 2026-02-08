@@ -1,0 +1,70 @@
+@use "sass:color";
+@use "index" as *;
+
+.container {
+}
+
+.flyout-button {
+  @include button-text-font($shadow: false);
+  @include button-sizing($font-size: 0.9rem, $min-width: auto);
+  @include button-focus-visible-outline();
+  @include button-style(
+    $bg-color: color.scale($clr-ui-bg, $lightness: -20%),
+    $color: $clr-text-primary,
+    $border: 2px solid $clr-border
+  );
+  @include button-hover-active(
+    $bg-color: color.scale($clr-ui-bg, $lightness: 20%),
+    $bg-color-active: color.scale($clr-ui-bg, $lightness: 30%)
+  );
+
+  border-radius: calc($border-radius * 2);
+}
+
+.flyout {
+  position: relative;
+
+  &.open .flyout-content {
+    display: block;
+  }
+
+  .flyout-content {
+    @include panel();
+    @include panel-shadow($border-width: 2px, $border-color: $clr-border);
+    @include box-shadow();
+    z-index: 1;
+    right: 0;
+
+    margin-top: $gap;
+
+    display: none;
+    position: absolute;
+
+    .grid {
+      @include disable-text-selection();
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: calc($gap / 2);
+      padding: calc($gap / 2) calc($gap / 2);
+
+      align-items: center;
+
+      .grid__label {
+        text-align: left;
+        font-weight: bold;
+      }
+
+      .grid__value {
+        @include flexbox($align: top, $justify: flex-end);
+        text-align: center;
+      }
+
+      .grid__label,
+      .grid__value {
+        font-size: 1.05rem;
+        color: $clr-text-primary;
+        width: 200px;
+      }
+    }
+  }
+}
