@@ -29,7 +29,6 @@ export interface DungeonRoom {
   MidStages: number[];
   StagesMax: number;
 
-  BossBaseHealth: number;
   XpBase: number;
   GoldBase: number;
 

@@ -10,6 +10,7 @@ import {
 
 function DefaultBoss(): Partial<Boss> {
   return {
+    Life: InitialLife(0),
     Armor: NoArmor(),
     Stats: InitialBossStats(0, 0, 0),
     AttackInterval: InitialAttackInterval(0),
@@ -24,8 +25,7 @@ export function Gooey(): Boss {
     ...boss,
     Id: 'slime-cave-1',
     Name: 'Gooey Slime',
-    BossIcon: BossIcon('gooeydaemon', true),
-    Life: InitialLife(100)
+    BossIcon: BossIcon('gooeydaemon', true)
   };
 }
 
@@ -35,8 +35,7 @@ export function Slime(): Boss {
     ...boss,
     Id: 'slime-cave-2',
     Name: 'Slime',
-    BossIcon: BossIcon('slime', true),
-    Life: InitialLife(250)
+    BossIcon: BossIcon('slime', true)
   };
 }
 
@@ -44,10 +43,9 @@ export function Slug(): Boss {
   const boss = DefaultBoss() as Boss;
   return {
     ...boss,
-    Id: 'slime-cave-mid',
+    Id: 'slime-cave-3',
     Name: 'Slug',
-    BossIcon: BossIcon('graspingslug', true),
-    Life: InitialLife(1000)
+    BossIcon: BossIcon('graspingslug', true)
   };
 }
 
@@ -57,8 +55,7 @@ export function KingSlime(): Boss {
     ...boss,
     Id: 'slime-cave-boss',
     Name: 'Cyclop',
-    BossIcon: BossIcon('jawlesscyclop'),
-    Life: InitialLife(5000)
+    BossIcon: BossIcon('jawlesscyclop')
   };
 }
 //#endregion SLIMES
@@ -70,8 +67,7 @@ export function Troglodyte(): Boss {
     ...boss,
     Id: 'brute-lair-1',
     Name: 'Troglodyte',
-    BossIcon: BossIcon('troglodyte', true),
-    Life: InitialLife(250)
+    BossIcon: BossIcon('troglodyte', true)
   };
 }
 export function EvilMinion(): Boss {
@@ -80,28 +76,25 @@ export function EvilMinion(): Boss {
     ...boss,
     Id: 'brute-lair-2',
     Name: 'Evil Minion',
-    BossIcon: BossIcon('evilminion', true),
-    Life: InitialLife(750)
+    BossIcon: BossIcon('evilminion', true)
   };
 }
 export function BullyMinion(): Boss {
   const boss = DefaultBoss() as Boss;
   return {
     ...boss,
-    Id: 'brute-lair-mid-1',
+    Id: 'brute-lair-3',
     Name: 'Bully Minion',
-    BossIcon: BossIcon('bullyminion', true),
-    Life: InitialLife(3000)
+    BossIcon: BossIcon('bullyminion', true)
   };
 }
 export function Brute(): Boss {
   const boss = DefaultBoss() as Boss;
   return {
     ...boss,
-    Id: 'brute-lair-mid-2',
+    Id: 'brute-lair-4',
     Name: 'Brute',
-    BossIcon: BossIcon('brute'),
-    Life: InitialLife(6000)
+    BossIcon: BossIcon('brute')
   };
 }
 export function Minotaur(): Boss {
@@ -110,8 +103,73 @@ export function Minotaur(): Boss {
     ...boss,
     Id: 'brute-lair-boss',
     Name: 'Minotaur',
-    BossIcon: BossIcon('minotaur'),
-    Life: InitialLife(15000)
+    BossIcon: BossIcon('minotaur')
   };
 }
 //#endregion BRUTES
+
+//#region SNAKES
+export function RattleSnake(): Boss {
+  const boss = DefaultBoss() as Boss;
+  return {
+    ...boss,
+    Id: 'snake-den-1',
+    Name: 'Rattle Snake',
+    BossIcon: BossIcon('rattlesnake')
+  };
+}
+export function ViperSnake(): Boss {
+  const boss = DefaultBoss() as Boss;
+  return {
+    ...boss,
+    Id: 'snake-den-2',
+    Name: 'Viper',
+    BossIcon: BossIcon('poisonsnake')
+  };
+}
+export function SandSnake(): Boss {
+  const boss = DefaultBoss() as Boss;
+  return {
+    ...boss,
+    Id: 'snake-den-3',
+    Name: 'Sand Snake',
+    BossIcon: BossIcon('sandsnake', true)
+  };
+}
+export function MambaSnake(): Boss {
+  const boss = DefaultBoss() as Boss;
+  return {
+    ...boss,
+    Id: 'snake-den-4',
+    Name: 'Mamba',
+    BossIcon: BossIcon('snake', true)
+  };
+}
+export function PythonSnake(): Boss {
+  const boss = DefaultBoss() as Boss;
+  return {
+    ...boss,
+    Id: 'snake-den-5',
+    Name: 'Python',
+    BossIcon: BossIcon('snaketongue')
+  };
+}
+export function CobraSnake(): Boss {
+  const boss = DefaultBoss() as Boss;
+  return {
+    ...boss,
+    Id: 'snake-den-5',
+    Name: 'Cobra',
+    BossIcon: BossIcon('cobra', true)
+  };
+}
+export function SeaSerpent(): Boss {
+  const boss = DefaultBoss() as Boss;
+  return {
+    ...boss,
+    Id: 'snake-den-boss',
+    Name: 'Sea Serpent',
+    BossIcon: BossIcon('seaserpent', true)
+  };
+}
+//#endregion SNAKES

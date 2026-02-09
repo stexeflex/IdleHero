@@ -1,4 +1,5 @@
 import { BossFactory, DUNGEON_BOSS_CONFIGS, DungeonBossConfig } from '../../../constants';
+import { GetHealthForBossAtStage, SetHealth } from './boss-health.utils';
 
 import { Boss } from '../../../models';
 import { Injectable } from '@angular/core';
@@ -27,20 +28,11 @@ export class BossSelectionService {
       const pool = this.ResolvePoolForStage(dungeonConfig, stageId);
       const idx = RandomUtils.stableIndex(`${dungeonId}:${stageId}`, pool.length);
       boss = pool[idx]();
-
-      const hpForStage = Math.floor(
-        boss.Life.MaxHp * Math.pow(stageId, dungeonConfig.LifeIncreasePerStage)
-      );
-
-      boss = {
-        ...boss,
-        Life: {
-          ...boss.Life,
-          Hp: hpForStage,
-          MaxHp: hpForStage
-        }
-      };
     }
+
+    // Set Boss health based on stage and dungeon config
+    const hpForStage = GetHealthForBossAtStage(dungeonId, stageId);
+    boss = SetHealth(boss, hpForStage);
 
     return boss;
   }

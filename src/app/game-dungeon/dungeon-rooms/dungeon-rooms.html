@@ -13,6 +13,9 @@
             <div class="dungeon-meta">
               <span>Stages: {{ dungeon.StagesBase }} - {{ dungeon.StagesMax }}</span>
             </div>
+            <div class="dungeon-meta">
+              <span>Elites: {{ dungeon.MidStages.join(" | ") }}</span>
+            </div>
           </div>
           <button
             class="ih-button"
@@ -34,6 +37,9 @@
             <div class="dungeon-desc">{{ dungeon.Description }}</div>
             <div class="dungeon-meta">
               <span>Stages: {{ dungeon.StagesBase }} - {{ dungeon.StagesMax }}</span>
+            </div>
+            <div class="dungeon-meta">
+              <span>Elites: {{ dungeon.MidStages.join(" | ") }}</span>
             </div>
           </div>
           <button

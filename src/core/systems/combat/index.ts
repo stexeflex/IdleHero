@@ -1,4 +1,5 @@
 export * from './attack-interval-computing';
+export * from './dungeons/boss-health.utils';
 export * from './dungeons/boss-selection.service';
 export * from './dungeons/boss.factory';
 export * from './dungeons/dungeon-rewards.service';

@@ -1,17 +1,4 @@
-import { AFFIX_DEFINITIONS, ITEM_VARIANTS, RUNE_DEFINITIONS } from '../../../core/constants';
-import {
-  AffixDefinition,
-  AffixTier,
-  Item,
-  ItemRarity,
-  ItemSlot,
-  ItemVariantDefinition,
-  Rune,
-  RuneDefinition,
-  RuneQuality
-} from '../../../core/models';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { ClampAffixTier, GetItemRarity, GetItemRarityRule } from '../../../core/systems/items';
 import {
   CraftingService,
   GearLoadoutService,
@@ -20,6 +7,7 @@ import {
   InventoryService
 } from '../../../core/services';
 import { Inventory, TabDefinition, TabStrip } from '../../../shared/components';
+import { Item, ItemRarity, ItemSlot } from '../../../core/models';
 
 import { Crafting } from './crafting/crafting';
 import { Enchanting } from './enchanting/enchanting';
@@ -37,7 +25,6 @@ interface SelectedItemContext {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CraftingArea {
-  private readonly crafting = inject(CraftingService);
   public readonly cost = inject(GoldCostProvider);
   private readonly inventory = inject(InventoryService);
   private readonly gear = inject(GearLoadoutService);
@@ -47,7 +34,7 @@ export class CraftingArea {
     return [
       { id: 'crafting', label: 'CRAFTING', disabled: false },
       { id: 'enchanting', label: 'ENCHANTING', disabled: false },
-      { id: 'socketing', label: 'SOCKETING', disabled: false }
+      { id: 'socketing', label: 'SOCKETING', disabled: true }
     ];
   }
 
