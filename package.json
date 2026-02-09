@@ -8,6 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "icons": "node scripts/generate-icons.js",
+    "boss:hp-table": "npx ts-node -P scripts/tsconfig.scripts.json scripts/boss-hp-table.script.ts",
     "cleanup": "ng generate @angular/core:cleanup-unused-imports",
     "build:gh": "ng build --configuration production --base-href /IdleHero/ --output-path docs",
     "postbuild:gh": "cp docs/browser/index.html docs/browser/404.html && mv docs/browser/* docs/ && rm -rf docs/browser",
