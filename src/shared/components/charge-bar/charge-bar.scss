@@ -8,10 +8,10 @@
 
   border-radius: $border-radius;
   border-color: $clr-black;
-}
 
-.charged {
-  box-shadow: 0 0 20px $clr-charge-yellow;
+  &.charged {
+    box-shadow: 0 0 20px $clr-charge-yellow;
+  }
 }
 
 .bar-fill {
@@ -31,4 +31,8 @@
   color: $clr-text-primary;
   font-size: 1.2rem;
   font-weight: 600;
+
+  &.charged {
+    color: $clr-charge-yellow;
+  }
 }

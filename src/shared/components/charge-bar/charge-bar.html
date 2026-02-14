@@ -2,5 +2,9 @@
   <div class="bar-fill" [style.width]="progress + '%'"></div>
 </div>
 @if (showValues()) {
-  <div class="bar-text">{{ current() | number }} / {{ max() | number }} HP</div>
+  @if (charged()) {
+    <div class="bar-text charged">CHARGED</div>
+  } @else {
+    <div class="bar-text">{{ current() | number }} / {{ max() | number }} Charge</div>
+  }
 }
