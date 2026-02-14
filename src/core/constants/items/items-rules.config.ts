@@ -54,7 +54,7 @@ export const ITEM_TIER_RULES: Record<ItemTier, ItemTierRule> = {
   },
   II: {
     MinItemLevel: ITEM_LEVEL_CONFIG.LEVEL.MAGIC.MIN,
-    MaxItemLevel: ITEM_LEVEL_CONFIG.LEVEL.LEGENDARY.MAX,
+    MaxItemLevel: ITEM_LEVEL_CONFIG.LEVEL.EPIC.MAX,
     MinRarity: 'Magic',
     MaxRarity: 'Epic'
   },

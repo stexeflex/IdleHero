@@ -9,23 +9,50 @@ import {
   ItemLevel,
   LabelToString
 } from '../../models';
+import { DecimalPipe, PercentPipe } from '@angular/common';
 import { GetItemRarity, GetMaxAffixTier } from './item.utils';
 
-import { DecimalPipe } from '@angular/common';
+export function GetAffixInfo(affix: Affix, locale: string): AffixInfo {
+  const decimalPipe = new DecimalPipe(locale);
+  const percentPipe = new PercentPipe(locale);
 
-export function GetAffixInfo(affix: Affix, decimalPipe: DecimalPipe): AffixInfo {
   const definition: AffixDefinition = GetAffixDefinition(affix.DefinitionId);
-  const minMax: { min: number; max: number } = GetMinMaxRoll(definition, affix.Tier);
-  const label: string = LabelToString(definition.Effect.ToLabel(affix.RolledValue), decimalPipe);
+  const affixTierSpec: AffixTierSpec = GetAffixTierSpec(definition, affix.Tier);
+  const minMax: { min: number; max: number } = GetMinMaxRoll(affixTierSpec);
+  const rolledValue = minMax.min + (minMax.max - minMax.min) * affix.ValueRangePercentage;
+  const label: string = LabelToString(definition.Effect.ToLabel(rolledValue), decimalPipe);
+
+  let minRollLabel: string = minMax.min.toString();
+  let maxRollLabel: string = minMax.max.toString();
+
+  switch (affixTierSpec.Value.Type) {
+    case 'Flat':
+      minRollLabel = decimalPipe.transform(minMax.min, '1.0-0')!;
+      maxRollLabel = decimalPipe.transform(minMax.max, '1.0-0')!;
+      break;
+
+    case 'Percent':
+      minRollLabel = percentPipe.transform(minMax.min, '1.0-0')!;
+      maxRollLabel = percentPipe.transform(minMax.max, '1.0-0')!;
+      break;
+  }
 
   return {
     Tier: affix.Tier,
     Label: label,
-    Value: affix.RolledValue,
-    MinRoll: minMax.min,
-    MaxRoll: minMax.max,
+    Value: rolledValue,
+    MinRoll: minRollLabel,
+    MaxRoll: maxRollLabel,
     Improved: affix.Improved
   };
+}
+
+export function GetAffixValue(affix: Affix): number {
+  const definition: AffixDefinition = GetAffixDefinition(affix.DefinitionId);
+  const affixTierSpec: AffixTierSpec = GetAffixTierSpec(definition, affix.Tier);
+  const minMax: { min: number; max: number } = GetMinMaxRoll(affixTierSpec);
+  const rolledValue = minMax.min + (minMax.max - minMax.min) * affix.ValueRangePercentage;
+  return rolledValue;
 }
 
 export function GetAffixDefinition(definitionId: string): AffixDefinition {
@@ -36,19 +63,8 @@ export function GetAffixTierSpec(definition: AffixDefinition, tier: AffixTier): 
   return definition.Tiers.find((t) => t.Tier === tier)!;
 }
 
-export function GetMinMaxRoll(
-  definition: AffixDefinition,
-  tier: AffixTier
-): { min: number; max: number } {
-  const tierSpec = definition.Tiers.find((t) => t.Tier === tier)!;
-  const min = Number.isInteger(tierSpec.Value.Min)
-    ? tierSpec.Value.Min
-    : Math.round(tierSpec.Value.Min * 100);
-  const max = Number.isInteger(tierSpec.Value.Max)
-    ? tierSpec.Value.Max
-    : Math.round(tierSpec.Value.Max * 100);
-
-  return { min: min, max: max };
+export function GetMinMaxRoll(affixTierSpec: AffixTierSpec): { min: number; max: number } {
+  return { min: affixTierSpec.Value.Min, max: affixTierSpec.Value.Max };
 }
 
 /** Returns the index of the given affix tier in the order array. */
@@ -115,20 +131,25 @@ export function ExceedsMaximumEnchantableAffixes(item: Item): boolean {
  * Generates a random integer within the specified range [min, max].
  * @param min the minimum value (inclusive).
  * @param max the maximum value (inclusive).
- * @returns A random integer between min and max.
+ * @returns The percentage rolled within the tier range, as a number between 0 and 1.
  */
-export function RandomInRange(min: number, max: number): number {
+export function RandomInRange(min: number, max: number, type: 'Flat' | 'Percent'): number {
   const lo = Math.min(min, max);
   const hi = Math.max(min, max);
 
-  const isIntegerRange = Number.isInteger(lo) && Number.isInteger(hi);
+  let rolled: number;
 
-  // Inclusive integer roll
-  if (isIntegerRange) {
-    return Math.floor(lo + Math.random() * (hi - lo + 1));
+  switch (type) {
+    case 'Flat':
+      rolled = Math.floor(lo + Math.random() * (hi - lo + 1));
+      break;
+
+    case 'Percent':
+      rolled = lo + Math.random() * (hi - lo);
+      rolled = Math.round(rolled * 100) / 100;
+      break;
   }
 
-  // Keep decimals
-  const val = lo + Math.random() * (hi - lo);
-  return Math.round(val * 100) / 100;
+  const percentage = (rolled - min) / (max - min);
+  return percentage;
 }

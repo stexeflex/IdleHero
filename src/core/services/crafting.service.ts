@@ -154,7 +154,7 @@ export class CraftingService {
     const spec = definition.Qualities.find((q) => q.Quality === quality);
     if (!spec) return { Success: false, Item: item };
 
-    const rolled = RandomInRange(spec.Value.Min, spec.Value.Max);
+    const rolled = RandomInRange(spec.Value.Min, spec.Value.Max, spec.Value.Type);
 
     const newRune: Rune = {
       Id: `rune_${Date.now()}_${Math.random().toString(36).slice(2)}`,

@@ -4,7 +4,7 @@ export interface AffixInfo {
   Tier: AffixTier;
   Label: string;
   Value: number;
-  MinRoll: number;
-  MaxRoll: number;
+  MinRoll: string;
+  MaxRoll: string;
   Improved: boolean;
 }

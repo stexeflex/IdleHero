@@ -8,6 +8,7 @@ import { StatSource } from '../../combat/stats/stat-source.type';
 export interface AffixValueRange {
   Min: number;
   Max: number;
+  Type: 'Flat' | 'Percent';
 }
 
 /** Specifies an affix tier along with its value range. */
@@ -52,8 +53,8 @@ export interface Affix {
   /** The tier this affix rolled into */
   Tier: AffixTier;
 
-  /** The numeric value rolled within the tier range */
-  RolledValue: number;
+  /** The percentage rolled within the tier range */
+  ValueRangePercentage: number;
 
   /** True if this affix was improved (tier-up or special reroll rules) */
   Improved: boolean;

@@ -6,6 +6,7 @@ import { StatSource } from '../../combat/stats/stat-source.type';
 export interface RuneValueRange {
   Min: number;
   Max: number;
+  Type: 'Flat' | 'Percent';
 }
 
 /** Specifies a rune quality along with its value range. */

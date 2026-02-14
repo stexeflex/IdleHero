@@ -66,34 +66,34 @@ const ATTRIBUTES_AFFIX_DEFINITIONS: AffixDefinition[] = [
   }
 ];
 const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
-  {
-    Id: 'affix_damage_flat',
-    Groups: ['Offense'],
-    AllowedSlots: ['Weapon'],
-    Tiers: DAMAGE_FLAT_TIERS,
-    Effect: {
-      ToLabel: (value: number) => FlatAdditiveLabel('Damage', value),
-      MapToStatSource: (source: string, value: number) => {
-        const s = EmptyStatSource(source + `_affix_damage_flat_${performance.now()}`);
-        s.Damage.Flat = value;
-        return s;
-      }
-    }
-  },
-  {
-    Id: 'affix_damage_percent',
-    Groups: ['Offense'],
-    AllowedSlots: ['Weapon'],
-    Tiers: DAMAGE_PCT_TIERS,
-    Effect: {
-      ToLabel: (value: number) => PercentageAdditiveLabel('Damage', value),
-      MapToStatSource: (source: string, value: number) => {
-        const s = EmptyStatSource(source + `_affix_damage_percent_${performance.now()}`);
-        s.Damage.Multiplier = value;
-        return s;
-      }
-    }
-  },
+  // {
+  //   Id: 'affix_damage_flat',
+  //   Groups: ['Offense'],
+  //   AllowedSlots: ['Weapon'],
+  //   Tiers: DAMAGE_FLAT_TIERS,
+  //   Effect: {
+  //     ToLabel: (value: number) => FlatAdditiveLabel('Damage', value),
+  //     MapToStatSource: (source: string, value: number) => {
+  //       const s = EmptyStatSource(source + `_affix_damage_flat_${performance.now()}`);
+  //       s.Damage.Flat = value;
+  //       return s;
+  //     }
+  //   }
+  // },
+  // {
+  //   Id: 'affix_damage_percent',
+  //   Groups: ['Offense'],
+  //   AllowedSlots: ['Weapon'],
+  //   Tiers: DAMAGE_PCT_TIERS,
+  //   Effect: {
+  //     ToLabel: (value: number) => PercentageAdditiveLabel('Damage', value),
+  //     MapToStatSource: (source: string, value: number) => {
+  //       const s = EmptyStatSource(source + `_affix_damage_percent_${performance.now()}`);
+  //       s.Damage.Multiplier = value;
+  //       return s;
+  //     }
+  //   }
+  // },
   {
     Id: 'affix_bleed_chance_percent',
     Groups: ['Offense'],

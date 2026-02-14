@@ -50,7 +50,7 @@ export class ItemPreview {
 
   protected readonly AffixesInfo = computed<AffixInfo[]>(() => {
     return this.Item().Affixes.map((affix) => {
-      return GetAffixInfo(affix, this.decimalPipe);
+      return GetAffixInfo(affix, this.locale);
     });
   });
 }

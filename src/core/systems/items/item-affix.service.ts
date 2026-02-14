@@ -73,13 +73,12 @@ export class ItemAffixService {
     if (!definition) return item;
 
     const baseTier: AffixTier = 'Common';
-    const tierSpec: AffixTierSpec = GetAffixTierSpec(definition, baseTier);
-    const rolled = RandomInRange(tierSpec.Value.Min, tierSpec.Value.Max);
+    const rolledValue = this.RollValue(definition, baseTier);
 
     const newAffix: Affix = {
       DefinitionId: definition.Id,
       Tier: baseTier,
-      RolledValue: rolled,
+      ValueRangePercentage: rolledValue,
       Improved: false
     };
 
@@ -108,13 +107,12 @@ export class ItemAffixService {
     if (overMax) return item;
 
     // Determine new rolled value in next tier's range
-    const tierSpec: AffixTierSpec = GetAffixTierSpec(definition, next);
-    const rolled = RandomInRange(tierSpec.Value.Min, tierSpec.Value.Max);
+    const rolledValue = this.RollValue(definition, next);
 
     const newAffix: Affix = {
       ...affix,
       Tier: next,
-      RolledValue: rolled,
+      ValueRangePercentage: rolledValue,
       Improved: true
     };
 
@@ -146,7 +144,7 @@ export class ItemAffixService {
     const newAffix: Affix = {
       ...affix,
       DefinitionId: definition.Id,
-      RolledValue: rolledValue
+      ValueRangePercentage: rolledValue
     };
 
     const nextAffixes = item.Affixes.slice();
@@ -165,8 +163,8 @@ export class ItemAffixService {
     return pool[index] ?? null;
   }
 
-  private RollValue(definition: AffixDefinition, tier: AffixTier): number | null {
-    const tierSpec = GetAffixTierSpec(definition, tier);
-    return RandomInRange(tierSpec.Value.Min, tierSpec.Value.Max);
+  private RollValue(definition: AffixDefinition, tier: AffixTier): number {
+    const tierSpec: AffixTierSpec = GetAffixTierSpec(definition, tier);
+    return RandomInRange(tierSpec.Value.Min, tierSpec.Value.Max, tierSpec.Value.Type);
   }
 }

@@ -43,7 +43,6 @@ export class Enchanting {
   private readonly goldCostProvider = inject(GoldCostProvider);
   private readonly itemLevel = inject(ItemLevelService);
   private readonly itemAffix = inject(ItemAffixService);
-  private readonly decimalPipe = new DecimalPipe(this.locale);
 
   public readonly Item = input.required<Item>();
   public readonly ItemChange = output<Item>();
@@ -99,7 +98,7 @@ export class Enchanting {
 
   protected GetAffixInfo(slotIndex: number): AffixInfo {
     const affix = this.Item().Affixes[slotIndex];
-    return GetAffixInfo(affix, this.decimalPipe);
+    return GetAffixInfo(affix, this.locale);
   }
 
   protected CanUpgradeItem(): boolean {

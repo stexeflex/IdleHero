@@ -8,6 +8,8 @@ import {
   StatSource
 } from '../../models';
 
+import { GetAffixValue } from './affix.utils';
+
 export function MapItemToStatSources(item: Item): StatSource[] {
   const statSources: StatSource[] = [];
 
@@ -54,7 +56,7 @@ export function MapItemToStatSources(item: Item): StatSource[] {
 
     const affixStatSource: StatSource = affixDefinition.Effect.MapToStatSource(
       item.Id,
-      affix.RolledValue
+      GetAffixValue(affix)
     );
     statSources.push(affixStatSource);
   }
