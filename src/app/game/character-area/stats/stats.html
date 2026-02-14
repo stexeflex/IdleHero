@@ -12,10 +12,7 @@
       <button
         class="ih-button-icon grid-header__toggle"
         (click)="AttributesExpanded.set(!AttributesExpanded())">
-        <i
-          class="bi toggle-icon"
-          [class.bi-caret-up-fill]="AttributesExpanded()"
-          [class.bi-caret-down-fill]="!AttributesExpanded()"></i>
+        <app-toggle-icon [direction]="AttributesExpanded() ? 'up' : 'down'"></app-toggle-icon>
       </button>
     </div>
     @if (AttributesExpanded()) {
@@ -49,10 +46,7 @@
         <button
           class="ih-button-icon grid-header__toggle"
           (click)="statGrid.expanded = !statGrid.expanded">
-          <i
-            class="bi toggle-icon"
-            [class.bi-caret-up-fill]="statGrid.expanded"
-            [class.bi-caret-down-fill]="!statGrid.expanded"></i>
+          <app-toggle-icon [direction]="statGrid.expanded ? 'up' : 'down'"></app-toggle-icon>
         </button>
       </div>
       @if (statGrid.expanded) {

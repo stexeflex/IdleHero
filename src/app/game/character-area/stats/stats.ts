@@ -6,6 +6,7 @@ import { ATTRIBUTES_CONFIG } from '../../../../core/constants';
 import { Attributes } from '../../../../core/models';
 import { CombatState } from '../../../../core/systems/combat';
 import { IconComponent } from '../../../../shared/components';
+import { ToggleIcon } from './toggle-icon/toggle-icon';
 
 interface StatsItem {
   label: string;
@@ -20,7 +21,7 @@ interface StatsGrid {
 
 @Component({
   selector: 'app-stats',
-  imports: [IconComponent],
+  imports: [IconComponent, ToggleIcon],
   templateUrl: './stats.html',
   styleUrl: './stats.scss'
 })
