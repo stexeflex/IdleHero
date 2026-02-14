@@ -28,7 +28,6 @@ export type MissEvent = {
   AtMs: number;
   Actor: Actor;
   Target: Target;
-  HitChance: number;
 };
 
 export type DamageEvent = {

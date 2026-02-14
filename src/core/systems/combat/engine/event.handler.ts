@@ -20,11 +20,11 @@ import {
   HeroStats,
   MissEvent
 } from '../../../models';
+import { ChanceUtils, ClampUtils } from '../../../../shared/utils';
 import { CombatLogService, StatisticsService } from '../../../services';
 import { HealLife, TakeDamage } from '../life.utils';
 import { Injectable, inject } from '@angular/core';
 
-import { ClampUtils } from '../../../../shared/utils';
 import { CombatState } from './combat.state';
 import { ComputeNextIntervalMs } from '../attack-interval-computing';
 import { DamageResult } from './models/damage-result';
@@ -95,20 +95,14 @@ export class EventHandler {
     if (!actor || !target) return;
 
     // 1) Hit-Check mit Accuracy/Evasion
-    const { hitChance, isHit } = this.CalculateHit(
-      STATS_CONFIG.BASE.HIT_CHANCE,
+    const isHit: boolean = this.CalculateHit(
       (actor.Stats as HeroStats).Accuracy,
       (target.Stats as BossStats).Evasion
     );
 
     // Miss-Event
     if (!isHit) {
-      const missEvent: MissEvent = CreateMissEvent(
-        event.AtMs + this.EventDelayMs,
-        actor,
-        target,
-        hitChance
-      );
+      const missEvent: MissEvent = CreateMissEvent(event.AtMs + this.EventDelayMs, actor, target);
       this.CombatState.Queue.Push(missEvent);
     }
     // Hit-Event
@@ -374,15 +368,17 @@ export class EventHandler {
 
   //#region Helpers
   private CalculateHit(
-    baseHitChance: number,
     actorAccuracy: number | undefined,
     targetEvasion: number | undefined
-  ): { hitChance: number; isHit: boolean } {
-    const hitChance = ClampUtils.clamp01(
-      baseHitChance + (actorAccuracy ?? 0) - (targetEvasion ?? 0)
-    );
-    const isHit = Math.random() < hitChance;
-    return { hitChance, isHit };
+  ): boolean {
+    // const hitChance = ClampUtils.clamp01(
+    //   baseHitChance + (actorAccuracy ?? 0) - (targetEvasion ?? 0)
+    // );
+    // const isHit = Math.random() < hitChance;
+    // return { hitChance, isHit };
+
+    const isHit = ChanceUtils.success(actorAccuracy ?? 0);
+    return isHit;
   }
 
   private RollMultiHitChain(chance: number, chainFactor: number, maxChainHits: number): number {

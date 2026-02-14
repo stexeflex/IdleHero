@@ -41,7 +41,6 @@ export interface MissLogEntry extends BaseCombatLogEntry {
   Type: CombatLogType.Miss;
   Actor: Actor;
   Target: Target;
-  HitChance: number;
 }
 
 export interface HealLogEntry extends BaseCombatLogEntry {

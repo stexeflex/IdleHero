@@ -29,18 +29,12 @@ export function CreateAttackEvent(atMs: number, actor: Actor, target: Target): A
   };
 }
 
-export function CreateMissEvent(
-  atMs: number,
-  actor: Actor,
-  target: Target,
-  hitChance: number
-): MissEvent {
+export function CreateMissEvent(atMs: number, actor: Actor, target: Target): MissEvent {
   return {
     Type: 'Miss',
     AtMs: atMs,
     Actor: actor,
-    Target: target,
-    HitChance: hitChance
+    Target: target
   };
 }
 

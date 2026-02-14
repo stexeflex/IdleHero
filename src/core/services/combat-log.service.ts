@@ -66,19 +66,9 @@ export class CombatLogService {
       Type: CombatLogType.Miss,
       TimestampMs: event.AtMs,
       Actor: event.Actor,
-      Target: event.Target,
-      HitChance: event.HitChance
+      Target: event.Target
     };
     this.Push(entry);
-
-    this.Heal({
-      Type: 'Heal',
-      AtMs: event.AtMs,
-      Actor: event.Target,
-      Target: event.Target,
-      Amount: 15
-    });
-
     return entry;
   }
 
