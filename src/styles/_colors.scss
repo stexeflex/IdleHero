@@ -31,6 +31,7 @@ $clr-hp-red: #e53e3e;
 $clr-mp-blue: #3b82f6;
 $clr-exp-green: #4caf50;
 $clr-exp-blue: #2196f3;
+$clr-charge-yellow: #fbbf24;
 
 $clr-common: #a0a0a0;
 $clr-magic: #3b82f6;
@@ -96,4 +97,10 @@ $grad-health-bar: linear-gradient(
   90deg,
   $clr-hp-red 0%,
   color.scale($clr-hp-red, $lightness: -30%) 100%
+);
+
+$grad-charge-bar: linear-gradient(
+  90deg,
+  $clr-charge-yellow 0%,
+  color.scale($clr-charge-yellow, $lightness: -30%) 100%
 );

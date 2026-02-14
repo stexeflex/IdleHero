@@ -34,6 +34,10 @@ export class StatisticsFlyout {
         value: this.decimalPipe.transform(damageStats.HighestSingleHit, '1.0-0')
       },
       {
+        label: 'Highest Charged Hit',
+        value: this.decimalPipe.transform(damageStats.HighestChargedHit, '1.0-0')
+      },
+      {
         label: 'Highest Bleeding Tick',
         value: this.decimalPipe.transform(damageStats.HighestBleedingTick, '1.0-0')
       },
@@ -46,21 +50,33 @@ export class StatisticsFlyout {
         value: this.decimalPipe.transform(damageStats.HighestMultiHit, '1.0-0')
       },
       {
-        label: 'Highest Multi Hit Chain',
-        value: this.decimalPipe.transform(damageStats.HighestMultiHitChain, '1.0-0')
+        label: 'Highest Charged Multi Hit',
+        value: this.decimalPipe.transform(damageStats.HighestChargedMultiHit, '1.0-0')
       },
       {
         label: 'Highest Critical Multi Hit',
         value: this.decimalPipe.transform(damageStats.HighestCriticalMultiHit, '1.0-0')
       },
       {
-        label: 'Highest Total Multi Hit',
-        value: this.decimalPipe.transform(damageStats.HighestTotalMultiHit, '1.0-0')
+        label: 'Highest Charged Critical Multi Hit',
+        value: this.decimalPipe.transform(damageStats.HighestChargedCriticalMultiHit, '1.0-0')
       },
       {
-        label: 'Highest Splash Hit',
-        value: this.decimalPipe.transform(damageStats.HighestSplashHit, '1.0-0')
+        label: 'Highest Multi Hit Chain',
+        value: this.decimalPipe.transform(damageStats.HighestMultiHitChain, '1.0-0')
+      },
+      {
+        label: 'Highest Total Hit',
+        value: this.decimalPipe.transform(damageStats.HighestTotalHit, '1.0-0')
+      },
+      {
+        label: 'Highest Charged Total Hit',
+        value: this.decimalPipe.transform(damageStats.HighestChargedTotalHit, '1.0-0')
       }
+      // {
+      //   label: 'Highest Splash Hit',
+      //   value: this.decimalPipe.transform(damageStats.HighestSplashHit, '1.0-0')
+      // }
     ];
   });
 }

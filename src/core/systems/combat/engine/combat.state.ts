@@ -5,6 +5,7 @@ import {
   CreateAttackEvent,
   Hero,
   InitialActorState,
+  InitialHeroCharge,
   InitialLife,
   NoArmor,
   ResetLife
@@ -17,6 +18,7 @@ import {
 } from '../attack-interval-computing';
 import { Injectable, inject, signal } from '@angular/core';
 
+import { DELAYS } from '../../../../shared/constants';
 import { EventQueue } from './event.queue';
 
 /**
@@ -99,8 +101,10 @@ export class CombatState {
   /**
    * Advance to the next Boss in the Dungeon Room
    */
-  public AdvanceToNextBoss(): void {
+  public async AdvanceToNextBoss(): Promise<void> {
     if (this.Boss()?.Life.Alive) return;
+
+    await new Promise((resolve) => setTimeout(resolve, DELAYS.BOSS_RESPAWN_ANIMATION_MS));
 
     // const oldBoss = this.DungeonRoom.CurrentBoss();
     this.DungeonRoom.AdvanceStage();
@@ -109,12 +113,15 @@ export class CombatState {
     if (!nextBoss) return;
 
     // this.UpdateEventQueueOnStageAdvance(oldBoss, nextBoss);
-    this.Queue.Clear();
-    this.SetFirstEvent(this.Hero()!, nextBoss);
+    this.Queue.Clear(['Charge', 'Clear']);
+    this.DelayEventsBy(DELAYS.BOSS_RESPAWN_ANIMATION_MS * 2);
 
+    this.SetFirstEvent(this.Hero()!, nextBoss);
     nextBoss.Life = ResetLife(nextBoss.Life);
     this.Boss.set(nextBoss);
     this.PublishState();
+
+    await new Promise((resolve) => setTimeout(resolve, DELAYS.BOSS_RESPAWN_ANIMATION_MS));
   }
 
   /**
@@ -135,7 +142,8 @@ export class CombatState {
       Armor: NoArmor(),
       Stats: computedStats,
       AttackInterval: ComputeInitialAttackInterval(computedStats.AttackSpeed),
-      State: InitialActorState()
+      State: InitialActorState(),
+      Charge: InitialHeroCharge()
     };
 
     return hero;
@@ -158,6 +166,12 @@ export class CombatState {
     const attackEvent: CombatEvent = CreateAttackEvent(firstAt, hero, boss);
 
     this.Queue.Push(attackEvent);
+  }
+
+  private DelayEventsBy(delayMs: number): void {
+    this.Queue.UpdateAll((event) => {
+      return { ...event, AtMs: event.AtMs + delayMs };
+    });
   }
 
   // Clean up/retarget queued events referencing the old boss

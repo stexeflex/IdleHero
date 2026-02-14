@@ -1,7 +1,8 @@
 import {
   Actor,
   AttackEvent,
-  ClearDamageOverTimeEvent,
+  ChargeEvent,
+  ClearEvent,
   CombatEvent,
   DamageEvent,
   DamageOverTimeEvent,
@@ -78,16 +79,25 @@ export function CreateDamageOverTimeEvent(
   };
 }
 
-export function CreateClearDamageOverTimeEvent(
-  atMs: number,
-  dotType: 'Bleed',
-  target: Target
-): ClearDamageOverTimeEvent {
+export function CreateChargeEvent(atMs: number, actor: Actor, amount: number): ChargeEvent {
   return {
-    Type: 'ClearDamageOverTime',
-    DotType: dotType,
+    Type: 'Charge',
     AtMs: atMs,
-    Target: target
+    Actor: actor,
+    Amount: amount
+  };
+}
+
+export function CreateClearEvent(
+  atMs: number,
+  target: Target,
+  clearingType: 'Charge' | 'Bleed'
+): ClearEvent {
+  return {
+    Type: 'Clear',
+    AtMs: atMs,
+    Target: target,
+    ClearingType: clearingType
   };
 }
 

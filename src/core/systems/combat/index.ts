@@ -9,6 +9,7 @@ export * from './engine/event.handler';
 export * from './engine/event.queue';
 export * from './engine/models/combat-actors';
 export * from './engine/models/damage-result';
+export * from './engine/models/event';
 export * from './engine/models/timestamp';
 export * from './life.utils';
 export * from './stat-computing';

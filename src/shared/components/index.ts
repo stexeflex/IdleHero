@@ -1,5 +1,6 @@
 export * from './battle-log/battle-log';
 export * from './buffs-bar/buffs-bar';
+export * from './charge-bar/charge-bar';
 export * from './enchantment-slot-icon/enchantment-slot-icon';
 export * from './experience-bar/experience-bar';
 export * from './gold/gold';

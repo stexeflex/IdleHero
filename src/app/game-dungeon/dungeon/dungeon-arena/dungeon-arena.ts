@@ -1,6 +1,6 @@
 import { Boss, DamageEvent, Hero } from '../../../../core/models';
+import { ChargeBar, HealthBar, IconComponent } from '../../../../shared/components';
 import { Component, OnDestroy, computed, inject, signal } from '@angular/core';
-import { HealthBar, IconComponent } from '../../../../shared/components';
 
 import { CombatState } from '../../../../core/systems/combat';
 import { DELAYS } from '../../../../shared/constants';
@@ -13,7 +13,7 @@ interface BleedingTick {
 
 @Component({
   selector: 'app-dungeon-arena',
-  imports: [HealthBar, IconComponent],
+  imports: [HealthBar, IconComponent, ChargeBar],
   templateUrl: './dungeon-arena.html',
   styleUrl: './dungeon-arena.scss'
 })

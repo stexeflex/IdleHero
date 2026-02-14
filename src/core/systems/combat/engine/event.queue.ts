@@ -1,16 +1,17 @@
-import { Timestamp } from './models/timestamp';
+import { Event } from './models/event';
 
 /**
  * Event-Queue, die Events nach Timestamp sortiert hält.
  */
-export class EventQueue<T extends Timestamp> {
+export class EventQueue<T extends Event> {
   private QueuedItems: T[] = [];
 
   /**
    * Leert die Queue.
+   * @param exceptType Optional: Es werden alle Events entfernt, außer denen mit den angegebenen Typen.
    */
-  public Clear(): void {
-    this.QueuedItems = [];
+  public Clear(exceptType: string[] = []): void {
+    this.QueuedItems = this.QueuedItems.filter((item) => exceptType.includes(item.Type));
   }
 
   /**

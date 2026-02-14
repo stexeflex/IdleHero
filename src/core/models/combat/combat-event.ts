@@ -5,6 +5,17 @@ import { Hero } from './actors/hero';
 export type Actor = Hero | Boss;
 export type Target = Hero | Boss;
 
+export type EventType =
+  | 'Attack'
+  | 'Miss'
+  | 'Damage'
+  | 'DamageOverTime'
+  | 'ClearDamageOverTime'
+  | 'Charge'
+  | 'Clear'
+  | 'Heal'
+  | 'Death';
+
 export type AttackEvent = {
   Type: 'Attack';
   AtMs: number;
@@ -39,11 +50,18 @@ export type DamageOverTimeEvent = {
   TotalTicks: number;
 };
 
-export type ClearDamageOverTimeEvent = {
-  Type: 'ClearDamageOverTime';
-  DotType: 'Bleed';
+export type ChargeEvent = {
+  Type: 'Charge';
+  AtMs: number;
+  Actor: Actor;
+  Amount: number;
+};
+
+export type ClearEvent = {
+  Type: 'Clear';
   AtMs: number;
   Target: Target;
+  ClearingType: 'Charge' | 'Bleed';
 };
 
 export type HealEvent = {
@@ -65,6 +83,7 @@ export type CombatEvent =
   | MissEvent
   | DamageEvent
   | DamageOverTimeEvent
-  | ClearDamageOverTimeEvent
+  | ChargeEvent
+  | ClearEvent
   | HealEvent
   | DeathEvent;

@@ -45,25 +45,25 @@
       display: grid;
       grid-template-columns: auto 1fr;
       gap: calc($gap / 2);
-      padding: calc($gap / 2) calc($gap / 2);
 
       align-items: center;
 
       .grid__label {
         text-align: left;
         font-weight: bold;
+        width: 270px;
       }
 
       .grid__value {
         @include flexbox($align: top, $justify: flex-end);
         text-align: center;
+        width: 250px;
       }
 
       .grid__label,
       .grid__value {
         font-size: 1.05rem;
         color: $clr-text-primary;
-        width: 200px;
       }
     }
   }

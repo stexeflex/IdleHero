@@ -56,10 +56,11 @@
       </div>
       <div class="actor-info bottom">
         <h2 class="actor-name right">{{ hero.Name }}</h2>
-        <!-- <app-health-bar
-          [currentHealth]="hero.Life.Hp"
-          [maxHealth]="hero.Life.MaxHp"
-          [showHealthValues]="true"></app-health-bar> -->
+        <app-charge-bar
+          [current]="hero.Charge.Current"
+          [max]="hero.Charge.Max"
+          [charged]="hero.Charge.Charged"
+          [showValues]="true"></app-charge-bar>
       </div>
     }
   </div>
