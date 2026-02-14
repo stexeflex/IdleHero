@@ -56,9 +56,25 @@
     color: $clr-highlight;
   }
 
+  .item-type-info {
+    display: inline-flex;
+    gap: calc($gap / 2);
+  }
+
+  .item-tier {
+    font-weight: bold;
+    font-family: $font-family-title;
+    color: color.scale($clr-accent, $lightness: 15%);
+  }
+
   .item-type {
     font-size: 0.95rem;
     color: $clr-mute;
+    font-weight: normal;
+  }
+
+  .item-level {
+    font-size: 0.95rem;
     font-weight: normal;
   }
 }

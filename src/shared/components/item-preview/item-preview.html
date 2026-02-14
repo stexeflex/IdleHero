@@ -5,14 +5,30 @@
   [class.rare--border]="Rarity() === 'Rare'"
   [class.epic--border]="Rarity() === 'Epic'"
   [class.legendary--border]="Rarity() === 'Legendary'">
+  <!-- ITEM ICON -->
   <div class="item-icon">
     <app-icon [gear]="Item().Icon" size="3x"></app-icon>
   </div>
+
   <div class="item-info">
     <!-- ITEM NAME -->
     <span class="item-name common--font">{{ Item().Name.toUpperCase() }}</span>
+
     <!-- ITEM TYPE -->
-    <span class="item-type">{{ Rarity() }} {{ Variant().Type }} [{{ Item().Level }}]</span>
+    <div class="item-type-info">
+      <span class="item-tier">{{ Item().Tier }}</span>
+      <span class="separator">•</span>
+      <span class="item-type">{{ Rarity() }} {{ Variant().Type }}</span>
+      <span
+        class="item-level"
+        [class.common--font]="Rarity() === 'Common'"
+        [class.magic--font]="Rarity() === 'Magic'"
+        [class.rare--font]="Rarity() === 'Rare'"
+        [class.epic--font]="Rarity() === 'Epic'"
+        [class.legendary--font]="Rarity() === 'Legendary'">
+        [{{ Item().Level }}]
+      </span>
+    </div>
 
     <separator class="ih-separator"></separator>
 
