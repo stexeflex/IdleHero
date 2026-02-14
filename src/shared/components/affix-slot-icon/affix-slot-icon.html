@@ -1,0 +1,14 @@
+<div class="slots">
+  @for (affix of affixes(); track $index) {
+    @let affixSlotInfo = GetAffixSlotInfo($index);
+    <div
+      class="slot"
+      [style.width]="size()"
+      [style.height]="size()"
+      [class.common--border]="affixSlotInfo.IsCommon"
+      [class.magic--border]="affixSlotInfo.IsMagic"
+      [class.rare--border]="affixSlotInfo.IsRare"
+      [class.epic--border]="affixSlotInfo.IsEpic"
+      [class.legendary--border]="affixSlotInfo.IsLegendary"></div>
+  }
+</div>

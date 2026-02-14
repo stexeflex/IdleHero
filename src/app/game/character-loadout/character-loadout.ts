@@ -1,3 +1,4 @@
+import { Affix, Item, ItemSlot, ItemVariantDefinition } from '../../../core/models';
 import { Component, computed, inject, output, signal } from '@angular/core';
 import {
   GearSlotIconName,
@@ -6,8 +7,8 @@ import {
   Separator
 } from '../../../shared/components';
 import { GetItemRarity, GetItemVariant } from '../../../core/systems/items';
-import { Item, ItemSlot, ItemVariantDefinition } from '../../../core/models';
 
+import { AffixSlotIcon } from '../../../shared/components/affix-slot-icon/affix-slot-icon';
 import { GearLoadoutService } from '../../../core/services';
 import { ICONS_CONFIG } from '../../../core/constants';
 
@@ -30,7 +31,7 @@ interface ItemSlotInfo {
 
 @Component({
   selector: 'app-character-loadout',
-  imports: [IconComponent, ItemPreview, Separator],
+  imports: [IconComponent, ItemPreview, Separator, AffixSlotIcon],
   templateUrl: './character-loadout.html',
   styleUrl: './character-loadout.scss'
 })
@@ -64,6 +65,11 @@ export class CharacterLoadout {
       IsEpic: rarity === 'Epic',
       IsLegendary: rarity === 'Legendary'
     };
+  }
+
+  protected AffixInfo(slot: ItemSlot): Affix[] {
+    const item = this.gearLoadoutService.Get(slot);
+    return item ? item.Affixes : [];
   }
 
   protected SelectItemSlot(event: MouseEvent, slot: ItemSlot): void {

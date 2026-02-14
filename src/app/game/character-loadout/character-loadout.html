@@ -16,8 +16,9 @@
         [class.epic--border]="itemSlotInfo.IsEpic"
         [class.legendary--border]="itemSlotInfo.IsLegendary">
         <app-icon class="gear-slot__icon" [gear]="itemSlotInfo.Icon" size="2x"></app-icon>
-        <!-- <app-enchantment-slot-icon [enchantments]="GetEnchantments(itemSlot.type)" size="12">
-      </app-enchantment-slot-icon> -->
+
+        @let affixes = AffixInfo(itemSlot.slot);
+        <app-affix-slot-icon [affixes]="affixes" size="12"></app-affix-slot-icon>
       </button>
     }
   </div>
