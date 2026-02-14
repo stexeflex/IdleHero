@@ -56,7 +56,9 @@ export class Inventory {
   }
 
   protected DeselectGear() {
+    const current = this.SelectedItemContext()!;
     this.SelectedItemContext.set(null);
+    this.ItemSelected.emit({ itemId: '', source: current.source });
   }
 
   protected EquipSelected(event: Event, item: Item): void {

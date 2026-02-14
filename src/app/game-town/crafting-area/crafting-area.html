@@ -16,13 +16,14 @@
               [Item]="SelectedItem()!"
               (ItemChange)="OnEnchantingItemChange($event)"></app-enchanting>
           } @else {
-            <div class="panel" style="padding: 16px">
-              <span class="empty">Select an item in your inventory to enchant.</span>
+            <div class="empty">
+              <div class="headline">Nothing to show</div>
+              <div class="hint">Select an item in your inventory to enchant.</div>
             </div>
           }
         }
         @case ("socketing") {
-          Nothing to see here
+          Coming Soon...
         }
       }
     </div>

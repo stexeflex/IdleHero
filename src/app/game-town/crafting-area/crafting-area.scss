@@ -79,7 +79,22 @@
 }
 
 .empty {
-  @include disable-text-selection();
-  color: $clr-mute;
-  font-style: italic;
+  @include panel($bg: rgba(0, 0, 0, 0.2));
+  @include flexbox($dir: column, $justify: center, $align: center);
+  gap: calc($gap / 2);
+
+  text-align: center;
+
+  .headline {
+    font-family: $font-family-header;
+    color: $clr-text-primary;
+    font-size: 1.2rem;
+  }
+
+  .hint {
+    font-family: $font-family-header;
+    color: $clr-mute;
+    font-size: 1.1rem;
+    font-style: italic;
+  }
 }
