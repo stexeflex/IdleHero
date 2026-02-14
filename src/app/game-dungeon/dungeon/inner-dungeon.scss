@@ -13,7 +13,7 @@
   gap: $gap;
 }
 
-@media (max-width: $bp-lg) {
+@media (max-width: $bp-xl) {
   .inner-dungeon {
     grid-template-columns: 1fr;
   }

@@ -5,7 +5,7 @@
   @include panel();
   @include panel-shadow($border-width: 2px, $border-color: $clr-border);
 
-  @include overflow($display: flex, $max-height: 78vh);
+  @include overflow($display: flex, $max-height: $size-combat-log-height);
   @include scrollbar($size: 25px);
 
   display: flex;
@@ -13,6 +13,12 @@
 
   // Horizontal gap between separators and list
   gap: calc($gap / 2);
+}
+
+@media (max-width: $bp-xl) {
+  .log-list {
+    @include overflow($display: flex, $max-height: $size-combat-log-height-xl);
+  }
 }
 
 .log-entry,
