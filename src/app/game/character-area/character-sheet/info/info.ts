@@ -1,9 +1,8 @@
-import { CombatStatsService, LevelService } from '../../../../../core/services';
+import { CombatStatsService, LevelService, PlayerHeroService } from '../../../../../core/services';
 import { Component, LOCALE_ID, inject } from '@angular/core';
 import { IconComponent, NumberValue } from '../../../../../shared/components';
 
 import { DecimalPipe } from '@angular/common';
-import { HeroService } from '../../../../../shared/services';
 
 @Component({
   selector: 'app-info',
@@ -13,7 +12,7 @@ import { HeroService } from '../../../../../shared/services';
 })
 export class Info {
   private readonly locale = inject(LOCALE_ID);
-  private heroService = inject(HeroService);
+  private heroService = inject(PlayerHeroService);
   private statsService = inject(CombatStatsService);
   private levelService = inject(LevelService);
 

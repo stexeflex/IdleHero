@@ -18,6 +18,10 @@ export class GearLoadoutService {
     return this.EquippedItems().flatMap((i) => MapItemToStatSources(i));
   });
 
+  public SetStarterWeapon(weapon: Item): void {
+    this.Equip(weapon);
+  }
+
   /**
    * Gets the item equipped in the specified slot
    * @param slot the item slot

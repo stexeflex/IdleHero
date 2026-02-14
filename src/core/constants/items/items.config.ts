@@ -955,6 +955,13 @@ export const FEET_VARIANTS: ItemVariantDefinition[] = [
 ];
 //#endregion FEET
 
+export const STARTER_WEAPON_VARIANTS: ItemVariantDefinition[] = [
+  ...WEAPON_SWORDS_VARIANTS.filter((v) => v.Tier === 'I'),
+  ...WEAPON_BOWS_VARIANTS.filter((v) => v.Tier === 'I'),
+  ...WEAPON_DAGGER_VARIANTS.filter((v) => v.Tier === 'I'),
+  ...WEAPON_STAFF_WAND_VARIANTS.filter((v) => v.Tier === 'I')
+];
+
 export const ITEM_VARIANTS: ItemVariantDefinition[] = [
   ...WEAPON_VARIANTS,
   ...OFFHAND_VARIANTS,

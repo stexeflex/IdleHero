@@ -14,7 +14,6 @@ import {
 import {
   AffixEnchantService,
   AffixRerollService,
-  ClampAffixTier,
   GetItemRarity,
   GetItemRarityRule,
   ItemLevelService,

@@ -1,30 +1,51 @@
 <div class="container">
   <div class="header">
-    <h1>Idle Hero</h1>
+    <h1>{{ title().toUpperCase() }}</h1>
     <separator class="ih-separator"></separator>
   </div>
 
   <div class="content">
-    <h2 class="intro-text">
-      Welcome to Idle Hero!
-      <br /><br />
-      Prepare yourself for an epic adventure filled with heroes, battles, and treasures.
-      <br /><br />
-      Choose your character and enter your name to embark on your journey!
-    </h2>
-
+    <div class="intro">
+      <h2 class="intro-text">Welcome to {{ title() }}!</h2>
+      <h2 class="intro-text">
+        Prepare yourself for an epic adventure filled with exciting battles and rich treasures.
+      </h2>
+      <h2 class="intro-text">
+        Choose your character and starting weapon, and enter your name to embark on your journey!
+      </h2>
+    </div>
     <div class="character">
-      <!-- SELECTION -->
+      <!-- ICON SELECTION -->
       <div class="character-selection">
-        <button class="ih-button-icon ih-button-icon-border left" (click)="PreviousCharacter()">
-          <app-icon ui="arrow" size="sm"></app-icon>
-        </button>
         <div class="character-icon">
-          <app-icon [character]="CharacterIcon" size="4x"></app-icon>
+          <app-icon [character]="CharacterIcon()" size="4x"></app-icon>
         </div>
-        <button class="ih-button-icon ih-button-icon-border right" (click)="NextCharacter()">
-          <app-icon ui="arrow" size="sm"></app-icon>
-        </button>
+        <div class="character-selection-actions">
+          <button class="ih-button-icon ih-button-icon-border left" (click)="PreviousCharacter()">
+            <app-icon ui="arrow" size="sm"></app-icon>
+          </button>
+          <span> {{ CurrentCharacterIndex() + 1 }} / {{ TotalCharacters }} </span>
+          <button class="ih-button-icon ih-button-icon-border right" (click)="NextCharacter()">
+            <app-icon ui="arrow" size="sm"></app-icon>
+          </button>
+        </div>
+      </div>
+      <!-- WEAPON SELECTION -->
+      <div class="weapon-selection">
+        <div class="weapon-preview">
+          <app-item-variant-preview
+            [Variant]="WeaponVariant()"
+            [Selected]="false"></app-item-variant-preview>
+        </div>
+        <div class="weapon-selection-actions">
+          <button class="ih-button-icon ih-button-icon-border left" (click)="PreviousWeapon()">
+            <app-icon ui="arrow" size="sm"></app-icon>
+          </button>
+          <span> {{ CurrentWeaponIndex() + 1 }} / {{ TotalWeapons }} </span>
+          <button class="ih-button-icon ih-button-icon-border right" (click)="NextWeapon()">
+            <app-icon ui="arrow" size="sm"></app-icon>
+          </button>
+        </div>
       </div>
       <!-- NAME INPUT -->
       <div class="name-input">
@@ -59,7 +80,7 @@
 
     <div class="actions">
       <button class="ih-button" (click)="StartGame()" [disabled]="heroname.invalid">
-        Start Game
+        START ADVENTURE
       </button>
     </div>
   </div>

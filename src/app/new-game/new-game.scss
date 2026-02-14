@@ -1,7 +1,7 @@
 @use "sass:color";
 @use "index" as *;
 
-$margin: 40px;
+$margin: 20px;
 
 .container {
   @include flexbox($dir: column);
@@ -12,50 +12,98 @@ $margin: 40px;
   width: calc(100% - 2 * $margin);
 
   margin: $margin;
+
+  .header {
+    // margin-bottom: $margin;
+    text-align: center;
+  }
 }
 
 .content {
   @include flexbox($dir: column);
+  gap: calc($gap / 2);
+}
+
+.intro {
+  display: grid;
   gap: $gap;
-}
 
-.header {
-  margin-bottom: $margin;
+  .intro-text {
+    text-align: center;
 
-  width: 300px;
-  text-align: center;
-}
-
-.intro-text {
-  margin-bottom: $margin;
-
-  width: 900px;
-  text-align: center;
-
-  @media (max-width: $bp-md) {
-    width: 300px;
-    font-size: 1rem;
+    @media (max-width: $bp-md) {
+      font-size: 1rem;
+    }
   }
 }
 
 .character {
   @include flexbox($dir: row);
-  gap: calc($gap * 4);
+  gap: calc($gap);
 
   @media (max-width: $bp-md) {
     flex-direction: column;
-    width: 300px;
     font-size: 1rem;
+  }
+
+  .character-selection {
+    @include flexbox($dir: column);
+    gap: calc($gap);
+
+    .character-icon {
+      @include flexbox($dir: column);
+
+      height: 12em;
+      width: 10em;
+
+      border: 3px solid $clr-border;
+      border-radius: $border-radius;
+    }
+
+    .character-selection-actions {
+      @include flexbox($dir: row);
+      gap: $gap;
+    }
+  }
+
+  .weapon-selection {
+    @include flexbox($dir: column);
+    gap: calc($gap);
+
+    .weapon-preview {
+    }
+
+    .weapon-selection-actions {
+      @include flexbox($dir: row);
+      gap: $gap;
+    }
+  }
+
+  .name-input {
+    @include flexbox($dir: column);
+    width: 350px;
+    gap: calc($gap / 2);
+
+    input {
+      padding: calc($gap / 2);
+
+      line-height: 2rem;
+      font-size: 1.5rem;
+
+      background: $clr-ui-bg;
+      border: 2px solid $clr-border;
+      border-radius: $border-radius;
+    }
+
+    .input-hint {
+      color: $clr-accent;
+      font-size: 1rem;
+    }
   }
 }
 
-.character-selection {
-  @include flexbox($dir: row);
-  gap: $gap;
-}
-
 .actions {
-  margin-bottom: $gap;
+  // margin-bottom: $gap;
 }
 
 .left {
@@ -64,37 +112,4 @@ $margin: 40px;
 
 .right {
   rotate: -90deg;
-}
-
-.character-icon {
-  @include flexbox();
-
-  height: 12em;
-  width: 10em;
-
-  border: 3px solid $clr-border;
-  border-radius: $border-radius;
-}
-
-.name-input {
-  @include flexbox($dir: column);
-  height: 200px;
-  width: 350px;
-  gap: $gap;
-}
-
-input {
-  padding: calc($gap / 2);
-
-  line-height: 2rem;
-  font-size: 1.5rem;
-
-  background: $clr-ui-bg;
-  border: 2px solid $clr-border;
-  border-radius: $border-radius;
-}
-
-.input-hint {
-  color: $clr-accent;
-  font-size: 1rem;
 }

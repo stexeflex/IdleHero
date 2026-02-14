@@ -10,7 +10,12 @@ import {
   NoArmor,
   ResetLife
 } from '../../../models';
-import { CombatLogService, CombatStatsService, DungeonRoomService } from '../../../services';
+import {
+  CombatLogService,
+  CombatStatsService,
+  DungeonRoomService,
+  PlayerHeroService
+} from '../../../services';
 import {
   ComputeAttackInterval,
   ComputeFirstIntervalMs,
@@ -27,6 +32,7 @@ import { EventQueue } from './event.queue';
 @Injectable({ providedIn: 'root' })
 export class CombatState {
   // Services
+  private readonly PlayerHero = inject<PlayerHeroService>(PlayerHeroService);
   private readonly DungeonRoom = inject<DungeonRoomService>(DungeonRoomService);
   private readonly CombatStats = inject<CombatStatsService>(CombatStatsService);
   private readonly Log = inject<CombatLogService>(CombatLogService);
@@ -136,8 +142,8 @@ export class CombatState {
     const computedStats = this.CombatStats.Effective();
 
     const hero: Hero = {
-      Name: 'Hero',
-      HeroIcon: 'overlord',
+      Name: this.PlayerHero.Name(),
+      HeroIcon: this.PlayerHero.CharacterIcon(),
       Life: InitialLife(100),
       Armor: NoArmor(),
       Stats: computedStats,
