@@ -19,11 +19,11 @@ import {
   MissEvent,
   ResetLife
 } from '../../../models';
+import { CombatLogService, StatisticsService } from '../../../services';
 import { HealLife, TakeDamage } from '../life.utils';
 import { Injectable, inject } from '@angular/core';
 
 import { ClampUtils } from '../../../../shared/utils';
-import { CombatLogService } from '../../../services';
 import { CombatState } from './combat.state';
 import { ComputeNextIntervalMs } from '../attack-interval-computing';
 import { DELAYS } from '../../../../shared/constants';
@@ -35,8 +35,9 @@ import { STATS_CONFIG } from '../../../constants';
  */
 @Injectable({ providedIn: 'root' })
 export class EventHandler {
-  private readonly CombatState: CombatState = inject<CombatState>(CombatState);
-  private readonly Logger: CombatLogService = inject<CombatLogService>(CombatLogService);
+  private readonly CombatState = inject<CombatState>(CombatState);
+  private readonly Logger = inject<CombatLogService>(CombatLogService);
+  private readonly Statistics = inject<StatisticsService>(StatisticsService);
 
   private readonly EventDelayMs = 10;
 
@@ -168,6 +169,8 @@ export class EventHandler {
           bleedDamage = this.CreateBleedDamage(actor);
         }
       }
+
+      this.Statistics.UpdateDamage({ HighestMultiHitChain: totalHits });
     }
 
     // Event
@@ -204,6 +207,35 @@ export class EventHandler {
     const target = event.Target;
 
     if (!target) return;
+    if (!target.Life.Alive) return;
+
+    // Single Hit Statistics
+    if (event.Damage.length === 1) {
+      if (event.Damage[0].IsCritical) {
+        this.Statistics.UpdateDamage({ HighestCriticalHit: event.Damage[0].Amount });
+      } else {
+        this.Statistics.UpdateDamage({ HighestSingleHit: event.Damage[0].Amount });
+      }
+    }
+    // Multi-Hit Statistics
+    else {
+      if (event.Damage.some((d) => d.IsCritical)) {
+        const highestCriticalMultiHit = event.Damage.filter((d) => d.IsCritical).reduce(
+          (max, d) => (d.Amount > max ? d.Amount : max),
+          0
+        );
+        this.Statistics.UpdateDamage({ HighestCriticalMultiHit: highestCriticalMultiHit });
+      }
+
+      const highestMultiHit = event.Damage.filter((d) => !d.IsCritical).reduce(
+        (max, d) => (d.Amount > max ? d.Amount : max),
+        0
+      );
+      this.Statistics.UpdateDamage({ HighestMultiHit: highestMultiHit });
+
+      const totalDamage = event.Damage.reduce((sum, d) => sum + d.Amount, 0);
+      this.Statistics.UpdateDamage({ HighestTotalMultiHit: totalDamage });
+    }
 
     for (const dmg of event.Damage) {
       target.Life = TakeDamage(target.Life, dmg.Amount);
@@ -224,6 +256,7 @@ export class EventHandler {
     if (!target) return;
     if (!target.Life.Alive) return;
 
+    this.Statistics.UpdateDamage({ HighestBleedingTick: event.Damage.Amount });
     this.SetBleeding(target as Boss, event.Tick);
     target.Life = TakeDamage(target.Life, event.Damage.Amount);
 

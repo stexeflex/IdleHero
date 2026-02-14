@@ -7,9 +7,11 @@ import { DungeonKeyService } from './dungeon-key.service';
 import { DungeonRewardsService } from '../systems/combat/dungeons/dungeon-rewards.service';
 import { GetDungeonById } from '../constants';
 import { GoldService } from './gold.service';
+import { StatisticsService } from './statistics.service';
 
 @Injectable({ providedIn: 'root' })
 export class DungeonRoomService {
+  private readonly Statistics = inject<StatisticsService>(StatisticsService);
   private readonly Bosses = inject(BossSelectionService);
   private readonly Rewards = inject(DungeonRewardsService);
   private readonly Keys = inject(DungeonKeyService);
@@ -153,5 +155,27 @@ export class DungeonRoomService {
   public ExitDungeon(): void {
     this.CurrentDungeonIdState.set(null);
     this.CurrentStageState.set(1);
+  }
+
+  /**
+   * Handles prestige by updating statistics, resetting stage, and exiting dungeon.
+   */
+  public Prestige(): void {
+    const currentDungeon: DungeonRoom = this.CurrentDungeon()!;
+
+    const dungeonRoomStat = {
+      [currentDungeon.Id]: this.CurrentStage()
+    };
+
+    switch (currentDungeon.Type) {
+      case 'Normal':
+        this.Statistics.UpdateDungeon({ Dungeon: dungeonRoomStat });
+        break;
+      case 'Capstone':
+        this.Statistics.UpdateDungeon({ Capstone: dungeonRoomStat });
+        break;
+    }
+
+    this.SetStage(1);
   }
 }

@@ -44,9 +44,14 @@ export class CombatState {
   public readonly Hero$ = new BehaviorSubject<Hero | undefined>(undefined);
   public readonly Boss$ = new BehaviorSubject<Boss | undefined>(undefined);
 
+  public Leave() {
+    this.DungeonRoom.ExitDungeon();
+  }
+
   public Prestige() {
     this.InProgress.set(false);
     this.Queue.Clear();
+    this.DungeonRoom.Prestige();
     this.Hero.set(undefined);
     this.Boss.set(undefined);
     this.PublishState();

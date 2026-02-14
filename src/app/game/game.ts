@@ -58,6 +58,11 @@ export class Game {
 
   SwitchArea() {
     this.currentArea.set(this.currentArea() === 'Town' ? 'Dungeon' : 'Town');
+
+    if (this.currentArea() === 'Town') {
+      this.combatState.Leave();
+    }
+
     this.router.navigate([`/game/${this.currentArea().toLowerCase()}`]);
   }
 }

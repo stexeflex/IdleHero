@@ -50,7 +50,6 @@ export class InnerDungeon implements OnDestroy {
 
     // End fight and keep player in dungeon arena
     this.engine.Stop();
-    this.dungeonRoom.SetStage(1);
   }
 
   public ExitDungeon(): void {

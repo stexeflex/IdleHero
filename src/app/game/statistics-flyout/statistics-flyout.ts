@@ -1,7 +1,7 @@
 import { Component, LOCALE_ID, computed, inject, signal } from '@angular/core';
 
 import { DecimalPipe } from '@angular/common';
-import { StatisticsService } from '../../../shared/services';
+import { StatisticsService } from '../../../core/services';
 
 interface StatisticItem {
   label: string;
@@ -17,7 +17,6 @@ interface StatisticItem {
 export class StatisticsFlyout {
   private readonly locale = inject(LOCALE_ID);
   private readonly decimalPipe: DecimalPipe = new DecimalPipe(this.locale);
-
   private readonly statisticsService = inject(StatisticsService);
 
   protected readonly IsOpen = signal<boolean>(false);
@@ -27,49 +26,40 @@ export class StatisticsFlyout {
   }
 
   protected readonly Statistics = computed<StatisticItem[]>(() => {
+    const damageStats = this.statisticsService.DamageStatistics();
+
     return [
       {
         label: 'Highest Single Hit',
-        value: this.decimalPipe.transform(
-          this.statisticsService.DamageStatistics().HighestSingleHit,
-          '1.0-0'
-        )
+        value: this.decimalPipe.transform(damageStats.HighestSingleHit, '1.0-0')
       },
       {
         label: 'Highest Bleeding Tick',
-        value: this.decimalPipe.transform(0, '1.0-0')
+        value: this.decimalPipe.transform(damageStats.HighestBleedingTick, '1.0-0')
       },
       {
         label: 'Highest Critical Hit',
-        value: this.decimalPipe.transform(
-          this.statisticsService.DamageStatistics().HighestCriticalHit,
-          '1.0-0'
-        )
+        value: this.decimalPipe.transform(damageStats.HighestCriticalHit, '1.0-0')
       },
       {
         label: 'Highest Multi Hit',
-        value: this.decimalPipe.transform(
-          this.statisticsService.DamageStatistics().HighestMultiHit,
-          '1.0-0'
-        )
+        value: this.decimalPipe.transform(damageStats.HighestMultiHit, '1.0-0')
       },
       {
         label: 'Highest Multi Hit Chain',
-        value: this.decimalPipe.transform(0, '1.0-0')
+        value: this.decimalPipe.transform(damageStats.HighestMultiHitChain, '1.0-0')
       },
       {
         label: 'Highest Critical Multi Hit',
-        value: this.decimalPipe.transform(
-          this.statisticsService.DamageStatistics().HighestCriticalMultiHit,
-          '1.0-0'
-        )
+        value: this.decimalPipe.transform(damageStats.HighestCriticalMultiHit, '1.0-0')
+      },
+      {
+        label: 'Highest Total Multi Hit',
+        value: this.decimalPipe.transform(damageStats.HighestTotalMultiHit, '1.0-0')
       },
       {
         label: 'Highest Splash Hit',
-        value: this.decimalPipe.transform(
-          this.statisticsService.DamageStatistics().HighestSplashHit,
-          '1.0-0'
-        )
+        value: this.decimalPipe.transform(damageStats.HighestSplashHit, '1.0-0')
       }
     ];
   });

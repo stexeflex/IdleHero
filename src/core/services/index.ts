@@ -11,3 +11,4 @@ export * from './inventory.service';
 export * from './item-management.service';
 export * from './level.service';
 export * from './respec.service';
+export * from './statistics.service';

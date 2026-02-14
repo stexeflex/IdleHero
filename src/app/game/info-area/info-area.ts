@@ -1,10 +1,9 @@
 import { Component, inject } from '@angular/core';
-import { CurrencyService, StatisticsService } from '../../../shared/services';
 import { Gold, IconComponent, Separator } from '../../../shared/components';
+import { GoldService, StatisticsService } from '../../../core/services';
 
-import { DecimalPipe } from '@angular/common';
+import { CurrencyService } from '../../../shared/services';
 import { DungeonRoomKey } from '../../../shared/models';
-import { GoldService } from '../../../core/services';
 
 @Component({
   selector: 'app-info-area',
@@ -22,11 +21,11 @@ export class InfoArea {
   }
 
   protected get MaxStages(): string {
-    const stageStatistics = this.statisticsService.StageStatistics();
+    const stageStatistics = this.statisticsService.DungeonStatistics();
     const stages =
-      Object.entries(stageStatistics.HighestStageReached)
+      Object.entries(stageStatistics.Capstone)
         .map(([roomId, stage]) => `${roomId} - ${stage}`)
-        .join(' | ') || '1 - 0';
+        .join(' | ') || 'C1 - 0';
     return stages;
   }
 
