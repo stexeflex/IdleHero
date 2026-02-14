@@ -42,11 +42,19 @@
 
     .grid {
       @include disable-text-selection();
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: calc($gap / 2);
 
-      align-items: center;
+      .row {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: calc($gap / 2);
+        padding: calc($gap / 2);
+
+        &:hover {
+          cursor: pointer;
+          background: $grad-ui-bg-lighten-revert;
+          border-radius: $border-radius;
+        }
+      }
 
       .grid__label {
         text-align: left;

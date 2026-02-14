@@ -4,8 +4,10 @@
     <div class="flyout-content">
       <div class="grid">
         @for (statistic of Statistics(); track statistic.label) {
-          <div class="grid__label">{{ statistic.label }}</div>
-          <div class="grid__value">{{ statistic.value }}</div>
+          <div class="row">
+            <div class="grid__label">{{ statistic.label }}</div>
+            <div class="grid__value">{{ statistic.value }}</div>
+          </div>
         }
       </div>
     </div>
