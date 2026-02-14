@@ -4,22 +4,23 @@ import {
   ComputeProgressFromTotalXP,
   XpToNextLevel
 } from '../systems/progression';
-import { InitialLevelState, LevelProgress, LevelState, PlayerLevelState } from '../models';
+import { InitialPlayerLevelState, LevelProgress, LevelState, PlayerLevelState } from '../models';
 import { Injectable, computed, signal } from '@angular/core';
 
 import { ClampUtils } from '../../shared/utils';
 
 @Injectable({ providedIn: 'root' })
 export class LevelService {
-  private readonly State = signal<PlayerLevelState>(InitialLevelState());
+  private readonly State = signal<PlayerLevelState>(InitialPlayerLevelState());
 
   public readonly Level = computed(() => this.State().Level);
   public readonly TotalExperience = computed(() => this.State().TotalExperience);
   public readonly ExperienceInLevel = computed(() => this.State().ExperienceInLevel);
-  public readonly ExperienceToNext = computed(() => this.State().ExperienceToNext);
+  public readonly ExperienceToNext = computed(() => XpToNextLevel(this.State().Level));
   public readonly ProgressRatio = computed(() => {
     const s = this.State();
-    return s.ExperienceToNext > 0 ? s.ExperienceInLevel / s.ExperienceToNext : 0;
+    const toNext = this.ExperienceToNext();
+    return toNext > 0 ? s.ExperienceInLevel / toNext : 0;
   });
 
   public readonly UnspentAttributePoints = computed(() => this.State().UnspentAttributePoints);
@@ -33,8 +34,7 @@ export class LevelService {
 
     this.State.update((s) => {
       let totalXP = s.TotalExperience + Math.floor(amount);
-      let { Level, ExperienceInLevel, ExperienceToNext }: LevelProgress =
-        ComputeProgressFromTotalXP(totalXP);
+      let { Level, ExperienceInLevel }: LevelProgress = ComputeProgressFromTotalXP(totalXP);
 
       // Award points for each level gained compared to previous
       const gainedLevels = Math.max(0, Level - s.Level);
@@ -45,7 +45,6 @@ export class LevelService {
         Level: Level,
         TotalExperience: totalXP,
         ExperienceInLevel: ExperienceInLevel,
-        ExperienceToNext: ExperienceToNext,
         UnspentAttributePoints: s.UnspentAttributePoints + awardedPoints
       };
     });
@@ -108,18 +107,11 @@ export class LevelService {
     }));
   }
 
-  /**
-   * Resets level state to initial values
-   */
-  public Reset(): void {
-    this.State.set(InitialLevelState());
+  public GetState(): PlayerLevelState {
+    return { ...this.State() };
   }
 
-  /**
-   * Gets a snapshot of the current level state
-   * @returns the current LevelState
-   */
-  public GetState(): LevelState {
-    return { ...this.State() };
+  public SetState(state: PlayerLevelState): void {
+    this.State.set({ ...state });
   }
 }

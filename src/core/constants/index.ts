@@ -1,5 +1,6 @@
 export * from './attributes.config';
 export * from './currency.config';
+export * from './delays.constants';
 export * from './dungeon-boss.config';
 export * from './dungeons.config';
 export * from './inventory.config';

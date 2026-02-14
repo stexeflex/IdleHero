@@ -40,6 +40,14 @@ export class AttributesService {
   }
 
   /**
+   * Sets the allocated attributes
+   * @param attributes the allocated attributes to set
+   */
+  public SetAllocated(attributes: Attributes): void {
+    this.Allocated.set({ ...attributes });
+  }
+
+  /**
    * Gets a copy of the base attributes
    * @returns the base attributes
    */

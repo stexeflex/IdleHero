@@ -1,49 +1,50 @@
 import {
   AttributesService,
-  CurrencyService,
-  HeroService,
+  DungeonKeyService,
+  GearLoadoutService,
+  GoldService,
   InventoryService,
   LevelService,
-  SkillsService
-} from '../shared/services';
+  PlayerHeroService,
+  StatisticsService
+} from '../core/services';
+import { InitialSchema, Schema } from './models/schema';
 import { Injectable, inject } from '@angular/core';
-
-import { Schema } from './models/schema';
-import { StatisticsService } from '../shared/services/character/statistics.service';
 
 @Injectable({ providedIn: 'root' })
 export class StateCollectionService {
-  private statisticsService = inject(StatisticsService);
-  private heroService = inject(HeroService);
+  private heroService = inject(PlayerHeroService);
   private levelService = inject(LevelService);
   private attributesService = inject(AttributesService);
-  private skillsService = inject(SkillsService);
+  private goldService = inject(GoldService);
+  private dungeonKeyService = inject(DungeonKeyService);
+  private loadoutService = inject(GearLoadoutService);
   private inventoryService = inject(InventoryService);
-  private currencyService = inject(CurrencyService);
+  private statisticsService = inject(StatisticsService);
 
   public CollectStates(): Schema {
-    const schema = new Schema();
-
-    // Statistics
-    schema.Statistics = this.statisticsService.CollectSchema(schema.Statistics);
+    const schema: Schema = InitialSchema();
 
     // Hero
-    schema.Hero = this.heroService.CollectSchema(schema.Hero);
+    schema.Player = this.heroService.Get();
 
     // Level
-    schema.Level = this.levelService.CollectSchema(schema.Level);
+    schema.Level = this.levelService.GetState();
 
-    // Stats
-    schema.Attributes = this.attributesService.CollectSchema(schema.Attributes);
-
-    // Skills
-    schema.Skills = this.skillsService.CollectSchema(schema.Skills);
-
-    // Inventory
-    schema.Inventory = this.inventoryService.CollectSchema(schema.Inventory);
+    // Attributes
+    schema.Attributes = this.attributesService.GetAllocated();
 
     // Currency
-    schema.Currency = this.currencyService.CollectSchema(schema.Currency);
+    schema.Gold = this.goldService.GetState();
+    schema.DungeonKeys = this.dungeonKeyService.GetState();
+
+    // Loadout & Inventory
+    schema.Loadout = this.loadoutService.GetState();
+    schema.Inventory = this.inventoryService.GetState();
+
+    // Statistics
+    schema.Statistics.Dungeon = this.statisticsService.DungeonStatistics();
+    schema.Statistics.Damage = this.statisticsService.DamageStatistics();
 
     return schema;
   }

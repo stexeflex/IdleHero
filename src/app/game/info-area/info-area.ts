@@ -1,9 +1,8 @@
 import { Component, inject } from '@angular/core';
+import { DungeonKeyService, GoldService, StatisticsService } from '../../../core/services';
 import { Gold, IconComponent, Separator } from '../../../shared/components';
-import { GoldService, StatisticsService } from '../../../core/services';
 
-import { CurrencyService } from '../../../shared/services';
-import { DungeonRoomKey } from '../../../shared/models';
+import { DungeonRoomKey } from '../../../core/models';
 
 @Component({
   selector: 'app-info-area',
@@ -13,7 +12,7 @@ import { DungeonRoomKey } from '../../../shared/models';
 })
 export class InfoArea {
   private readonly goldService = inject<GoldService>(GoldService);
-  private readonly currencyService = inject<CurrencyService>(CurrencyService);
+  private readonly dungeonKeyService = inject<DungeonKeyService>(DungeonKeyService);
   private readonly statisticsService = inject<StatisticsService>(StatisticsService);
 
   protected get GoldAmount(): number {
@@ -30,14 +29,10 @@ export class InfoArea {
   }
 
   protected get HasAnyKey(): boolean {
-    return (
-      this.currencyService.SilverKey() ||
-      this.currencyService.MagicKey() ||
-      this.currencyService.GoldenKey()
-    );
+    return this.dungeonKeyService.Keys().length > 0;
   }
 
   protected HasKey(key: DungeonRoomKey): boolean {
-    return this.currencyService.HasKey(key);
+    return this.dungeonKeyService.HasKey(key);
   }
 }

@@ -1,7 +1,6 @@
-export * from './battle-log/battle-log';
+export * from './affix-slot-icon/affix-slot-icon';
 export * from './buffs-bar/buffs-bar';
 export * from './charge-bar/charge-bar';
-export * from './enchantment-slot-icon/enchantment-slot-icon';
 export * from './experience-bar/experience-bar';
 export * from './gold/gold';
 export * from './health-bar/health-bar';
@@ -21,5 +20,4 @@ export * from './item-preview/item-variant-preview';
 export * from './number-value/number-value';
 export * from './panel-header/panel-header';
 export * from './separator/separator';
-export * from './stage-label/stage-label';
 export * from './tab-strip/tab-strip';

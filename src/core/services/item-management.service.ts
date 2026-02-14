@@ -2,7 +2,6 @@ import { Injectable, inject } from '@angular/core';
 
 import { GearLoadoutService } from './gear-loadout.service';
 import { InventoryService } from './inventory.service';
-import { Item } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class ItemManagementService {

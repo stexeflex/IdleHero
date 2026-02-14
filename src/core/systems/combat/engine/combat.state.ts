@@ -23,7 +23,7 @@ import {
 } from '../attack-interval-computing';
 import { Injectable, inject, signal } from '@angular/core';
 
-import { DELAYS } from '../../../../shared/constants';
+import { DELAYS } from '../../../constants';
 import { EventQueue } from './event.queue';
 
 /**

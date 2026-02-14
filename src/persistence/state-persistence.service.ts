@@ -1,14 +1,14 @@
+import { InitialSchema, MergeSchemas, Schema } from './models/schema';
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 
 import { AppStateService } from '../shared/services';
 import { LocalStorageData } from './models/local-storage-data';
-import { Schema } from './models/schema';
 import { environment } from '../environment/environment';
 import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({ providedIn: 'root' })
 export class StatePersistenceService {
-  private readonly STORAGE_KEY = 'idle-hero:save:v1';
+  private readonly STORAGE_KEY = 'idle-hero:save:v2';
 
   private readonly platformId = inject(PLATFORM_ID);
   private readonly AppState = inject(AppStateService);
@@ -17,14 +17,14 @@ export class StatePersistenceService {
     return environment.version;
   }
 
-  public async Save<T>(data: T): Promise<void> {
+  public async Save(data: Schema): Promise<void> {
     if (!this.isBrowser()) {
       console.log('Not in browser environment, cannot save to local storage');
       return;
     }
 
     try {
-      const payloadData: LocalStorageData<T> = {
+      const payloadData: LocalStorageData<Schema> = {
         Version: this.Version,
         TimeStamp: new Date(Date.now()),
         Data: data
@@ -37,7 +37,7 @@ export class StatePersistenceService {
     }
   }
 
-  public async Load<T = unknown>(): Promise<T | null> {
+  public async Load(): Promise<Schema | null> {
     if (!this.isBrowser()) {
       console.log('Not in browser environment, cannot load from local storage');
       return null;
@@ -45,27 +45,21 @@ export class StatePersistenceService {
 
     try {
       const raw = localStorage.getItem(this.STORAGE_KEY);
+      if (!raw) return null;
 
-      if (!raw) {
-        return null;
-      }
-
-      const localStorageData: LocalStorageData<T> | null = JSON.parse(
+      const localStorageData: LocalStorageData<Schema> | null = JSON.parse(
         raw
-      ) as LocalStorageData<T> | null;
-
-      if (localStorageData === null) {
-        return null;
-      }
+      ) as LocalStorageData<Schema> | null;
+      if (localStorageData === null) return null;
 
       const version: string = localStorageData.Version;
-      let data: T = localStorageData.Data;
+      let data: Schema = localStorageData.Data;
 
       if (version !== this.Version) {
-        data = this.migrate(data, version, this.Version) as T;
+        data = this.migrate(data, version, this.Version) as Schema;
       }
 
-      return (data ?? null) as T | null;
+      return (data ?? null) as Schema | null;
     } catch (error) {
       console.error('Failed to load from local storage', error);
       return null;
@@ -77,12 +71,12 @@ export class StatePersistenceService {
    * Ensures missing or invalid fields are replaced by defaults.
    */
   public async LoadSchema(): Promise<Schema> {
-    const raw = await this.Load<unknown>();
+    const raw: Schema | null = await this.Load();
 
     this.AppState.LoadedExistingSaveGame.set(raw !== null);
 
-    const defaults = new Schema();
-    const merged = Schema.FromRaw(defaults, raw);
+    const defaults: Schema = InitialSchema();
+    const merged: Schema = MergeSchemas(defaults, raw ?? {});
     return merged;
   }
 

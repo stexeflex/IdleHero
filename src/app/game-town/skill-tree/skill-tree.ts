@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, input, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { Skill, SkillTier } from '../../../shared/models';
 
 import { SkillArea } from './skill-area/skill-area';
 import { SkillTierArea } from './skill-tier-area/skill-tier-area';
 import { SkillsService } from '../../../shared/services';
-import { SkillsSpecifications } from '../../../shared/specifications';
+import { SkillsSpecifications } from '../../../shared/specifications/skills.specifications';
 
 @Component({
   selector: 'app-skill-tree',

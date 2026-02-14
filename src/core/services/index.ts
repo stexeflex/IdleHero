@@ -4,7 +4,6 @@ export * from './combat-stats.service';
 export * from './crafting.service';
 export * from './dungeon-key.service';
 export * from './dungeon-room.service';
-export * from './game.service';
 export * from './gear-loadout.service';
 export * from './gold-cost.provider';
 export * from './gold.service';
