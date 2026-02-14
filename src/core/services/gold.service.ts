@@ -81,11 +81,11 @@ export class GoldService {
     this.State.set(InitialGoldState(initialBalance));
   }
 
-  /**
-   * Snapshot of the current gold state.
-   * @returns a copy of the current gold state
-   */
   public GetState(): GoldState {
     return { ...this.State() };
+  }
+
+  public SetState(state: GoldState): void {
+    this.State.set({ ...state });
   }
 }

@@ -3,7 +3,7 @@ import { Component, OnDestroy, computed, inject, signal } from '@angular/core';
 import { IconComponent, PanelHeader } from '../../../shared/components';
 
 import { CombatLog } from './combat-log/combat-log';
-import { DELAYS } from '../../../shared/constants';
+import { DELAYS } from '../../../core/constants';
 import { DungeonArena } from './dungeon-arena/dungeon-arena';
 import { DungeonRoomService } from '../../../core/services';
 

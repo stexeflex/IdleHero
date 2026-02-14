@@ -12,13 +12,11 @@ export function ComputeProgressFromTotalXP(totalXP: number): LevelProgress {
   while (remaining >= xpToNext && level < cap) {
     remaining -= xpToNext;
     level += 1;
-    xpToNext = XpToNextLevel(level);
   }
 
   return {
     Level: level,
-    ExperienceInLevel: remaining,
-    ExperienceToNext: xpToNext
+    ExperienceInLevel: remaining
   };
 }
 

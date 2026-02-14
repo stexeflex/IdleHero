@@ -15,6 +15,7 @@ export * from './combat/stats/life';
 export * from './combat/stats/stat-source.type';
 export * from './combat/stats/stats';
 export * from './economy/ascension-crystals-state';
+export * from './economy/dungeon-keys-state';
 export * from './economy/gold-state';
 export * from './economy/rewards';
 export * from './items/affixes/affix-group.enum';

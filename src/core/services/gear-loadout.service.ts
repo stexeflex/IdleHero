@@ -22,6 +22,14 @@ export class GearLoadoutService {
     this.Equip(weapon);
   }
 
+  public GetState(): GearLoadout {
+    return { ...this.equipped() };
+  }
+
+  public SetState(loadout: GearLoadout): void {
+    this.equipped.set({ ...loadout });
+  }
+
   /**
    * Gets the item equipped in the specified slot
    * @param slot the item slot

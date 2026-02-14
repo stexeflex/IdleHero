@@ -1,7 +1,7 @@
 import { Component, ElementRef, HostListener, inject } from '@angular/core';
-import { GameStateService, MenuService } from '../../../shared/services';
 
 import { GameSaverService } from '../../../persistence';
+import { MenuService } from '../../../shared/services';
 import { Router } from '@angular/router';
 import { Separator } from '../../../shared/components';
 import { environment } from '../../../environment/environment';
@@ -15,7 +15,6 @@ import { environment } from '../../../environment/environment';
 export class Menu {
   private router = inject(Router);
   private menuService = inject(MenuService);
-  private gameStateService = inject(GameStateService);
   private gameSaverService = inject(GameSaverService);
 
   private elementRef = inject(ElementRef);
@@ -44,7 +43,6 @@ export class Menu {
   }
 
   protected async NewGame() {
-    this.gameStateService.Reset();
     await this.router.navigate(['new']);
   }
 

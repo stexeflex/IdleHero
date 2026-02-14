@@ -3,7 +3,7 @@ import { ChargeBar, HealthBar, IconComponent } from '../../../../shared/componen
 import { Component, OnDestroy, computed, inject, signal } from '@angular/core';
 
 import { CombatState } from '../../../../core/systems/combat';
-import { DELAYS } from '../../../../shared/constants';
+import { DELAYS } from '../../../../core/constants';
 import { Subscription } from 'rxjs';
 
 interface BleedingTick {

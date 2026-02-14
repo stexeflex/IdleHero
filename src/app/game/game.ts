@@ -1,14 +1,13 @@
 import { Component, inject, signal } from '@angular/core';
+import { GameService, MenuService } from '../../shared/services';
 import { IconComponent, TabDefinition, TabStrip } from '../../shared/components';
 import { Router, RouterOutlet } from '@angular/router';
 
 import { CharacterArea } from './character-area/character-area';
 import { CharacterLoadout } from './character-loadout/character-loadout';
 import { CombatState } from '../../core/systems/combat';
-import { GameService } from '../../core/services';
 import { InfoArea } from './info-area/info-area';
 import { Menu } from './menu/menu';
-import { MenuService } from '../../shared/services';
 import { StatisticsFlyout } from './statistics-flyout/statistics-flyout';
 
 @Component({

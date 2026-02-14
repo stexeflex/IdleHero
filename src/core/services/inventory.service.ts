@@ -20,6 +20,14 @@ export class InventoryService {
   );
   public readonly IsFull = computed<boolean>(() => this.SlotsFree() <= 0);
 
+  public GetState(): InventoryState {
+    return { ...this.State() };
+  }
+
+  public SetState(state: InventoryState): void {
+    this.State.set({ ...state });
+  }
+
   /**
    * Sets the inventory capacity.
    * @param capacity The new capacity value; negative values clamp to 0.

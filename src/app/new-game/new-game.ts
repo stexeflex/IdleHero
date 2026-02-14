@@ -8,7 +8,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { GameLoaderService } from '../../persistence';
-import { GameService } from '../../core/services';
+import { GameService } from '../../shared/services';
 import { ItemVariantDefinition } from '../../core/models';
 import { Router } from '@angular/router';
 import { STARTER_WEAPON_VARIANTS } from '../../core/constants';

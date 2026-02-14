@@ -1,8 +1,6 @@
 import { Injectable, Signal, computed, signal } from '@angular/core';
 import { SKILL_TIERS, Skill, SkillId, SkillTier, SkillTreeState } from '../../models';
 
-import { SkillSchema } from '../../../persistence';
-
 @Injectable({ providedIn: 'root' })
 export class SkillsService {
   private _skillTree = signal<SkillTier[]>(SKILL_TIERS);
@@ -21,17 +19,6 @@ export class SkillsService {
   });
 
   public SkillTreeState = signal<SkillTreeState>({ TierState: {}, SkillState: {} });
-
-  constructor() {}
-
-  public Init(skillSchema: SkillSchema): void {
-    this.SkillTreeState.set(skillSchema.SkillTreeState);
-  }
-
-  public CollectSchema(schema: SkillSchema): SkillSchema {
-    schema.SkillTreeState = this.SkillTreeState();
-    return schema;
-  }
 
   public GetTier(tierId: number): SkillTier | undefined {
     return this.SkillTree().find((tier) => tier.Id === tierId);
