@@ -1,9 +1,7 @@
 import {
-  Affix,
   AffixDefinition,
-  AffixTier,
+  CraftingCostProvider,
   Item,
-  ItemRarity,
   ItemVariantDefinition,
   OperationResult,
   RarityRules,
@@ -12,35 +10,21 @@ import {
   RuneQuality
 } from '../models';
 import {
-  AffixEnchantService,
-  AffixRerollService,
+  CreateItem,
+  GetAffixDefinition,
   GetItemRarity,
   GetItemRarityRule,
+  ItemAffixService,
   ItemLevelService,
-  MinLevelForTier,
   MinRarityForTier,
   RandomInRange
 } from '../systems/items';
 import { Injectable, inject } from '@angular/core';
 
-export interface CraftingCostProvider {
-  GetCraftItemCost(variant: ItemVariantDefinition, rarity: ItemRarity): number;
-  GetLevelUpCost(item: Item): number;
-  GetRerollAffixCost(item: Item, affixIndex: number): number;
-  GetEnchantAffixCost(item: Item, affixIndex: number): number;
-  GetAddAffixCost(item: Item, definition: AffixDefinition): number;
-  GetRemoveAffixCost(item: Item, affixIndex: number): number;
-  GetSocketRuneCost(item: Item, definition: RuneDefinition, quality: RuneQuality): number;
-  GetUnsocketRuneCost(item: Item): number;
-  CanAfford(cost: number): boolean;
-  Charge(cost: number): boolean;
-}
-
 @Injectable({ providedIn: 'root' })
 export class CraftingService {
   private readonly Level = inject(ItemLevelService);
-  private readonly Reroll = inject(AffixRerollService);
-  private readonly Enchant = inject(AffixEnchantService);
+  private readonly Affix = inject(ItemAffixService);
 
   /**
    * Crafts a brand new item from a variant and rarity at level 1.
@@ -56,18 +40,7 @@ export class CraftingService {
     const cost = provider?.GetCraftItemCost(variant, rarity) ?? 0;
     if (provider && !provider.CanAfford(cost)) return { Success: false, Item: null as any };
 
-    const item: Item = {
-      Id: `item_${variant.Id}_${performance.now()}`,
-      DefinitionId: variant.Id,
-      Name: variant.Name,
-      Icon: variant.Icon,
-      Slot: variant.Slot,
-      Type: variant.Type,
-      Tier: variant.Tier,
-      Level: MinLevelForTier(variant.Tier),
-      Affixes: [],
-      Rune: null
-    };
+    const item: Item = CreateItem(variant);
 
     if (provider) provider.Charge(cost);
     return { Success: true, Item: item, Cost: cost };
@@ -94,28 +67,20 @@ export class CraftingService {
    * Rerolls the value of an affix within its current tier.
    * @param item The item containing the affix.
    * @param affixIndex The affix index to reroll.
-   * @param definition The affix definition.
    * @param provider Optional cost provider.
    * @returns Operation result with success flag and updated item.
    */
   public RerollAffix(
     item: Item,
     affixIndex: number,
-    definition: AffixDefinition,
     provider?: CraftingCostProvider
   ): OperationResult {
-    const rarity = GetItemRarity(item.Level);
-    const rules: RarityRules = GetItemRarityRule(rarity);
-    if (!rules.AllowAffixReroll) return { Success: false, Item: item };
-
-    if (affixIndex < 0 || affixIndex >= item.Affixes.length) {
-      return { Success: false, Item: item };
-    }
+    if (!this.Affix.CanReroll(item, affixIndex)) return { Success: false, Item: item };
 
     const cost = provider?.GetRerollAffixCost(item, affixIndex) ?? 0;
     if (provider && !provider.CanAfford(cost)) return { Success: false, Item: item };
 
-    const next = this.Reroll.RerollAffix(item, affixIndex);
+    const next = this.Affix.RerollAffix(item, affixIndex);
     if (provider) provider.Charge(cost);
 
     return { Success: true, Item: next, Cost: cost };
@@ -125,25 +90,22 @@ export class CraftingService {
    * Enchants (upgrades tier) of a specific affix if allowed by rarity and item level.
    * @param item The item instance.
    * @param affixIndex Index of the affix to enchant.
-   * @param definition The affix definition.
    * @param provider Optional cost provider.
    * @returns Operation result with success flag and updated item.
    */
   public EnchantAffix(
     item: Item,
     affixIndex: number,
-    definition: AffixDefinition,
     provider?: CraftingCostProvider
   ): OperationResult {
-    if (!this.Enchant.CanEnchant(item, affixIndex)) return { Success: false, Item: item };
+    if (!this.Affix.CanEnchant(item, affixIndex)) return { Success: false, Item: item };
 
     const cost = provider?.GetEnchantAffixCost(item, affixIndex) ?? 0;
     if (provider && !provider.CanAfford(cost)) return { Success: false, Item: item };
-    const next = this.Enchant.EnchantAffix(item, affixIndex, definition);
 
-    if (provider) {
-      provider.Charge(cost);
-    }
+    const definition: AffixDefinition = GetAffixDefinition(item.Affixes[affixIndex].DefinitionId);
+    const next = this.Affix.EnchantAffix(item, affixIndex, definition);
+    if (provider) provider.Charge(cost);
 
     return { Success: true, Item: next, Cost: cost };
   }
@@ -151,68 +113,16 @@ export class CraftingService {
   /**
    * Adds a new affix to the item if allowed by rarity and slot, respecting level tier gating.
    * @param item The item instance.
-   * @param definition The affix template to apply.
    * @param provider Optional cost provider.
    * @returns Operation result with success flag and updated item.
    */
-  public AddAffix(
-    item: Item,
-    definition: AffixDefinition,
-    provider?: CraftingCostProvider
-  ): OperationResult {
-    const rarity = GetItemRarity(item.Level);
-    const rules: RarityRules = GetItemRarityRule(rarity);
-    if (item.Affixes.length >= rules.MaxAffixes) return { Success: false, Item: item };
-    if (!definition.AllowedSlots.includes(item.Slot)) return { Success: false, Item: item };
+  public AddAffix(item: Item, provider?: CraftingCostProvider): OperationResult {
+    if (!this.Affix.CanAddAffix(item)) return { Success: false, Item: item };
 
-    const cost = provider?.GetAddAffixCost(item, definition) ?? 0;
+    const cost = provider?.GetAddAffixCost(item) ?? 0;
     if (provider && !provider.CanAfford(cost)) return { Success: false, Item: item };
 
-    const baseTier: AffixTier = 'Common';
-    const tierSpec = definition.Tiers.find((t) => t.Tier === baseTier);
-
-    if (!tierSpec) return { Success: false, Item: item };
-
-    const rolled = RandomInRange(tierSpec.Value.Min, tierSpec.Value.Max);
-
-    const newAffix: Affix = {
-      DefinitionId: definition.Id,
-      Tier: baseTier,
-      RolledValue: rolled,
-      Improved: false
-    };
-
-    const nextAffixes = [...item.Affixes, newAffix];
-    const next: Item = { ...item, Affixes: nextAffixes };
-
-    if (provider) provider.Charge(cost);
-
-    return { Success: true, Item: next, Cost: cost };
-  }
-
-  /**
-   * Removes an affix at index.
-   * @param item The item instance.
-   * @param affixIndex The index to remove.
-   * @param provider Optional cost provider.
-   * @returns Operation result with success flag and updated item.
-   */
-  public RemoveAffix(
-    item: Item,
-    affixIndex: number,
-    provider?: CraftingCostProvider
-  ): OperationResult {
-    if (affixIndex < 0 || affixIndex >= item.Affixes.length) {
-      return { Success: false, Item: item };
-    }
-
-    const cost = provider?.GetRemoveAffixCost(item, affixIndex) ?? 0;
-    if (provider && !provider.CanAfford(cost)) return { Success: false, Item: item };
-
-    const nextAffixes = item.Affixes.slice();
-    nextAffixes.splice(affixIndex, 1);
-    const next: Item = { ...item, Affixes: nextAffixes };
-
+    const next = this.Affix.AddAffix(item);
     if (provider) provider.Charge(cost);
 
     return { Success: true, Item: next, Cost: cost };

@@ -1,6 +1,4 @@
 import {
-  Affix,
-  AffixDefinition,
   AffixInfo,
   AffixTier,
   Item,
@@ -19,18 +17,14 @@ import {
 } from '@angular/core';
 import { CraftingService, GoldCostProvider } from '../../../../core/services';
 import {
-  ExceedsMaxTierForItemLevel,
-  ExceedsMaximumEnchantableAffixes,
-  GetAffixDefinition,
   GetAffixInfo,
-  GetAffixPool,
   GetItemRarity,
   GetItemRarityRule,
   GetItemVariant,
   GetMaxAffixTier,
-  IsMaxLevel,
-  NextTier,
-  RandomInRange
+  IsMaxTier,
+  ItemAffixService,
+  ItemLevelService
 } from '../../../../core/systems/items';
 import { Gold, IconComponent, ItemPreview } from '../../../../shared/components';
 
@@ -47,6 +41,8 @@ export class Enchanting {
   private readonly locale = inject(LOCALE_ID);
   private readonly craftingService = inject(CraftingService);
   private readonly goldCostProvider = inject(GoldCostProvider);
+  private readonly itemLevel = inject(ItemLevelService);
+  private readonly itemAffix = inject(ItemAffixService);
   private readonly decimalPipe = new DecimalPipe(this.locale);
 
   public readonly Item = input.required<Item>();
@@ -86,7 +82,7 @@ export class Enchanting {
   }
 
   protected AddAffixCost(): number {
-    return this.goldCostProvider.GetAddAffixCost(this.Item(), {} as AffixDefinition);
+    return this.goldCostProvider.GetAddAffixCost(this.Item());
   }
 
   protected EnchantCost(slotIndex: number): number {
@@ -108,7 +104,12 @@ export class Enchanting {
 
   protected CanUpgradeItem(): boolean {
     const item = this.Item();
-    return !IsMaxLevel(item);
+    return this.itemLevel.CanLevelUp(item);
+  }
+
+  protected EnoughGoldForUpgrade(): boolean {
+    const cost = this.UpgradeCost();
+    return this.goldCostProvider.CanAfford(cost);
   }
 
   protected UpgradeItem(): void {
@@ -120,41 +121,21 @@ export class Enchanting {
     }
   }
 
-  protected CanEnchantSlot(slotIndex: number): boolean {
+  protected CanAddAffixSlot(): boolean {
     const item = this.Item();
-    return slotIndex === item.Affixes.length && slotIndex < this.MaxAffixSlots();
+    return this.itemAffix.CanAddAffix(item) && this.EnoughGoldForAddingAffix();
   }
 
-  protected IsMaxedSlot(slotIndex: number): boolean {
-    if (!this.HasAffix(slotIndex)) return false;
-    const item = this.Item();
-    const affix = item.Affixes[slotIndex];
-    const maxTier = GetMaxAffixTier(item.Level);
-    return affix.Tier === maxTier;
+  protected EnoughGoldForAddingAffix(): boolean {
+    const cost = this.AddAffixCost();
+    return this.goldCostProvider.CanAfford(cost);
   }
 
-  protected CanUpgradeSlot(slotIndex: number): boolean {
-    if (!this.HasAffix(slotIndex)) return false;
-    const item = this.Item();
-    const affix = item.Affixes[slotIndex];
-    const next = NextTier(affix.Tier);
-    if (!next) return false;
-    if (ExceedsMaxTierForItemLevel(next, item.Level)) return false;
-
-    if (!affix.Improved) {
-      if (ExceedsMaximumEnchantableAffixes(item)) return false;
-    }
-
-    return true;
-  }
-
-  public EnchantSlot(slotIndex: number): void {
-    if (!this.CanEnchantSlot(slotIndex)) return;
+  public AddAffixSlot(): void {
+    if (!this.CanAddAffixSlot()) return;
 
     const item = this.Item();
-    const pool = GetAffixPool(item.Slot);
-    const definition = this.PickRandomDefinition(pool);
-    const result = this.craftingService.AddAffix(item, definition!, this.goldCostProvider);
+    const result = this.craftingService.AddAffix(item, this.goldCostProvider);
 
     if (!result.Success) return;
 
@@ -162,45 +143,50 @@ export class Enchanting {
     this.ItemChange.emit({ ...next });
   }
 
-  private PickRandomDefinition(pool: AffixDefinition[]): AffixDefinition | null {
-    if (pool.length === 0) return null;
-    const index = Math.floor(Math.random() * pool.length);
-    return pool[index] ?? null;
+  protected IsMaxedSlot(slotIndex: number): boolean {
+    if (!this.HasAffix(slotIndex)) return false;
+    const item = this.Item();
+    return IsMaxTier(item, slotIndex);
   }
 
-  public RerollSlot(slotIndex: number): void {
-    if (!this.HasAffix(slotIndex)) return;
+  protected EnoughGoldForEnchant(slotIndex: number): boolean {
+    const cost = this.EnchantCost(slotIndex);
+    return this.goldCostProvider.CanAfford(cost);
+  }
 
-    let item = this.Item();
-    const current = item.Affixes[slotIndex];
-    const result = this.craftingService.RerollAffix(
-      item,
-      slotIndex,
-      GetAffixDefinition(current.DefinitionId)!,
-      this.goldCostProvider
+  protected CanUpgradeSlot(slotIndex: number): boolean {
+    if (!this.HasAffix(slotIndex)) return false;
+    return (
+      this.itemAffix.CanEnchant(this.Item(), slotIndex) && this.EnoughGoldForEnchant(slotIndex)
     );
-
-    if (!result.Success) return;
-
-    item = result.Item;
-    this.ItemChange.emit({ ...item });
   }
 
   public UpgradeSlot(slotIndex: number): void {
     if (!this.CanUpgradeSlot(slotIndex)) return;
 
     const item = this.Item();
-    const current = item.Affixes[slotIndex];
-    const result = this.craftingService.EnchantAffix(
-      item,
-      slotIndex,
-      GetAffixDefinition(current.DefinitionId)!,
-      this.goldCostProvider
-    );
+    const result = this.craftingService.EnchantAffix(item, slotIndex, this.goldCostProvider);
 
     if (!result.Success) return;
 
     const next = result.Item;
     this.ItemChange.emit({ ...next });
+  }
+
+  public EnoughGoldForReroll(slotIndex: number): boolean {
+    const cost = this.RerollCost(slotIndex);
+    return this.goldCostProvider.CanAfford(cost);
+  }
+
+  public RerollSlot(slotIndex: number): void {
+    if (!this.HasAffix(slotIndex)) return;
+
+    let item = this.Item();
+    const result = this.craftingService.RerollAffix(item, slotIndex, this.goldCostProvider);
+
+    if (!result.Success) return;
+
+    item = result.Item;
+    this.ItemChange.emit({ ...item });
   }
 }

@@ -1,5 +1,5 @@
 import {
-  AffixDefinition,
+  CraftingCostProvider,
   Item,
   ItemRarity,
   ItemVariantDefinition,
@@ -10,7 +10,6 @@ import { GetItemRarity, QualityIndex, TierIndex } from '../systems/items';
 import { ITEM_RARITY_COST_MULTIPLIER, ITEM_TIER_COST_MULTIPLIER } from '../constants';
 import { Injectable, inject } from '@angular/core';
 
-import { CraftingCostProvider } from './crafting.service';
 import { GoldService } from './gold.service';
 
 @Injectable({ providedIn: 'root' })
@@ -51,18 +50,11 @@ export class GoldCostProvider implements CraftingCostProvider {
     return Math.floor(120 * mult * (tIdx + 1) * (1 + item.Level * 0.1));
   }
 
-  public GetAddAffixCost(item: Item, definition: AffixDefinition): number {
+  public GetAddAffixCost(item: Item): number {
     const rarity = GetItemRarity(item.Level);
     const mult = ITEM_RARITY_COST_MULTIPLIER[rarity];
     // Adding an affix is mid-tier cost; scales with item level
     return Math.floor(100 * mult * (1 + item.Level * 0.2));
-  }
-
-  public GetRemoveAffixCost(item: Item, affixIndex: number): number {
-    const rarity = GetItemRarity(item.Level);
-    const mult = ITEM_RARITY_COST_MULTIPLIER[rarity];
-    // Flat service fee scaled by rarity
-    return Math.floor(25 * mult);
   }
 
   public GetSocketRuneCost(item: Item, definition: RuneDefinition, quality: RuneQuality): number {

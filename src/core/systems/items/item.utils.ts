@@ -68,3 +68,19 @@ export function IsMaxLevel(item: Item): boolean {
   const tierRules = ITEM_TIER_RULES[item.Tier];
   return item.Level >= tierRules.MaxItemLevel;
 }
+
+export function CreateItem(variant: ItemVariantDefinition): Item {
+  const item: Item = {
+    Id: `item_${variant.Id}_${performance.now()}`,
+    DefinitionId: variant.Id,
+    Name: variant.Name,
+    Icon: variant.Icon,
+    Slot: variant.Slot,
+    Type: variant.Type,
+    Tier: variant.Tier,
+    Level: MinLevelForTier(variant.Tier),
+    Affixes: [],
+    Rune: null
+  };
+  return item;
+}

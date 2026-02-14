@@ -20,6 +20,7 @@
   gap: calc($gap / 4);
 
   .subtitle {
+    @include disable-text-selection();
     @include flexbox($align: center);
     gap: calc($gap / 2);
     font-size: 0.9rem;
@@ -31,6 +32,7 @@
 }
 
 .actions {
+  @include disable-text-selection();
   @include flexbox($dir: row, $justify: center, $align: flex-end);
   gap: $gap;
   margin-right: 50px;

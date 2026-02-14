@@ -1,5 +1,5 @@
-import { InnateValue, IsMaxLevel, NextLevel } from '.';
-import { Item, ItemLevel, ItemVariantDefinition } from '../../models';
+import { IsMaxLevel, NextLevel } from '.';
+import { Item, ItemLevel } from '../../models';
 
 import { Injectable } from '@angular/core';
 
@@ -15,23 +15,12 @@ export class ItemLevelService {
   }
 
   /**
-   * Levels up the item by one, clamped to 5.
+   * Levels up the item by one.
    * @param item The item instance to update.
    * @returns A new item instance with increased level.
    */
   public LevelUp(item: Item): Item {
     const nextLevel: ItemLevel = NextLevel(item);
-    // TODO: Increase WeaponDamage based on some formula involving base damage and level
     return { ...item, Level: nextLevel };
-  }
-
-  /**
-   * Computes the innate numeric value for a variant at the item's level.
-   * @param variant The item variant definition.
-   * @param item The item instance.
-   * @returns The innate numeric value at this level.
-   */
-  public ComputeInnate(variant: ItemVariantDefinition, item: Item): number {
-    return InnateValue(variant, item.Level);
   }
 }

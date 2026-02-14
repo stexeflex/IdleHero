@@ -21,6 +21,7 @@ export * from './items/affixes/affix-group.enum';
 export * from './items/affixes/affix-info';
 export * from './items/affixes/affix-tier.enum';
 export * from './items/affixes/affix';
+export * from './items/crafting-cost-provider.type';
 export * from './items/crafting-operation.type';
 export * from './items/gear-loadout';
 export * from './items/inventory-state';

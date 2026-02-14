@@ -1,8 +1,9 @@
-import { CraftingService, GearLoadoutService, PlayerHeroService } from '../core/services';
+import { GearLoadoutService, PlayerHeroService } from '../core/services';
 import { Injectable, inject } from '@angular/core';
 
 import { AppStateService } from '../shared/services';
 import { CharactersIconName } from '../shared/components';
+import { CreateItem } from '../core/systems/items';
 import { ItemVariantDefinition } from '../core/models';
 import { StateApplicationService } from './state-application.service';
 import { StatePersistenceService } from './state-persistence.service';
@@ -11,7 +12,6 @@ import { StatePersistenceService } from './state-persistence.service';
 export class GameLoaderService {
   private appStateService = inject(AppStateService);
   private playerHeroService = inject(PlayerHeroService);
-  private craftingService = inject(CraftingService);
   private loadoutService = inject(GearLoadoutService);
   private statePersistenceService = inject(StatePersistenceService);
   private stateApplicationService = inject(StateApplicationService);
@@ -38,9 +38,7 @@ export class GameLoaderService {
 
     this.playerHeroService.Name.set(heroName);
     this.playerHeroService.CharacterIcon.set(characterIcon);
-    const starterWeaponCraftResult = this.craftingService.CraftNewItem(weaponVariant);
-    if (starterWeaponCraftResult.Success) {
-      this.loadoutService.SetStarterWeapon(starterWeaponCraftResult.Item);
-    }
+    const starterWeapon = CreateItem(weaponVariant);
+    this.loadoutService.SetStarterWeapon(starterWeapon);
   }
 }

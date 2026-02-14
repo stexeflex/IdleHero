@@ -48,7 +48,12 @@
     <div class="preview">
       <app-item-preview [Item]="Item()" [Variant]="Variant()"> </app-item-preview>
       @if (CanUpgradeItem()) {
-        <button class="ih-button-tertiary" (click)="UpgradeItem()">UPGRADE ITEM</button>
+        <button
+          class="ih-button-tertiary"
+          [disabled]="!EnoughGoldForUpgrade()"
+          (click)="UpgradeItem()">
+          UPGRADE ITEM
+        </button>
       }
     </div>
 
@@ -63,6 +68,7 @@
             @if (SelectedAffixIndex() === slotIndex && HasAffix(slotIndex)) {
               <button
                 class="ih-button-icon ih-button-icon-border"
+                [disabled]="!EnoughGoldForReroll(slotIndex)"
                 (click)="RerollSlot(slotIndex)"
                 title="Reroll Affix">
                 <app-icon ui="cycle" size="sm"></app-icon>
@@ -101,8 +107,8 @@
                   <app-gold [amount]="AddAffixCost()" [size]="'md'" [fontSize]="'1rem'"></app-gold>
                   <button
                     class="ih-button-tertiary"
-                    (click)="EnchantSlot(slotIndex)"
-                    [disabled]="!CanEnchantSlot(slotIndex)">
+                    (click)="AddAffixSlot()"
+                    [disabled]="!CanAddAffixSlot()">
                     ADD AFFIX
                   </button>
                 </div>
