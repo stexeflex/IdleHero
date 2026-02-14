@@ -32,7 +32,8 @@ export class StateCollectionService {
     schema.Level = this.levelService.GetState();
 
     // Attributes
-    schema.Attributes = this.attributesService.GetAllocated();
+    schema.Attributes.Allocated = this.attributesService.GetAllocated();
+    schema.Attributes.Unallocated = this.attributesService.UnallocatedPoints();
 
     // Currency
     schema.Gold = this.goldService.GetState();

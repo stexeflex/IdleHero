@@ -66,10 +66,18 @@ export class DungeonArena implements OnDestroy {
 
   constructor() {
     this.heroSub = this.combat.Hero$.subscribe((s) => {
+      if (!s) {
+        this.Hero.set(undefined);
+        return;
+      }
       this.Hero.set({ ...s } as Hero | undefined);
     });
 
     this.bossSub = this.combat.Boss$.subscribe((s) => {
+      if (!s) {
+        this.Boss.set(undefined);
+        return;
+      }
       this.Boss.set({ ...s } as Boss | undefined);
     });
 

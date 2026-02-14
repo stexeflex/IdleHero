@@ -28,10 +28,11 @@ export class StateApplicationService {
     this.heroService.Set(schema.Player.Name, schema.Player.CharacterIcon);
 
     // Level
-    this.levelService.SetState(schema.Level);
+    this.levelService.SetLevel(schema.Level.Level, schema.Level.ExperienceInLevel);
 
     // Attributes
-    this.attributesService.SetAllocated(schema.Attributes);
+    this.attributesService.SetAllocated(schema.Attributes.Allocated);
+    this.attributesService.AddAttributePoints(schema.Attributes.Unallocated);
 
     // Currency
     this.goldService.SetState(schema.Gold);

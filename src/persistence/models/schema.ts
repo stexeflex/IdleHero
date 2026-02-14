@@ -3,7 +3,6 @@ import {
   CreateEmptyLoadout,
   DamageStatistics,
   DungeonKeysState,
-  DungeonRoomKey,
   DungeonStatistics,
   GearLoadout,
   GoldState,
@@ -12,9 +11,8 @@ import {
   InitialDungeonStatistics,
   InitialGoldState,
   InitialInventoryState,
-  InitialPlayerLevelState,
+  InitialLevelState,
   InventoryState,
-  PlayerLevelState,
   ZeroAttributes
 } from '../../core/models';
 
@@ -25,8 +23,14 @@ export interface Schema {
     Name: string;
     CharacterIcon: CharactersIconName;
   };
-  Level: PlayerLevelState;
-  Attributes: Attributes;
+  Level: {
+    Level: number;
+    ExperienceInLevel: number;
+  };
+  Attributes: {
+    Allocated: Attributes;
+    Unallocated: number;
+  };
   Gold: GoldState;
   DungeonKeys: DungeonKeysState;
   Loadout: GearLoadout;
@@ -43,8 +47,11 @@ export function InitialSchema(): Schema {
       Name: 'Hero',
       CharacterIcon: 'dwarf'
     },
-    Level: InitialPlayerLevelState(),
-    Attributes: ZeroAttributes(),
+    Level: InitialLevelState(),
+    Attributes: {
+      Allocated: ZeroAttributes(),
+      Unallocated: 0
+    },
     Gold: InitialGoldState(),
     DungeonKeys: InitialDungeonKeysState(),
     Loadout: CreateEmptyLoadout(),

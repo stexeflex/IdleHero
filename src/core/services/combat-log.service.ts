@@ -6,7 +6,8 @@ import {
   DeathLogEntry,
   HealLogEntry,
   InfoLogEntry,
-  MissLogEntry
+  MissLogEntry,
+  RewardsLogEntry
 } from '../models/combat/combat-log';
 import { DamageEvent, DamageOverTimeEvent, DeathEvent, HealEvent, MissEvent } from '../models';
 import { Injectable, computed, signal } from '@angular/core';
@@ -28,6 +29,18 @@ export class CombatLogService {
       Type: CombatLogType.Info,
       TimestampMs: performance.now(),
       Message: message
+    };
+    this.Push(entry);
+    return entry;
+  }
+
+  public Rewards(stage: number, rewards: { Gold: number; Experience: number }): RewardsLogEntry {
+    const entry: RewardsLogEntry = {
+      Type: CombatLogType.Rewards,
+      TimestampMs: performance.now(),
+      Stage: stage,
+      Gold: rewards.Gold,
+      Experience: rewards.Experience
     };
     this.Push(entry);
     return entry;

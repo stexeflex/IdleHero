@@ -39,4 +39,3 @@ export * from './items/runes/rune';
 export * from './progression/ascension-level-state';
 export * from './progression/level-progress';
 export * from './progression/level-state';
-export * from './progression/player-level-state';

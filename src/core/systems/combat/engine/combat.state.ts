@@ -65,6 +65,13 @@ export class CombatState {
     this.PublishState();
   }
 
+  public Cleared() {
+    this.Log.Info(`${this.DungeonRoom.CurrentDungeon()?.Title.toUpperCase()}: Dungeon Cleared!`);
+    this.Queue.Clear();
+    this.Boss.set(undefined);
+    this.PublishState();
+  }
+
   /**
    * Setup Combat with Actors
    * @param actors Combat Actors to setup
@@ -113,9 +120,15 @@ export class CombatState {
     await new Promise((resolve) => setTimeout(resolve, DELAYS.BOSS_RESPAWN_ANIMATION_MS));
 
     // const oldBoss = this.DungeonRoom.CurrentBoss();
-    this.DungeonRoom.AdvanceStage();
-    const nextBoss = this.DungeonRoom.CurrentBoss();
+    const advanced: boolean = this.DungeonRoom.AdvanceStage();
 
+    if (!advanced) {
+      this.Cleared();
+      await new Promise((resolve) => setTimeout(resolve, 200));
+      return;
+    }
+
+    const nextBoss = this.DungeonRoom.CurrentBoss();
     if (!nextBoss) return;
 
     // this.UpdateEventQueueOnStageAdvance(oldBoss, nextBoss);

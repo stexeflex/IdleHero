@@ -33,6 +33,8 @@ $clr-exp-green: #4caf50;
 $clr-exp-blue: #2196f3;
 $clr-charge-yellow: #fbbf24;
 
+$clr-gold: $clr-highlight;
+
 $clr-common: #a0a0a0;
 $clr-magic: #3b82f6;
 $clr-rare: #eee000;
@@ -41,6 +43,8 @@ $clr-legendary: #ff8800;
 
 $clr-stage-label: color.scale($clr-highlight, $lightness: 30%);
 $clr-log-info: color.scale($clr-exp-green, $lightness: 20%);
+$clr-log-rewards-gold: color.scale($clr-highlight, $lightness: 20%);
+$clr-log-rewards-xp: $clr-exp-blue;
 $clr-log-other: $clr-common;
 $clr-log-damage: #ee4444;
 $clr-log-bleed: #8a0303;

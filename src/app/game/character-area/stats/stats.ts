@@ -1,4 +1,4 @@
-import { AttributesService, CombatStatsService, LevelService } from '../../../../core/services';
+import { AttributesService, CombatStatsService } from '../../../../core/services';
 import { Component, LOCALE_ID, computed, inject, signal } from '@angular/core';
 import { DecimalPipe, PercentPipe } from '@angular/common';
 
@@ -29,7 +29,6 @@ export class Stats {
   private readonly combatState = inject(CombatState);
   private readonly attributesService = inject(AttributesService);
   private readonly statsService = inject(CombatStatsService);
-  private readonly levelService = inject(LevelService);
 
   private readonly decimalPipe: DecimalPipe = new DecimalPipe(this.locale);
   private readonly percentPipe: PercentPipe = new PercentPipe(this.locale);
@@ -42,19 +41,19 @@ export class Stats {
 
   //#region ATTRIBUTES
   protected readonly ShowAttributePoints = computed<boolean>(
-    () => this.levelService.UnspentAttributePoints() > 0
+    () => this.attributesService.UnallocatedPoints() > 0
   );
 
   protected readonly AttributePoints = computed<string>(() => {
-    const unspent: number = this.levelService.UnspentAttributePoints();
+    const unspent: number = this.attributesService.UnallocatedPoints();
     const total: number =
-      this.attributesService.AllocatedTotal() + this.levelService.UnspentAttributePoints();
+      this.attributesService.AllocatedTotal() + this.attributesService.UnallocatedPoints();
     return `${unspent} / ${total}`;
   });
 
   protected readonly CanIncreaseAttributes = computed<boolean>(() => {
     const battleInProgress = this.combatState.InProgress();
-    const hasUnspentPoints = this.levelService.UnspentAttributePoints() > 0;
+    const hasUnspentPoints = this.attributesService.UnallocatedPoints() > 0;
 
     return !battleInProgress && hasUnspentPoints;
   });

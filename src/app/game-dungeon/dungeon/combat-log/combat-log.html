@@ -2,7 +2,7 @@
   @for (entry of VisibleEntries(); track entry) {
     <!-- SEPARATOR -->
     <separator class="ih-separator" [margin]="false"></separator>
-    @if (entry.Type == "Death") {
+    @if (entry.Type == "Rewards") {
       <separator class="ih-separator" [margin]="false"></separator>
     }
 
@@ -15,6 +15,18 @@
         <!-- INFO -->
         @case ("Info") {
           <span class="log-info">{{ entry.Message }}</span>
+        }
+        <!-- REWARDS -->
+        @case ("Rewards") {
+          <app-icon class="log-rewards" symbol="lockedchest" size="md"></app-icon>
+          <span class="log-rewards-gold">
+            +{{ entry.Gold | number: "1.0-0" }}
+            <app-icon symbol="twocoins" size="sm"></app-icon>
+          </span>
+          <span class="log-rewards-xp">
+            +{{ entry.Experience | number: "1.0-0" }}
+            <app-icon symbol="starsstack" size="sm"></app-icon>
+          </span>
         }
         <!-- DAMAGE -->
         @case ("Damage") {

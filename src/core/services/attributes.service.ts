@@ -1,14 +1,11 @@
 import { Attributes, InitialAttributes, ZeroAttributes } from '../models';
-import { Injectable, computed, inject, signal } from '@angular/core';
-
-import { LevelService } from './level.service';
+import { Injectable, computed, signal } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class AttributesService {
-  private readonly Level = inject(LevelService);
-
   private readonly Base = signal<Attributes>(InitialAttributes());
   private readonly Allocated = signal<Attributes>(ZeroAttributes());
+  private readonly Unallocated = signal<number>(0);
 
   /**
    * Effective attributes: Base + Allocated
@@ -32,19 +29,21 @@ export class AttributesService {
   });
 
   /**
-   * Sets the base attributes
-   * @param attributes the base attributes to set
+   * Unallocated attribute points available to spend on allocation
    */
+  public readonly UnallocatedPoints = computed<number>(() => this.Unallocated());
+
   public SetBase(attributes: Attributes): void {
     this.Base.set({ ...attributes });
   }
 
-  /**
-   * Sets the allocated attributes
-   * @param attributes the allocated attributes to set
-   */
   public SetAllocated(attributes: Attributes): void {
     this.Allocated.set({ ...attributes });
+  }
+
+  public AddAttributePoints(amount: number): void {
+    if (!Number.isFinite(amount) || amount <= 0) return;
+    this.Unallocated.update((current) => current + Math.floor(amount));
   }
 
   /**
@@ -72,8 +71,7 @@ export class AttributesService {
   public Allocate(attribute: keyof Attributes, amount: number): boolean {
     if (!Number.isFinite(amount) || amount <= 0) return false;
 
-    const spendOk = this.Level.SpendAttributePoints(amount);
-
+    const spendOk = this.SpendAttributePoints(amount);
     if (!spendOk) return false;
 
     this.Allocated.update((cur) => ({
@@ -104,7 +102,7 @@ export class AttributesService {
       [attribute]: a[attribute] - toRefund
     }));
 
-    this.Level.RefundAttributePoints(toRefund);
+    this.RefundAttributePoints(toRefund);
 
     return toRefund;
   }
@@ -131,9 +129,31 @@ export class AttributesService {
 
     if (total > 0) {
       this.Allocated.set(InitialAttributes());
-      this.Level.RefundAttributePoints(total);
+      this.RefundAttributePoints(total);
     }
 
     return total;
+  }
+
+  /**
+   * Deducts points if available
+   * @param amount the amount of attribute points to spend
+   * @returns true if points were successfully spent, false otherwise
+   */
+  private SpendAttributePoints(amount: number): boolean {
+    if (!Number.isFinite(amount) || amount <= 0) return false;
+    if (this.UnallocatedPoints() < amount) return false;
+
+    this.Unallocated.update((current) => current - amount);
+    return true;
+  }
+
+  /**
+   * Refunds attribute points back to the unspent pool
+   * @param amount the amount of points to refund
+   */
+  private RefundAttributePoints(amount: number): void {
+    if (!Number.isFinite(amount) || amount <= 0) return;
+    this.Unallocated.update((current) => current + Math.floor(amount));
   }
 }

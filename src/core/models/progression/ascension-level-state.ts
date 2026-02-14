@@ -16,6 +16,7 @@ export function InitialAscensionLevelState(
     Level: level,
     TotalExperience: totalExperience,
     ExperienceInLevel: experienceInLevel,
+    ExperienceToNext: 0,
     AscensionCount: ascensionCount,
     UnspentAscensionCrystals: unspentAscensionCrystals
   };

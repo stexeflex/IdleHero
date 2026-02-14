@@ -4,26 +4,26 @@ import {
   ComputeProgressFromTotalXP,
   XpToNextLevel
 } from '../systems/progression';
-import { InitialPlayerLevelState, LevelProgress, LevelState, PlayerLevelState } from '../models';
-import { Injectable, computed, signal } from '@angular/core';
+import { InitialLevelState, LevelProgress, LevelState } from '../models';
+import { Injectable, computed, inject, signal } from '@angular/core';
 
+import { AttributesService } from './attributes.service';
 import { ClampUtils } from '../../shared/utils';
 
 @Injectable({ providedIn: 'root' })
 export class LevelService {
-  private readonly State = signal<PlayerLevelState>(InitialPlayerLevelState());
+  private readonly Attributes = inject(AttributesService);
+
+  private readonly State = signal<LevelState>(InitialLevelState());
 
   public readonly Level = computed(() => this.State().Level);
   public readonly TotalExperience = computed(() => this.State().TotalExperience);
   public readonly ExperienceInLevel = computed(() => this.State().ExperienceInLevel);
-  public readonly ExperienceToNext = computed(() => XpToNextLevel(this.State().Level));
+  public readonly ExperienceToNext = computed(() => this.State().ExperienceToNext);
   public readonly ProgressRatio = computed(() => {
     const s = this.State();
-    const toNext = this.ExperienceToNext();
-    return toNext > 0 ? s.ExperienceInLevel / toNext : 0;
+    return s.ExperienceToNext > 0 ? s.ExperienceInLevel / s.ExperienceToNext : 0;
   });
-
-  public readonly UnspentAttributePoints = computed(() => this.State().UnspentAttributePoints);
 
   /**
    * Increments XP, handles multi-level ups, awards points
@@ -34,50 +34,21 @@ export class LevelService {
 
     this.State.update((s) => {
       let totalXP = s.TotalExperience + Math.floor(amount);
-      let { Level, ExperienceInLevel }: LevelProgress = ComputeProgressFromTotalXP(totalXP);
+      const levelProgress: LevelProgress = ComputeProgressFromTotalXP(totalXP);
 
       // Award points for each level gained compared to previous
-      const gainedLevels = Math.max(0, Level - s.Level);
+      const gainedLevels = Math.max(0, levelProgress.Level - s.Level);
       const awardedPoints = AttributePointsForGainedLevels(gainedLevels);
+      this.Attributes.AddAttributePoints(awardedPoints);
 
       return {
         ...s,
-        Level: Level,
+        Level: levelProgress.Level,
         TotalExperience: totalXP,
-        ExperienceInLevel: ExperienceInLevel,
-        UnspentAttributePoints: s.UnspentAttributePoints + awardedPoints
+        ExperienceInLevel: levelProgress.ExperienceInLevel,
+        ExperienceToNext: levelProgress.ExperienceToNext
       };
     });
-  }
-
-  /**
-   * Deducts points if available
-   * @param amount the amount of attribute points to spend
-   * @returns true if points were successfully spent, false otherwise
-   */
-  public SpendAttributePoints(amount: number): boolean {
-    if (!Number.isFinite(amount) || amount <= 0) return false;
-    if (this.State().UnspentAttributePoints < amount) return false;
-
-    this.State.update((current) => ({
-      ...current,
-      UnspentAttributePoints: current.UnspentAttributePoints - amount
-    }));
-
-    return true;
-  }
-
-  /**
-   * Refunds attribute points back to the unspent pool
-   * @param amount the amount of points to refund
-   */
-  public RefundAttributePoints(amount: number): void {
-    if (!Number.isFinite(amount) || amount <= 0) return;
-
-    this.State.update((current) => ({
-      ...current,
-      UnspentAttributePoints: current.UnspentAttributePoints + Math.floor(amount)
-    }));
   }
 
   /**
@@ -102,16 +73,12 @@ export class LevelService {
       Level: clamped,
       TotalExperience: total,
       ExperienceInLevel: expInLevel,
-      ExperienceToNext: toNext,
-      UnspentAttributePoints: _.UnspentAttributePoints
+      ExperienceToNext: toNext
     }));
   }
 
-  public GetState(): PlayerLevelState {
-    return { ...this.State() };
-  }
-
-  public SetState(state: PlayerLevelState): void {
-    this.State.set({ ...state });
+  public GetState(): { Level: number; ExperienceInLevel: number } {
+    const { Level, ExperienceInLevel } = this.State();
+    return { Level, ExperienceInLevel };
   }
 }
