@@ -4,7 +4,7 @@
     aria-expanded="{{ IsMenuOpen }}"
     aria-controls="menuNav"
     (click)="ToggleMenu()">
-    <i class="bi bi-list menu__toggle__icon"></i>
+    <app-menu-button-icon></app-menu-button-icon>
   </button>
 
   <div class="menu__content" [hidden]="!IsMenuOpen">

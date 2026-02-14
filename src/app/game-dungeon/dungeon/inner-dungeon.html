@@ -20,7 +20,7 @@
           <button class="ih-button" (click)="Prestige()">PRESTIGE</button>
         } @else if (RestartDelay()) {
           <button class="ih-button-secondary button-leaving" disabled>
-            <i class="fa fa-circle-o-notch fa-spin"></i>
+            <app-loading-spinner></app-loading-spinner>
             <h3>LEAVING...</h3>
           </button>
         } @else {

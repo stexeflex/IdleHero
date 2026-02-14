@@ -1,6 +1,6 @@
 import { CombatEngine, CombatState } from '../../../core/systems/combat';
 import { Component, OnDestroy, computed, inject, signal } from '@angular/core';
-import { IconComponent, PanelHeader } from '../../../shared/components';
+import { IconComponent, LoadingSpinner, PanelHeader } from '../../../shared/components';
 
 import { CombatLog } from './combat-log/combat-log';
 import { DELAYS } from '../../../core/constants';
@@ -9,7 +9,7 @@ import { DungeonRoomService } from '../../../core/services';
 
 @Component({
   selector: 'app-inner-dungeon',
-  imports: [PanelHeader, IconComponent, DungeonArena, CombatLog],
+  imports: [PanelHeader, IconComponent, DungeonArena, CombatLog, LoadingSpinner],
   templateUrl: './inner-dungeon.html',
   styleUrl: './inner-dungeon.scss'
 })
