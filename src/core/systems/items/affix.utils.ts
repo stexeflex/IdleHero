@@ -14,8 +14,14 @@ import { GetItemRarity, GetMaxAffixTier } from './item.utils';
 
 import { ClampUtils } from '../../../shared/utils';
 
-function ComputeRolledValue(min: number, max: number, percentage: number): number {
-  return min + (max - min) * ClampUtils.clamp(percentage, 0, 1);
+function ComputeRolledValue(
+  min: number,
+  max: number,
+  percentage: number,
+  type: 'Flat' | 'Percent'
+): number {
+  const result = min + (max - min) * ClampUtils.clamp(percentage, 0, 1);
+  return type === 'Flat' ? Math.round(result) : result;
 }
 
 export function GetAffixInfo(affix: Affix, locale: string): AffixInfo {
@@ -25,7 +31,12 @@ export function GetAffixInfo(affix: Affix, locale: string): AffixInfo {
   const definition: AffixDefinition = GetAffixDefinition(affix.DefinitionId);
   const affixTierSpec: AffixTierSpec = GetAffixTierSpec(definition, affix.Tier);
   const minMax: { min: number; max: number } = GetMinMaxRoll(affixTierSpec);
-  const rolledValue = ComputeRolledValue(minMax.min, minMax.max, affix.ValueRangePercentage);
+  const rolledValue = ComputeRolledValue(
+    minMax.min,
+    minMax.max,
+    affix.ValueRangePercentage,
+    affixTierSpec.Value.Type
+  );
   const label: string = LabelToString(definition.Effect.ToLabel(rolledValue), decimalPipe);
 
   let minRollLabel: string = minMax.min.toString();
@@ -57,7 +68,12 @@ export function GetAffixValue(affix: Affix): number {
   const definition: AffixDefinition = GetAffixDefinition(affix.DefinitionId);
   const affixTierSpec: AffixTierSpec = GetAffixTierSpec(definition, affix.Tier);
   const minMax: { min: number; max: number } = GetMinMaxRoll(affixTierSpec);
-  const rolledValue = ComputeRolledValue(minMax.min, minMax.max, affix.ValueRangePercentage);
+  const rolledValue = ComputeRolledValue(
+    minMax.min,
+    minMax.max,
+    affix.ValueRangePercentage,
+    affixTierSpec.Value.Type
+  );
   return rolledValue;
 }
 
