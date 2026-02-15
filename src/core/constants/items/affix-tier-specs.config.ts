@@ -73,11 +73,11 @@ export const ATTACK_SPEED_TIERS: AffixTierSpec[] = [
 ];
 
 export const ACCURACY_TIERS: AffixTierSpec[] = [
-  { Tier: 'Common', Value: { Min: 0.02, Max: 0.04, Type: 'Percent' } },
-  { Tier: 'Magic', Value: { Min: 0.04, Max: 0.07, Type: 'Percent' } },
-  { Tier: 'Rare', Value: { Min: 0.07, Max: 0.1, Type: 'Percent' } },
-  { Tier: 'Epic', Value: { Min: 0.1, Max: 0.14, Type: 'Percent' } },
-  { Tier: 'Legendary', Value: { Min: 0.14, Max: 0.2, Type: 'Percent' } }
+  { Tier: 'Common', Value: { Min: 0.02, Max: 0.05, Type: 'Percent' } },
+  { Tier: 'Magic', Value: { Min: 0.05, Max: 0.08, Type: 'Percent' } },
+  { Tier: 'Rare', Value: { Min: 0.08, Max: 0.11, Type: 'Percent' } },
+  { Tier: 'Epic', Value: { Min: 0.11, Max: 0.15, Type: 'Percent' } },
+  { Tier: 'Legendary', Value: { Min: 0.15, Max: 0.2, Type: 'Percent' } }
 ];
 
 export const PENETRATION_TIERS: AffixTierSpec[] = [
@@ -89,11 +89,11 @@ export const PENETRATION_TIERS: AffixTierSpec[] = [
 ];
 
 export const CHARGING_STRIKE_GAIN_TIERS: AffixTierSpec[] = [
-  { Tier: 'Common', Value: { Min: 1, Max: 3, Type: 'Flat' } },
-  { Tier: 'Magic', Value: { Min: 3, Max: 5, Type: 'Flat' } },
-  { Tier: 'Rare', Value: { Min: 5, Max: 8, Type: 'Flat' } },
-  { Tier: 'Epic', Value: { Min: 8, Max: 11, Type: 'Flat' } },
-  { Tier: 'Legendary', Value: { Min: 11, Max: 15, Type: 'Flat' } }
+  { Tier: 'Common', Value: { Min: 1, Max: 2, Type: 'Flat' } },
+  { Tier: 'Magic', Value: { Min: 3, Max: 4, Type: 'Flat' } },
+  { Tier: 'Rare', Value: { Min: 5, Max: 6, Type: 'Flat' } },
+  { Tier: 'Epic', Value: { Min: 7, Max: 8, Type: 'Flat' } },
+  { Tier: 'Legendary', Value: { Min: 9, Max: 10, Type: 'Flat' } }
 ];
 
 export const CHARGING_STRIKE_DAMAGE_TIERS: AffixTierSpec[] = [

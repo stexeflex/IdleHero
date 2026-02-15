@@ -284,7 +284,7 @@ export class EventHandler {
     if (actor.Charge.Current >= actor.Charge.Max) {
       actor.Charge.Charged = true;
 
-      const factor = 2;
+      const factor = 4;
       const ticks = actor.Stats.ChargeDuration * factor;
       const chargeDecreasePerSecond = actor.Charge.Max / actor.Stats.ChargeDuration;
 
