@@ -29,7 +29,7 @@ export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
     StagesBase: 1,
     MidStages: [25, 50, 75],
     StagesMax: 100,
-    XpBase: 12,
+    XpBase: 15,
     GoldBase: 15,
     Locked: false
   },
@@ -42,7 +42,7 @@ export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
     StagesBase: 1,
     MidStages: [20, 35, 50, 65, 80],
     StagesMax: 100,
-    XpBase: 14,
+    XpBase: 20,
     GoldBase: 20,
     Locked: false
   },
@@ -55,7 +55,7 @@ export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
     StagesBase: 1,
     MidStages: [20, 40, 60, 80],
     StagesMax: 100,
-    XpBase: 18,
+    XpBase: 25,
     GoldBase: 25,
     Locked: true
   }
@@ -71,8 +71,8 @@ export const CAPSTONE_DUNGEONS: CapstoneDungeonRoom[] = [
     StagesBase: 1,
     MidStages: [20, 40],
     StagesMax: 60,
-    XpBase: 25,
-    GoldBase: 40,
+    XpBase: 100,
+    GoldBase: 100,
     Prerequisites: { Gold: 500, Key: null },
     Rewards: { Gold: 2500, Key: 'Silver Key' as DungeonRoomKey },
     Locked: true
@@ -86,8 +86,8 @@ export const CAPSTONE_DUNGEONS: CapstoneDungeonRoom[] = [
     StagesBase: 1,
     MidStages: [20, 40],
     StagesMax: 60,
-    XpBase: 30,
-    GoldBase: 60,
+    XpBase: 150,
+    GoldBase: 150,
     Prerequisites: { Gold: 2500, Key: 'Silver Key' as DungeonRoomKey },
     Rewards: { Gold: 10000, Key: 'Magic Key' as DungeonRoomKey },
     Locked: true
@@ -101,8 +101,8 @@ export const CAPSTONE_DUNGEONS: CapstoneDungeonRoom[] = [
     StagesBase: 1,
     MidStages: [20, 40],
     StagesMax: 60,
-    XpBase: 35,
-    GoldBase: 80,
+    XpBase: 200,
+    GoldBase: 200,
     Prerequisites: { Gold: 10000, Key: 'Magic Key' as DungeonRoomKey },
     Rewards: { Gold: 50000, Key: 'Golden Key' as DungeonRoomKey },
     Locked: true

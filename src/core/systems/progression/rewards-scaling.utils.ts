@@ -32,6 +32,7 @@ export function ComputeDampedExperience(
   const midStages = [...dungeon.MidStages].sort((a, b) => a - b);
   const firstMidStage = midStages[0];
   const secondMidStage = midStages[1];
+  const thirdMidStage = midStages[2];
 
   if (firstMidStage === undefined) {
     return rawExperience;
@@ -42,13 +43,24 @@ export function ComputeDampedExperience(
 
   let multiplier = 1;
 
+  // Third Mid Stage Check
   if (
+    thirdMidStage !== undefined &&
+    highestStageReached >= thirdMidStage &&
+    stageId < thirdMidStage
+  ) {
+    multiplier = config.BELOW_THIRD_MIDSTAGE_MULTIPLIER;
+  }
+  // Second Mid Stage Check
+  else if (
     secondMidStage !== undefined &&
     highestStageReached >= secondMidStage &&
     stageId < secondMidStage
   ) {
     multiplier = config.BELOW_SECOND_MIDSTAGE_MULTIPLIER;
-  } else if (highestStageReached >= firstMidStage && stageId < firstMidStage) {
+  }
+  // First Mid Stage Check
+  else if (highestStageReached >= firstMidStage && stageId < firstMidStage) {
     multiplier = config.BELOW_FIRST_MIDSTAGE_MULTIPLIER;
   }
 

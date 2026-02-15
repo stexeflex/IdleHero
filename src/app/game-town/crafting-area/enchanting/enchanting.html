@@ -19,14 +19,14 @@
       <!-- <button class="ih-button-secondary">DISMANTLE</button> -->
       @if (CanUpgradeItem()) {
         <div class="action-info">
-          <span>Upgrade</span>
+          <span>Upgrade Item</span>
           <app-gold [amount]="UpgradeCost()" [size]="'md'" [fontSize]="'1rem'"></app-gold>
         </div>
       }
       @if (SelectedAffixIndex() !== null && HasAffix(SelectedAffixIndex()!)) {
         @if (!IsMaxedSlot(SelectedAffixIndex()!)) {
           <div class="action-info">
-            <span>Enchant</span>
+            <span>Enchant Affix</span>
             <app-gold
               [amount]="EnchantCost(SelectedAffixIndex()!)"
               [size]="'md'"
@@ -34,7 +34,7 @@
           </div>
         }
         <div class="action-info">
-          <span>Reroll</span>
+          <span>Reroll Affix</span>
           <app-gold
             [amount]="RerollCost(SelectedAffixIndex()!)"
             [size]="'md'"
@@ -123,7 +123,7 @@
                 class="ih-button-icon ih-button-icon-border"
                 (click)="UpgradeSlot(slotIndex)"
                 [disabled]="!CanUpgradeSlot(slotIndex)"
-                title="Upgrade Affix">
+                title="Enchant Affix">
                 <app-icon class="rotate-180" ui="arrow" size="sm"></app-icon>
               </button>
             }
