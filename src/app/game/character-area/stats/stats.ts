@@ -1,4 +1,4 @@
-import { AttributesService, CombatStatsService } from '../../../../core/services';
+import { AttributesService, CombatStatsService, LevelService } from '../../../../core/services';
 import { Component, LOCALE_ID, computed, inject, signal } from '@angular/core';
 import { DecimalPipe, PercentPipe } from '@angular/common';
 
@@ -29,6 +29,7 @@ export class Stats {
   private readonly locale = inject(LOCALE_ID);
   private readonly combatState = inject(CombatState);
   private readonly attributesService = inject(AttributesService);
+  private readonly levelService = inject(LevelService);
   private readonly statsService = inject(CombatStatsService);
 
   private readonly decimalPipe: DecimalPipe = new DecimalPipe(this.locale);
@@ -47,9 +48,11 @@ export class Stats {
 
   protected readonly AttributePoints = computed<string>(() => {
     const unspent: number = this.attributesService.UnallocatedPoints();
-    const total: number =
-      this.attributesService.AllocatedTotal() + this.attributesService.UnallocatedPoints();
-    return `${unspent} / ${total}`;
+    // const total: number = AttributePointsForGainedLevels(this.levelService.Level() - 1);
+    // const spent: number = this.attributesService.AllocatedTotal();
+    // const unspentTotal: number = total - spent;
+    // return `${unspent} / ${unspentTotal}`;
+    return `${unspent}`;
   });
 
   protected readonly CanIncreaseAttributes = computed<boolean>(() => {
