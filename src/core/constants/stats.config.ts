@@ -21,38 +21,29 @@ export const STATS_CONFIG = {
   },
   LIMITS: {
     STR_TO_BLEED_CHANCE: 0.5, // Maximal +50% BHC durch STR
+    STR_TO_BLEED_DAMAGE: 0.5, // Maximal +50% BHD durch STR
     INT_TO_CRIT_CHANCE: 0.5, // Maximal +50% CHC durch INT
-    DEX_TO_HASTE: 0.25, // Maximal +25% Haste durch DEX
-    DEX_TO_MULTI_HIT_CHANCE: 0.35, // Maximal +35% MHC durch DEX
-    DEX_TO_MULTI_HIT_DAMAGE: 2.0, // Maximal 200% MHD durch DEX
-    DEX_TO_CHAIN_FACTOR: 0.8 // Maximale Chain Factor durch DEX
+    INT_TO_CRIT_DAMAGE: 3.0, // Maximal +300% CHD durch INT
+    DEX_TO_MULTI_HIT_CHANCE: 0.5, // Maximal +50% MHC durch DEX
+    DEX_TO_MULTI_HIT_DAMAGE: 1.0, // Maximal +100% MHD durch DEX
+    DEX_TO_CHAIN_FACTOR: 0.7 // Maximal +70% MHCF durch DEX
   },
   CAPS: {
     MAX_BLEEDING_CHANCE: 0.9, // Maximal 90% BHC
     MAX_CRIT_CHANCE: 0.9, // Maximal 90% CHC
     MAX_MULTI_HIT_CHANCE: 0.9, // Maximal 90% MHC
     MAX_MULTI_HIT_CHAIN_FACTOR: 0.9, // Maximal 90% Chain Factor
-    MAX_CHAIN_HITS: 8 // Maximal 8 Hits in Multi-Hit Chain
+    MAX_CHAIN_HITS: 6 // Maximal 6 Hits in Multi-Hit Chain
   },
   MAPPINGS: {
-    STR_A: 0.02, // Skalierungsfaktor für STR zu Damage
-    STR_B: 0.005, // Skalierungs-DR für STR zu Damage
+    // Attribute-Scaling (Attribute liegen effektiv bei 0..50)
+    STR_K: 25,
+    INT_K: 25,
+    DEX_MULTI_HIT_K: 25,
+    DEX_CHAIN_FACTOR_K: 35,
 
-    STR_K: 80, // Skalierungskonstante für STR
-    INT_K: 80, // Skalierungskonstante für INT
-
-    DEX_HASTE_K: 120, // Skalierungskonstante für DEX to Haste
-
-    DEX_MULTI_HIT_K: 80, // Skalierungskonstante für DEX to Multi-Hit Damage
-    DEX_CHAIN_FACTOR_K: 180, // Skalierungskonstante für DEX zu Chain Factor
-
-    DEX_BASE_ACCURACY: 0.0, // Basis-Accuracy durch DEX
-    DEX_ACCURACY_A: 0.03, // Skalierungsfaktor für DEX zu Accuracy
-
-    DEX_BASE_EVASION: 0.0, // Basis-Evasion durch DEX
-    DEX_EVASION_A: 0.02, // Skalierungsfaktor für DEX zu Evasion
-
-    STR_ARMOR_PENETRATION_K: 100, // Skalierungskonstante für STR to Armor Penetration
-    INT_RESISTANCE_PENETRATION_K: 100 // Skalierungskonstante für INT to Magic Penetration
+    // Softcap für "+X% Chance"-Quellen, die als MultiplierChance gemappt werden.
+    // Je höher K, desto weniger stark wirken kleine +% Werte (langsamerer Start bei 0%).
+    CHANCE_INCREASE_K: 1.8
   }
 };
