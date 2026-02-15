@@ -128,7 +128,7 @@ const WEAPON_SWORDS_VARIANTS: ItemVariantDefinition[] = [
     Slot: 'Weapon',
     Type: 'Sword',
     Tier: 'I',
-    WeaponBaseDamage: WEAPON_BASE_DAMAGE_CONFIG.BASE_DAMAGE_BASE7,
+    WeaponBaseDamage: WEAPON_BASE_DAMAGE_CONFIG.BASE_DAMAGE_BASE10,
     WeaponBaseAttackSpeed: 1.0,
     Innate: {
       ToLabel: (value: number) => PercentageAdditiveLabel('Bleeding Chance', value),
@@ -322,7 +322,7 @@ const WEAPON_BOWS_VARIANTS: ItemVariantDefinition[] = [
     Slot: 'Weapon',
     Type: 'Bow',
     Tier: 'I',
-    WeaponBaseDamage: WEAPON_BASE_DAMAGE_CONFIG.BASE_DAMAGE_BASE6,
+    WeaponBaseDamage: WEAPON_BASE_DAMAGE_CONFIG.BASE_DAMAGE_BASE9,
     WeaponBaseAttackSpeed: 1.1,
     Innate: {
       ToLabel: (value: number) => PercentageAdditiveLabel('Multi Hit Chance', value),
@@ -419,7 +419,7 @@ const WEAPON_DAGGER_VARIANTS: ItemVariantDefinition[] = [
     Slot: 'Weapon',
     Type: 'Dagger',
     Tier: 'I',
-    WeaponBaseDamage: WEAPON_BASE_DAMAGE_CONFIG.BASE_DAMAGE_BASE6,
+    WeaponBaseDamage: WEAPON_BASE_DAMAGE_CONFIG.BASE_DAMAGE_BASE8,
     WeaponBaseAttackSpeed: 1.2,
     Innate: {
       ToLabel: (value: number) => PercentageAdditiveLabel('Critical Hit Chance', value),
@@ -877,11 +877,11 @@ const LEGS_PANTS_VARIANTS: ItemVariantDefinition[] = [
     Type: 'Pants',
     Tier: 'I',
     Innate: {
-      ToLabel: (value: number) => PercentageAdditiveLabel('Critical Hit Chance', value),
+      ToLabel: (value: number) => PercentageAdditiveLabel('Multi Hit Chance', value),
       ValuesByLevel: ScaleLinearValueCurve(0.01, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_legs_pants_shorts_innate');
-        s.CriticalHit.FlatChance = value;
+        s.MultiHit.FlatChance = value;
         return s;
       }
     }
@@ -896,11 +896,11 @@ const LEGS_SKIRT_VARIANTS: ItemVariantDefinition[] = [
     Type: 'Skirt',
     Tier: 'I',
     Innate: {
-      ToLabel: (value: number) => PercentageAdditiveLabel('Multi Hit Chance', value),
+      ToLabel: (value: number) => PercentageAdditiveLabel('Critical Hit Chance', value),
       ValuesByLevel: ScaleLinearValueCurve(0.01, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_legs_skirt_skirt_innate');
-        s.MultiHit.FlatChance = value;
+        s.CriticalHit.FlatChance = value;
         return s;
       }
     }
