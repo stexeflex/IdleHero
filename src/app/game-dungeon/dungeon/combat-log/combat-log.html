@@ -19,14 +19,21 @@
         <!-- REWARDS -->
         @case ("Rewards") {
           <app-icon class="log-rewards" symbol="lockedchest" size="md"></app-icon>
-          <span class="log-rewards-gold">
-            +{{ entry.Rewards.Gold | number: "1.0-0" }}
-            <app-icon symbol="twocoins" size="sm"></app-icon>
-          </span>
-          <span class="log-rewards-xp">
-            +{{ entry.Rewards.Experience | number: "1.0-0" }}
-            <app-icon symbol="starsstack" size="sm"></app-icon>
-          </span>
+          <div class="log-rewards-entry">
+            <div class="log-rewards-header">
+              <span>Completed Stage {{ entry.Stage }}</span>
+            </div>
+            <div class="log-rewards-values">
+              <span class="log-rewards-gold">
+                +{{ entry.Rewards.Gold | number: "1.0-0" }}
+                <app-icon symbol="twocoins" size="sm"></app-icon>
+              </span>
+              <span class="log-rewards-xp">
+                +{{ entry.Rewards.Experience | number: "1.0-0" }}
+                <app-icon symbol="starsstack" size="sm"></app-icon>
+              </span>
+            </div>
+          </div>
         }
         <!-- DAMAGE -->
         @case ("Damage") {
@@ -74,6 +81,7 @@
             </div>
           </div>
         }
+        <!-- BLEED -->
         @case ("Bleed") {
           <div class="log-damage-entry">
             <div class="log-damage-header">

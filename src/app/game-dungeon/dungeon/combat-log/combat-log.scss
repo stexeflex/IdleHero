@@ -23,7 +23,9 @@
 
 .log-entry,
 .log-damage-entry,
-.log-damage-header {
+.log-rewards-entry,
+.log-damage-header,
+.log-rewards-header {
   @include disable-text-selection();
   display: flex;
   flex-wrap: wrap;
@@ -37,12 +39,14 @@
   font-size: 1.2rem;
 }
 
-.log-damage-entry {
+.log-damage-entry,
+.log-rewards-entry {
   flex-direction: column;
   align-items: flex-start;
 }
 
-.log-damage-values {
+.log-damage-values,
+.log-rewards-values {
   display: flex;
   gap: calc($gap / 2);
 }
@@ -57,7 +61,8 @@
   font-weight: bold;
 }
 
-.log-rewards {
+.log-rewards,
+.log-rewards-header {
   color: $clr-highlight;
 }
 
