@@ -65,7 +65,7 @@
       .grid__value {
         @include flexbox($align: top, $justify: flex-end);
         text-align: center;
-        width: 250px;
+        width: 150px;
       }
 
       .grid__label,
