@@ -30,7 +30,11 @@
     <!-- TIERS -->
     <div class="tiers">
       @for (t of Tiers; track t) {
-        <button class="tier" [class.active]="SelectedTier() === t" (click)="SelectedTier.set(t)">
+        <button
+          class="tier"
+          [class.active]="SelectedTier() === t"
+          (click)="SelectedTier.set(t)"
+          [disabled]="t !== 'I'">
           TIER {{ t }}
         </button>
       }
