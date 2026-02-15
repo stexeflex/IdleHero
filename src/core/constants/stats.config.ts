@@ -44,6 +44,6 @@ export const STATS_CONFIG = {
 
     // Softcap für "+X% Chance"-Quellen, die als MultiplierChance gemappt werden.
     // Je höher K, desto weniger stark wirken kleine +% Werte (langsamerer Start bei 0%).
-    CHANCE_INCREASE_K: 1.8
+    CHANCE_INCREASE_K: 1.7
   }
 };
