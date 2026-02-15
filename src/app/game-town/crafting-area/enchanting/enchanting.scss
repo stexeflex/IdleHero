@@ -1,0 +1,188 @@
+@use "sass:color";
+@use "index" as *;
+
+.panel {
+  @include panel();
+  @include panel-shadow($border-width: 2px, $border-color: $clr-border);
+  @include flexbox($dir: column, $align: stretch);
+  gap: $gap;
+}
+
+.panel-header {
+  @include flexbox($justify: space-between, $align: center);
+  border-bottom: 1px solid $clr-border;
+  gap: $gap;
+  padding: calc($gap / 2);
+}
+
+.title {
+  @include flexbox($dir: column, $align: flex-start);
+  gap: calc($gap / 4);
+
+  .subtitle {
+    @include disable-text-selection();
+    @include flexbox($align: center);
+    gap: calc($gap / 2);
+    font-size: 0.9rem;
+  }
+
+  .dot {
+    opacity: 0.6;
+  }
+}
+
+.actions {
+  @include disable-text-selection();
+  @include flexbox($dir: row, $justify: center, $align: flex-end);
+  gap: $gap;
+  margin-right: 50px;
+
+  .action-info {
+    display: inline-flex;
+    align-items: center;
+    gap: calc($gap / 2);
+
+    > span {
+      font-size: 1rem;
+      color: $clr-text-primary;
+      font-family: $font-family-header;
+    }
+  }
+}
+
+.muted {
+  color: $clr-mute;
+}
+
+.panel-body {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: $gap;
+}
+
+.preview {
+  align-self: start;
+  display: grid;
+  gap: $gap;
+}
+
+.affixes {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: $gap;
+  align-items: center;
+}
+
+.affix-content {
+  display: grid;
+}
+
+.affix {
+  @include button-hover-active(
+    $bg-color: color.scale($clr-ui-bg, $lightness: 10%),
+    $bg-color-active: color.scale($clr-ui-bg, $lightness: 30%)
+  );
+  @include button-focus-visible-outline();
+
+  @include panel($bg: rgba(0, 0, 0, 0.2));
+  @include panel-shadow($border-width: 1px, $border-color: $clr-border);
+  @include box-shadow();
+
+  &:hover {
+    transform: scale(1.01);
+    transition: transform 0.2s;
+  }
+
+  display: grid;
+  gap: calc($gap / 3);
+  text-align: left;
+
+  // min-height: 100px;
+  min-width: 360px;
+
+  &.selected {
+    background: $grad-ui-bg-lighten-revert;
+    // background: color.scale($clr-ui-bg, $lightness: 10%);
+    // box-shadow: 0 0 10px color.scale($clr-highlight, $lightness: 0%);
+  }
+
+  .affix-header {
+    @include flexbox($justify: flex-start, $align: center);
+    gap: $gap;
+
+    .affix-title {
+      font-family: $font-family-header;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+  }
+
+  .affix-label {
+    color: $clr-text-primary;
+    font-size: 1.1rem;
+    font-weight: bold;
+  }
+
+  .affix-range {
+    font-size: 1rem;
+    color: $clr-mute;
+  }
+
+  .empty-slot {
+    display: inline-flex;
+    justify-content: center;
+    gap: $gap;
+  }
+}
+
+.affix-actions {
+  @include flexbox($dir: column, $justify: center, $align: flex-end);
+  gap: $gap;
+  min-width: 42px;
+}
+
+// .slot-title {
+//   @include flexbox($align: baseline);
+//   gap: calc($gap / 2);
+// }
+
+// .slot-name {
+//   font-family: $font-family-header;
+//   font-weight: bold;
+//   color: $clr-highlight;
+// }
+
+// .slot-tier {
+//   font-size: 0.9rem;
+// }
+
+// .slot-actions {
+//   @include flexbox($align: center);
+//   gap: calc($gap / 2);
+// }
+
+// .action {
+//   min-height: 35px;
+//   min-width: 92px;
+//   font-size: 1.05rem;
+// }
+
+// .slot-body {
+//   display: grid;
+//   gap: calc($gap / 4);
+// }
+
+// .affix-label {
+//   font-size: 0.95rem;
+//   color: $clr-text-primary;
+// }
+
+// .affix-meta {
+//   font-size: 0.85rem;
+// }
+
+.empty-state {
+  @include panel($bg: rgba(0, 0, 0, 0.2));
+  @include panel-shadow($border-width: 2px, $border-color: $clr-border);
+  padding: $gap;
+}

@@ -13,7 +13,22 @@ export const routes: Routes = [
   {
     path: 'game',
     component: Game,
-    canActivate: [gameGuard]
+    canActivate: [gameGuard],
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'town'
+      },
+      {
+        path: 'town',
+        loadComponent: () => import('./game-town/game-town').then((m) => m.GameTown)
+      },
+      {
+        path: 'dungeon',
+        loadComponent: () => import('./game-dungeon/game-dungeon').then((m) => m.GameDungeon)
+      }
+    ]
   },
   // New Game route
   {

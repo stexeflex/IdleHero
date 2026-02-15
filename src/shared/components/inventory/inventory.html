@@ -1,0 +1,73 @@
+<div class="panel">
+  <div class="panel-body">
+    @if (ShowEquipped()) {
+      <!-- EQUIPPED -->
+      <div class="list">
+        <div class="list-title">
+          <h4>EQUIPPED</h4>
+          @if (SelectedItem()) {
+            <button
+              class="ih-button-icon button-cancel"
+              (click)="DeselectGear()"
+              title="Clear Selection">
+              <app-icon ui="cancel" size="sm"></app-icon>
+            </button>
+          }
+        </div>
+        @for (e of EquippedItems(); track e.Id) {
+          <app-list-item
+            class="list-item"
+            [item]="e"
+            [selected]="SelectedItem()?.Id === e.Id"
+            (onSelect)="SelectItemFromEquipped(e)">
+            @if (SelectedItem()?.Id === e.Id) {
+              <button
+                class="ih-button-secondary show-on-hover"
+                (click)="UnequipSelected($event, e)">
+                UNEQUIP
+              </button>
+            }
+          </app-list-item>
+        }
+        @if (EquippedItems().length == 0) {
+          <div class="empty">
+            <div class="name">No items equipped</div>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- BAG -->
+    <div class="list">
+      <div class="list-title">
+        <h4>BAG</h4>
+        @if (!ShowEquipped() && SelectedItem()) {
+          <button
+            class="ih-button-icon button-cancel"
+            (click)="DeselectGear()"
+            title="Clear Selection">
+            <app-icon ui="cancel" size="sm"></app-icon>
+          </button>
+        }
+      </div>
+      @for (it of InventoryItems(); track it.Id) {
+        <app-list-item
+          class="list-item"
+          [item]="it"
+          [selected]="SelectedItem()?.Id === it.Id"
+          (onSelect)="SelectItemFromInventory(it)">
+          @if (SelectedItem()?.Id === it.Id) {
+            <button class="ih-button-secondary show-on-hover" (click)="EquipSelected($event, it)">
+              EQUIP
+            </button>
+          }
+        </app-list-item>
+      }
+      @if (InventoryItems().length == 0) {
+        <div class="empty">
+          <div class="name">No items in bag</div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

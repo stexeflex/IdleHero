@@ -1,0 +1,60 @@
+<button
+  class="variant"
+  [class.active]="Selected()"
+  [class.common--border]="Rarity() === 'Common'"
+  [class.magic--border]="Rarity() === 'Magic'"
+  [class.rare--border]="Rarity() === 'Rare'"
+  [class.epic--border]="Rarity() === 'Epic'"
+  [class.legendary--border]="Rarity() === 'Legendary'"
+  (click)="SelectVariant(Variant().Id)">
+  <!-- ITEM ICON -->
+  <div class="item-icon">
+    <app-icon [gear]="Variant().Icon" size="3x"></app-icon>
+  </div>
+
+  <div class="item-info">
+    <!-- ITEM NAME -->
+    <span class="item-name common--font">{{ Variant().Name.toUpperCase() }}</span>
+
+    <!-- ITEM TYPE -->
+    <div class="item-type-info">
+      <span class="item-tier">{{ Variant().Tier }}</span>
+      <span class="separator">•</span>
+      <span class="item-type">{{ Rarity() }} {{ Variant().Type }}</span>
+      <span
+        class="item-level"
+        [class.common--font]="Rarity() === 'Common'"
+        [class.magic--font]="Rarity() === 'Magic'"
+        [class.rare--font]="Rarity() === 'Rare'"
+        [class.epic--font]="Rarity() === 'Epic'"
+        [class.legendary--font]="Rarity() === 'Legendary'">
+        [{{ Level() }}]
+      </span>
+    </div>
+
+    <separator class="ih-separator"></separator>
+
+    <!-- WEAPON STATS -->
+    @if (Variant().WeaponBaseDamage && Variant().WeaponBaseAttackSpeed) {
+      <div class="item-weapon-stats">
+        <span class="weapon-stat">
+          <span class="value"> {{ WeaponBaseDamage() | number: "1.0-0" }}</span>
+          <span class="label">Damage</span>
+        </span>
+        <span class="separator">•</span>
+        <span class="weapon-stat">
+          <span class="value">
+            {{ WeaponBaseAttackSpeed() | number: "1.2-2" : "en-en" }}
+          </span>
+          <span class="label">APS</span>
+        </span>
+      </div>
+    }
+  </div>
+
+  <!-- INNATE -->
+  <div class="item-innate">
+    <app-icon class="icon" symbol="beveledstar" size="mini"></app-icon>
+    <span class="label">{{ VariantLabel() }}</span>
+  </div>
+</button>

@@ -1,31 +1,33 @@
-import { DecimalPipe } from '@angular/common';
-import { HeroService, LevelService, StatsService } from '../../../../../shared/services';
+import { CombatStatsService, LevelService, PlayerHeroService } from '../../../../../core/services';
+import { Component, LOCALE_ID, inject } from '@angular/core';
+import { IconComponent, NumberValue } from '../../../../../shared/components';
 
-import { Component, Inject, LOCALE_ID } from '@angular/core';
-import { NumberValue } from '../../../../../shared/components';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-info',
-  imports: [NumberValue],
+  imports: [NumberValue, IconComponent],
   templateUrl: './info.html',
   styleUrl: './info.scss'
 })
 export class Info {
-  private readonly PLACEHOLDER = '-';
+  private readonly locale = inject(LOCALE_ID);
+  private heroService = inject(PlayerHeroService);
+  private statsService = inject(CombatStatsService);
+  private levelService = inject(LevelService);
 
+  private readonly PLACEHOLDER = '-';
   private readonly decimalPipe: DecimalPipe;
 
-  private get DamagePerSecond(): number {
-    return Math.round(this.statsService.AttackPower() * this.statsService.AttackSpeed());
+  constructor() {
+    this.decimalPipe = new DecimalPipe(this.locale);
   }
 
-  constructor(
-    @Inject(LOCALE_ID) locale: string,
-    protected heroService: HeroService,
-    protected statsService: StatsService,
-    protected levelService: LevelService
-  ) {
-    this.decimalPipe = new DecimalPipe(locale);
+  get HeroInfo(): { name: string; level: number } {
+    return {
+      name: this.heroService.Name(),
+      level: this.levelService.Level()
+    };
   }
 
   get SummaryStats(): { label: string; value: string }[] {
@@ -36,7 +38,7 @@ export class Info {
       },
       {
         label: 'DPS',
-        value: this.decimalPipe.transform(this.DamagePerSecond) || this.PLACEHOLDER
+        value: this.decimalPipe.transform(this.statsService.DamagePerSecond()) || this.PLACEHOLDER
       }
     ];
   }

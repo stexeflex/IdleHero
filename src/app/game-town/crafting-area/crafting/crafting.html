@@ -1,0 +1,56 @@
+<!-- CRAFTING PANEL -->
+<div class="panel">
+  <div class="panel-header">
+    <div>
+      <h3>ITEM CRAFTING</h3>
+    </div>
+    <!-- ACTIONS -->
+    <div class="actions">
+      <app-gold [amount]="CraftCost()" size="sm" fontSize="1.3rem"></app-gold>
+      <button
+        class="ih-button-secondary action"
+        [disabled]="CraftCost() > GoldBalance() || !SelectedVariant()"
+        (click)="Craft()">
+        CRAFT
+      </button>
+    </div>
+  </div>
+
+  <div class="panel-body">
+    <!-- SLOTS -->
+    <div class="slots">
+      @for (s of Slots; track s) {
+        <button class="slot" [class.active]="SelectedSlot() === s" (click)="SelectSlot(s)">
+          <app-icon [gear]="SlotIcons[s]" size="md"></app-icon>
+          {{ s.toUpperCase() }}
+        </button>
+      }
+    </div>
+
+    <!-- TIERS -->
+    <div class="tiers">
+      @for (t of Tiers; track t) {
+        <button
+          class="tier"
+          [class.active]="SelectedTier() === t"
+          (click)="SelectedTier.set(t)"
+          [disabled]="t !== 'I'">
+          TIER {{ t }}
+        </button>
+      }
+    </div>
+
+    <!-- VARIANTS -->
+    <div class="variants">
+      @for (v of VariantsForSlot(); track v.Id) {
+        <div class="variant">
+          <app-item-variant-preview
+            [Variant]="v"
+            [Selected]="SelectedVariantId() === v.Id"
+            (OnSelectVariant)="SelectVariant($event)">
+          </app-item-variant-preview>
+        </div>
+      }
+    </div>
+  </div>
+</div>

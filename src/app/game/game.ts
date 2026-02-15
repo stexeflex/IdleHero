@@ -1,40 +1,69 @@
-import { Component, signal } from '@angular/core';
-import { TabDefinition, TabStrip } from '../../shared/components';
+import { Component, inject, signal } from '@angular/core';
+import { GameService, MenuService } from '../../shared/services';
+import { IconComponent, TabDefinition, TabStrip } from '../../shared/components';
+import { Router, RouterOutlet } from '@angular/router';
 
 import { CharacterArea } from './character-area/character-area';
-import { DungeonArea } from './dungeon-area/dungeon-area';
+import { CharacterLoadout } from './character-loadout/character-loadout';
+import { CombatState } from '../../core/systems/combat';
 import { InfoArea } from './info-area/info-area';
-import { InventoryArea } from './inventory-area/inventory-area';
 import { Menu } from './menu/menu';
-import { MenuService } from '../../shared/services';
-import { SkillTree } from './skill-tree/skill-tree';
+import { StatisticsFlyout } from './statistics-flyout/statistics-flyout';
 
 @Component({
   selector: 'app-game',
-  imports: [CharacterArea, InventoryArea, Menu, InfoArea, SkillTree, TabStrip, DungeonArea],
+  imports: [
+    CharacterArea,
+    Menu,
+    InfoArea,
+    RouterOutlet,
+    IconComponent,
+    TabStrip,
+    CharacterLoadout,
+    StatisticsFlyout
+  ],
   templateUrl: './game.html',
   styleUrl: './game.scss'
 })
 export class Game {
-  protected readonly title = signal('IDLE HERO');
+  private router = inject(Router);
+  private gameService = inject(GameService);
+  private menuService = inject(MenuService);
+  private combatState = inject(CombatState);
 
+  protected readonly title = this.gameService.Title;
+  protected readonly currentArea = signal<'Town' | 'Dungeon'>('Town');
+
+  // Tabs
+  protected get Tabs(): TabDefinition[] {
+    return [
+      { id: 'character', label: 'CHARACTER', disabled: false },
+      { id: 'loadout', label: 'LOADOUT', disabled: false }
+    ];
+  }
+
+  protected SelectedTab = signal<TabDefinition['id']>('character');
+
+  protected onTabSelected(tabId: TabDefinition['id']): void {
+    this.SelectedTab.set(tabId);
+  }
+
+  // UI State
   protected get IsMenuOpen(): boolean {
     return this.menuService.IsMenuOpen();
   }
 
-  protected get Tabs(): TabDefinition[] {
-    return [
-      { id: 'inventory', label: 'INVENTORY', disabled: false },
-      { id: 'skills', label: 'SKILLS', disabled: true },
-      { id: 'crafting', label: 'CRAFTING', disabled: true }
-    ];
+  protected get CanSwitchArea(): boolean {
+    return !this.combatState.InProgress();
   }
 
-  protected SelectedTab = signal<TabDefinition['id'] | null>('inventory');
+  SwitchArea() {
+    this.currentArea.set(this.currentArea() === 'Town' ? 'Dungeon' : 'Town');
 
-  constructor(private menuService: MenuService) {}
+    if (this.currentArea() === 'Town') {
+      this.combatState.Leave();
+    }
 
-  protected onTabSelected(tabId: TabDefinition['id']): void {
-    this.SelectedTab.set(tabId);
+    this.router.navigate([`/game/${this.currentArea().toLowerCase()}`]);
   }
 }

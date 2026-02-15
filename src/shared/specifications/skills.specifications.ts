@@ -1,16 +1,14 @@
-import { Injectable } from '@angular/core';
-import { LevelSpecifications } from './level.specifications';
+import { GoldService, LevelService } from '../../core/services';
+import { Injectable, inject } from '@angular/core';
+
 import { SkillId } from '../models';
 import { SkillsService } from '../services';
-import { VendorSpecifications } from './vendor.specifications';
 
 @Injectable({ providedIn: 'root' })
 export class SkillsSpecifications {
-  constructor(
-    private levelSpecifications: LevelSpecifications,
-    private vendorSpecifications: VendorSpecifications,
-    private skillsService: SkillsService
-  ) {}
+  private levelService = inject(LevelService);
+  private goldService = inject(GoldService);
+  private skillsService = inject(SkillsService);
 
   public CanUnlockTier(tierId: number): boolean {
     const tier = this.skillsService.GetTier(tierId);
@@ -26,9 +24,8 @@ export class SkillsSpecifications {
 
     const canUnlock =
       previousTierUnlocked &&
-      this.levelSpecifications.HasRequiredLevel(tier.RequiredLevel) &&
-      this.vendorSpecifications.CanBuy() &&
-      this.vendorSpecifications.EnoughGold(tier.GoldCost);
+      this.levelService.Level() >= tier.RequiredLevel &&
+      this.goldService.CanAfford(tier.GoldCost);
 
     return canUnlock;
   }
@@ -57,7 +54,7 @@ export class SkillsSpecifications {
     const skillAvailable = this.SkillAvailable(skillId);
 
     // Add enough skill points check when skill points are implemented
-    const canUnlock = skillAvailable && this.vendorSpecifications.CanBuy();
+    const canUnlock = skillAvailable;
 
     return canUnlock;
   }
@@ -75,8 +72,7 @@ export class SkillsSpecifications {
     const isMaxed = currentLevel < skill.MaxLevel;
 
     // Add enough skill points check when skill points are implemented
-    const canLevel =
-      skillAvailable && skillUnlocked && isMaxed && this.vendorSpecifications.CanBuy();
+    const canLevel = skillAvailable && skillUnlocked && isMaxed;
 
     return canLevel;
   }

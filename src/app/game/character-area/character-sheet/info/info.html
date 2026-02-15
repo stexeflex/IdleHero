@@ -1,18 +1,19 @@
 <!-- Header -->
 <div class="header">
-  <div class="header__name">{{ heroService.Name() }}</div>
-  <app-number-value
-    class="header__level"
-    [label]="'Level:'"
-    [value]="levelService.Level()"></app-number-value>
+  @let hero = HeroInfo;
+  <div class="header__name">{{ hero.name.toUpperCase() }}</div>
+  <div class="header__level">
+    <app-number-value [label]="'Level:'" [value]="hero.level"></app-number-value>
+    <app-icon class="level-icon" symbol="roundstar" size="sm"></app-icon>
+  </div>
 </div>
 
 <!-- Summary -->
 <div class="summary">
   @for (summaryStat of SummaryStats; track summaryStat.label) {
     <div class="summary__item">
-      <div class="item__label">{{ summaryStat.label }}</div>
       <div class="item__value">{{ summaryStat.value }}</div>
+      <div class="item__label">{{ summaryStat.label }}</div>
     </div>
   }
 </div>

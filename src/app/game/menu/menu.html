@@ -4,7 +4,7 @@
     aria-expanded="{{ IsMenuOpen }}"
     aria-controls="menuNav"
     (click)="ToggleMenu()">
-    <i class="bi bi-list menu__toggle__icon"></i>
+    <app-menu-button-icon></app-menu-button-icon>
   </button>
 
   <div class="menu__content" [hidden]="!IsMenuOpen">
@@ -28,7 +28,7 @@
       </p>
       <separator></separator>
       <footer class="footer">
-        <div>Made by Cedust</div>
+        <div>Made by <a href="https://github.com/Cedust" target="_blank">Cedust</a></div>
         <div>Version: {{ Version }}</div>
       </footer>
     </div>

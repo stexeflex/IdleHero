@@ -1,0 +1,55 @@
+<section>
+  <app-panel-header [title]="'DUNGEONS'"></app-panel-header>
+
+  <div class="dungeon-list">
+    <div class="dungeon-group">
+      <h3 class="group-title">DUNGEONS</h3>
+      @for (dungeon of NormalDungeons(); track dungeon.Id) {
+        <div class="dungeon-card">
+          <app-icon [creatures]="dungeon.Icon" size="lg"></app-icon>
+          <div class="dungeon-info">
+            <div class="dungeon-title">{{ dungeon.Id }} • {{ dungeon.Title.toUpperCase() }}</div>
+            <div class="dungeon-desc">{{ dungeon.Description }}</div>
+            <div class="dungeon-meta">
+              <span>Stages: {{ dungeon.StagesBase }} - {{ dungeon.StagesMax }}</span>
+            </div>
+            <div class="dungeon-meta">
+              <span>Elites: {{ dungeon.MidStages.join(" | ") }}</span>
+            </div>
+          </div>
+          <button
+            class="ih-button"
+            [disabled]="!CanEnter(dungeon.Id)"
+            (click)="EnterDungeon(dungeon.Id)">
+            ENTER
+          </button>
+        </div>
+      }
+    </div>
+
+    <div class="dungeon-group">
+      <h3 class="group-title">CAPSTONE DUNGEONS</h3>
+      @for (dungeon of CapstoneDungeons(); track dungeon.Id) {
+        <div class="dungeon-card">
+          <app-icon [creatures]="dungeon.Icon" size="lg"></app-icon>
+          <div class="dungeon-info">
+            <div class="dungeon-title">{{ dungeon.Id }} • {{ dungeon.Title.toUpperCase() }}</div>
+            <div class="dungeon-desc">{{ dungeon.Description }}</div>
+            <div class="dungeon-meta">
+              <span>Stages: {{ dungeon.StagesBase }} - {{ dungeon.StagesMax }}</span>
+            </div>
+            <div class="dungeon-meta">
+              <span>Elites: {{ dungeon.MidStages.join(" | ") }}</span>
+            </div>
+          </div>
+          <button
+            class="ih-button"
+            [disabled]="!CanEnter(dungeon.Id)"
+            (click)="EnterDungeon(dungeon.Id)">
+            ENTER
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+</section>

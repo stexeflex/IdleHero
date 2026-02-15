@@ -1,0 +1,93 @@
+@use "sass:color";
+@use "index" as *;
+
+.panel {
+  @include panel();
+  @include panel-shadow($border-width: 2px, $border-color: $clr-border);
+  @include flexbox($dir: column, $align: stretch);
+  gap: $gap;
+}
+
+.panel-header {
+  @include flexbox($justify: space-between, $align: center);
+  border-bottom: 1px solid $clr-border;
+  padding: calc($gap / 2);
+}
+
+.actions {
+  @include flexbox($align: center);
+  gap: calc($gap / 2);
+}
+
+.action {
+  font-size: 1.1rem;
+  min-height: 35px;
+  min-width: 80px;
+}
+
+.panel-body {
+  display: grid;
+  grid:
+    "slots tiers" auto
+    "slots variants" 1fr
+    / auto 1fr;
+
+  gap: $gap;
+}
+
+.slot,
+.tier {
+  @include button-text-font();
+  @include button-sizing($font-size: 0.9rem, $min-width: auto);
+  @include button-style($bg-color: rgba(0, 0, 0, 0.25), $border: 1px solid $clr-border);
+  @include button-focus-visible-outline();
+
+  @include flexbox($dir: column, $justify: center, $align: center);
+  @include panel($bg: $clr-ui-bg);
+  @include box-shadow();
+}
+
+.slot.active,
+.tier.active {
+  // border-width: 4px;
+  background: $grad-ui-bg-lighten;
+}
+
+$slot-size: 80px;
+
+.slots {
+  grid-area: slots;
+  display: grid;
+  justify-content: start;
+  align-content: start;
+  gap: $gap;
+}
+
+.slot {
+  gap: calc($gap / 2);
+
+  height: $slot-size;
+  width: $slot-size;
+}
+
+.tiers {
+  grid-area: tiers;
+  display: inline-flex;
+  align-items: center;
+  gap: $gap;
+  height: 44px;
+}
+
+.tier {
+  min-width: 80px;
+}
+
+.variants {
+  grid-area: variants;
+  @include overflow($display: flex, $max-height: $size-crafting-variants-height);
+  @include scrollbar($size: 0.8rem);
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: $gap;
+  padding: $gap;
+}

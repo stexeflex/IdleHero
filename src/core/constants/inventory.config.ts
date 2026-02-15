@@ -1,0 +1,4 @@
+export const INVENTORY_CONFIG = {
+  ITEM_CAPACITY: 50,
+  RUNE_CAPACITY: 25
+};

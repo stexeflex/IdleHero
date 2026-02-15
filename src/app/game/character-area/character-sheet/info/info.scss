@@ -4,13 +4,10 @@
 /* Header */
 .header {
   display: grid;
-  grid:
-    "name level" auto
-    "prestige stage" auto
-    / 1fr auto;
+  grid-template-columns: 1fr auto;
 
   @include disable-text-selection();
-  margin-bottom: $gap;
+  // margin-bottom: $gap;
 }
 
 .header__name,
@@ -20,30 +17,19 @@
 }
 
 .header__name {
-  grid-area: name;
-
   color: $clr-highlight;
   font-family: $font-family-title;
   font-size: $font-size-info-header;
 }
 
 .header__level {
-  grid-area: level;
-  align-content: center;
-  justify-items: end;
-}
+  display: inline-flex;
+  align-items: center;
 
-.header__prestige {
-  grid-area: prestige;
-}
-
-.header__stage {
-  grid-area: stage;
-}
-
-.header__prestige,
-.header__stage {
-  margin-bottom: $gap;
+  .level-icon {
+    color: $clr-highlight;
+    margin: 0 0 calc($gap / 4) calc($gap / 2);
+  }
 }
 
 /* Summary */
@@ -51,30 +37,28 @@ $padding-attributes-summary: $gap 0;
 
 .summary {
   @include divider($clr-ui-bg-invert, $margin: 0, $padding: $padding-attributes-summary);
-}
-
-.summary {
   @include flexbox(row, space-around, center);
+
   padding: $padding-attributes-summary;
   gap: $gap;
-}
 
-.summary__item {
-  @include flexbox(column, center, center);
-}
+  .summary__item {
+    @include flexbox(column, center, center);
 
-.item__label {
-  font-family: $font-family-header;
-  color: $clr-text-primary;
-}
+    .item__label {
+      font-family: $font-family-header;
+      color: $clr-text-primary;
+    }
 
-.item__value {
-  color: $clr-highlight;
-}
+    .item__value {
+      color: $clr-highlight;
+    }
 
-.item__label,
-.item__value {
-  @include disable-text-selection();
-  font-size: 1.3rem;
-  font-weight: bold;
+    .item__label,
+    .item__value {
+      @include disable-text-selection();
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+  }
 }

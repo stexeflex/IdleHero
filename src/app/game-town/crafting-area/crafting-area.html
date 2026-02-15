@@ -1,0 +1,37 @@
+<section class="blacksmith-area">
+  <app-tab-strip
+    [tabs]="Tabs"
+    [selected]="SelectedTab()"
+    (selectedChange)="onTabSelected($event)"></app-tab-strip>
+  <div class="area">
+    <!-- TAB AREA -->
+    <div class="tab__area">
+      @switch (SelectedTab()) {
+        @case ("crafting") {
+          <app-crafting></app-crafting>
+        }
+        @case ("enchanting") {
+          @if (SelectedItem()) {
+            <app-enchanting
+              [Item]="SelectedItem()!"
+              (ItemChange)="OnEnchantingItemChange($event)"></app-enchanting>
+          } @else {
+            <div class="empty">
+              <div class="headline">Nothing to show</div>
+              <div class="hint">Select an item in your inventory to enchant.</div>
+            </div>
+          }
+        }
+        @case ("socketing") {
+          Coming Soon...
+        }
+      }
+    </div>
+    <!-- INVENTORY -->
+    <div>
+      <app-inventory
+        [ShowEquipped]="true"
+        (ItemSelected)="onInventoryItemSelected($event)"></app-inventory>
+    </div>
+  </div>
+</section>

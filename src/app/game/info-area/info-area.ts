@@ -1,47 +1,47 @@
 import { Component, inject } from '@angular/core';
+import { DungeonKeyService, GoldService, StatisticsService } from '../../../core/services';
 import { Gold, IconComponent, Separator } from '../../../shared/components';
 
-import { CurrencyService } from '../../../shared/services';
-import { DecimalPipe } from '@angular/common';
-import { DungeonRoomKey } from '../../../shared/models';
-import { StatisticsService } from '../../../shared/services/character/statistics.service';
+import { DungeonRoomKey } from '../../../core/models';
 
 @Component({
   selector: 'app-info-area',
-  imports: [DecimalPipe, Gold, Separator, IconComponent],
+  imports: [Gold, Separator, IconComponent],
   templateUrl: './info-area.html',
   styleUrl: './info-area.scss'
 })
 export class InfoArea {
-  readonly currencyService = inject<CurrencyService>(CurrencyService);
-  readonly statisticsService = inject<StatisticsService>(StatisticsService);
+  private readonly goldService = inject<GoldService>(GoldService);
+  private readonly dungeonKeyService = inject<DungeonKeyService>(DungeonKeyService);
+  private readonly statisticsService = inject<StatisticsService>(StatisticsService);
 
   protected get GoldAmount(): number {
-    return this.currencyService.Gold();
-  }
-
-  protected get PrestigeLevel(): number {
-    return this.statisticsService.Prestiges();
+    return this.goldService.Balance();
   }
 
   protected get MaxStages(): string {
-    const stageStatistics = this.statisticsService.StageStatistics();
+    const stageStatistics = this.statisticsService.DungeonStatistics();
     const stages =
-      Object.entries(stageStatistics.HighestStageReached)
+      Object.entries(stageStatistics.Dungeon)
         .map(([roomId, stage]) => `${roomId} - ${stage}`)
-        .join(' | ') || '1 - 0';
+        .join(' | ') || 'D1 - 0';
+    return stages;
+  }
+
+  protected get MaxCapstoneStages(): string {
+    const stageStatistics = this.statisticsService.DungeonStatistics();
+    const stages =
+      Object.entries(stageStatistics.Capstone)
+        .map(([roomId, stage]) => `${roomId} - ${stage}`)
+        .join(' | ') || 'C1 - 0';
     return stages;
   }
 
   protected get HasAnyKey(): boolean {
-    return (
-      this.currencyService.SilverKey() ||
-      this.currencyService.MagicKey() ||
-      this.currencyService.GoldenKey()
-    );
+    return this.dungeonKeyService.Keys().length > 0;
   }
 
   protected HasKey(key: DungeonRoomKey): boolean {
-    return this.currencyService.HasKey(key);
+    return this.dungeonKeyService.HasKey(key);
   }
 }

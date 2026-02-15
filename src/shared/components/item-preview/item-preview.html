@@ -1,0 +1,86 @@
+<div
+  class="item"
+  [class.common--border]="Rarity() === 'Common'"
+  [class.magic--border]="Rarity() === 'Magic'"
+  [class.rare--border]="Rarity() === 'Rare'"
+  [class.epic--border]="Rarity() === 'Epic'"
+  [class.legendary--border]="Rarity() === 'Legendary'">
+  <!-- ITEM ICON -->
+  <div class="item-icon">
+    <app-icon [gear]="Item().Icon" size="3x"></app-icon>
+  </div>
+
+  <div class="item-info">
+    <!-- ITEM NAME -->
+    <span class="item-name common--font">{{ Item().Name.toUpperCase() }}</span>
+
+    <!-- ITEM TYPE -->
+    <div class="item-type-info">
+      <span class="item-tier">{{ Item().Tier }}</span>
+      <span class="separator">•</span>
+      <span class="item-type">{{ Rarity() }} {{ Variant().Type }}</span>
+      <span
+        class="item-level"
+        [class.common--font]="Rarity() === 'Common'"
+        [class.magic--font]="Rarity() === 'Magic'"
+        [class.rare--font]="Rarity() === 'Rare'"
+        [class.epic--font]="Rarity() === 'Epic'"
+        [class.legendary--font]="Rarity() === 'Legendary'">
+        [{{ Item().Level }}]
+      </span>
+    </div>
+
+    <separator class="ih-separator"></separator>
+
+    <!-- WEAPON STATS -->
+    @if (WeaponBaseDamage() && WeaponBaseAttackSpeed()) {
+      <div class="item-weapon-stats">
+        <span class="weapon-stat">
+          <span class="value"> {{ WeaponBaseDamage() | number: "1.0-0" }}</span>
+          <span class="label">Damage</span>
+        </span>
+        <span class="separator">•</span>
+        <span class="weapon-stat">
+          <span class="value">
+            {{ WeaponBaseAttackSpeed() | number: "1.2-2" : "en-en" }}
+          </span>
+          <span class="label">APS</span>
+        </span>
+      </div>
+    }
+  </div>
+
+  <!-- INNATE -->
+  <div class="item-innate">
+    <span class="icon">
+      <app-icon symbol="beveledstar" size="mini"></app-icon>
+    </span>
+    <span class="label">{{ VariantLabel() }}</span>
+  </div>
+
+  <!-- AFFIXES -->
+  <div class="item-affixes">
+    @for (affix of AffixesInfo(); track affix.Label) {
+      <div class="item-affix">
+        <span
+          class="icon"
+          [class.common--font]="affix.Tier === 'Common'"
+          [class.magic--font]="affix.Tier === 'Magic'"
+          [class.rare--font]="affix.Tier === 'Rare'"
+          [class.epic--font]="affix.Tier === 'Epic'"
+          [class.legendary--font]="affix.Tier === 'Legendary'">
+          <app-icon symbol="polarstar" size="mini"></app-icon>
+        </span>
+        <span class="label">
+          {{ affix.Label }}
+          <span class="min-max-roll">[{{ affix.MinRoll }} - {{ affix.MaxRoll }}]</span>
+        </span>
+      </div>
+    }
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="actions">
+    <ng-content></ng-content>
+  </div>
+</div>

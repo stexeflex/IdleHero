@@ -9,8 +9,8 @@
 .sheet__portrait {
   @include flexbox();
 
-  height: 12em;
-  width: 10em;
+  height: 10em;
+  width: 9em;
 
   border: 3px solid $clr-border;
   border-radius: $border-radius;

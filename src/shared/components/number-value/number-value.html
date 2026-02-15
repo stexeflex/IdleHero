@@ -1,8 +1,8 @@
 <div class="container">
-  @if (label) {
-    <div class="label">{{ label }}</div>
+  @if (label()) {
+    <div class="label">{{ label() }}</div>
   }
   <div class="value">
-    {{ value | number: "1.0-0" }}
+    {{ value() | number: "1.0-0" }}
   </div>
 </div>

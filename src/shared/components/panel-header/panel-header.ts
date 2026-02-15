@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 import { Separator } from '../separator/separator';
 
@@ -9,5 +9,5 @@ import { Separator } from '../separator/separator';
   styleUrl: './panel-header.scss'
 })
 export class PanelHeader {
-  @Input({ required: true }) title: string = '';
+  readonly title = input.required<string>();
 }

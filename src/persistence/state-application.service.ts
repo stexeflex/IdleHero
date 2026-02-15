@@ -1,38 +1,48 @@
 import {
   AttributesService,
-  CurrencyService,
-  GameStateService,
-  HeroService,
+  DungeonKeyService,
+  GearLoadoutService,
+  GoldService,
   InventoryService,
   LevelService,
-  SkillsService
-} from '../shared/services';
+  PlayerHeroService,
+  StatisticsService
+} from '../core/services';
+import { Injectable, inject } from '@angular/core';
 
-import { Injectable } from '@angular/core';
 import { Schema } from './models/schema';
-import { StatisticsService } from '../shared/services/character/statistics.service';
 
 @Injectable({ providedIn: 'root' })
 export class StateApplicationService {
-  constructor(
-    private gameStateService: GameStateService,
-    private statisticsService: StatisticsService,
-    private heroService: HeroService,
-    private levelService: LevelService,
-    private attributesService: AttributesService,
-    private skillsService: SkillsService,
-    private inventoryService: InventoryService,
-    private currencyService: CurrencyService
-  ) {}
+  private heroService = inject(PlayerHeroService);
+  private levelService = inject(LevelService);
+  private attributesService = inject(AttributesService);
+  private goldService = inject(GoldService);
+  private dungeonKeyService = inject(DungeonKeyService);
+  private loadoutService = inject(GearLoadoutService);
+  private inventoryService = inject(InventoryService);
+  private statisticsService = inject(StatisticsService);
 
   public ApplyState(schema: Schema): void {
-    this.gameStateService.GameCreated.set(schema.GameState.GameCreated);
-    this.statisticsService.Init(schema.Statistics);
-    this.heroService.Init(schema.Hero);
-    this.levelService.Init(schema.Level);
-    this.attributesService.Init(schema.Attributes);
-    this.skillsService.Init(schema.Skills);
-    this.inventoryService.Init(schema.Inventory);
-    this.currencyService.Init(schema.Currency);
+    // Hero
+    this.heroService.Set(schema.Player.Name, schema.Player.CharacterIcon);
+
+    // Level
+    this.levelService.SetLevel(schema.Level.Level, schema.Level.ExperienceInLevel);
+
+    // Attributes
+    this.attributesService.SetAllocated(schema.Attributes.Allocated);
+    this.attributesService.SetUnallocated(schema.Attributes.Unallocated);
+
+    // Currency
+    this.goldService.SetState(schema.Gold);
+    this.dungeonKeyService.SetState(schema.DungeonKeys);
+
+    // Loadout & Inventory
+    this.loadoutService.SetState(schema.Loadout);
+    this.inventoryService.SetState(schema.Inventory);
+
+    // Statistics
+    this.statisticsService.SetState(schema.Statistics);
   }
 }
