@@ -8,7 +8,7 @@
         <div class="dungeon-card">
           <app-icon [creatures]="dungeon.Icon" size="lg"></app-icon>
           <div class="dungeon-info">
-            <div class="dungeon-title">{{ dungeon.Title.toUpperCase() }}</div>
+            <div class="dungeon-title">{{ dungeon.Id }} • {{ dungeon.Title.toUpperCase() }}</div>
             <div class="dungeon-desc">{{ dungeon.Description }}</div>
             <div class="dungeon-meta">
               <span>Stages: {{ dungeon.StagesBase }} - {{ dungeon.StagesMax }}</span>
@@ -33,7 +33,7 @@
         <div class="dungeon-card">
           <app-icon [creatures]="dungeon.Icon" size="lg"></app-icon>
           <div class="dungeon-info">
-            <div class="dungeon-title">{{ dungeon.Title.toUpperCase() }}</div>
+            <div class="dungeon-title">{{ dungeon.Id }} • {{ dungeon.Title.toUpperCase() }}</div>
             <div class="dungeon-desc">{{ dungeon.Description }}</div>
             <div class="dungeon-meta">
               <span>Stages: {{ dungeon.StagesBase }} - {{ dungeon.StagesMax }}</span>

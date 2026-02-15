@@ -22,6 +22,15 @@ export class InfoArea {
   protected get MaxStages(): string {
     const stageStatistics = this.statisticsService.DungeonStatistics();
     const stages =
+      Object.entries(stageStatistics.Dungeon)
+        .map(([roomId, stage]) => `${roomId} - ${stage}`)
+        .join(' | ') || 'D1 - 0';
+    return stages;
+  }
+
+  protected get MaxCapstoneStages(): string {
+    const stageStatistics = this.statisticsService.DungeonStatistics();
+    const stages =
       Object.entries(stageStatistics.Capstone)
         .map(([roomId, stage]) => `${roomId} - ${stage}`)
         .join(' | ') || 'C1 - 0';
