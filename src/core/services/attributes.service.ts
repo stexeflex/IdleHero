@@ -62,6 +62,11 @@ export class AttributesService {
     return { ...this.Allocated() };
   }
 
+  public SetUnallocated(points: number): void {
+    if (!Number.isFinite(points) || points < 0) return;
+    this.Unallocated.set(Math.floor(points));
+  }
+
   /**
    * Allocates attribute points if available
    * @param attribute the attribute to allocate points to

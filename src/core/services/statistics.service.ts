@@ -58,4 +58,9 @@ export class StatisticsService {
 
     this.DamageStatistics.update(() => updated);
   }
+
+  public SetState(newStats: { Dungeon: DungeonStatistics; Damage: DamageStatistics }): void {
+    this.DungeonStatistics.set(newStats.Dungeon);
+    this.DamageStatistics.set(newStats.Damage);
+  }
 }

@@ -32,7 +32,7 @@ export class StateApplicationService {
 
     // Attributes
     this.attributesService.SetAllocated(schema.Attributes.Allocated);
-    this.attributesService.AddAttributePoints(schema.Attributes.Unallocated);
+    this.attributesService.SetUnallocated(schema.Attributes.Unallocated);
 
     // Currency
     this.goldService.SetState(schema.Gold);
@@ -43,7 +43,6 @@ export class StateApplicationService {
     this.inventoryService.SetState(schema.Inventory);
 
     // Statistics
-    this.statisticsService.UpdateDungeon(schema.Statistics.Dungeon);
-    this.statisticsService.UpdateDamage(schema.Statistics.Damage);
+    this.statisticsService.SetState(schema.Statistics);
   }
 }
