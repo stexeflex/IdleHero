@@ -12,23 +12,25 @@ import {
   CreateDamageOverTimeEvent,
   CreateDeathEvent,
   CreateMissEvent,
+  CreateStageAdvanceEvent,
   DamageEvent,
   DamageOverTimeEvent,
   DeathEvent,
   HealEvent,
   Hero,
   HeroStats,
-  MissEvent
+  MissEvent,
+  StageAdvanceEvent
 } from '../../../models';
 import { ChanceUtils, ClampUtils } from '../../../../shared/utils';
 import { CombatLogService, StatisticsService } from '../../../services';
+import { DELAYS, STATS_CONFIG } from '../../../constants';
 import { HealLife, TakeDamage } from '../life.utils';
 import { Injectable, inject } from '@angular/core';
 
 import { CombatState } from './combat.state';
 import { ComputeNextIntervalMs } from '../attack-interval-computing';
 import { DamageResult } from './models/damage-result';
-import { STATS_CONFIG } from '../../../constants';
 
 /**
  * Event Handler Service
@@ -83,11 +85,16 @@ export class EventHandler {
 
       case 'Death':
         this.Logger.Death(event);
-        await this.HandleDeathEvent(event);
+        this.HandleDeathEvent(event);
+        break;
+
+      case 'StageAdvance':
+        this.HandleStageAdvanceEvent(event);
         break;
     }
   }
 
+  /** ATTACK */
   private HandleAttackEvent(event: AttackEvent): void {
     const actor = event.Actor;
     const target = event.Target;
@@ -127,6 +134,7 @@ export class EventHandler {
     this.CombatState.Queue.Push(nextAttackEvent);
   }
 
+  /** CALCULATE HITS & DAMAGE */
   private HandleHeroHitEvent(hero: Hero, event: AttackEvent): void {
     const actor = hero;
     const target = event.Target;
@@ -205,10 +213,12 @@ export class EventHandler {
     }
   }
 
+  /** MISSED HIT */
   private HandleMissEvent(event: MissEvent): void {
     // Nur für Log/Animation relevant
   }
 
+  /** DEAL DAMAGE */
   private HandleDamageEvent(event: DamageEvent): void {
     const target = event.Target;
 
@@ -230,6 +240,7 @@ export class EventHandler {
     this.CombatState.PublishState();
   }
 
+  /** DAMAGE OVER TIME */
   private HandleDamageOverTimeEvent(event: DamageOverTimeEvent): void {
     const target = event.Target;
 
@@ -268,6 +279,7 @@ export class EventHandler {
     this.CombatState.PublishState();
   }
 
+  /** CHARGED */
   private HandleChargeEvent(event: ChargeEvent): void {
     const actor = event.Actor as Hero;
 
@@ -306,6 +318,7 @@ export class EventHandler {
     this.CombatState.PublishState();
   }
 
+  /** STATE CLEARANCE */
   private HandleClearEvent(event: ClearEvent): void {
     switch (event.ClearingType) {
       case 'Charge': {
@@ -333,6 +346,7 @@ export class EventHandler {
     this.CombatState.PublishState();
   }
 
+  /** HEALING */
   private HandleHealEvent(event: HealEvent): void {
     const target = event.Target;
 
@@ -344,26 +358,21 @@ export class EventHandler {
     this.CombatState.PublishState();
   }
 
-  private async HandleDeathEvent(event: DeathEvent): Promise<void> {
+  /** BOSS DEATH */
+  private HandleDeathEvent(event: DeathEvent): void {
     // Boss besiegt
     if (!!(event.Actor as Boss)) {
-      // Heal Hero after defeating Boss
-      // let hero = this.CombatState.Hero();
-      // if (!hero) return;
-      // if (!hero.Life.Alive) return;
-      // hero = {
-      //   ...hero,
-      //   Life: ResetLife(hero.Life)
-      // };
-      // this.CombatState.Hero.set(hero);
+      this.CombatState.PrepareStageAdvance();
+      const stageAdvanceEvent = CreateStageAdvanceEvent(
+        event.AtMs + DELAYS.BOSS_RESPAWN_ANIMATION_MS
+      );
+      this.CombatState.Queue.Push(stageAdvanceEvent);
+    }
+  }
 
-      await this.CombatState.AdvanceToNextBoss();
-    }
-    // Hero besiegt
-    else if (!!(event.Actor as Hero)) {
-      // Combat beenden
-      // this.CombatState.InProgress.set(false);
-    }
+  /** STAGE ADVANCE */
+  private HandleStageAdvanceEvent(event: StageAdvanceEvent): void {
+    this.CombatState.AdvanceToNextBoss();
   }
 
   //#region Helpers

@@ -14,7 +14,8 @@ export type EventType =
   | 'Charge'
   | 'Clear'
   | 'Heal'
-  | 'Death';
+  | 'Death'
+  | 'StageAdvance';
 
 export type AttackEvent = {
   Type: 'Attack';
@@ -77,6 +78,11 @@ export type DeathEvent = {
   Actor: Actor;
 };
 
+export type StageAdvanceEvent = {
+  Type: 'StageAdvance';
+  AtMs: number;
+};
+
 export type CombatEvent =
   | AttackEvent
   | MissEvent
@@ -85,4 +91,5 @@ export type CombatEvent =
   | ChargeEvent
   | ClearEvent
   | HealEvent
-  | DeathEvent;
+  | DeathEvent
+  | StageAdvanceEvent;

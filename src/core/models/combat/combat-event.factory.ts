@@ -117,3 +117,10 @@ export function CreateDeathEvent(atMs: number, actor: Actor): DeathEvent {
     Actor: actor
   };
 }
+
+export function CreateStageAdvanceEvent(atMs: number): CombatEvent {
+  return {
+    Type: 'StageAdvance',
+    AtMs: atMs
+  };
+}

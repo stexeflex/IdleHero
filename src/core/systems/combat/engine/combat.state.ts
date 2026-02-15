@@ -97,7 +97,8 @@ export class CombatState {
     this.Boss.set(firstBoss);
 
     // Add first Combat Event for Hero
-    this.SetFirstEvent(hero, firstBoss);
+    const now = performance.now();
+    this.SetFirstEvent(hero, firstBoss, now);
     this.PublishState();
 
     // Log combat start
@@ -120,35 +121,34 @@ export class CombatState {
   }
 
   /**
+   * Prepare Stage Advance: Clear certain queued events and delay others to sync with Boss respawn animation
+   */
+  public PrepareStageAdvance() {
+    this.Queue.Clear(['Charge', 'Clear']);
+    // this.DelayEventsBy(DELAYS.BOSS_RESPAWN_ANIMATION_MS, ['Charge', 'Clear']);
+  }
+
+  /**
    * Advance to the next Boss in the Dungeon Room
    */
-  public async AdvanceToNextBoss(): Promise<void> {
+  public AdvanceToNextBoss(): void {
     if (this.Boss()?.Life.Alive) return;
 
-    await new Promise((resolve) => setTimeout(resolve, DELAYS.BOSS_RESPAWN_ANIMATION_MS));
-
-    // const oldBoss = this.DungeonRoom.CurrentBoss();
     const advanced: boolean = this.DungeonRoom.AdvanceStage();
 
     if (!advanced) {
       this.Cleared();
-      await new Promise((resolve) => setTimeout(resolve, 200));
       return;
     }
 
     const nextBoss = this.DungeonRoom.CurrentBoss();
     if (!nextBoss) return;
 
-    // this.UpdateEventQueueOnStageAdvance(oldBoss, nextBoss);
-    this.Queue.Clear(['Charge', 'Clear']);
-    this.DelayEventsBy(DELAYS.BOSS_RESPAWN_ANIMATION_MS * 2);
-
-    this.SetFirstEvent(this.Hero()!, nextBoss);
+    const now = performance.now();
+    this.SetFirstEvent(this.Hero()!, nextBoss, now);
     nextBoss.Life = ResetLife(nextBoss.Life);
     this.Boss.set(nextBoss);
     this.PublishState();
-
-    await new Promise((resolve) => setTimeout(resolve, DELAYS.BOSS_RESPAWN_ANIMATION_MS));
   }
 
   /**
@@ -159,6 +159,7 @@ export class CombatState {
     this.Boss$.next(this.Boss());
   }
 
+  //#region Setup
   private SetupHero(): Hero {
     const computedStats = this.CombatStats.Effective();
 
@@ -187,16 +188,17 @@ export class CombatState {
     return boss;
   }
 
-  private SetFirstEvent(hero: Hero, boss: Boss): void {
-    const now = performance.now();
-    const firstAt: number = ComputeFirstIntervalMs(now, hero.AttackInterval);
+  private SetFirstEvent(hero: Hero, boss: Boss, atMs: number): void {
+    const firstAt: number = ComputeFirstIntervalMs(atMs, hero.AttackInterval);
     const attackEvent: CombatEvent = CreateAttackEvent(firstAt, hero, boss);
-
     this.Queue.Push(attackEvent);
   }
+  //#endregion Setup
 
-  private DelayEventsBy(delayMs: number): void {
+  //#region Event Queue Management
+  private DelayEventsBy(delayMs: number, exceptTypes: string[] = []): void {
     this.Queue.UpdateAll((event) => {
+      if (exceptTypes.includes(event.Type)) return event;
       return { ...event, AtMs: event.AtMs + delayMs };
     });
   }
@@ -252,4 +254,5 @@ export class CombatState {
       }
     });
   }
+  //#endregion Event Queue Management
 }
