@@ -73,11 +73,11 @@ export const ATTACK_SPEED_TIERS: AffixTierSpec[] = [
 ];
 
 export const ACCURACY_TIERS: AffixTierSpec[] = [
-  { Tier: 'Common', Value: { Min: 0.02, Max: 0.05, Type: 'Percent' } },
-  { Tier: 'Magic', Value: { Min: 0.05, Max: 0.08, Type: 'Percent' } },
-  { Tier: 'Rare', Value: { Min: 0.08, Max: 0.11, Type: 'Percent' } },
-  { Tier: 'Epic', Value: { Min: 0.11, Max: 0.15, Type: 'Percent' } },
-  { Tier: 'Legendary', Value: { Min: 0.15, Max: 0.2, Type: 'Percent' } }
+  { Tier: 'Common', Value: { Min: 0.01, Max: 0.03, Type: 'Percent' } },
+  { Tier: 'Magic', Value: { Min: 0.03, Max: 0.05, Type: 'Percent' } },
+  { Tier: 'Rare', Value: { Min: 0.05, Max: 0.08, Type: 'Percent' } },
+  { Tier: 'Epic', Value: { Min: 0.08, Max: 0.12, Type: 'Percent' } },
+  { Tier: 'Legendary', Value: { Min: 0.12, Max: 0.15, Type: 'Percent' } }
 ];
 
 export const PENETRATION_TIERS: AffixTierSpec[] = [

@@ -607,7 +607,7 @@ const OFFHAND_SHIELDS_VARIANTS: ItemVariantDefinition[] = [
     Tier: 'I',
     Innate: {
       ToLabel: (value: number) => PercentageAdditiveLabel('Bleeding Damage', value),
-      ValuesByLevel: ScaleLinearValueCurve(0.05, 0.05),
+      ValuesByLevel: ScaleLinearValueCurve(0.05, 0.025),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_offhand_shield_starter_innate');
         s.Bleeding.FlatDamage = value;
@@ -627,7 +627,7 @@ const OFFHAND_ORBS_VARIANTS: ItemVariantDefinition[] = [
     Tier: 'II',
     Innate: {
       ToLabel: (value: number) => PercentageAdditiveLabel('Critical Hit Damage', value),
-      ValuesByLevel: ScaleLinearValueCurve(0.05, 0.05),
+      ValuesByLevel: ScaleLinearValueCurve(0.1, 0.1),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_offhand_orb_starter_innate');
         s.CriticalHit.FlatDamage = value;
@@ -667,7 +667,7 @@ const OFFHAND_DAGGERS_VARIANTS: ItemVariantDefinition[] = [
     Tier: 'I',
     Innate: {
       ToLabel: (value: number) => PercentageAdditiveLabel('Critical Hit Damage', value),
-      ValuesByLevel: ScaleLinearValueCurve(0.05, 0.05),
+      ValuesByLevel: ScaleLinearValueCurve(0.1, 0.1),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_offhand_dagger_starter_innate');
         s.CriticalHit.FlatDamage = value;
@@ -923,11 +923,11 @@ const FEET_BOOTS_VARIANTS: ItemVariantDefinition[] = [
     Type: 'Boots',
     Tier: 'I',
     Innate: {
-      ToLabel: (value: number) => PercentageAdditiveLabel('Accuracy', value),
-      ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
+      ToLabel: (value: number) => PercentageAdditiveLabel('Attack Speed', value),
+      ValuesByLevel: ScaleLinearValueCurve(0.01, 0.005),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_feet_boots_leather_boots_innate');
-        s.Accuracy.Multiplier = value;
+        s.AttackSpeed.Multiplier = value;
         return s;
       }
     }
@@ -942,11 +942,11 @@ const FEET_SHOES_VARIANTS: ItemVariantDefinition[] = [
     Type: 'Shoes',
     Tier: 'I',
     Innate: {
-      ToLabel: (value: number) => PercentageAdditiveLabel('Accuracy', value),
-      ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
+      ToLabel: (value: number) => PercentageAdditiveLabel('Attack Speed', value),
+      ValuesByLevel: ScaleLinearValueCurve(0.01, 0.005),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_feet_boots_leather_shoes_innate');
-        s.Accuracy.Multiplier = value;
+        s.AttackSpeed.Multiplier = value;
         return s;
       }
     }
