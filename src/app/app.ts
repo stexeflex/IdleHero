@@ -1,6 +1,6 @@
 import { Router, RouterOutlet } from '@angular/router';
 
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +9,9 @@ import { Component } from '@angular/core';
   styleUrl: './app.scss'
 })
 export class App {
-  constructor(private router: Router) {
+  private router = inject(Router);
+
+  constructor() {
     this.router.navigate(['']);
   }
 }

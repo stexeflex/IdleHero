@@ -1,0 +1,50 @@
+@use "sass:color";
+@use "index" as *;
+
+.list-item {
+  cursor: pointer;
+  @include disable-text-selection();
+  @include flexbox($dir: row, $justify: flex-start, $align: center);
+
+  gap: $gap;
+  padding: calc($gap / 3);
+  border-radius: $border-radius;
+
+  &:hover {
+    background: $grad-ui-bg-lighten;
+  }
+
+  &.selected {
+    outline: 1px solid $clr-border;
+    background: $grad-ui-bg-lighten;
+  }
+}
+
+.info {
+  @include flexbox($dir: column, $justify: center, $align: flex-start);
+  gap: calc($gap / 6);
+
+  .name {
+    font-size: 1.1rem;
+    font-weight: bold;
+    font-family: $font-family-header;
+  }
+
+  .meta {
+    display: flex;
+    gap: calc($gap / 2);
+
+    font-size: 1rem;
+    font-weight: normal;
+
+    .tier {
+      font-weight: bold;
+      font-family: $font-family-title;
+      color: color.scale($clr-accent, $lightness: 15%);
+    }
+  }
+}
+
+.actions {
+  margin-left: auto;
+}

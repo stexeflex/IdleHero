@@ -1,0 +1,37 @@
+import { DecimalPipe } from '@angular/common';
+
+export type ValueType = 'Flat' | 'Percentage';
+
+export interface Label {
+  Value: number;
+  ValueType: ValueType;
+  Stat: string;
+}
+
+export function FlatAdditiveLabel(stat: string, value: number): Label {
+  return {
+    Value: value,
+    ValueType: 'Flat',
+    Stat: stat
+  };
+}
+
+export function PercentageAdditiveLabel(stat: string, value: number): Label {
+  return {
+    Value: value,
+    ValueType: 'Percentage',
+    Stat: stat
+  };
+}
+
+export function LabelToString(label: Label, decimalPipe: DecimalPipe): string {
+  // const typeStr = label.Type === 'Additive' ? '+' : '\u00D7'; // Multiplication sign
+  const typeStr = '+';
+  const valueStr =
+    label.ValueType === 'Flat'
+      ? `${label.Value}`
+      : `${decimalPipe.transform(label.Value * 100, '1.0-0')}%`;
+
+  // Example output: "+5 Strength" or "×20% Critical Strike Chance"
+  return `${typeStr}${valueStr} ${label.Stat}`;
+}

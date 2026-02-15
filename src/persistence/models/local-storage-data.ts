@@ -1,5 +1,7 @@
+import { Schema } from './schema';
+
 export interface LocalStorageData<T> {
-  version: string;
-  timestamp: number;
-  data: T;
+  Version: string;
+  TimeStamp: Date;
+  Data: Schema;
 }

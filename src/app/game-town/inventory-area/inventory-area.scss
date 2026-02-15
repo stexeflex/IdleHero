@@ -1,0 +1,123 @@
+@use "sass:color";
+@use "index" as *;
+
+.inventory {
+  @include panel();
+  @include panel-shadow($border-width: 2px, $border-color: $clr-border);
+  @include flexbox($dir: column, $justify: flex-start, $align: stretch);
+
+  gap: $gap;
+}
+
+.header {
+  @include flexbox($dir: row, $justify: space-between, $align: center);
+  gap: $gap;
+}
+
+.title {
+  @include flexbox($dir: row, $justify: center, $align: flex-start);
+  gap: $gap;
+
+  .meta {
+    @include disable-text-selection();
+    color: $clr-mute;
+    font-size: 0.95rem;
+    font-weight: 500;
+
+    .separator {
+      margin: 0 $gap;
+    }
+  }
+}
+
+.filters {
+  @include panel($bg: rgba(0, 0, 0, 0.2));
+  @include flexbox($dir: column, $justify: flex-start, $align: stretch);
+  gap: $gap;
+}
+
+.filter-group {
+  display: grid;
+  grid-template-columns: 65px 1fr;
+  align-items: start;
+  gap: $gap;
+}
+
+.filter-title {
+  @include disable-text-selection();
+  font-family: $font-family-header;
+  font-size: 1rem;
+  font-weight: bold;
+  align-self: center;
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc($gap / 2);
+}
+
+.chip {
+  @include button-text-font($weight: 700);
+  @include button-sizing($font-size: 0.9rem, $min-width: auto);
+  @include button-focus-visible-outline();
+  @include button-style($bg-color: rgba(0, 0, 0, 0.25), $border: 1px solid $clr-border);
+
+  display: inline-flex;
+  align-items: center;
+  gap: calc($gap / 2);
+
+  min-height: 40px;
+
+  transition:
+    transform 120ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease;
+
+  &:hover {
+    background: $grad-ui-bg-lighten;
+    transform: translateY(-1px);
+  }
+
+  &.is-active {
+    border-color: color.scale($clr-accent, $lightness: 10%);
+    background: color.scale($clr-accent, $lightness: -70%);
+  }
+}
+
+.grid {
+  min-height: $size-inventory-grid-height;
+  @include overflow($display: flex, $max-height: $size-inventory-grid-height);
+  @include scrollbar();
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: $gap;
+  padding: $gap;
+}
+
+.empty {
+  @include panel($bg: rgba(0, 0, 0, 0.2));
+  @include flexbox($dir: column, $justify: center, $align: center);
+  gap: calc($gap / 2);
+
+  text-align: center;
+
+  .headline {
+    font-family: $font-family-header;
+    color: $clr-text-primary;
+    font-size: 1.2rem;
+  }
+
+  .hint {
+    font-family: $font-family-header;
+    color: $clr-mute;
+    font-size: 1.1rem;
+    font-style: italic;
+  }
+}
+
+.item-preview-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: $gap;
+}

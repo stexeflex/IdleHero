@@ -42,3 +42,17 @@
 .legendary--font {
   color: $clr-legendary;
 }
+
+.rotate-90 {
+  transform: rotate(90deg);
+}
+.rotate-180 {
+  transform: rotate(180deg);
+}
+.rotate-270 {
+  transform: rotate(270deg);
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}

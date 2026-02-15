@@ -1,0 +1,19 @@
+<div class="town-area">
+  <app-tab-strip
+    [tabs]="Tabs"
+    [selected]="SelectedTab()"
+    (selectedChange)="onTabSelected($event)"></app-tab-strip>
+  <div class="tab-content">
+    @switch (SelectedTab()) {
+      @case ("inventory") {
+        <app-inventory-area></app-inventory-area>
+      }
+      @case ("crafting") {
+        <app-crafting-area></app-crafting-area>
+      }
+      @case ("skills") {
+        <app-skill-tree></app-skill-tree>
+      }
+    }
+  </div>
+</div>

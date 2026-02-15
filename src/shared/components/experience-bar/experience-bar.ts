@@ -8,7 +8,7 @@ import {
   signal
 } from '@angular/core';
 
-import { DELAYS } from '../../constants';
+import { DELAYS } from '../../../core/constants';
 import { DecimalPipe } from '@angular/common';
 import { TimeoutUtils } from '../../utils';
 

@@ -1,0 +1,38 @@
+@use "sass:color";
+@use "index" as *;
+
+.bar-bg {
+  @include panel-shadow();
+  background: $clr-black;
+  height: 2rem;
+
+  border-radius: $border-radius;
+  border-color: $clr-black;
+
+  &.charged {
+    box-shadow: 0 0 20px $clr-charge-yellow;
+  }
+}
+
+.bar-fill {
+  height: 100%;
+  background: $grad-charge-bar;
+  border-radius: $border-radius;
+  transition: width 0.6s cubic-bezier(0.4, 0.8, 0.6, 1);
+}
+
+.bar-text {
+  @include disable-text-selection();
+
+  display: block;
+  white-space: nowrap;
+  text-align: center;
+
+  color: $clr-text-primary;
+  font-size: 1.2rem;
+  font-weight: 600;
+
+  &.charged {
+    color: $clr-charge-yellow;
+  }
+}

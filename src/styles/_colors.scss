@@ -24,12 +24,16 @@ $clr-highlight: #d4af37;
 /* ========== Additional Colors ========== */
 $clr-black: #0f0f0f;
 $clr-gray: #7a7a7a;
+$clr-mute: #888888;
 
 /* ========= Game Colors ========== */
 $clr-hp-red: #e53e3e;
 $clr-mp-blue: #3b82f6;
 $clr-exp-green: #4caf50;
 $clr-exp-blue: #2196f3;
+$clr-charge-yellow: #fbbf24;
+
+$clr-gold: $clr-highlight;
 
 $clr-common: #a0a0a0;
 $clr-magic: #3b82f6;
@@ -39,14 +43,19 @@ $clr-legendary: #ff8800;
 
 $clr-stage-label: color.scale($clr-highlight, $lightness: 30%);
 $clr-log-info: color.scale($clr-exp-green, $lightness: 20%);
+$clr-log-rewards-gold: color.scale($clr-highlight, $lightness: 20%);
+$clr-log-rewards-xp: $clr-exp-blue;
 $clr-log-other: $clr-common;
 $clr-log-damage: #ee4444;
+$clr-log-bleed: #8a0303;
 $clr-log-crit: $clr-rare;
 $clr-log-multi: $clr-epic;
 $clr-log-crit-multi: $clr-legendary;
 $clr-log-boss-defeat: color.scale($clr-accent, $lightness: 40%);
 $clr-log-level-up: #00aaff;
 $clr-log-dungeon-cleared: #00aaff;
+$clr-log-heal: #22c55e;
+$clr-log-miss: $clr-mute;
 
 $clr-buff-button: #ddd;
 
@@ -59,6 +68,12 @@ $grad-ui-bg: linear-gradient(
 
 $grad-ui-bg-lighten: linear-gradient(
   $gradient-top-left,
+  $clr-ui-bg 0%,
+  color.scale($clr-ui-bg, $lightness: 30%) 100%
+);
+
+$grad-ui-bg-lighten-revert: linear-gradient(
+  $gradient-bottom-right,
   $clr-ui-bg 0%,
   color.scale($clr-ui-bg, $lightness: 30%) 100%
 );
@@ -86,4 +101,10 @@ $grad-health-bar: linear-gradient(
   90deg,
   $clr-hp-red 0%,
   color.scale($clr-hp-red, $lightness: -30%) 100%
+);
+
+$grad-charge-bar: linear-gradient(
+  90deg,
+  $clr-charge-yellow 0%,
+  color.scale($clr-charge-yellow, $lightness: -30%) 100%
 );

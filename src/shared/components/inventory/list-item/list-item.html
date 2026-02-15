@@ -1,0 +1,30 @@
+<div class="list-item" [class.selected]="selected()" (click)="SelectItem()">
+  <app-icon class="gear-slot__icon" [gear]="item().Icon" size="md"></app-icon>
+  <div class="info">
+    <div
+      class="name"
+      [class.common--font]="Rarity() === 'Common'"
+      [class.magic--font]="Rarity() === 'Magic'"
+      [class.rare--font]="Rarity() === 'Rare'"
+      [class.epic--font]="Rarity() === 'Epic'"
+      [class.legendary--font]="Rarity() === 'Legendary'">
+      {{ item().Name.toUpperCase() }}
+    </div>
+    <div class="meta">
+      <span class="tier">{{ item().Tier }}</span>
+      <span>•</span>
+      <span>{{ Rarity() }} {{ item().Type }}</span>
+      <span
+        [class.common--font]="Rarity() === 'Common'"
+        [class.magic--font]="Rarity() === 'Magic'"
+        [class.rare--font]="Rarity() === 'Rare'"
+        [class.epic--font]="Rarity() === 'Epic'"
+        [class.legendary--font]="Rarity() === 'Legendary'">
+        [{{ item().Level }}]
+      </span>
+    </div>
+  </div>
+  <div class="actions">
+    <ng-content></ng-content>
+  </div>
+</div>

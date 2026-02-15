@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 import { DecimalPipe } from '@angular/common';
 
@@ -9,6 +9,6 @@ import { DecimalPipe } from '@angular/common';
   styleUrl: './number-value.scss'
 })
 export class NumberValue {
-  @Input() label: string | undefined = undefined;
-  @Input({ required: true }) value!: number;
+  readonly label = input<string>();
+  readonly value = input.required<number>();
 }

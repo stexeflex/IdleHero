@@ -16,11 +16,6 @@ $position-left: calc($gap + 12px);
   border-radius: $border-radius;
 }
 
-.menu__toggle__icon {
-  font-size: 1.5rem;
-  color: $clr-text-primary;
-}
-
 .menu__toggle:hover,
 .menu__toggle:focus {
   outline: none;

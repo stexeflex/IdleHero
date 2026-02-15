@@ -1,9 +1,6 @@
 @use "index" as *;
 @use "sass:color";
 
-// Bootstrap Icons
-@use "bootstrap-icons";
-
 * {
   font-family: "Segoe UI", "Segoe UI Emoji", "Segoe UI Symbol";
 
@@ -59,6 +56,11 @@ h3 {
   @include disable-text-selection();
 }
 
+h4 {
+  font-family: "MedievalSharp", cursive;
+  @include disable-text-selection();
+}
+
 button {
   @include disable-text-selection();
   cursor: pointer;
@@ -80,6 +82,35 @@ button {
   @include button-sizing();
   @include button-hover-active();
   @include button-focus-visible-outline();
+}
+
+.ih-button-secondary {
+  @include button-style(
+    $bg-color: color.scale($clr-ui-bg-invert, $lightness: -20%),
+    $color: $clr-text-invert
+  );
+  @include button-text-font($shadow: false);
+  @include button-sizing();
+  @include button-hover-active(
+    $bg-color: color.scale($clr-ui-bg-invert, $lightness: -40%),
+    $bg-color-active: color.scale($clr-ui-bg-invert, $lightness: -60%)
+  );
+  @include button-focus-visible-outline();
+}
+
+.ih-button-tertiary {
+  @include button-text-font($shadow: false);
+  @include button-sizing($font-size: 0.9rem, $min-width: auto);
+  @include button-focus-visible-outline();
+  @include button-style(
+    $bg-color: color.scale($clr-ui-bg-invert, $lightness: -20%),
+    $color: $clr-text-invert,
+    $border: 1px solid $clr-border
+  );
+  @include button-hover-active(
+    $bg-color: color.scale($clr-ui-bg-invert, $lightness: -40%),
+    $bg-color-active: color.scale($clr-ui-bg-invert, $lightness: -60%)
+  );
 }
 
 .ih-button-icon {

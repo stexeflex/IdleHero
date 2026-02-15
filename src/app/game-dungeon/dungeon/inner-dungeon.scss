@@ -1,0 +1,65 @@
+@use "sass:color";
+@use "index" as *;
+
+.dungeon {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+
+.inner-dungeon {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: $gap;
+}
+
+@media (max-width: $bp-xl) {
+  .inner-dungeon {
+    grid-template-columns: 1fr;
+  }
+}
+
+.top-bar {
+  @include panel();
+  @include panel-shadow($border-width: 2px, $border-color: $clr-border);
+  @include flexbox($justify: flex-start);
+  gap: $gap;
+}
+
+.room-info {
+  @include disable-text-selection();
+  font-weight: 800;
+  font-size: 1.3rem;
+  min-width: 175px;
+}
+
+.room-label,
+.room-value {
+  font-family: $font-family-header;
+}
+
+.room-label {
+  color: $clr-stage-label;
+  text-align: center;
+}
+
+.room-value {
+  text-align: center;
+}
+
+.dungeon-actions {
+  display: flex;
+  gap: 12px;
+
+  // Move to right
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.button-leaving {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  font-size: 1rem;
+}

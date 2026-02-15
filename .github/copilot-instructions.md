@@ -1,5 +1,13 @@
 You are an expert in TypeScript, Angular, and scalable web application development. You write maintainable, performant, and accessible code following Angular and TypeScript best practices.
 
+## Personal Preferences
+
+- Use PascalCase for classes, interfaces, functions, and types.
+- Use PascalCase for properties and methods.
+- Use access modifiers (public, private, protected) explicitly for all class members.
+- Use documentation comments including param and returns tags, if not void, for all public methods of a service.
+- Do not use abbreviations in variable names, be specific.
+
 ## TypeScript Best Practices
 
 - Use strict type checking
