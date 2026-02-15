@@ -1,0 +1,56 @@
+import { DungeonRoom, DungeonStatistics, DungeonType } from '../../models';
+
+import { REWARDS_CONFIG } from '../../constants';
+
+export function StageFactor(stageId: number): number {
+  const s = Math.max(1, Math.floor(stageId));
+  return 1 + REWARDS_CONFIG.STAGE_LINEAR_FACTOR * (s - 1);
+}
+
+export function MidBossFactor(): number {
+  return REWARDS_CONFIG.MID_BOSS_MULTIPLIER;
+}
+
+export function CompletionFactor(): number {
+  return REWARDS_CONFIG.COMPLETION_MULTIPLIER;
+}
+
+export function ComputeDampedExperience(
+  dungeon: DungeonRoom,
+  stageId: number,
+  statistics: DungeonStatistics
+): number {
+  const f = StageFactor(stageId);
+  const rawExperience = Math.round(dungeon.XpBase * f);
+
+  const config = REWARDS_CONFIG.EXPERIENCE_DAMPING;
+
+  if (!config.ENABLED) {
+    return rawExperience;
+  }
+
+  const midStages = [...dungeon.MidStages].sort((a, b) => a - b);
+  const firstMidStage = midStages[0];
+  const secondMidStage = midStages[1];
+
+  if (firstMidStage === undefined) {
+    return rawExperience;
+  }
+
+  const category = dungeon.Type === DungeonType.Capstone ? statistics.Capstone : statistics.Dungeon;
+  const highestStageReached = category[dungeon.Id] ?? 0;
+
+  let multiplier = 1;
+
+  if (
+    secondMidStage !== undefined &&
+    highestStageReached >= secondMidStage &&
+    stageId < secondMidStage
+  ) {
+    multiplier = config.BELOW_SECOND_MIDSTAGE_MULTIPLIER;
+  } else if (highestStageReached >= firstMidStage && stageId < firstMidStage) {
+    multiplier = config.BELOW_FIRST_MIDSTAGE_MULTIPLIER;
+  }
+
+  return Math.max(config.MIN_EXPERIENCE_PER_BOSS, Math.round(rawExperience * multiplier));
+}

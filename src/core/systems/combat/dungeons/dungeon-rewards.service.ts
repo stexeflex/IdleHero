@@ -1,11 +1,17 @@
 import { CapstoneDungeonRoom, DungeonRoom, DungeonType, Rewards } from '../../../models';
-import { CompletionFactor, MidBossFactor, StageFactor } from '../../economy';
+import {
+  CompletionFactor,
+  ComputeDampedExperience,
+  MidBossFactor,
+  StageFactor
+} from '../../progression';
 import { Injectable, inject } from '@angular/core';
 
 import { CombatLogService } from '../../../services';
 import { DungeonKeyService } from '../../../services/dungeon-key.service';
 import { GoldService } from '../../../services/gold.service';
 import { LevelService } from '../../../services/level.service';
+import { StatisticsService } from '../../../services/statistics.service';
 
 @Injectable({ providedIn: 'root' })
 export class DungeonRewardsService {
@@ -13,6 +19,7 @@ export class DungeonRewardsService {
   private readonly Gold = inject(GoldService);
   private readonly Keys = inject(DungeonKeyService);
   private readonly Log = inject<CombatLogService>(CombatLogService);
+  private readonly Statistics = inject(StatisticsService);
 
   /**
    * Computes rewards for a single stage within a dungeon.
@@ -23,7 +30,9 @@ export class DungeonRewardsService {
   public ComputeStageRewards(dungeon: DungeonRoom, stageId: number): Rewards {
     const f = StageFactor(stageId);
     const gold = Math.round(dungeon.GoldBase * f);
-    const xp = Math.round(dungeon.XpBase * f);
+
+    const xp = ComputeDampedExperience(dungeon, stageId, this.Statistics.DungeonStatistics());
+
     return {
       Gold: gold,
       Experience: xp
