@@ -1,4 +1,9 @@
-import { BossFactory, DUNGEON_BOSS_CONFIGS, DungeonBossConfig } from '../../../constants';
+import {
+  BossFactory,
+  DungeonBossConfig,
+  GetBossConfigForDungeon,
+  GetDungeonById
+} from '../../../constants';
 import { GetHealthForBossAtStage, SetHealth } from './boss-health.utils';
 
 import { Boss } from '../../../models';
@@ -14,18 +19,25 @@ export class BossSelectionService {
    * @returns The selected Boss instance.
    */
   public GetBoss(dungeonId: string, stageId: number): Boss {
-    const dungeonConfig = this.GetDungeonConfig(dungeonId);
+    const dungeonConfig = GetDungeonById(dungeonId);
+    const dungeonBossConfig = GetBossConfigForDungeon(dungeonId);
 
     let boss = null;
 
     // Stage specific Boss
-    if (dungeonConfig.StageSpecific.has(stageId)) {
-      const factory = dungeonConfig.StageSpecific.get(stageId)!;
+    if (dungeonBossConfig.StageSpecific.has(stageId)) {
+      const factory = dungeonBossConfig.StageSpecific.get(stageId)!;
       boss = factory();
+
+      if (stageId !== dungeonConfig?.StagesBase && stageId !== dungeonConfig?.StagesMax) {
+        boss.IsElite = true;
+      } else if (stageId === dungeonConfig?.StagesMax) {
+        boss.IsEndboss = true;
+      }
     }
     // Random Boss from Pool
     else {
-      const pool = this.ResolvePoolForStage(dungeonConfig, stageId);
+      const pool = this.ResolvePoolForStage(dungeonBossConfig, stageId);
       const idx = RandomUtils.stableIndex(`${dungeonId}:${stageId}`, pool.length);
       boss = pool[idx]();
     }
@@ -35,16 +47,6 @@ export class BossSelectionService {
     boss = SetHealth(boss, hpForStage);
 
     return boss;
-  }
-
-  private GetDungeonConfig(dungeonId: string): DungeonBossConfig {
-    const dungeonConfig = DUNGEON_BOSS_CONFIGS[dungeonId];
-
-    if (!dungeonConfig) {
-      throw new Error(`No boss config found for dungeonConfigId=${dungeonId}`);
-    }
-
-    return dungeonConfig;
   }
 
   private ResolvePoolForStage(config: DungeonBossConfig, stageId: number): BossFactory[] {

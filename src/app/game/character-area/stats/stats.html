@@ -23,7 +23,7 @@
             <button
               class="attribute-modifier-button"
               (click)="decreaseAttribute(attribute.label)"
-              [disabled]="!CanDecreaseAttribute(attribute.label) || false">
+              [disabled]="!CanDecreaseAttribute(attribute.label)">
               -
             </button>
             <div class="attribute-value">{{ attribute.value }}</div>

@@ -14,7 +14,9 @@ function DefaultBoss(): Partial<Boss> {
     Armor: NoArmor(),
     Stats: InitialBossStats(0, 0, 0),
     AttackInterval: InitialAttackInterval(0),
-    State: InitialActorState()
+    State: InitialActorState(),
+    IsElite: false,
+    IsEndboss: false
   };
 }
 

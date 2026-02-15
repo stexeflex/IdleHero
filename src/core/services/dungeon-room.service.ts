@@ -164,7 +164,8 @@ export class DungeonRoomService {
     const currentDungeon: DungeonRoom = this.CurrentDungeon()!;
 
     const dungeonRoomStat = {
-      [currentDungeon.Id]: this.CurrentStage()
+      // Store the last completed stage (current stage - 1)
+      [currentDungeon.Id]: this.CurrentStage() - 1
     };
 
     switch (currentDungeon.Type) {

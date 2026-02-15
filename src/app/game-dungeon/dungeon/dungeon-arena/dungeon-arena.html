@@ -4,7 +4,13 @@
     @let boss = Boss();
     @if (boss) {
       <div class="actor-info">
-        <h2 class="actor-name">{{ boss.Name }}</h2>
+        @if (boss.IsElite) {
+          <h2 class="actor-name">ELITE {{ boss.Name }}</h2>
+        } @else if (boss.IsEndboss) {
+          <h2 class="actor-name">END BOSS {{ boss.Name }}</h2>
+        } @else {
+          <h2 class="actor-name">{{ boss.Name }}</h2>
+        }
         <app-health-bar
           [currentHealth]="boss.Life.Hp"
           [maxHealth]="boss.Life.MaxHp"

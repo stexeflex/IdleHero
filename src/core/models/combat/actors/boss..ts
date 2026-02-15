@@ -15,6 +15,8 @@ export interface Boss extends CombatActor {
   Name: string;
   BossIcon: BossIcon;
   Stats: BossStats;
+  IsElite: boolean;
+  IsEndboss: boolean;
 }
 
 export function BossIcon(Icon: CreaturesIconName, Rotate: boolean = false): BossIcon {
