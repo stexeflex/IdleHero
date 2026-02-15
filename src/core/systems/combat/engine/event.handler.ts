@@ -486,6 +486,7 @@ export class EventHandler {
     // Multi-Hit Statistics
     else {
       const totalDamage = damage.reduce((sum, d) => sum + d.Amount, 0);
+      this.Statistics.UpdateDamage({ HighestMultiHitChain: damage.length });
 
       if (damage.some((d) => d.IsCharged && d.IsCritical)) {
         this.Statistics.UpdateDamage({ HighestChargedCriticalMultiHit: totalDamage });
