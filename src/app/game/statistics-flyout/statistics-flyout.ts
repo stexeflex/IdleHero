@@ -53,10 +53,6 @@ export class StatisticsFlyout {
       {
         label: 'Highest Multi Hit Chain',
         value: this.decimalPipe.transform(damageStats.HighestMultiHitChain, '1.0-0')
-      },
-      {
-        label: 'Highest Total Hit',
-        value: this.decimalPipe.transform(damageStats.HighestTotalHit, '1.0-0')
       }
       // {
       //   label: 'Highest Splash Hit',
@@ -74,12 +70,27 @@ export class StatisticsFlyout {
         value: this.decimalPipe.transform(damageStats.HighestChargedHit, '1.0-0')
       },
       {
+        label: 'Highest Charged Critical Hit',
+        value: this.decimalPipe.transform(damageStats.HighestChargedCriticalHit, '1.0-0')
+      },
+      {
         label: 'Highest Charged Multi Hit',
         value: this.decimalPipe.transform(damageStats.HighestChargedMultiHit, '1.0-0')
       },
       {
         label: 'Highest Charged Critical Multi Hit',
         value: this.decimalPipe.transform(damageStats.HighestChargedCriticalMultiHit, '1.0-0')
+      }
+    ];
+  });
+
+  protected readonly TotalStatistics = computed<StatisticItem[]>(() => {
+    const damageStats = this.statisticsService.DamageStatistics();
+
+    return [
+      {
+        label: 'Highest Total Hit',
+        value: this.decimalPipe.transform(damageStats.HighestTotalHit, '1.0-0')
       },
       {
         label: 'Highest Charged Total Hit',

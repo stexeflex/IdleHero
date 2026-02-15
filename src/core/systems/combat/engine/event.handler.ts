@@ -458,52 +458,39 @@ export class EventHandler {
   private UpdateDamageStatistics(damage: DamageResult[]): void {
     // Single Hit Statistics
     if (damage.length === 1) {
-      if (damage[0].IsCharged) {
-        this.Statistics.UpdateDamage({ HighestChargedHit: damage[0].Amount });
-        this.Statistics.UpdateDamage({ HighestChargedTotalHit: damage[0].Amount });
+      const damageAmount = damage[0].Amount;
+
+      if (damage[0].IsCharged && damage[0].IsCritical) {
+        this.Statistics.UpdateDamage({ HighestChargedCriticalHit: damageAmount });
+        this.Statistics.UpdateDamage({ HighestChargedTotalHit: damageAmount });
+      } else if (damage[0].IsCharged) {
+        this.Statistics.UpdateDamage({ HighestChargedHit: damageAmount });
+        this.Statistics.UpdateDamage({ HighestChargedTotalHit: damageAmount });
       } else if (damage[0].IsCritical) {
-        this.Statistics.UpdateDamage({ HighestCriticalHit: damage[0].Amount });
-        this.Statistics.UpdateDamage({ HighestTotalHit: damage[0].Amount });
+        this.Statistics.UpdateDamage({ HighestCriticalHit: damageAmount });
+        this.Statistics.UpdateDamage({ HighestTotalHit: damageAmount });
       } else {
-        this.Statistics.UpdateDamage({ HighestSingleHit: damage[0].Amount });
-        this.Statistics.UpdateDamage({ HighestTotalHit: damage[0].Amount });
+        this.Statistics.UpdateDamage({ HighestSingleHit: damageAmount });
+        this.Statistics.UpdateDamage({ HighestTotalHit: damageAmount });
       }
     }
     // Multi-Hit Statistics
     else {
       const totalDamage = damage.reduce((sum, d) => sum + d.Amount, 0);
 
-      // Charged
-      if (damage.some((d) => d.IsCharged)) {
-        const highestChargedHit = damage
-          .filter((d) => d.IsCharged && !d.IsCritical)
-          .reduce((max, d) => (d.Amount > max ? d.Amount : max), 0);
-        this.Statistics.UpdateDamage({ HighestChargedMultiHit: highestChargedHit });
-
-        const highestChargedCriticalHit = damage
-          .filter((d) => d.IsCharged && d.IsCritical)
-          .reduce((max, d) => (d.Amount > max ? d.Amount : max), 0);
-        this.Statistics.UpdateDamage({ HighestChargedCriticalMultiHit: highestChargedCriticalHit });
-
+      if (damage.some((d) => d.IsCharged && d.IsCritical)) {
+        this.Statistics.UpdateDamage({ HighestChargedCriticalMultiHit: totalDamage });
         this.Statistics.UpdateDamage({ HighestChargedTotalHit: totalDamage });
-      }
-      // Default
-      else {
-        const highestMultiHit = damage
-          .filter((d) => !d.IsCritical)
-          .reduce((max, d) => (d.Amount > max ? d.Amount : max), 0);
-        this.Statistics.UpdateDamage({ HighestMultiHit: highestMultiHit });
-
-        const highestCriticalMultiHit = damage
-          .filter((d) => d.IsCritical)
-          .reduce((max, d) => (d.Amount > max ? d.Amount : max), 0);
-        this.Statistics.UpdateDamage({ HighestCriticalMultiHit: highestCriticalMultiHit });
-
+      } else if (damage.some((d) => d.IsCharged)) {
+        this.Statistics.UpdateDamage({ HighestChargedMultiHit: totalDamage });
+        this.Statistics.UpdateDamage({ HighestChargedTotalHit: totalDamage });
+      } else if (damage.some((d) => d.IsCritical)) {
+        this.Statistics.UpdateDamage({ HighestCriticalMultiHit: totalDamage });
+        this.Statistics.UpdateDamage({ HighestTotalHit: totalDamage });
+      } else {
+        this.Statistics.UpdateDamage({ HighestMultiHit: totalDamage });
         this.Statistics.UpdateDamage({ HighestTotalHit: totalDamage });
       }
-
-      const totalHits = damage.length;
-      this.Statistics.UpdateDamage({ HighestMultiHitChain: totalHits });
     }
   }
   //#endregion
