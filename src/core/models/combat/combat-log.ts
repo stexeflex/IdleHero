@@ -1,6 +1,7 @@
 import { Actor, Target } from './combat-event';
 
 import { DamageResult } from '../../systems/combat';
+import { Rewards } from '../economy/rewards';
 
 export enum CombatLogType {
   Info = 'Info',
@@ -25,8 +26,7 @@ export interface InfoLogEntry extends BaseCombatLogEntry {
 export interface RewardsLogEntry extends BaseCombatLogEntry {
   Type: CombatLogType.Rewards;
   Stage: number;
-  Gold: number;
-  Experience: number;
+  Rewards: Rewards;
 }
 
 export interface DamageLogEntry extends BaseCombatLogEntry {

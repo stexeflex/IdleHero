@@ -20,11 +20,11 @@
         @case ("Rewards") {
           <app-icon class="log-rewards" symbol="lockedchest" size="md"></app-icon>
           <span class="log-rewards-gold">
-            +{{ entry.Gold | number: "1.0-0" }}
+            +{{ entry.Rewards.Gold | number: "1.0-0" }}
             <app-icon symbol="twocoins" size="sm"></app-icon>
           </span>
           <span class="log-rewards-xp">
-            +{{ entry.Experience | number: "1.0-0" }}
+            +{{ entry.Rewards.Experience | number: "1.0-0" }}
             <app-icon symbol="starsstack" size="sm"></app-icon>
           </span>
         }
