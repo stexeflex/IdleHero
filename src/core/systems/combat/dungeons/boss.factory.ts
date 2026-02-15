@@ -29,11 +29,21 @@ export function Gooey(): Boss {
   };
 }
 
-export function Slime(): Boss {
+export function VileFluid(): Boss {
   const boss = DefaultBoss() as Boss;
   return {
     ...boss,
     Id: 'slime-cave-2',
+    Name: 'Vile Fluid',
+    BossIcon: BossIcon('vilefluid', false)
+  };
+}
+
+export function Slime(): Boss {
+  const boss = DefaultBoss() as Boss;
+  return {
+    ...boss,
+    Id: 'slime-cave-3',
     Name: 'Slime',
     BossIcon: BossIcon('slime', true)
   };
@@ -43,7 +53,7 @@ export function Slug(): Boss {
   const boss = DefaultBoss() as Boss;
   return {
     ...boss,
-    Id: 'slime-cave-3',
+    Id: 'slime-cave-4',
     Name: 'Slug',
     BossIcon: BossIcon('graspingslug', true)
   };

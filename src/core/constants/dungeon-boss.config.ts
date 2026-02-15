@@ -14,6 +14,7 @@ import {
   Slime,
   Slug,
   Troglodyte,
+  VileFluid,
   ViperSnake
 } from '../systems/combat/dungeons/boss.factory';
 
@@ -39,16 +40,18 @@ export const DUNGEON_BOSS_CONFIGS: Record<string, DungeonBossConfig> = {
   D1: {
     StageSpecific: new Map<number, BossFactory>([
       [1, Gooey],
-      [30, Slime],
-      [60, Slug],
+      [25, VileFluid],
+      [50, Slime],
+      [75, Slug],
       [100, KingSlime]
     ]),
     BossPools: new Map<number, BossFactory[]>([
       [1, [Gooey]],
-      [20, [Gooey, Slime]],
-      [40, [Gooey, Slime, Slug]],
-      [60, [Slime, Slug]],
-      [80, [Slug]],
+      [15, [Gooey, VileFluid]],
+      [35, [Gooey, VileFluid, Slime]],
+      [50, [VileFluid, Slime]],
+      [65, [Slime, Slug]],
+      [85, [Slug]],
       [90, [Slug, KingSlime]]
     ])
   },

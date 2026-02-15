@@ -14,10 +14,10 @@ export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
     Icon: 'slime',
     Type: DungeonType.Normal,
     StagesBase: 1,
-    MidStages: [30, 60],
+    MidStages: [25, 50, 75],
     StagesMax: 100,
-    XpBase: 8,
-    GoldBase: 12,
+    XpBase: 10,
+    GoldBase: 10,
     Locked: false
   },
   {
@@ -29,7 +29,7 @@ export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
     StagesBase: 1,
     MidStages: [25, 50, 75],
     StagesMax: 100,
-    XpBase: 10,
+    XpBase: 12,
     GoldBase: 15,
     Locked: false
   },
