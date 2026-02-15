@@ -25,6 +25,7 @@ import { Injectable, inject, signal } from '@angular/core';
 
 import { DELAYS } from '../../../constants';
 import { EventQueue } from './event.queue';
+import { GameSaverService } from '../../../../persistence';
 
 /**
  * Combat State Service
@@ -36,6 +37,7 @@ export class CombatState {
   private readonly DungeonRoom = inject<DungeonRoomService>(DungeonRoomService);
   private readonly CombatStats = inject<CombatStatsService>(CombatStatsService);
   private readonly Log = inject<CombatLogService>(CombatLogService);
+  private readonly GameSaver = inject<GameSaverService>(GameSaverService);
 
   // Combat State
   public readonly InProgress = signal<boolean>(false);
@@ -63,6 +65,8 @@ export class CombatState {
     this.Hero.set(undefined);
     this.Boss.set(undefined);
     this.PublishState();
+
+    this.GameSaver.SaveGame();
   }
 
   public Cleared() {
@@ -70,6 +74,8 @@ export class CombatState {
     this.Queue.Clear();
     this.Boss.set(undefined);
     this.PublishState();
+
+    this.GameSaver.SaveGame();
   }
 
   /**
@@ -80,6 +86,8 @@ export class CombatState {
     this.Log.Clear();
     this.Queue.Clear();
     this.InProgress.set(true);
+
+    this.GameSaver.SaveGame();
 
     // Set Combat Actors
     const hero: Hero = this.SetupHero();
