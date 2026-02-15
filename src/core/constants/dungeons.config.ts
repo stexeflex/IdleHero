@@ -4,7 +4,7 @@ import {
   DungeonRoomKey,
   DungeonType,
   NormalDungeonRoom
-} from '../models';
+} from '../models/combat/dungeon-room';
 
 export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
   {
