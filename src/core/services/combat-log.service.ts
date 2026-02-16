@@ -23,6 +23,8 @@ import { TimestampUtils } from '../../shared/utils';
 
 @Injectable({ providedIn: 'root' })
 export class CombatLogService {
+  private readonly MAX_ENTRIES = 250;
+
   private readonly EntriesState = signal<CombatLogEntry[]>([]);
 
   public readonly Entries = computed<CombatLogEntry[]>(() => this.EntriesState());
@@ -122,7 +124,8 @@ export class CombatLogService {
   private Push(entry: CombatLogEntry): void {
     this.EntriesState.update((list) => {
       list.unshift(entry);
-      return [...list];
+      // Keep only the latest X entries to prevent unbounded growth
+      return [...list].slice(0, this.MAX_ENTRIES);
     });
   }
 }
