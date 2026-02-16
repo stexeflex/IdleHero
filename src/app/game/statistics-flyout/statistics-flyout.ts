@@ -1,7 +1,7 @@
 import { Component, LOCALE_ID, computed, inject, signal } from '@angular/core';
+import { LoadingSpinner, Separator } from '../../../shared/components';
 
 import { DecimalPipe } from '@angular/common';
-import { Separator } from '../../../shared/components';
 import { StatisticsService } from '../../../core/services';
 
 interface StatisticItem {
@@ -11,7 +11,7 @@ interface StatisticItem {
 
 @Component({
   selector: 'app-statistics-flyout',
-  imports: [Separator],
+  imports: [Separator, LoadingSpinner],
   templateUrl: './statistics-flyout.html',
   styleUrl: './statistics-flyout.scss'
 })
@@ -21,9 +21,24 @@ export class StatisticsFlyout {
   private readonly statisticsService = inject(StatisticsService);
 
   protected readonly IsOpen = signal<boolean>(false);
+  protected readonly IsResetting = signal<boolean>(false);
+  private timeout: number = 0;
 
   protected ToggleFlyout(): void {
     this.IsOpen.set(!this.IsOpen());
+  }
+
+  protected StartReset(): void {
+    clearTimeout(this.timeout);
+    this.IsResetting.set(true);
+    this.timeout = setTimeout(() => {
+      this.IsResetting.set(false);
+    }, 1500);
+  }
+
+  protected ResetStatistics(): void {
+    this.statisticsService.ResetDamageStatistics();
+    this.IsResetting.set(false);
   }
 
   protected readonly Statistics = computed<StatisticItem[]>(() => {

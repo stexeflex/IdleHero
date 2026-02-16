@@ -28,6 +28,19 @@
           </div>
         }
       </div>
+      <separator class="ih-separator"></separator>
+      <div class="reset">
+        <button
+          class="ih-button-tertiary reset-button"
+          (click)="IsResetting() ? ResetStatistics() : StartReset()">
+          @if (IsResetting()) {
+            <app-loading-spinner [size]="18"></app-loading-spinner>
+            CONFIRM
+          } @else {
+            RESET
+          }
+        </button>
+      </div>
     </div>
   </div>
 </div>
