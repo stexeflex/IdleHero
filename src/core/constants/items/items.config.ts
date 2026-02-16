@@ -542,7 +542,7 @@ const WEAPON_STAFF_WAND_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: WEAPON_INNATE_CONFIG.CRIT_DAMAGE_BASE10,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_weapon_staff_crit_damage_innate');
-        s.CriticalHit.FlatDamage = value;
+        s.CriticalHit.MultiplierDamage = value;
         return s;
       }
     }
@@ -561,7 +561,7 @@ const WEAPON_STAFF_WAND_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: WEAPON_INNATE_CONFIG.CRIT_DAMAGE_BASE25,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t3_weapon_wand_crit_damage_innate');
-        s.CriticalHit.FlatDamage = value;
+        s.CriticalHit.MultiplierDamage = value;
         return s;
       }
     }
@@ -607,10 +607,10 @@ const OFFHAND_SHIELDS_VARIANTS: ItemVariantDefinition[] = [
     Tier: 'I',
     Innate: {
       ToLabel: (value: number) => PercentageAdditiveLabel('Bleeding Damage', value),
-      ValuesByLevel: ScaleLinearValueCurve(0.05, 0.025),
+      ValuesByLevel: ScaleLinearValueCurve(0.07, 0.04),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_offhand_shield_starter_innate');
-        s.Bleeding.FlatDamage = value;
+        s.Bleeding.MultiplierDamage = value;
         return s;
       }
     }
@@ -627,10 +627,10 @@ const OFFHAND_ORBS_VARIANTS: ItemVariantDefinition[] = [
     Tier: 'II',
     Innate: {
       ToLabel: (value: number) => PercentageAdditiveLabel('Critical Hit Damage', value),
-      ValuesByLevel: ScaleLinearValueCurve(0.1, 0.1),
+      ValuesByLevel: ScaleLinearValueCurve(0.1, 0.05),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_offhand_orb_starter_innate');
-        s.CriticalHit.FlatDamage = value;
+        s.CriticalHit.MultiplierDamage = value;
         return s;
       }
     }
@@ -647,10 +647,10 @@ const OFFHAND_QUIVERS_VARIANTS: ItemVariantDefinition[] = [
     Tier: 'I',
     Innate: {
       ToLabel: (value: number) => PercentageAdditiveLabel('Multi Hit Damage', value),
-      ValuesByLevel: ScaleLinearValueCurve(0.05, 0.05),
+      ValuesByLevel: ScaleLinearValueCurve(0.05, 0.03),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_offhand_quiver_starter_innate');
-        s.MultiHit.FlatDamage = value;
+        s.MultiHit.MultiplierDamage = value;
         return s;
       }
     }
@@ -667,10 +667,10 @@ const OFFHAND_DAGGERS_VARIANTS: ItemVariantDefinition[] = [
     Tier: 'I',
     Innate: {
       ToLabel: (value: number) => PercentageAdditiveLabel('Critical Hit Damage', value),
-      ValuesByLevel: ScaleLinearValueCurve(0.1, 0.1),
+      ValuesByLevel: ScaleLinearValueCurve(0.05, 0.05),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_offhand_dagger_starter_innate');
-        s.CriticalHit.FlatDamage = value;
+        s.CriticalHit.MultiplierDamage = value;
         return s;
       }
     }
@@ -833,7 +833,7 @@ const CHEST_SHIRT_VARIANTS: ItemVariantDefinition[] = [
     Type: 'Shirt',
     Tier: 'I',
     Innate: {
-      ToLabel: (value: number) => PercentageAdditiveLabel('Charging Strike Damage', value),
+      ToLabel: (value: number) => PercentageAdditiveLabel('Charged Damage', value),
       ValuesByLevel: ScaleLinearValueCurve(0.05, 0.05),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_chest_shirt_light_top_innate');

@@ -58,14 +58,15 @@ export class Stats {
   protected readonly CanIncreaseAttributes = computed<boolean>(() => {
     const battleInProgress = this.combatState.InProgress();
     const hasUnspentPoints = this.attributesService.UnallocatedPoints() > 0;
-
     return !battleInProgress && hasUnspentPoints;
   });
 
   protected CanDecreaseAttribute(attribute: string): boolean {
-    return this.attributesService.CanDeallocate(
+    const battleInProgress = this.combatState.InProgress();
+    const canDeallocate = this.attributesService.CanDeallocate(
       attribute as 'Strength' | 'Intelligence' | 'Dexterity'
     );
+    return !battleInProgress && canDeallocate;
   }
 
   protected increaseAttribute(attribute: string) {
@@ -129,7 +130,7 @@ export class Stats {
         value: this.decimalPipe.transform(combatStats.ChargeGain, '1.0-0') + ' / Hit'
       },
       {
-        label: 'Charging Strike Damage',
+        label: 'Charged Damage',
         value: this.percentPipe.transform(combatStats.ChargeDamage, '1.0-0')
       },
       {

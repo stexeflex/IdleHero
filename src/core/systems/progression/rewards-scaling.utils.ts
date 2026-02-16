@@ -7,12 +7,12 @@ export function StageFactor(stageId: number): number {
   return 1 + REWARDS_CONFIG.STAGE_LINEAR_FACTOR * (s - 1);
 }
 
-export function MidBossFactor(): number {
-  return REWARDS_CONFIG.MID_BOSS_MULTIPLIER;
+export function MidBossFactor(reward: 'GOLD' | 'EXPERIENCE'): number {
+  return REWARDS_CONFIG[reward].MID_BOSS_MULTIPLIER;
 }
 
-export function CompletionFactor(): number {
-  return REWARDS_CONFIG.COMPLETION_MULTIPLIER;
+export function CompletionFactor(reward: 'GOLD' | 'EXPERIENCE'): number {
+  return REWARDS_CONFIG[reward].COMPLETION_MULTIPLIER;
 }
 
 export function ComputeDampedExperience(

@@ -2,8 +2,8 @@ import { ATTRIBUTES_CONFIG, STATS_CONFIG } from '../../constants';
 import { Attributes, ComputedHeroStats, HeroStats, StatSource } from '../../models';
 import {
   MapDexterityToChainFactor,
-  MapDexterityToMultiHitDamage,
   MapDexterityToMultiHitChance,
+  MapDexterityToMultiHitDamage,
   MapIntelligenceToCritChance,
   MapIntelligenceToCritDamage,
   MapStrengthToBleedChance,
@@ -72,6 +72,7 @@ export function ComputeStats(
     sources,
     baseStats.MultiHitChance,
     baseStats.MultiHitDamage,
+    baseStats.MultiHitChainFactor,
     attributes.Dexterity
   );
 
@@ -150,7 +151,7 @@ function ComputeBleeding(
   );
   const bleedChanceBase = ClampUtils.clamp(
     baseBleedChance + addBleedChance,
-    0,
+    STATS_CONFIG.BASE.BLEEDING_CHANCE,
     STATS_CONFIG.CAPS.MAX_BLEEDING_CHANCE
   );
   const bleedChance = ApplyIncreasedChanceSoftCap(
@@ -160,13 +161,13 @@ function ComputeBleeding(
   );
 
   // Bleeding Damage
-  const baseBleedDamage = Flat(baseMultiplier ?? STATS_CONFIG.BASE.BLEEDING_DAMAGE, MapStrengthToBleedDamage(strength));
-  const addBleedDamage = sources.reduce((sum, s) => Flat(sum, s.Bleeding.FlatDamage), 0);
-  const multiplyBleedDamage = sources.reduce(
-    (prod, s) => Multiplier(prod, s.Bleeding.MultiplierDamage),
-    1
+  const baseBleedDamage = baseMultiplier ?? STATS_CONFIG.BASE.BLEEDING_DAMAGE;
+  const strengthBleedDamage = MapStrengthToBleedDamage(strength);
+  const increasedBleedDamage = sources.reduce((sum, s) => Sum(sum, s.Bleeding.MultiplierDamage), 0);
+  const bleedMultiplier = Math.max(
+    STATS_CONFIG.BASE.BLEEDING_DAMAGE,
+    baseBleedDamage + strengthBleedDamage + increasedBleedDamage
   );
-  const bleedMultiplier = Effective(baseBleedDamage, addBleedDamage, multiplyBleedDamage, 0);
 
   return {
     BleedingChance: bleedChance,
@@ -189,7 +190,7 @@ function ComputeCriticalHit(
   );
   const critChanceBase = ClampUtils.clamp(
     baseCritChance + addCritChance,
-    0,
+    STATS_CONFIG.BASE.CRIT_CHANCE,
     STATS_CONFIG.CAPS.MAX_CRIT_CHANCE
   );
   const critChance = ApplyIncreasedChanceSoftCap(
@@ -199,17 +200,20 @@ function ComputeCriticalHit(
   );
 
   // Crit Damage
-  const baseCritDamage = Flat(baseMultiplier ?? STATS_CONFIG.BASE.CRIT_DAMAGE, MapIntelligenceToCritDamage(intelligence));
-  const addCritDamage = sources.reduce((sum, s) => Flat(sum, s.CriticalHit.FlatDamage), 0);
-  const multiplyCritDamage = sources.reduce(
-    (prod, s) => Multiplier(prod, s.CriticalHit.MultiplierDamage),
-    1
+  const baseCritDamage = baseMultiplier ?? STATS_CONFIG.BASE.CRIT_DAMAGE;
+  const intelligenceCritDamage = MapIntelligenceToCritDamage(intelligence);
+  const increasedCritDamage = sources.reduce(
+    (sum, s) => Sum(sum, s.CriticalHit.MultiplierDamage),
+    0
   );
-  const critMultiplier = Effective(baseCritDamage, addCritDamage, multiplyCritDamage, 1);
+  const critDamage = Math.max(
+    STATS_CONFIG.BASE.CRIT_DAMAGE,
+    baseCritDamage + intelligenceCritDamage + increasedCritDamage
+  );
 
   return {
     CriticalHitChance: critChance,
-    CriticalHitDamage: critMultiplier
+    CriticalHitDamage: critDamage
   };
 }
 
@@ -217,6 +221,7 @@ function ComputeMultiHit(
   sources: StatSource[],
   baseChance: number,
   baseMultiplier: number,
+  baseChainFactor: number,
   dexterity: number
 ): { MultiHitChance: number; MultiHitChainFactor: number; MultiHitDamage: number } {
   // Multi-Hit Chance
@@ -225,7 +230,7 @@ function ComputeMultiHit(
   const mulMulti = sources.reduce((prod, s) => Multiplier(prod, s.MultiHit.MultiplierChance), 1);
   const multiHitChanceBase = ClampUtils.clamp(
     baseMulti + addMulti,
-    0,
+    STATS_CONFIG.BASE.MULTI_HIT_CHANCE,
     STATS_CONFIG.CAPS.MAX_MULTI_HIT_CHANCE
   );
   const multiHitChance = ApplyIncreasedChanceSoftCap(
@@ -235,26 +240,26 @@ function ComputeMultiHit(
   );
 
   // Multi-Hit Damage
-  const baseMultiHitDamage = MapDexterityToMultiHitDamage(
-    dexterity,
-    baseMultiplier ?? STATS_CONFIG.BASE.MULTI_HIT_DAMAGE
+  const baseMultiHitDamage = baseMultiplier ?? STATS_CONFIG.BASE.MULTI_HIT_DAMAGE;
+  const dexterityMultiHitDamage = MapDexterityToMultiHitDamage(dexterity);
+  const increaseMultiHitDamage = sources.reduce(
+    (sum, s) => Sum(sum, s.MultiHit.MultiplierDamage),
+    0
   );
-  const addMultiHitDamage = sources.reduce((sum, s) => Flat(sum, s.MultiHit.FlatDamage), 0);
-  const mulMultiHitDamage = sources.reduce(
-    (prod, s) => Multiplier(prod, s.MultiHit.MultiplierDamage),
-    1
+  const multiHitDamage = Math.max(
+    STATS_CONFIG.BASE.MULTI_HIT_DAMAGE,
+    baseMultiHitDamage + dexterityMultiHitDamage + increaseMultiHitDamage
   );
-  const multiHitDamage = Effective(baseMultiHitDamage, addMultiHitDamage, mulMultiHitDamage, 0);
 
   // Multi-Hit Chain Factor
-  const baseChainFactor = MapDexterityToChainFactor(dexterity);
-  const addChainFactor = sources.reduce((sum, s) => Flat(sum, s.MultiHit.FlatChainFactor), 0);
-  const mulChainFactor = sources.reduce(
-    (prod, s) => Multiplier(prod, s.MultiHit.MultiplierChainFactor),
-    1
+  const baseMultiHitChainFactor = baseChainFactor ?? STATS_CONFIG.BASE.MULTI_HIT_CHAIN_FACTOR;
+  const dexterityChainFactor = MapDexterityToChainFactor(dexterity);
+  const increaseMultiHitChainFactor = sources.reduce(
+    (sum, s) => Sum(sum, s.MultiHit.MultiplierChainFactor),
+    0
   );
   const multiHitChainFactor = ClampUtils.clamp(
-    (baseChainFactor + addChainFactor) * mulChainFactor,
+    baseMultiHitChainFactor + dexterityChainFactor + increaseMultiHitChainFactor,
     STATS_CONFIG.BASE.MULTI_HIT_CHAIN_FACTOR,
     STATS_CONFIG.CAPS.MAX_MULTI_HIT_CHAIN_FACTOR
   );
@@ -322,6 +327,10 @@ function ApplyIncreasedChanceSoftCap(
 //#region Helpers
 function Flat(currentFlat: number, additionalFlat: number): number {
   return currentFlat + (additionalFlat ?? 0);
+}
+
+function Sum(currentSum: number, additionalValue: number): number {
+  return currentSum + (additionalValue ?? 0);
 }
 
 function Multiplier(currentMultiplier: number, additionalMultiplier: number): number {

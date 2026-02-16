@@ -18,6 +18,8 @@ import {
   RarityRules
 } from '../../models';
 
+import { TimestampUtils } from '../../../shared/utils';
+
 export function GetItemVariant(definitionId: string): ItemVariantDefinition {
   return ITEM_VARIANTS.find((v) => v.Id === definitionId)!;
 }
@@ -71,7 +73,7 @@ export function IsMaxLevel(item: Item): boolean {
 
 export function CreateItem(variant: ItemVariantDefinition): Item {
   const item: Item = {
-    Id: `item_${variant.Id}_${performance.now()}`,
+    Id: `item_${variant.Id}_${TimestampUtils.GetTimestampNow()}`,
     DefinitionId: variant.Id,
     Name: variant.Name,
     Icon: variant.Icon,

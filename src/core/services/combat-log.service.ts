@@ -19,8 +19,12 @@ import {
 } from '../models';
 import { Injectable, computed, signal } from '@angular/core';
 
+import { TimestampUtils } from '../../shared/utils';
+
 @Injectable({ providedIn: 'root' })
 export class CombatLogService {
+  private readonly MAX_ENTRIES = 250;
+
   private readonly EntriesState = signal<CombatLogEntry[]>([]);
 
   public readonly Entries = computed<CombatLogEntry[]>(() => this.EntriesState());
@@ -30,11 +34,12 @@ export class CombatLogService {
     this.EntriesState.set([]);
   }
 
+  //#region LOG MESSAGE HELPER METHODS
   /** Adds an info message to the log. */
   public Info(message: string): InfoLogEntry {
     const entry: InfoLogEntry = {
       Type: CombatLogType.Info,
-      TimestampMs: performance.now(),
+      TimestampMs: TimestampUtils.GetTimestamp(),
       Message: message
     };
     this.Push(entry);
@@ -44,7 +49,7 @@ export class CombatLogService {
   public Rewards(stage: number, rewards: Rewards): RewardsLogEntry {
     const entry: RewardsLogEntry = {
       Type: CombatLogType.Rewards,
-      TimestampMs: performance.now(),
+      TimestampMs: TimestampUtils.GetTimestamp(),
       Stage: stage,
       Rewards: rewards
     };
@@ -114,11 +119,13 @@ export class CombatLogService {
     this.Push(entry);
     return entry;
   }
+  //#endregion LOG MESSAGE HELPER METHODS
 
   private Push(entry: CombatLogEntry): void {
     this.EntriesState.update((list) => {
       list.unshift(entry);
-      return [...list];
+      // Keep only the latest X entries to prevent unbounded growth
+      return [...list].slice(0, this.MAX_ENTRIES);
     });
   }
 }
