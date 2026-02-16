@@ -1,4 +1,4 @@
-import { Component, LOCALE_ID, computed, inject, signal } from '@angular/core';
+import { Component, LOCALE_ID, OnDestroy, computed, inject, signal } from '@angular/core';
 import { LoadingSpinner, Separator } from '../../../shared/components';
 
 import { DecimalPipe } from '@angular/common';
@@ -15,7 +15,7 @@ interface StatisticItem {
   templateUrl: './statistics-flyout.html',
   styleUrl: './statistics-flyout.scss'
 })
-export class StatisticsFlyout {
+export class StatisticsFlyout implements OnDestroy {
   private readonly locale = inject(LOCALE_ID);
   private readonly decimalPipe: DecimalPipe = new DecimalPipe(this.locale);
   private readonly statisticsService = inject(StatisticsService);
@@ -23,6 +23,10 @@ export class StatisticsFlyout {
   protected readonly IsOpen = signal<boolean>(false);
   protected readonly IsResetting = signal<boolean>(false);
   private timeout: number = 0;
+
+  ngOnDestroy(): void {
+    clearTimeout(this.timeout);
+  }
 
   protected ToggleFlyout(): void {
     this.IsOpen.set(!this.IsOpen());
