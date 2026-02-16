@@ -50,16 +50,16 @@ export class CombatEngine {
   private EventHandling(): void {
     if (!this.Running) return;
 
+    // MANUALLY INSERTED
+    if (this.TimerId) clearTimeout(this.TimerId);
+    // MANUALLY INSERTED END
+
     const nextEvent: CombatEvent | undefined = this.CombatState.Queue.Peek();
 
     if (!nextEvent) return;
 
     const now: number = TimestampUtils.GetTimestamp();
     const delay: number = Math.max(0, nextEvent.AtMs - now);
-
-    // MANUALLY INSERTED
-    if (this.TimerId) clearTimeout(this.TimerId);
-    // MANUALLY INSERTED END
 
     this.Zone.runOutsideAngular(() => {
       this.TimerId = setTimeout(() => {
@@ -79,6 +79,8 @@ export class CombatEngine {
     let processedEvents: number = 0;
 
     while (this.EventCanBeProcessed(nextEvent, now, processedEvents)) {
+      if (!this.Running) break;
+
       const eventToProcess: CombatEvent = this.CombatState.Queue.Pop()!;
       await this.EventHandler.HandleEvent(eventToProcess);
       processedEvents++;
