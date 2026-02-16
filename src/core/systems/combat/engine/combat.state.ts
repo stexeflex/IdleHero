@@ -23,9 +23,9 @@ import {
 } from '../attack-interval-computing';
 import { Injectable, inject, signal } from '@angular/core';
 
-import { DELAYS } from '../../../constants';
 import { EventQueue } from './event.queue';
 import { GameSaverService } from '../../../../persistence';
+import { TimestampUtils } from '../../../../shared/utils';
 
 /**
  * Combat State Service
@@ -97,7 +97,7 @@ export class CombatState {
     this.Boss.set(firstBoss);
 
     // Add first Combat Event for Hero
-    const now = performance.now();
+    const now = TimestampUtils.GetTimestamp();
     this.SetFirstEvent(hero, firstBoss, now);
     this.PublishState();
 
@@ -144,7 +144,7 @@ export class CombatState {
     const nextBoss = this.DungeonRoom.CurrentBoss();
     if (!nextBoss) return;
 
-    const now = performance.now();
+    const now = TimestampUtils.GetTimestamp();
     this.SetFirstEvent(this.Hero()!, nextBoss, now);
     nextBoss.Life = ResetLife(nextBoss.Life);
     this.Boss.set(nextBoss);

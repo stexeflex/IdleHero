@@ -120,4 +120,15 @@
   display: flex;
   justify-content: space-between;
   gap: $gap;
+
+  .button-equip {
+    width: 110px;
+  }
+
+  .button-dismantle {
+    @include flexbox();
+    gap: $gap;
+    background-color: $clr-black;
+    color: $clr-text-primary;
+  }
 }

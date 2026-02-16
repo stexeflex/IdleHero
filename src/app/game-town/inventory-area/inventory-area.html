@@ -65,9 +65,22 @@
           <app-item-preview [Item]="card.Item" [Variant]="card.Variant">
             <separator class="ih-separator"></separator>
             <div class="item-preview-actions">
-              <button class="ih-button-tertiary" (click)="EquipItem(card.Item)">EQUIP</button>
-              <button class="ih-button-tertiary" (click)="DismantleItem(card.Item)">
-                DISMANTLE
+              @if (IsDismantlingItem() !== card.Item) {
+                <button class="ih-button-tertiary button-equip" (click)="EquipItem(card.Item)">
+                  EQUIP
+                </button>
+              }
+              <button
+                class="ih-button-tertiary button-dismantle"
+                (click)="
+                  IsDismantlingItem() ? DismantleItem(card.Item) : StartDismantling(card.Item)
+                ">
+                @if (IsDismantlingItem() === card.Item) {
+                  <app-loading-spinner [size]="16" [color]="'#fff'"></app-loading-spinner>
+                  CONFIRM
+                } @else {
+                  DISMANTLE
+                }
               </button>
             </div>
           </app-item-preview>

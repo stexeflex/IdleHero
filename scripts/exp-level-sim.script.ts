@@ -134,11 +134,11 @@ function GetExperienceForKill(
   const base = ComputeDampedExperience(dungeon, stage, statistics);
 
   if (stage >= dungeon.StagesMax) {
-    return Math.max(0, Math.round(base * CompletionFactor()));
+    return Math.max(0, Math.round(base * CompletionFactor('EXPERIENCE')));
   }
 
   if (IsMidBossStage(dungeon, stage)) {
-    return Math.max(0, Math.round(base * MidBossFactor()));
+    return Math.max(0, Math.round(base * MidBossFactor('EXPERIENCE')));
   }
 
   return Math.max(0, base);

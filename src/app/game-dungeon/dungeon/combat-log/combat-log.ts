@@ -5,6 +5,7 @@ import { IconComponent, Separator } from '../../../../shared/components';
 import { CombatActorIcon } from './combat-actor-icon/combat-actor-icon';
 import { CombatLogService } from '../../../../core/services';
 import { DecimalPipe } from '@angular/common';
+import { TimestampUtils } from '../../../../shared/utils';
 
 interface DamageLogEntryExtended {
   ActorClass: string;
@@ -84,9 +85,6 @@ export class CombatLog {
   }
 
   protected FormatTimestamp(timestampMs: number): string {
-    const date = new Date(timestampMs);
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const seconds = date.getSeconds().toString().padStart(2, '0');
-    return `[${minutes}:${seconds}]`;
+    return TimestampUtils.FormatTimestamp(timestampMs);
   }
 }

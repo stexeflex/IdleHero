@@ -26,7 +26,7 @@ export const STATS_CONFIG = {
     INT_TO_CRIT_DAMAGE: 3.0, // Maximal +300% CHD durch INT
     DEX_TO_MULTI_HIT_CHANCE: 0.5, // Maximal +50% MHC durch DEX
     DEX_TO_MULTI_HIT_DAMAGE: 1.0, // Maximal +100% MHD durch DEX
-    DEX_TO_CHAIN_FACTOR: 0.7 // Maximal +70% MHCF durch DEX
+    DEX_TO_CHAIN_FACTOR: 0.2 // Maximal +20% MHCF durch DEX
   },
   CAPS: {
     MAX_BLEEDING_CHANCE: 0.9, // Maximal 90% BHC

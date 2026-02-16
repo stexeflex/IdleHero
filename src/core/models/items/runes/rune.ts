@@ -17,7 +17,7 @@ export interface RuneQualitySpec {
 
 /**
  * Describes how a rune applies stats when a concrete value is chosen.
- * For example, a "+X% Critical Strike Chance" rune maps its rolled value X into StatSource.CriticalHit.FlatChance.
+ * For example, a "+X% Critical Hit Chance" rune maps its rolled value X into StatSource.CriticalHit.MultiplierChance.
  */
 export interface RuneEffectMapping {
   /** Human-readable description of the effect */

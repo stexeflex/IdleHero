@@ -5,3 +5,4 @@ export * from './flags.utils';
 export * from './object.utils';
 export * from './random.utils';
 export * from './timeout.utils';
+export * from './timestamp.utils';

@@ -61,10 +61,11 @@ export class DungeonRewardsService {
    */
   public ComputeMidBossRewards(dungeon: DungeonRoom, stageId: number): Rewards {
     const base = this.ComputeStageRewards(dungeon, stageId);
-    const m = MidBossFactor();
+    const mGold = MidBossFactor('GOLD');
+    const mExp = MidBossFactor('EXPERIENCE');
     const rewards = {
-      Gold: Math.round(base.Gold * m),
-      Experience: Math.round(base.Experience * m)
+      Gold: Math.round(base.Gold * mGold),
+      Experience: Math.round(base.Experience * mExp)
     };
     return rewards;
   }
@@ -92,10 +93,11 @@ export class DungeonRewardsService {
   public ComputeCompletionRewards(dungeon: DungeonRoom): Rewards {
     const finalStage = Math.max(dungeon.StagesBase, dungeon.StagesMax);
     const base = this.ComputeStageRewards(dungeon, finalStage);
-    const c = CompletionFactor();
+    const cGold = CompletionFactor('GOLD');
+    const cExp = CompletionFactor('EXPERIENCE');
     const rewards = {
-      Gold: Math.round(base.Gold * c),
-      Experience: Math.round(base.Experience * c)
+      Gold: Math.round(base.Gold * cGold),
+      Experience: Math.round(base.Experience * cExp)
     };
     return rewards;
   }

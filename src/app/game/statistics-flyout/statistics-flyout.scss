@@ -75,4 +75,14 @@
       }
     }
   }
+
+  .reset {
+    @include flexbox();
+
+    .reset-button {
+      @include flexbox();
+      gap: $gap;
+      width: 125px;
+    }
+  }
 }
