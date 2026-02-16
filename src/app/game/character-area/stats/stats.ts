@@ -130,7 +130,7 @@ export class Stats {
         value: this.decimalPipe.transform(combatStats.ChargeGain, '1.0-0') + ' / Hit'
       },
       {
-        label: 'Charging Strike Damage',
+        label: 'Charged Damage',
         value: this.percentPipe.transform(combatStats.ChargeDamage, '1.0-0')
       },
       {

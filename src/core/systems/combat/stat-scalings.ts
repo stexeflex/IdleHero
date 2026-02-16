@@ -32,21 +32,13 @@ export function MapDexterityToMultiHitChance(dex: number): number {
 }
 
 export function MapDexterityToChainFactor(dex: number): number {
-  // Wertebereich [0.X .. 0.X]
-  const minF = STATS_CONFIG.BASE.MULTI_HIT_CHAIN_FACTOR;
-  const maxF = STATS_CONFIG.LIMITS.DEX_TO_CHAIN_FACTOR;
-
-  // Steuert, wie schnell die Kettenchance abfällt (höher => längere Ketten)
+  const cap = STATS_CONFIG.LIMITS.DEX_TO_CHAIN_FACTOR;
   const K = STATS_CONFIG.MAPPINGS.DEX_CHAIN_FACTOR_K;
-  const t = 1 - Math.exp(-dex / K); // 0..1
-  return ClampUtils.clamp(minF + (maxF - minF) * t, minF, maxF);
+  return ClampUtils.clamp01(cap * (1 - Math.exp(-dex / K)));
 }
 
-export function MapDexterityToMultiHitDamage(dex: number, baseDamageMultiplier: number): number {
-  const minDmg = Math.max(0, baseDamageMultiplier);
-  const maxDmg = Math.max(minDmg, STATS_CONFIG.LIMITS.DEX_TO_MULTI_HIT_DAMAGE);
+export function MapDexterityToMultiHitDamage(dex: number): number {
+  const cap = STATS_CONFIG.LIMITS.DEX_TO_MULTI_HIT_DAMAGE;
   const K = STATS_CONFIG.MAPPINGS.DEX_MULTI_HIT_K;
-
-  const t = 1 - Math.exp(-dex / K); // 0..1
-  return ClampUtils.clamp(minDmg + (maxDmg - minDmg) * t, minDmg, maxDmg);
+  return Math.max(0, cap * (1 - Math.exp(-dex / K)));
 }

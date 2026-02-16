@@ -236,7 +236,7 @@ const UTILITY_AFFIX_DEFINITIONS: AffixDefinition[] = [
   {
     Id: 'affix_accuracy_percent',
     Groups: ['Utility'],
-    AllowedSlots: ['OffHand', 'Head', 'Chest', 'Legs', 'Feet'],
+    AllowedSlots: ['Head', 'Chest', 'Legs', 'Feet'],
     Tiers: ACCURACY_TIERS,
     Effect: {
       ToLabel: (value: number) => PercentageAdditiveLabel('Accuracy', value),
@@ -285,7 +285,7 @@ const CHARGING_STRIKE_AFFIX_DEFINITIONS: AffixDefinition[] = [
   {
     Id: 'affix_charging_strike_gain_flat',
     Groups: ['Charging Strike'],
-    AllowedSlots: ['Weapon'],
+    AllowedSlots: ['OffHand'],
     Tiers: CHARGING_STRIKE_GAIN_TIERS,
     Effect: {
       ToLabel: (value: number) => FlatAdditiveLabel('Charge Gain per Hit', value),
@@ -301,10 +301,10 @@ const CHARGING_STRIKE_AFFIX_DEFINITIONS: AffixDefinition[] = [
   {
     Id: 'affix_charging_strike_damage_percent',
     Groups: ['Charging Strike'],
-    AllowedSlots: ['OffHand', 'Chest', 'Legs'],
+    AllowedSlots: ['Weapon'],
     Tiers: CHARGING_STRIKE_DAMAGE_TIERS,
     Effect: {
-      ToLabel: (value: number) => PercentageAdditiveLabel('Charging Strike Damage', value),
+      ToLabel: (value: number) => PercentageAdditiveLabel('Charged Damage', value),
       MapToStatSource: (source: string, value: number) => {
         const s = EmptyStatSource(
           source + `_affix_charging_strike_damage_percent_${TimestampUtils.GetTimestamp()}`
@@ -320,7 +320,7 @@ const CHARGING_STRIKE_AFFIX_DEFINITIONS: AffixDefinition[] = [
   //   AllowedSlots: ['OffHand', 'Head', 'Feet'],
   //   Tiers: CHARGED_DURATION_TIERS,
   //   Effect: {
-  //     ToLabel: (value: number) => FlatAdditiveLabel('s Charge Duration', value),
+  //     ToLabel: (value: number) => FlatAdditiveLabel('s Charged Duration', value),
   //     MapToStatSource: (source: string, value: number) => {
   //       const s = EmptyStatSource(
   //         source + `_affix_charging_strike_duration_flat_${TimestampUtils.GetTimestampNow()}`
