@@ -3,6 +3,7 @@ import { Injectable, NgZone, inject } from '@angular/core';
 import { CombatEvent } from '../../../models';
 import { CombatState } from './combat.state';
 import { EventHandler } from './event.handler';
+import { TimestampUtils } from '../../../../shared/utils';
 
 /**
  * Combat Engine Service
@@ -53,7 +54,7 @@ export class CombatEngine {
 
     if (!nextEvent) return;
 
-    const now: number = performance.now();
+    const now: number = TimestampUtils.GetTimestamp();
     const delay: number = Math.max(0, nextEvent.AtMs - now);
 
     // MANUALLY INSERTED
@@ -73,7 +74,7 @@ export class CombatEngine {
   private async ProcessDueEvents(): Promise<void> {
     if (!this.Running) return;
 
-    const now: number = performance.now();
+    const now: number = TimestampUtils.GetTimestamp();
     let nextEvent: CombatEvent | undefined = this.CombatState.Queue.Peek();
     let processedEvents: number = 0;
 

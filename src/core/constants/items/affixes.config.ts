@@ -21,6 +21,8 @@ import {
   PercentageAdditiveLabel
 } from '../../models';
 
+import { TimestampUtils } from '../../../shared/utils';
+
 const ATTRIBUTES_AFFIX_DEFINITIONS: AffixDefinition[] = [
   {
     Id: 'affix_strength_flat',
@@ -30,7 +32,9 @@ const ATTRIBUTES_AFFIX_DEFINITIONS: AffixDefinition[] = [
     Effect: {
       ToLabel: (value: number) => FlatAdditiveLabel('Strength', value),
       MapToStatSource: (source: string, value: number) => {
-        const s = EmptyStatSource(source + `_affix_strength_flat_${performance.now()}`);
+        const s = EmptyStatSource(
+          source + `_affix_strength_flat_${TimestampUtils.GetTimestampNow()}`
+        );
         s.Strength.Flat = value;
         return s;
       }
@@ -44,7 +48,9 @@ const ATTRIBUTES_AFFIX_DEFINITIONS: AffixDefinition[] = [
     Effect: {
       ToLabel: (value: number) => FlatAdditiveLabel('Intelligence', value),
       MapToStatSource: (source: string, value: number) => {
-        const s = EmptyStatSource(source + `_affix_intelligence_flat_${performance.now()}`);
+        const s = EmptyStatSource(
+          source + `_affix_intelligence_flat_${TimestampUtils.GetTimestampNow()}`
+        );
         s.Intelligence.Flat = value;
         return s;
       }
@@ -58,7 +64,9 @@ const ATTRIBUTES_AFFIX_DEFINITIONS: AffixDefinition[] = [
     Effect: {
       ToLabel: (value: number) => FlatAdditiveLabel('Dexterity', value),
       MapToStatSource: (source: string, value: number) => {
-        const s = EmptyStatSource(source + `_affix_dexterity_flat_${performance.now()}`);
+        const s = EmptyStatSource(
+          source + `_affix_dexterity_flat_${TimestampUtils.GetTimestampNow()}`
+        );
         s.Dexterity.Flat = value;
         return s;
       }
@@ -74,7 +82,7 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
   //   Effect: {
   //     ToLabel: (value: number) => FlatAdditiveLabel('Damage', value),
   //     MapToStatSource: (source: string, value: number) => {
-  //       const s = EmptyStatSource(source + `_affix_damage_flat_${performance.now()}`);
+  //       const s = EmptyStatSource(source + `_affix_damage_flat_${TimestampUtils.GetTimestampNow()}`);
   //       s.Damage.Flat = value;
   //       return s;
   //     }
@@ -88,7 +96,7 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
   //   Effect: {
   //     ToLabel: (value: number) => PercentageAdditiveLabel('Damage', value),
   //     MapToStatSource: (source: string, value: number) => {
-  //       const s = EmptyStatSource(source + `_affix_damage_percent_${performance.now()}`);
+  //       const s = EmptyStatSource(source + `_affix_damage_percent_${TimestampUtils.GetTimestampNow()}`);
   //       s.Damage.Multiplier = value;
   //       return s;
   //     }
@@ -102,7 +110,9 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
     Effect: {
       ToLabel: (value: number) => PercentageAdditiveLabel('Bleeding Chance', value),
       MapToStatSource: (source: string, value: number) => {
-        const s = EmptyStatSource(source + `_affix_bleed_chance_percent_${performance.now()}`);
+        const s = EmptyStatSource(
+          source + `_affix_bleed_chance_percent_${TimestampUtils.GetTimestampNow()}`
+        );
         s.Bleeding.MultiplierChance = value;
         return s;
       }
@@ -116,7 +126,9 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
     Effect: {
       ToLabel: (value: number) => PercentageAdditiveLabel('Critical Hit Chance', value),
       MapToStatSource: (source: string, value: number) => {
-        const s = EmptyStatSource(source + `_affix_crit_chance_percent_${performance.now()}`);
+        const s = EmptyStatSource(
+          source + `_affix_crit_chance_percent_${TimestampUtils.GetTimestampNow()}`
+        );
         s.CriticalHit.MultiplierChance = value;
         return s;
       }
@@ -130,7 +142,9 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
     Effect: {
       ToLabel: (value: number) => PercentageAdditiveLabel('Multi Hit Chance', value),
       MapToStatSource: (source: string, value: number) => {
-        const s = EmptyStatSource(source + `_affix_multihit_chance_percent_${performance.now()}`);
+        const s = EmptyStatSource(
+          source + `_affix_multihit_chance_percent_${TimestampUtils.GetTimestampNow()}`
+        );
         s.MultiHit.MultiplierChance = value;
         return s;
       }
@@ -144,7 +158,9 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
     Effect: {
       ToLabel: (value: number) => PercentageAdditiveLabel('Bleeding Damage', value),
       MapToStatSource: (source: string, value: number) => {
-        const s = EmptyStatSource(source + `_affix_bleeding_damage_percent_${performance.now()}`);
+        const s = EmptyStatSource(
+          source + `_affix_bleeding_damage_percent_${TimestampUtils.GetTimestampNow()}`
+        );
         s.Bleeding.MultiplierDamage = value;
         return s;
       }
@@ -158,7 +174,9 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
     Effect: {
       ToLabel: (value: number) => PercentageAdditiveLabel('Critical Hit Damage', value),
       MapToStatSource: (source: string, value: number) => {
-        const s = EmptyStatSource(source + `_affix_crit_damage_percent_${performance.now()}`);
+        const s = EmptyStatSource(
+          source + `_affix_crit_damage_percent_${TimestampUtils.GetTimestampNow()}`
+        );
         s.CriticalHit.MultiplierDamage = value;
         return s;
       }
@@ -172,7 +190,9 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
     Effect: {
       ToLabel: (value: number) => PercentageAdditiveLabel('Multi Hit Damage', value),
       MapToStatSource: (source: string, value: number) => {
-        const s = EmptyStatSource(source + `_affix_multihit_damage_percent_${performance.now()}`);
+        const s = EmptyStatSource(
+          source + `_affix_multihit_damage_percent_${TimestampUtils.GetTimestampNow()}`
+        );
         s.MultiHit.MultiplierDamage = value;
         return s;
       }
@@ -186,7 +206,9 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
     Effect: {
       ToLabel: (value: number) => PercentageAdditiveLabel('Multi Hit Chain', value),
       MapToStatSource: (source: string, value: number) => {
-        const s = EmptyStatSource(source + `_affix_multihit_chain_percent_${performance.now()}`);
+        const s = EmptyStatSource(
+          source + `_affix_multihit_chain_percent_${TimestampUtils.GetTimestampNow()}`
+        );
         s.MultiHit.MultiplierChainFactor = value;
         return s;
       }
@@ -203,7 +225,9 @@ const UTILITY_AFFIX_DEFINITIONS: AffixDefinition[] = [
     Effect: {
       ToLabel: (value: number) => PercentageAdditiveLabel('Attack Speed', value),
       MapToStatSource: (source: string, value: number) => {
-        const s = EmptyStatSource(source + `_affix_attack_speed_percent_${performance.now()}`);
+        const s = EmptyStatSource(
+          source + `_affix_attack_speed_percent_${TimestampUtils.GetTimestampNow()}`
+        );
         s.AttackSpeed.Multiplier = value;
         return s;
       }
@@ -217,7 +241,9 @@ const UTILITY_AFFIX_DEFINITIONS: AffixDefinition[] = [
     Effect: {
       ToLabel: (value: number) => PercentageAdditiveLabel('Accuracy', value),
       MapToStatSource: (source: string, value: number) => {
-        const s = EmptyStatSource(source + `_affix_accuracy_percent_${performance.now()}`);
+        const s = EmptyStatSource(
+          source + `_affix_accuracy_percent_${TimestampUtils.GetTimestampNow()}`
+        );
         s.Accuracy.Multiplier = value;
         return s;
       }
@@ -231,7 +257,7 @@ const UTILITY_AFFIX_DEFINITIONS: AffixDefinition[] = [
   //   Effect: {
   //     ToLabel: (value: number) => PercentageAdditiveLabel('Armor Penetration', value),
   //     MapToStatSource: (source: string, value: number) => {
-  //       const s = EmptyStatSource(source + `_affix_armor_penetration_percent_${performance.now()}`);
+  //       const s = EmptyStatSource(source + `_affix_armor_penetration_percent_${TimestampUtils.GetTimestampNow()}`);
   //       s.ArmorPenetration.Multiplier = value;
   //       return s;
   //     }
@@ -246,7 +272,7 @@ const UTILITY_AFFIX_DEFINITIONS: AffixDefinition[] = [
   //     ToLabel: (value: number) => PercentageAdditiveLabel('Resistance Penetration', value),
   //     MapToStatSource: (source: string, value: number) => {
   //       const s = EmptyStatSource(
-  //         source + `_affix_resistance_penetration_percent_${performance.now()}`
+  //         source + `_affix_resistance_penetration_percent_${TimestampUtils.GetTimestampNow()}`
   //       );
   //       s.ResistancePenetration.Multiplier = value;
   //       return s;
@@ -264,7 +290,9 @@ const CHARGING_STRIKE_AFFIX_DEFINITIONS: AffixDefinition[] = [
     Effect: {
       ToLabel: (value: number) => FlatAdditiveLabel('Charge Gain per Hit', value),
       MapToStatSource: (source: string, value: number) => {
-        const s = EmptyStatSource(source + `_affix_charging_strike_gain_flat_${performance.now()}`);
+        const s = EmptyStatSource(
+          source + `_affix_charging_strike_gain_flat_${TimestampUtils.GetTimestampNow()}`
+        );
         s.ChargingStrike.ChargeGain = value;
         return s;
       }
@@ -279,7 +307,7 @@ const CHARGING_STRIKE_AFFIX_DEFINITIONS: AffixDefinition[] = [
       ToLabel: (value: number) => PercentageAdditiveLabel('Charging Strike Damage', value),
       MapToStatSource: (source: string, value: number) => {
         const s = EmptyStatSource(
-          source + `_affix_charging_strike_damage_percent_${performance.now()}`
+          source + `_affix_charging_strike_damage_percent_${TimestampUtils.GetTimestamp()}`
         );
         s.ChargingStrike.ChargeDamage = value;
         return s;
@@ -295,7 +323,7 @@ const CHARGING_STRIKE_AFFIX_DEFINITIONS: AffixDefinition[] = [
   //     ToLabel: (value: number) => FlatAdditiveLabel('s Charge Duration', value),
   //     MapToStatSource: (source: string, value: number) => {
   //       const s = EmptyStatSource(
-  //         source + `_affix_charging_strike_duration_flat_${performance.now()}`
+  //         source + `_affix_charging_strike_duration_flat_${TimestampUtils.GetTimestampNow()}`
   //       );
   //       s.ChargingStrike.ChargeDuration = value;
   //       return s;
