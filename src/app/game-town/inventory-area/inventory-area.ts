@@ -1,8 +1,16 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  computed,
+  inject,
+  signal
+} from '@angular/core';
 import {
   GearSlotIconName,
   IconComponent,
   ItemPreview,
+  LoadingSpinner,
   Separator
 } from '../../../shared/components';
 import { InventoryService, ItemManagementService } from '../../../core/services';
@@ -18,14 +26,21 @@ interface ItemCard {
 
 @Component({
   selector: 'app-inventory-area',
-  imports: [ItemPreview, IconComponent, Separator],
+  imports: [ItemPreview, IconComponent, Separator, LoadingSpinner],
   templateUrl: './inventory-area.html',
   styleUrl: './inventory-area.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class InventoryArea {
+export class InventoryArea implements OnDestroy {
   private readonly Inventory = inject(InventoryService);
   private readonly ItemManagement = inject(ItemManagementService);
+
+  protected readonly IsDismantlingItem = signal<Item | undefined>(undefined);
+  private timeout: number = 0;
+
+  ngOnDestroy(): void {
+    clearTimeout(this.timeout);
+  }
 
   // Constants
   protected readonly AllSlots: ItemSlot[] = ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Feet'];
@@ -153,5 +168,13 @@ export class InventoryArea {
   protected DismantleItem(item: Item) {
     if (!item) return;
     this.ItemManagement.DismantleItem(item.Id);
+  }
+
+  protected StartDismantling(item: Item): void {
+    clearTimeout(this.timeout);
+    this.IsDismantlingItem.set(item);
+    this.timeout = setTimeout(() => {
+      this.IsDismantlingItem.set(undefined);
+    }, 1500);
   }
 }

@@ -34,7 +34,7 @@
           class="ih-button-tertiary reset-button"
           (click)="IsResetting() ? ResetStatistics() : StartReset()">
           @if (IsResetting()) {
-            <app-loading-spinner [size]="18"></app-loading-spinner>
+            <app-loading-spinner [size]="16"></app-loading-spinner>
             CONFIRM
           } @else {
             RESET

@@ -82,8 +82,7 @@
     .reset-button {
       @include flexbox();
       gap: $gap;
-      width: 150px;
-      height: 35px;
+      width: 125px;
     }
   }
 }
