@@ -61,7 +61,7 @@ export class CombatState {
   public Prestige() {
     this.InProgress.set(false);
     this.Queue.Clear();
-    this.DungeonRoom.Prestige();
+    this.DungeonRoom.Prestige(false);
     this.Hero.set(undefined);
     this.Boss.set(undefined);
     this.PublishState();
@@ -72,6 +72,7 @@ export class CombatState {
   public Cleared() {
     this.Log.Info(`${this.DungeonRoom.CurrentDungeon()?.Title.toUpperCase()}: Dungeon Cleared!`);
     this.Queue.Clear();
+    this.DungeonRoom.Prestige(true);
     this.Boss.set(undefined);
     this.PublishState();
 
