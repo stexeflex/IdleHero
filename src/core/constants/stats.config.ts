@@ -29,11 +29,11 @@ export const STATS_CONFIG = {
     DEX_TO_CHAIN_FACTOR: 0.2 // Maximal +20% MHCF durch DEX
   },
   CAPS: {
-    MAX_BLEEDING_CHANCE: 0.9, // Maximal 90% BHC
-    MAX_CRIT_CHANCE: 0.9, // Maximal 90% CHC
-    MAX_MULTI_HIT_CHANCE: 0.9, // Maximal 90% MHC
+    MAX_BLEEDING_CHANCE: 1.0, // Maximal 100% BHC
+    MAX_CRIT_CHANCE: 1.0, // Maximal 100% CHC
+    MAX_MULTI_HIT_CHANCE: 1.0, // Maximal 100% MHC
     MAX_MULTI_HIT_CHAIN_FACTOR: 0.9, // Maximal 90% Chain Factor
-    MAX_CHAIN_HITS: 6 // Maximal 6 Hits in Multi-Hit Chain
+    MAX_CHAIN_HITS: 8 // Maximal 8 Hits in Multi-Hit Chain
   },
   MAPPINGS: {
     // Attribute-Scaling (Attribute liegen effektiv bei 0..50)
