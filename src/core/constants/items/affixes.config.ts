@@ -74,20 +74,22 @@ const ATTRIBUTES_AFFIX_DEFINITIONS: AffixDefinition[] = [
   }
 ];
 const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
-  // {
-  //   Id: 'affix_damage_flat',
-  //   Groups: ['Offense'],
-  //   AllowedSlots: ['Weapon'],
-  //   Tiers: DAMAGE_FLAT_TIERS,
-  //   Effect: {
-  //     ToLabel: (value: number) => FlatAdditiveLabel('Damage', value),
-  //     MapToStatSource: (source: string, value: number) => {
-  //       const s = EmptyStatSource(source + `_affix_damage_flat_${TimestampUtils.GetTimestampNow()}`);
-  //       s.Damage.Flat = value;
-  //       return s;
-  //     }
-  //   }
-  // },
+  {
+    Id: 'affix_damage_flat',
+    Groups: ['Offense'],
+    AllowedSlots: ['Weapon'],
+    Tiers: DAMAGE_FLAT_TIERS,
+    Effect: {
+      ToLabel: (value: number) => FlatAdditiveLabel('Damage', value),
+      MapToStatSource: (source: string, value: number) => {
+        const s = EmptyStatSource(
+          source + `_affix_damage_flat_${TimestampUtils.GetTimestampNow()}`
+        );
+        s.Damage.Flat = value;
+        return s;
+      }
+    }
+  },
   // {
   //   Id: 'affix_damage_percent',
   //   Groups: ['Offense'],
@@ -201,7 +203,7 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
   {
     Id: 'affix_multihit_chain_percent',
     Groups: ['Offense'],
-    AllowedSlots: ['Head', 'Feet'],
+    AllowedSlots: ['Head', 'OffHand', 'Feet'],
     Tiers: MULTIHIT_CHAIN_TIERS,
     Effect: {
       ToLabel: (value: number) => PercentageAdditiveLabel('Multi Hit Chain', value),
@@ -220,7 +222,7 @@ const UTILITY_AFFIX_DEFINITIONS: AffixDefinition[] = [
   {
     Id: 'affix_attack_speed_percent',
     Groups: ['Utility'],
-    AllowedSlots: ['Weapon', 'OffHand'],
+    AllowedSlots: ['Weapon', 'OffHand', 'Feet'],
     Tiers: ATTACK_SPEED_TIERS,
     Effect: {
       ToLabel: (value: number) => PercentageAdditiveLabel('Attack Speed', value),

@@ -9,11 +9,11 @@ export const ATTRIBUTE_TIERS: AffixTierSpec[] = [
 ];
 
 export const DAMAGE_FLAT_TIERS: AffixTierSpec[] = [
-  { Tier: 'Common', Value: { Min: 1, Max: 3, Type: 'Flat' } },
-  { Tier: 'Magic', Value: { Min: 3, Max: 5, Type: 'Flat' } },
-  { Tier: 'Rare', Value: { Min: 5, Max: 8, Type: 'Flat' } },
-  { Tier: 'Epic', Value: { Min: 8, Max: 11, Type: 'Flat' } },
-  { Tier: 'Legendary', Value: { Min: 11, Max: 15, Type: 'Flat' } }
+  { Tier: 'Common', Value: { Min: 1, Max: 5, Type: 'Flat' } },
+  { Tier: 'Magic', Value: { Min: 5, Max: 10, Type: 'Flat' } },
+  { Tier: 'Rare', Value: { Min: 10, Max: 25, Type: 'Flat' } },
+  { Tier: 'Epic', Value: { Min: 25, Max: 50, Type: 'Flat' } },
+  { Tier: 'Legendary', Value: { Min: 50, Max: 100, Type: 'Flat' } }
 ];
 
 export const DAMAGE_PCT_TIERS: AffixTierSpec[] = [
