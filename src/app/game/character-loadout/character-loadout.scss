@@ -22,6 +22,10 @@
   align-items: end;
 }
 
+$slot-height: 110px;
+$slot-width: 110px;
+$slot-height-large: calc(($slot-height * 2) + $gap);
+
 .gear-slot {
   @include button-text-font();
   @include button-focus-visible-outline();
@@ -30,14 +34,26 @@
   @include panel($bg: $clr-ui-bg);
   @include box-shadow();
 
-  height: 110px;
-  width: 110px;
+  height: $slot-height;
+  width: $slot-width;
 
-  display: flex;
+  position: relative;
+
+  .item-tier-info {
+    position: absolute;
+    top: calc($gap / 2);
+    left: calc($gap / 2);
+
+    .item-tier {
+      font-weight: bold;
+      font-family: $font-family-title;
+      color: color.scale($clr-accent, $lightness: 15%);
+    }
+  }
 }
 
 .gear-slot-large {
-  height: calc(220px + $gap);
+  height: $slot-height-large;
 }
 
 .gear-slot__icon {
