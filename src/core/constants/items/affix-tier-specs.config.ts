@@ -33,11 +33,11 @@ export const CHANCE_TIERS: AffixTierSpec[] = [
 ];
 
 export const BLEEDING_DAMAGE_TIERS: AffixTierSpec[] = [
-  { Tier: 'Common', Value: { Min: 0.05, Max: 0.08, Type: 'Percent' } },
-  { Tier: 'Magic', Value: { Min: 0.08, Max: 0.11, Type: 'Percent' } },
-  { Tier: 'Rare', Value: { Min: 0.11, Max: 0.15, Type: 'Percent' } },
-  { Tier: 'Epic', Value: { Min: 0.15, Max: 0.2, Type: 'Percent' } },
-  { Tier: 'Legendary', Value: { Min: 0.2, Max: 0.3, Type: 'Percent' } }
+  { Tier: 'Common', Value: { Min: 0.05, Max: 0.1, Type: 'Percent' } },
+  { Tier: 'Magic', Value: { Min: 0.1, Max: 0.2, Type: 'Percent' } },
+  { Tier: 'Rare', Value: { Min: 0.2, Max: 0.3, Type: 'Percent' } },
+  { Tier: 'Epic', Value: { Min: 0.3, Max: 0.4, Type: 'Percent' } },
+  { Tier: 'Legendary', Value: { Min: 0.4, Max: 0.5, Type: 'Percent' } }
 ];
 
 export const CRIT_DAMAGE_TIERS: AffixTierSpec[] = [

@@ -257,12 +257,14 @@ export class EventHandler {
     }
     // Next DoT Tick
     else if (event.Tick < event.TotalTicks) {
+      const nextTick = event.Tick + 1;
+      const damage = Math.max(Math.round(event.Damage.Amount * nextTick), 1);
       const nextDot = CreateDamageOverTimeEvent(
         event.AtMs + STATS_CONFIG.BASE.BLEEDING_TICK_INTERVAL_MS,
         event.DotType,
         target,
-        event.Damage,
-        event.Tick + 1,
+        { ...event.Damage, Amount: damage },
+        nextTick,
         event.TotalTicks
       );
 
