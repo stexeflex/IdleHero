@@ -34,7 +34,7 @@
           class="tier"
           [class.active]="SelectedTier() === t"
           (click)="SelectedTier.set(t)"
-          [disabled]="t !== 'I'">
+          [disabled]="t === 'III'">
           TIER {{ t }}
         </button>
       }

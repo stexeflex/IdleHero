@@ -1,4 +1,13 @@
-import { Component, LOCALE_ID, OnDestroy, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  LOCALE_ID,
+  OnDestroy,
+  computed,
+  inject,
+  signal
+} from '@angular/core';
 import { LoadingSpinner, Separator } from '../../../shared/components';
 
 import { DecimalPipe } from '@angular/common';
@@ -23,6 +32,14 @@ export class StatisticsFlyout implements OnDestroy {
   protected readonly IsOpen = signal<boolean>(false);
   protected readonly IsResetting = signal<boolean>(false);
   private timeout: number = 0;
+  private elementRef = inject(ElementRef);
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    if (!this.elementRef.nativeElement.contains(event.target)) {
+      this.IsOpen.set(false);
+    }
+  }
 
   ngOnDestroy(): void {
     clearTimeout(this.timeout);

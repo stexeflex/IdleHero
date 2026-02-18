@@ -25,16 +25,16 @@ export class StatisticsService {
         continue;
       }
 
-      for (const roomKey of Object.keys(newStats[category])) {
-        const roomId = roomKey as keyof DungeonStatistics[typeof category];
-        const newStage = newStats[category]?.[roomId];
-        const currentStage = updated[category][roomId] || 0;
+      for (const dungeon of Object.keys(newStats[category])) {
+        const dungeonId = dungeon as keyof DungeonStatistics[typeof category];
+        const newStage = newStats[category]?.[dungeonId];
+        const currentStage = updated[category][dungeonId] || 0;
 
         if (newStage === undefined || newStage <= currentStage) {
           continue;
         }
 
-        updated[category][roomId] = newStage;
+        updated[category][dungeonId] = newStage;
       }
     }
 

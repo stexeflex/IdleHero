@@ -7,7 +7,7 @@
 import { CAPSTONE_DUNGEONS, NORMAL_DUNGEONS } from '../src/core/constants/dungeons.config';
 
 import { DUNGEON_BOSS_SCALING } from '../src/core/constants/dungeon-boss.config';
-import { GetHealthForBossAtStage } from '../src/core/systems/combat';
+import { GetHealthForBossAtStage } from '../src/core/systems/combat/dungeons/boss-health.utils';
 
 interface DungeonDefinition {
   Id: string;

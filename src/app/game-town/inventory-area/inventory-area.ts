@@ -13,10 +13,10 @@ import {
   LoadingSpinner,
   Separator
 } from '../../../shared/components';
+import { GetItemRarity, GetItemVariant } from '../../../core/systems/items';
 import { InventoryService, ItemManagementService } from '../../../core/services';
-import { Item, ItemSlot, ItemTier, ItemVariantDefinition } from '../../../core/models';
+import { Item, ItemRarity, ItemSlot, ItemTier, ItemVariantDefinition } from '../../../core/models';
 
-import { GetItemVariant } from '../../../core/systems/items';
 import { ICONS_CONFIG } from '../../../core/constants';
 
 interface ItemCard {
@@ -45,6 +45,7 @@ export class InventoryArea implements OnDestroy {
   // Constants
   protected readonly AllSlots: ItemSlot[] = ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Feet'];
   protected readonly AllTiers: ItemTier[] = ['I', 'II', 'III'];
+  protected readonly AllRarities: ItemRarity[] = ['Common', 'Magic', 'Rare', 'Epic', 'Legendary'];
   protected readonly DefaultSlotIcons: Record<ItemSlot, GearSlotIconName> = {
     Weapon: ICONS_CONFIG['DEFAULT_WEAPON'],
     OffHand: ICONS_CONFIG['DEFAULT_OFFHAND'],
@@ -62,6 +63,7 @@ export class InventoryArea implements OnDestroy {
   // Filter State
   protected readonly FilteredSlots = signal<ReadonlySet<ItemSlot>>(new Set());
   protected readonly FilteredTiers = signal<ReadonlySet<ItemTier>>(new Set());
+  protected readonly FilteredRarities = signal<ReadonlySet<ItemRarity>>(new Set());
 
   private readonly SlotOrder = new Map<ItemSlot, number>(
     this.AllSlots.map((slot, index) => [slot, index] as const)
@@ -75,12 +77,13 @@ export class InventoryArea implements OnDestroy {
   protected readonly FilteredItemCards = computed<ItemCard[]>(() => {
     const selectedSlots = this.FilteredSlots();
     const selectedTiers = this.FilteredTiers();
-
+    const selectedRarities = this.FilteredRarities();
     return this.Inventory.Items()
       .map((item) => ({ Item: item, Variant: GetItemVariant(item.DefinitionId) }))
       .filter((card) => {
         let slotMatch = true;
         let tierMatch = true;
+        let rarityMatch = true;
 
         if (selectedSlots.size > 0) {
           slotMatch = selectedSlots.has(card.Item.Slot);
@@ -90,7 +93,12 @@ export class InventoryArea implements OnDestroy {
           tierMatch = selectedTiers.has(card.Item.Tier);
         }
 
-        return slotMatch && tierMatch;
+        if (selectedRarities.size > 0) {
+          const itemRarity = GetItemRarity(card.Item.Level);
+          rarityMatch = selectedRarities.has(itemRarity);
+        }
+
+        return slotMatch && tierMatch && rarityMatch;
       })
       .sort((a, b) => {
         const slotA = this.SlotOrder.get(a.Item.Slot) ?? 999;
@@ -109,7 +117,11 @@ export class InventoryArea implements OnDestroy {
   protected readonly FilteredCount = computed<number>(() => this.FilteredItemCards().length);
 
   protected readonly HasActiveFilters = computed<boolean>(() => {
-    return this.FilteredSlots().size > 0 || this.FilteredTiers().size > 0;
+    return (
+      this.FilteredSlots().size > 0 ||
+      this.FilteredTiers().size > 0 ||
+      this.FilteredRarities().size > 0
+    );
   });
 
   protected IsSlotSelected(slot: ItemSlot): boolean {
@@ -118,6 +130,10 @@ export class InventoryArea implements OnDestroy {
 
   protected IsTierSelected(tier: ItemTier): boolean {
     return this.FilteredTiers().has(tier);
+  }
+
+  protected IsRaritySelected(rarity: ItemRarity): boolean {
+    return this.FilteredRarities().has(rarity);
   }
 
   protected ToggleSlot(slot: ItemSlot): void {
@@ -154,9 +170,27 @@ export class InventoryArea implements OnDestroy {
     this.FilteredTiers.set(next);
   }
 
+  protected ToggleRarity(rarity: ItemRarity): void {
+    const next = new Set(this.FilteredRarities());
+
+    if (next.has(rarity)) {
+      next.delete(rarity);
+    } else {
+      next.add(rarity);
+    }
+
+    if (next.size === this.AllRarities.length) {
+      this.FilteredRarities.set(new Set());
+      return;
+    }
+
+    this.FilteredRarities.set(next);
+  }
+
   protected ResetFilters(): void {
     this.FilteredSlots.set(new Set());
     this.FilteredTiers.set(new Set());
+    this.FilteredRarities.set(new Set());
   }
 
   // Item Actions

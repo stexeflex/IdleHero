@@ -1,4 +1,4 @@
-import { Affix, Item, ItemSlot, ItemVariantDefinition } from '../../../core/models';
+import { Affix, Item, ItemSlot, ItemTier, ItemVariantDefinition } from '../../../core/models';
 import { Component, computed, inject, output, signal } from '@angular/core';
 import {
   GearSlotIconName,
@@ -22,6 +22,7 @@ interface ItemSlotInfo {
   IsSelected: boolean;
   IsEquipped: boolean;
   Icon: GearSlotIconName;
+  Tier: ItemTier;
   IsCommon: boolean;
   IsMagic: boolean;
   IsRare: boolean;
@@ -59,6 +60,7 @@ export class CharacterLoadout {
       IsSelected: false,
       IsEquipped: this.gearLoadoutService.IsEquipped(slot),
       Icon: item ? item.Icon : this.ItemSlots.find((s) => s.slot === slot)!.icon,
+      Tier: item?.Tier || 'I',
       IsCommon: rarity === 'Common',
       IsMagic: rarity === 'Magic',
       IsRare: rarity === 'Rare',

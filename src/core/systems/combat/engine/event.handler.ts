@@ -257,12 +257,14 @@ export class EventHandler {
     }
     // Next DoT Tick
     else if (event.Tick < event.TotalTicks) {
+      const nextTick = event.Tick + 1;
+      const damage = Math.max(Math.round(event.Damage.Amount * nextTick), 1);
       const nextDot = CreateDamageOverTimeEvent(
         event.AtMs + STATS_CONFIG.BASE.BLEEDING_TICK_INTERVAL_MS,
         event.DotType,
         target,
-        event.Damage,
-        event.Tick + 1,
+        { ...event.Damage, Amount: damage },
+        nextTick,
         event.TotalTicks
       );
 
@@ -383,7 +385,7 @@ export class EventHandler {
     // const hitChance = ClampUtils.clamp01(
     //   baseHitChance + (actorAccuracy ?? 0) - (targetEvasion ?? 0)
     // );
-    // const isHit = Math.random() < hitChance;
+    // const isHit = ChanceUtils.success(hitChance);
     // return { hitChance, isHit };
 
     const isHit = ChanceUtils.success(actorAccuracy ?? 0);
@@ -395,7 +397,9 @@ export class EventHandler {
     let currentChance = chance; // Chance für einen weiteren Hit
 
     for (let i = 0; i < maxChainHits - 1; i++) {
-      if (Math.random() < currentChance) {
+      const isHit = ChanceUtils.success(currentChance);
+
+      if (isHit) {
         hits++;
         currentChance *= chainFactor; // abnehmende Chance
       } else {
@@ -407,7 +411,7 @@ export class EventHandler {
   }
 
   private CalculateDamage(damage: number, chc: number, chd: number): DamageResult {
-    const isCritical = Math.random() < (chc ?? 0);
+    const isCritical = ChanceUtils.success(chc ?? 0);
 
     if (isCritical) {
       damage = Math.round(damage * (chd ?? 1));
@@ -417,7 +421,7 @@ export class EventHandler {
   }
 
   private CalculateBleedHit(hero: Hero): DamageResult {
-    const isBleedHit = Math.random() < (hero.Stats.BleedingChance ?? 0);
+    const isBleedHit = ChanceUtils.success(hero.Stats.BleedingChance ?? 0);
     const damage = isBleedHit
       ? Math.max(Math.round(hero.Stats.Damage * (hero.Stats.BleedingDamage ?? 0)), 1)
       : 0;

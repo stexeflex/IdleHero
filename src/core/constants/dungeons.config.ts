@@ -56,8 +56,8 @@ export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
     MidStages: [20, 40, 60, 80],
     StagesMax: 100,
     XpBase: 25,
-    GoldBase: 50,
-    Locked: true
+    GoldBase: 65,
+    Locked: false
   }
 ];
 

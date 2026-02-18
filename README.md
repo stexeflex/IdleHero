@@ -1,59 +1,45 @@
-# Idle Hero
+# IDLE HERO
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.9.
+Idle Hero is a little idle game that started as a side project to combine my interest in incremental games and action RPGs.
+Additionally, it serves as a playground for me to experiment with Angular and AI-based software development.
 
-## Development server
+## Gameplay
 
-To start a local development server, run:
+The core gameplay loop is based on incremental progression, where your hero grows over time.
+Visit dungeons and defeat bosses to earn experience and other rewards, which can be used to improve your hero and tackle tougher challenges.
+Level up different attributes and improve your crafted gear with various enchantments to further enhance your hero's power.
 
-```bash
-ng serve
-```
+## Remarks
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- Contains AI generated content
+- Contains Icons by
+  <a href="https://game-icons.net" target="_blank">Lorc, Delapouite & contributors</a> under the terms of
+  <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC 3.0 BY license</a>
 
-## Code scaffolding
+## Development
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Install dependencies:
 
 ```bash
-ng generate --help
+npm install
 ```
 
-## Building
-
-To build the project run:
+Run the development server:
 
 ```bash
-ng build
+npm run start
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Useful scripts
 
-## Running unit tests
+- Generate/update icon assets: `npm run icons`
+- Generate boss HP table: `npm run boss:hp-table`
+- Run XP/level simulation: `npm run exp:sim`
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## Deploy (GitHub Pages)
+
+This repo includes a `docs/` output workflow for GitHub Pages:
 
 ```bash
-ng test
+npm run deploy
 ```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
