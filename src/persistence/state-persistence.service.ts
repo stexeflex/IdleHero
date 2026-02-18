@@ -3,6 +3,7 @@ import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 
 import { AppStateService } from '../shared/services';
 import { LocalStorageData } from './models/local-storage-data';
+import { MigrateSchema_2_0_1_to_2_1_0 } from './migrations/2.0.1-2.1.0.migration';
 import { environment } from '../environment/environment';
 import { isPlatformBrowser } from '@angular/common';
 
@@ -97,10 +98,15 @@ export class StatePersistenceService {
     return isPlatformBrowser(this.platformId);
   }
 
-  private migrate(data: unknown, fromVersion: string, toVersion: string): unknown {
+  private migrate(data: Schema, fromVersion: string, toVersion: string): unknown {
     // Add versioned migrations here as your schema evolves
     // Example:
     // if (fromVersion < 1) { /* transform data to v1 */ }
+
+    if ((fromVersion === '2.0.0' || fromVersion === '2.0.1') && toVersion === '2.1.0') {
+      data = MigrateSchema_2_0_1_to_2_1_0(data);
+    }
+
     return data;
   }
 }

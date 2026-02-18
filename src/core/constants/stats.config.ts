@@ -4,7 +4,7 @@ export const STATS_CONFIG = {
     DAMAGE: 0, // Basis-Schaden
     BLEEDING_CHANCE: 0.0, // 0% Base Bleeding Chance
     BLEEDING_DAMAGE: 0.25, // 25% Base Bleeding Damage
-    BLEEDING_TICKS: 5, // Basis Anzahl Bleeding Ticks
+    BLEEDING_TICKS: 3, // Basis Anzahl Bleeding Ticks
     BLEEDING_TICK_INTERVAL_MS: 1000, // Basis Intervall zwischen Bleeding Ticks in Millisekunden
     CRIT_CHANCE: 0.0, // 0% Base CHC
     CRIT_DAMAGE: 1.5, // 150% Base CHD
@@ -21,7 +21,7 @@ export const STATS_CONFIG = {
   },
   LIMITS: {
     STR_TO_BLEED_CHANCE: 0.5, // Maximal +50% BHC durch STR
-    STR_TO_BLEED_DAMAGE: 0.5, // Maximal +50% BHD durch STR
+    STR_TO_BLEED_DAMAGE: 2.0, // Maximal +200% BHD durch STR
     INT_TO_CRIT_CHANCE: 0.5, // Maximal +50% CHC durch INT
     INT_TO_CRIT_DAMAGE: 3.0, // Maximal +300% CHD durch INT
     DEX_TO_MULTI_HIT_CHANCE: 0.5, // Maximal +50% MHC durch DEX
@@ -29,11 +29,11 @@ export const STATS_CONFIG = {
     DEX_TO_CHAIN_FACTOR: 0.2 // Maximal +20% MHCF durch DEX
   },
   CAPS: {
-    MAX_BLEEDING_CHANCE: 0.9, // Maximal 90% BHC
-    MAX_CRIT_CHANCE: 0.9, // Maximal 90% CHC
-    MAX_MULTI_HIT_CHANCE: 0.9, // Maximal 90% MHC
+    MAX_BLEEDING_CHANCE: 1.0, // Maximal 100% BHC
+    MAX_CRIT_CHANCE: 1.0, // Maximal 100% CHC
+    MAX_MULTI_HIT_CHANCE: 1.0, // Maximal 100% MHC
     MAX_MULTI_HIT_CHAIN_FACTOR: 0.9, // Maximal 90% Chain Factor
-    MAX_CHAIN_HITS: 6 // Maximal 6 Hits in Multi-Hit Chain
+    MAX_CHAIN_HITS: 8 // Maximal 8 Hits in Multi-Hit Chain
   },
   MAPPINGS: {
     // Attribute-Scaling (Attribute liegen effektiv bei 0..50)

@@ -9,11 +9,11 @@ export const ATTRIBUTE_TIERS: AffixTierSpec[] = [
 ];
 
 export const DAMAGE_FLAT_TIERS: AffixTierSpec[] = [
-  { Tier: 'Common', Value: { Min: 1, Max: 3, Type: 'Flat' } },
-  { Tier: 'Magic', Value: { Min: 3, Max: 5, Type: 'Flat' } },
-  { Tier: 'Rare', Value: { Min: 5, Max: 8, Type: 'Flat' } },
-  { Tier: 'Epic', Value: { Min: 8, Max: 11, Type: 'Flat' } },
-  { Tier: 'Legendary', Value: { Min: 11, Max: 15, Type: 'Flat' } }
+  { Tier: 'Common', Value: { Min: 1, Max: 5, Type: 'Flat' } },
+  { Tier: 'Magic', Value: { Min: 5, Max: 10, Type: 'Flat' } },
+  { Tier: 'Rare', Value: { Min: 10, Max: 25, Type: 'Flat' } },
+  { Tier: 'Epic', Value: { Min: 25, Max: 50, Type: 'Flat' } },
+  { Tier: 'Legendary', Value: { Min: 50, Max: 100, Type: 'Flat' } }
 ];
 
 export const DAMAGE_PCT_TIERS: AffixTierSpec[] = [
@@ -33,11 +33,11 @@ export const CHANCE_TIERS: AffixTierSpec[] = [
 ];
 
 export const BLEEDING_DAMAGE_TIERS: AffixTierSpec[] = [
-  { Tier: 'Common', Value: { Min: 0.05, Max: 0.08, Type: 'Percent' } },
-  { Tier: 'Magic', Value: { Min: 0.08, Max: 0.11, Type: 'Percent' } },
-  { Tier: 'Rare', Value: { Min: 0.11, Max: 0.15, Type: 'Percent' } },
-  { Tier: 'Epic', Value: { Min: 0.15, Max: 0.2, Type: 'Percent' } },
-  { Tier: 'Legendary', Value: { Min: 0.2, Max: 0.3, Type: 'Percent' } }
+  { Tier: 'Common', Value: { Min: 0.05, Max: 0.1, Type: 'Percent' } },
+  { Tier: 'Magic', Value: { Min: 0.1, Max: 0.2, Type: 'Percent' } },
+  { Tier: 'Rare', Value: { Min: 0.2, Max: 0.3, Type: 'Percent' } },
+  { Tier: 'Epic', Value: { Min: 0.3, Max: 0.4, Type: 'Percent' } },
+  { Tier: 'Legendary', Value: { Min: 0.4, Max: 0.5, Type: 'Percent' } }
 ];
 
 export const CRIT_DAMAGE_TIERS: AffixTierSpec[] = [

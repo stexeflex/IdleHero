@@ -3,8 +3,7 @@ import {
   ITEM_LEVEL_CONFIG,
   ITEM_RARITY_RULES,
   ITEM_TIER_RULES,
-  ITEM_VARIANTS,
-  MAX_AFFIX_TIER_FOR_LEVEL
+  ITEM_VARIANTS
 } from '../../constants';
 import {
   AffixDefinition,
@@ -28,9 +27,9 @@ export function GetItemRarityRule(rarity: ItemRarity): RarityRules {
   return ITEM_RARITY_RULES[rarity];
 }
 
-export function GetMaxAffixTier(itemLevel: ItemLevel): AffixTier {
-  const rules = MAX_AFFIX_TIER_FOR_LEVEL;
-  return rules[itemLevel];
+export function GetMaxAffixTier(rarity: ItemRarity): AffixTier {
+  const rules = ITEM_RARITY_RULES[rarity];
+  return rules.MaxAffixTier;
 }
 
 export function GetItemRarity(itemLevel: ItemLevel): ItemRarity {

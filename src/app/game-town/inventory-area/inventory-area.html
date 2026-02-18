@@ -51,6 +51,21 @@
         }
       </div>
     </div>
+
+    <div class="filter-group">
+      <div class="filter-title">RARITY</div>
+      <div class="chip-row">
+        @for (rarity of AllRarities; track rarity) {
+          <button
+            type="button"
+            class="chip"
+            [class.is-active]="IsRaritySelected(rarity)"
+            (click)="ToggleRarity(rarity)">
+            {{ rarity.toUpperCase() }}
+          </button>
+        }
+      </div>
+    </div>
   </div>
 
   @if (FilteredItemCards().length === 0) {

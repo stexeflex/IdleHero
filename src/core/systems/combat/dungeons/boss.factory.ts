@@ -185,3 +185,51 @@ export function SeaSerpent(): Boss {
   };
 }
 //#endregion SNAKES
+
+//#region GOLEMS
+export function RockGolem(): Boss {
+  const boss = DefaultBoss() as Boss;
+  return {
+    ...boss,
+    Id: 'golem-quarry-1',
+    Name: 'Rock Golem',
+    BossIcon: BossIcon('rockgolem', false)
+  };
+}
+export function IceGolem(): Boss {
+  const boss = DefaultBoss() as Boss;
+  return {
+    ...boss,
+    Id: 'golem-quarry-2',
+    Name: 'Ice Golem',
+    BossIcon: BossIcon('icegolem', false)
+  };
+}
+export function ShamblingMound(): Boss {
+  const boss = DefaultBoss() as Boss;
+  return {
+    ...boss,
+    Id: 'golem-quarry-3',
+    Name: 'Shambling Mound',
+    BossIcon: BossIcon('shamblingmound', true)
+  };
+}
+export function RobotGolem(): Boss {
+  const boss = DefaultBoss() as Boss;
+  return {
+    ...boss,
+    Id: 'golem-quarry-4',
+    Name: 'Robot Golem',
+    BossIcon: BossIcon('robotgolem', false)
+  };
+}
+export function BattleMechGolem(): Boss {
+  const boss = DefaultBoss() as Boss;
+  return {
+    ...boss,
+    Id: 'golem-quarry-boss',
+    Name: 'Battle Mech Golem',
+    BossIcon: BossIcon('battlemech', false)
+  };
+}
+//#endregion GOLEMS

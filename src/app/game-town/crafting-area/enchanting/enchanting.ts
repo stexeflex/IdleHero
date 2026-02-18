@@ -61,7 +61,7 @@ export class Enchanting {
     () => this.Rules().MaxEnchantableAffixes
   );
   protected readonly MaxAffixSlots = computed<number>(() => this.Rules().MaxAffixes);
-  protected readonly MaxAffixTier = computed<AffixTier>(() => GetMaxAffixTier(this.Item().Level));
+  protected readonly MaxAffixTier = computed<AffixTier>(() => GetMaxAffixTier(this.Rarity()));
 
   protected readonly VisibleSlotIndices = computed<number[]>(() => {
     const item = this.Item();

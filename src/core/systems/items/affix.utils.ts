@@ -96,24 +96,6 @@ export function TierIndex(tier: string): number {
 }
 
 /**
- * Clamps the target affix tier to the maximum allowed for the item level.
- * @param itemLevel the item level.
- * @param targetTier the desired affix tier.
- * @returns The clamped affix tier.
- */
-export function ClampAffixTier(itemLevel: ItemLevel, targetTier?: AffixTier): AffixTier {
-  const maxTierAllowed: AffixTier = GetMaxAffixTier(itemLevel);
-  targetTier = targetTier ?? maxTierAllowed;
-
-  const allowedIndex = AFFIX_TIER_ORDER.indexOf(maxTierAllowed);
-  const desiredIndex = AFFIX_TIER_ORDER.indexOf(targetTier);
-  const finalIndex = Math.min(desiredIndex < 0 ? allowedIndex : desiredIndex, allowedIndex);
-  const finalTier = AFFIX_TIER_ORDER[finalIndex];
-
-  return finalTier;
-}
-
-/**
  * Gets the next affix tier in order.
  * @param current The current affix tier.
  * @returns The next affix tier, or null if at max tier.
@@ -125,7 +107,8 @@ export function NextTier(current: AffixTier): AffixTier | null {
 }
 
 export function IsMaxTier(item: Item, affixIndex: number): boolean {
-  const maxTier: AffixTier = GetMaxAffixTier(item.Level);
+  const itemRarity = GetItemRarity(item.Level);
+  const maxTier: AffixTier = GetMaxAffixTier(itemRarity);
   return item.Affixes[affixIndex].Tier === maxTier;
 }
 
@@ -136,7 +119,8 @@ export function IsMaxTier(item: Item, affixIndex: number): boolean {
  * @returns True if the affix tier is above the max allowed for the item level; false otherwise.
  */
 export function ExceedsMaxTierForItemLevel(affixTier: AffixTier, itemLevel: ItemLevel): boolean {
-  const maxTierAllowed: AffixTier = GetMaxAffixTier(itemLevel);
+  const itemRarity = GetItemRarity(itemLevel);
+  const maxTierAllowed: AffixTier = GetMaxAffixTier(itemRarity);
   const affixIndex = AFFIX_TIER_ORDER.indexOf(affixTier);
   const maxIndex = AFFIX_TIER_ORDER.indexOf(maxTierAllowed);
   const overMax = affixIndex > maxIndex;

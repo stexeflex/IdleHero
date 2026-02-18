@@ -1,16 +1,21 @@
 import {
+  BattleMechGolem,
   Brute,
   BullyMinion,
   CobraSnake,
   EvilMinion,
   Gooey,
+  IceGolem,
   KingSlime,
   MambaSnake,
   Minotaur,
   PythonSnake,
   RattleSnake,
+  RobotGolem,
+  RockGolem,
   SandSnake,
   SeaSerpent,
+  ShamblingMound,
   Slime,
   Slug,
   Troglodyte,
@@ -95,6 +100,24 @@ export const DUNGEON_BOSS_CONFIGS: Record<string, DungeonBossConfig> = {
       [80, [MambaSnake, PythonSnake, CobraSnake]],
       [90, [CobraSnake, SeaSerpent]]
     ])
+  },
+  D4: {
+    StageSpecific: new Map<number, BossFactory>([
+      [1, RockGolem],
+      [20, RockGolem],
+      [40, IceGolem],
+      [60, ShamblingMound],
+      [80, RobotGolem],
+      [100, BattleMechGolem]
+    ]),
+    BossPools: new Map<number, BossFactory[]>([
+      [1, [RockGolem]],
+      [20, [RockGolem, IceGolem]],
+      [40, [RockGolem, IceGolem, ShamblingMound]],
+      [60, [IceGolem, ShamblingMound, RobotGolem]],
+      [80, [ShamblingMound, RobotGolem]],
+      [90, [RobotGolem, BattleMechGolem]]
+    ])
   }
 };
 
@@ -136,6 +159,14 @@ export const DUNGEON_BOSS_SCALING: Record<string, DungeonBossScalingParams> = {
     r: 1.038,
     a: 0.0012,
     b: 1.7,
+    MidBossMultiplier: 4,
+    EndBossMultiplier: 8
+  },
+  D4: {
+    BossBaseHealth: 10_000,
+    r: 1.05,
+    a: 0.0014,
+    b: 1.5,
     MidBossMultiplier: 4,
     EndBossMultiplier: 8
   }

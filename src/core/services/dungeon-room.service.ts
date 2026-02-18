@@ -160,12 +160,15 @@ export class DungeonRoomService {
   /**
    * Handles prestige by updating statistics, resetting stage, and exiting dungeon.
    */
-  public Prestige(): void {
+  public Prestige(cleared: boolean): void {
     const currentDungeon: DungeonRoom = this.CurrentDungeon()!;
+    const currentStage: number = this.CurrentStage()!;
+
+    // Store the last completed stage (current stage - 1)
+    const completedStage = cleared ? currentStage : currentStage - 1;
 
     const dungeonRoomStat = {
-      // Store the last completed stage (current stage - 1)
-      [currentDungeon.Id]: this.CurrentStage() - 1
+      [currentDungeon.Id]: completedStage
     };
 
     switch (currentDungeon.Type) {

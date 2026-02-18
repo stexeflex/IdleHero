@@ -70,30 +70,35 @@ export const ITEM_RARITY_RULES: RarityRulesMap = {
   Common: {
     MaxAffixes: 1,
     MaxEnchantableAffixes: 1,
+    MaxAffixTier: 'Common',
     AllowAffixReroll: true,
     AllowedRuneQualities: []
   },
   Magic: {
     MaxAffixes: 2,
-    MaxEnchantableAffixes: 1,
+    MaxEnchantableAffixes: 2,
+    MaxAffixTier: 'Magic',
     AllowAffixReroll: true,
     AllowedRuneQualities: ['Magic']
   },
   Rare: {
     MaxAffixes: 2,
     MaxEnchantableAffixes: 2,
+    MaxAffixTier: 'Rare',
     AllowAffixReroll: true,
     AllowedRuneQualities: ['Magic', 'Rare']
   },
   Epic: {
     MaxAffixes: 3,
-    MaxEnchantableAffixes: 2,
+    MaxEnchantableAffixes: 3,
+    MaxAffixTier: 'Epic',
     AllowAffixReroll: true,
     AllowedRuneQualities: ['Magic', 'Rare', 'Epic']
   },
   Legendary: {
     MaxAffixes: 3,
     MaxEnchantableAffixes: 3,
+    MaxAffixTier: 'Legendary',
     AllowAffixReroll: true,
     AllowedRuneQualities: ['Magic', 'Rare', 'Epic', 'Legendary']
   }
@@ -101,32 +106,3 @@ export const ITEM_RARITY_RULES: RarityRulesMap = {
 
 /** Helper order for tiers and qualities */
 export const AFFIX_TIER_ORDER: AffixTier[] = ['Common', 'Magic', 'Rare', 'Epic', 'Legendary'];
-
-/** Returns the max affix tier allowed for an item level per the defined gating rules. */
-export const MAX_AFFIX_TIER_FOR_LEVEL: Record<ItemLevel, AffixTier> = {
-  1: 'Magic',
-  2: 'Magic',
-  3: 'Magic',
-  4: 'Magic',
-  5: 'Rare',
-  6: 'Rare',
-  7: 'Rare',
-  8: 'Rare',
-  9: 'Rare',
-  10: 'Epic',
-  11: 'Epic',
-  12: 'Epic',
-  13: 'Epic',
-  14: 'Epic',
-  15: 'Epic',
-  16: 'Epic',
-  17: 'Epic',
-  18: 'Epic',
-  19: 'Epic',
-  20: 'Legendary',
-  21: 'Legendary',
-  22: 'Legendary',
-  23: 'Legendary',
-  24: 'Legendary',
-  25: 'Legendary'
-};
