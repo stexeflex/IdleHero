@@ -76,7 +76,7 @@ export const ITEM_RARITY_RULES: RarityRulesMap = {
   },
   Magic: {
     MaxAffixes: 2,
-    MaxEnchantableAffixes: 1,
+    MaxEnchantableAffixes: 2,
     MaxAffixTier: 'Magic',
     AllowAffixReroll: true,
     AllowedRuneQualities: ['Magic']
@@ -90,7 +90,7 @@ export const ITEM_RARITY_RULES: RarityRulesMap = {
   },
   Epic: {
     MaxAffixes: 3,
-    MaxEnchantableAffixes: 2,
+    MaxEnchantableAffixes: 3,
     MaxAffixTier: 'Epic',
     AllowAffixReroll: true,
     AllowedRuneQualities: ['Magic', 'Rare', 'Epic']
