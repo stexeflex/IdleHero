@@ -17,7 +17,11 @@
       </div>
       <div class="dungeon-actions">
         @if (IsInArena()) {
-          <button class="ih-button" (click)="Prestige()">PRESTIGE</button>
+          @if (ShowCompletion()) {
+            <button class="ih-button-secondary" (click)="ExitDungeon()">LEAVE</button>
+          } @else {
+            <button class="ih-button" (click)="Prestige()">PRESTIGE</button>
+          }
         } @else if (RestartDelay()) {
           <button class="ih-button-secondary button-leaving" disabled>
             <app-loading-spinner></app-loading-spinner>
@@ -32,8 +36,15 @@
   }
   @if (IsInArena()) {
     <div class="inner-dungeon">
-      <app-dungeon-arena></app-dungeon-arena>
-      <app-combat-log></app-combat-log>
+      @if (ShowCompletion()) {
+        <div class="dungeon-completion">
+          <h2>DUNGEON COMPLETED!</h2>
+        </div>
+        <app-combat-log></app-combat-log>
+      } @else {
+        <app-dungeon-arena></app-dungeon-arena>
+        <app-combat-log></app-combat-log>
+      }
     </div>
   }
 </main>

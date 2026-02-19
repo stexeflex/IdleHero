@@ -179,7 +179,5 @@ export class DungeonRoomService {
         this.Statistics.UpdateDungeon({ Capstone: dungeonRoomStat });
         break;
     }
-
-    this.SetStage(1);
   }
 }

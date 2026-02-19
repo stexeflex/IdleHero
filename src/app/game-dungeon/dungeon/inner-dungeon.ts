@@ -26,9 +26,11 @@ export class InnerDungeon implements OnDestroy {
   public readonly CurrentDungeon = this.dungeonRoom.CurrentDungeon;
   public readonly CurrentStage = this.dungeonRoom.CurrentStage;
   public readonly InCombat = this.combat.InProgress;
+  public readonly CompletedDungeon = this.combat.Completed;
 
   // Derived view states
   public readonly IsInArena = computed<boolean>(() => this.InCombat());
+  public readonly ShowCompletion = computed<boolean>(() => this.CompletedDungeon());
 
   ngOnDestroy(): void {
     if (this.restartTimer) {
@@ -38,9 +40,7 @@ export class InnerDungeon implements OnDestroy {
 
   // Actions
   public StartBattle(): void {
-    const current = this.CurrentDungeon();
-    if (!current) return;
-    this.combat.SetupCombat(current.Id);
+    this.combat.SetupCombat();
     this.engine.Start();
   }
 
@@ -49,11 +49,12 @@ export class InnerDungeon implements OnDestroy {
     this.DelayRestart();
 
     // End fight and keep player in dungeon arena
+    this.combat.Prestige();
     this.engine.Stop();
   }
 
   public ExitDungeon(): void {
-    this.dungeonRoom.ExitDungeon();
+    this.combat.Leave();
   }
 
   private DelayRestart() {

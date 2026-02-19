@@ -41,6 +41,7 @@ export class CombatState {
 
   // Combat State
   public readonly InProgress = signal<boolean>(false);
+  public readonly Completed = signal<boolean>(false);
 
   // Event Queue
   public readonly Queue = new EventQueue<CombatEvent>();
@@ -49,50 +50,60 @@ export class CombatState {
   public Hero = signal<Hero | undefined>(undefined);
   public Boss = signal<Boss | undefined>(undefined);
 
-  // Observables für UI
+  // Observables for UI
   public readonly Events$ = new Subject<CombatEvent>();
   public readonly Hero$ = new BehaviorSubject<Hero | undefined>(undefined);
   public readonly Boss$ = new BehaviorSubject<Boss | undefined>(undefined);
 
   public Leave() {
+    this.Reset();
     this.DungeonRoom.ExitDungeon();
   }
 
   public Prestige() {
-    this.InProgress.set(false);
-    this.Queue.Clear();
     this.DungeonRoom.Prestige(false);
-    this.Hero.set(undefined);
-    this.Boss.set(undefined);
-    this.PublishState();
-
+    this.Reset();
     this.GameSaver.SaveGame();
   }
 
-  public Cleared() {
+  private ClearedDungeon() {
+    this.Completed.set(true);
+
     this.Log.Info(`${this.DungeonRoom.CurrentDungeon()?.Title.toUpperCase()}: Dungeon Cleared!`);
-    this.Queue.Clear();
+
     this.DungeonRoom.Prestige(true);
+    this.Queue.Clear();
+    this.ClearActors();
+    this.GameSaver.SaveGame();
+  }
+
+  private Reset() {
+    this.InProgress.set(false);
+    this.Completed.set(false);
+    this.Queue.Clear();
+    this.Log.Clear();
+    this.ClearActors();
+    this.DungeonRoom.SetStage(1);
+  }
+
+  private ClearActors() {
+    this.Hero.set(undefined);
     this.Boss.set(undefined);
     this.PublishState();
-
-    this.GameSaver.SaveGame();
   }
 
   /**
    * Setup Combat with Actors
    * @param actors Combat Actors to setup
    */
-  public SetupCombat(dungeonId: string) {
-    this.Log.Clear();
-    this.Queue.Clear();
+  public SetupCombat() {
+    this.Reset();
     this.InProgress.set(true);
-
     this.GameSaver.SaveGame();
 
     // Set Combat Actors
     const hero: Hero = this.SetupHero();
-    const firstBoss: Boss = this.SetupBoss(dungeonId);
+    const firstBoss: Boss = this.SetupBoss();
 
     this.Hero.set(hero);
     this.Boss.set(firstBoss);
@@ -138,7 +149,7 @@ export class CombatState {
     const advanced: boolean = this.DungeonRoom.AdvanceStage();
 
     if (!advanced) {
-      this.Cleared();
+      this.ClearedDungeon();
       return;
     }
 
@@ -178,13 +189,8 @@ export class CombatState {
     return hero;
   }
 
-  private SetupBoss(dungeonId: string): Boss {
-    const boss: Boss | null = this.DungeonRoom.CurrentBoss();
-
-    if (!boss) {
-      throw new Error(`No boss found for dungeon ID: ${dungeonId}`);
-    }
-
+  private SetupBoss(): Boss {
+    const boss: Boss = this.DungeonRoom.CurrentBoss()!;
     boss.Life = ResetLife(boss.Life);
     return boss;
   }
