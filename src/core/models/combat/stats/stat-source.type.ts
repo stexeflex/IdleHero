@@ -62,27 +62,23 @@ export type AttackSpeedStatSource = {
 };
 
 export type BleedingStatSource = {
-  FlatChance: number;
-  MultiplierChance: number;
+  Chance: number;
 
   FlatDamage: number;
   MultiplierDamage: number;
 };
 
 export type CriticalHitStatSource = {
-  FlatChance: number;
-  MultiplierChance: number;
+  Chance: number;
 
   FlatDamage: number;
   MultiplierDamage: number;
 };
 
 export type MultiHitStatSource = {
-  FlatChance: number;
-  MultiplierChance: number;
+  Chance: number;
 
-  FlatChainFactor: number;
-  MultiplierChainFactor: number;
+  ChainFactor: number;
 
   FlatDamage: number;
   MultiplierDamage: number;
@@ -118,22 +114,18 @@ export function EmptyStatSource(id: string): StatSource {
     Damage: { Flat: 0, Multiplier: 0 },
     AttackSpeed: { Flat: 0, Multiplier: 0 },
     Bleeding: {
-      FlatChance: 0,
-      MultiplierChance: 0,
+      Chance: 0,
       FlatDamage: 0,
       MultiplierDamage: 0
     },
     CriticalHit: {
-      FlatChance: 0,
-      MultiplierChance: 0,
+      Chance: 0,
       FlatDamage: 0,
       MultiplierDamage: 0
     },
     MultiHit: {
-      FlatChance: 0,
-      MultiplierChance: 0,
-      FlatChainFactor: 0,
-      MultiplierChainFactor: 0,
+      Chance: 0,
+      ChainFactor: 0,
       FlatDamage: 0,
       MultiplierDamage: 0
     },

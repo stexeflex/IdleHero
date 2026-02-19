@@ -115,7 +115,7 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
         const s = EmptyStatSource(
           source + `_affix_bleed_chance_percent_${TimestampUtils.GetTimestampNow()}`
         );
-        s.Bleeding.MultiplierChance = value;
+        s.Bleeding.Chance = value;
         return s;
       }
     }
@@ -131,7 +131,7 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
         const s = EmptyStatSource(
           source + `_affix_crit_chance_percent_${TimestampUtils.GetTimestampNow()}`
         );
-        s.CriticalHit.MultiplierChance = value;
+        s.CriticalHit.Chance = value;
         return s;
       }
     }
@@ -147,7 +147,7 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
         const s = EmptyStatSource(
           source + `_affix_multihit_chance_percent_${TimestampUtils.GetTimestampNow()}`
         );
-        s.MultiHit.MultiplierChance = value;
+        s.MultiHit.Chance = value;
         return s;
       }
     }
@@ -211,7 +211,7 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
         const s = EmptyStatSource(
           source + `_affix_multihit_chain_percent_${TimestampUtils.GetTimestampNow()}`
         );
-        s.MultiHit.MultiplierChainFactor = value;
+        s.MultiHit.ChainFactor = value;
         return s;
       }
     }

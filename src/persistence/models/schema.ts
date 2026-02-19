@@ -16,6 +16,7 @@ import {
   ZeroAttributes
 } from '../../core/models';
 
+import { ATTRIBUTES_CONFIG } from '../../core/constants';
 import { CharactersIconName } from '../../shared/components';
 
 export interface Schema {
@@ -50,7 +51,7 @@ export function InitialSchema(): Schema {
     Level: InitialLevelState(),
     Attributes: {
       Allocated: ZeroAttributes(),
-      Unallocated: 0
+      Unallocated: ATTRIBUTES_CONFIG.INITIAL_ATTR_POINTS
     },
     Gold: InitialGoldState(),
     DungeonKeys: InitialDungeonKeysState(),

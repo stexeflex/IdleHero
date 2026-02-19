@@ -8,7 +8,7 @@ export const STATS_CONFIG = {
     CRIT_CHANCE: 0.0, // 0% Base CHC
     CRIT_DAMAGE: 1.5, // 150% Base CHD
     MULTI_HIT_CHANCE: 0.0, // 0% Base MHC
-    MULTI_HIT_DAMAGE: 0.5, // 50% Base MHC
+    MULTI_HIT_DAMAGE: 0.5, // 50% Base MHD
     MULTI_HIT_CHAIN_FACTOR: 0.4, // 40% Base Chain Factor
     ACCURACY: 0.7, // Basis-Accuracy
     ARMOR_PENETRATION: 0.1, // 10% Basis Armor Penetration
@@ -20,7 +20,7 @@ export const STATS_CONFIG = {
   },
   LIMITS: {
     STR_TO_BLEED_CHANCE: 0.5, // Maximal +50% BHC durch STR
-    STR_TO_BLEED_DAMAGE: 2.0, // Maximal +200% BHD durch STR
+    STR_TO_BLEED_DAMAGE: 1.5, // Maximal +150% BHD durch STR
     INT_TO_CRIT_CHANCE: 0.5, // Maximal +50% CHC durch INT
     INT_TO_CRIT_DAMAGE: 3.0, // Maximal +300% CHD durch INT
     DEX_TO_MULTI_HIT_CHANCE: 0.5, // Maximal +50% MHC durch DEX
@@ -36,13 +36,8 @@ export const STATS_CONFIG = {
   },
   MAPPINGS: {
     // Attribute-Scaling (Attribute liegen effektiv bei 0..50)
-    STR_K: 25,
-    INT_K: 25,
-    DEX_MULTI_HIT_K: 25,
-    DEX_CHAIN_FACTOR_K: 35,
-
-    // Softcap für "+X% Chance"-Quellen, die als MultiplierChance gemappt werden.
-    // Je höher K, desto weniger stark wirken kleine +% Werte (langsamerer Start bei 0%).
-    CHANCE_INCREASE_K: 1.7
+    STR_K: 50,
+    INT_K: 50,
+    DEX_K: 50
   }
 };

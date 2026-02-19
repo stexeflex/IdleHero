@@ -135,7 +135,7 @@ const WEAPON_SWORDS_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: WEAPON_INNATE_CONFIG.BLEED_CHANCE_BASE1,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_weapon_sword_starter_innate');
-        s.Bleeding.FlatChance = value;
+        s.Bleeding.Chance = value;
         return s;
       }
     }
@@ -154,7 +154,7 @@ const WEAPON_SWORDS_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: WEAPON_INNATE_CONFIG.BLEED_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_weapon_sword_bleed_innate');
-        s.Bleeding.FlatChance = value;
+        s.Bleeding.Chance = value;
         return s;
       }
     }
@@ -173,7 +173,7 @@ const WEAPON_SWORDS_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: WEAPON_INNATE_CONFIG.CRIT_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_weapon_sword_crit_innate');
-        s.CriticalHit.FlatChance = value;
+        s.CriticalHit.Chance = value;
         return s;
       }
     }
@@ -192,7 +192,7 @@ const WEAPON_SWORDS_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: WEAPON_INNATE_CONFIG.MULTI_HIT_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_weapon_sword_fast_innate');
-        s.MultiHit.FlatChance = value;
+        s.MultiHit.Chance = value;
         return s;
       }
     }
@@ -251,7 +251,7 @@ const WEAPON_AXES_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: WEAPON_INNATE_CONFIG.BLEED_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_weapon_axe_bleed_innate');
-        s.Bleeding.FlatChance = value;
+        s.Bleeding.Chance = value;
         return s;
       }
     }
@@ -270,7 +270,7 @@ const WEAPON_AXES_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: WEAPON_INNATE_CONFIG.CRIT_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_weapon_axe_crit_innate');
-        s.CriticalHit.FlatChance = value;
+        s.CriticalHit.Chance = value;
         return s;
       }
     }
@@ -308,7 +308,7 @@ const WEAPON_AXES_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: WEAPON_INNATE_CONFIG.BLEED_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t3_weapon_axe_halberd_innate');
-        s.Bleeding.FlatChance = value;
+        s.Bleeding.Chance = value;
         return s;
       }
     }
@@ -329,7 +329,7 @@ const WEAPON_BOWS_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: WEAPON_INNATE_CONFIG.MULTI_HIT_CHANCE_BASE1,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_weapon_bow_multi_hit_innate');
-        s.MultiHit.FlatChance = value;
+        s.MultiHit.Chance = value;
         return s;
       }
     }
@@ -348,7 +348,7 @@ const WEAPON_BOWS_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: WEAPON_INNATE_CONFIG.BLEED_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_weapon_bow_bleed_innate');
-        s.Bleeding.FlatChance = value;
+        s.Bleeding.Chance = value;
         return s;
       }
     }
@@ -367,7 +367,7 @@ const WEAPON_BOWS_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: WEAPON_INNATE_CONFIG.CRIT_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_weapon_bow_crit_innate');
-        s.CriticalHit.FlatChance = value;
+        s.CriticalHit.Chance = value;
         return s;
       }
     }
@@ -386,7 +386,7 @@ const WEAPON_BOWS_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: WEAPON_INNATE_CONFIG.MULTI_HIT_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_weapon_bow_multi_innate');
-        s.MultiHit.FlatChance = value;
+        s.MultiHit.Chance = value;
         return s;
       }
     }
@@ -426,7 +426,7 @@ const WEAPON_DAGGER_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: WEAPON_INNATE_CONFIG.CRIT_CHANCE_BASE1,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_weapon_dagger_starter_innate');
-        s.CriticalHit.FlatChance = value;
+        s.CriticalHit.Chance = value;
         return s;
       }
     }
@@ -445,7 +445,7 @@ const WEAPON_DAGGER_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: WEAPON_INNATE_CONFIG.BLEED_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_weapon_dagger_bleed_innate');
-        s.Bleeding.FlatChance = value;
+        s.Bleeding.Chance = value;
         return s;
       }
     }
@@ -464,7 +464,7 @@ const WEAPON_DAGGER_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: WEAPON_INNATE_CONFIG.CRIT_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_weapon_dagger_crit_innate');
-        s.CriticalHit.FlatChance = value;
+        s.CriticalHit.Chance = value;
         return s;
       }
     }
@@ -483,7 +483,7 @@ const WEAPON_DAGGER_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: WEAPON_INNATE_CONFIG.MULTI_HIT_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_weapon_dagger_multi_innate');
-        s.MultiHit.FlatChance = value;
+        s.MultiHit.Chance = value;
         return s;
       }
     }
@@ -523,7 +523,7 @@ const WEAPON_STAFF_WAND_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: WEAPON_INNATE_CONFIG.CRIT_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_weapon_wand_crit_innate');
-        s.CriticalHit.FlatChance = value;
+        s.CriticalHit.Chance = value;
         return s;
       }
     }
@@ -580,7 +580,7 @@ const WEAPON_STAFF_WAND_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: WEAPON_INNATE_CONFIG.CRIT_CHANCE_BASE6,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t3_weapon_staff_crit_innate');
-        s.CriticalHit.FlatChance = value;
+        s.CriticalHit.Chance = value;
         return s;
       }
     }
@@ -908,7 +908,7 @@ const CHEST_CHESTPLATE_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.01, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_chest_chestplate_chain_mail_armor_innate');
-        s.Bleeding.FlatChance = value;
+        s.Bleeding.Chance = value;
         return s;
       }
     }
@@ -925,7 +925,7 @@ const CHEST_CHESTPLATE_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.01, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_chest_chestplate_abdominal_armor_innate');
-        s.Bleeding.FlatChance = value;
+        s.Bleeding.Chance = value;
         return s;
       }
     }
@@ -942,7 +942,7 @@ const CHEST_CHESTPLATE_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.01, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_chest_chestplate_cape_armor_innate');
-        s.CriticalHit.FlatChance = value;
+        s.CriticalHit.Chance = value;
         return s;
       }
     }
@@ -961,7 +961,7 @@ const CHEST_TUNIC_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.01, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_chest_tunic_leather_armor_innate');
-        s.MultiHit.FlatChance = value;
+        s.MultiHit.Chance = value;
         return s;
       }
     }
@@ -978,7 +978,7 @@ const CHEST_TUNIC_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.01, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_chest_tunic_improved_tunic_innate');
-        s.MultiHit.FlatChance = value;
+        s.MultiHit.Chance = value;
         return s;
       }
     }
@@ -1014,7 +1014,7 @@ const CHEST_SHIRT_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.01, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_chest_shirt_buttoned_shirt_innate');
-        s.CriticalHit.FlatChance = value;
+        s.CriticalHit.Chance = value;
         return s;
       }
     }
@@ -1058,7 +1058,7 @@ const LEGS_PANTS_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.01, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_legs_pants_trousers_innate');
-        s.Bleeding.FlatChance = value;
+        s.Bleeding.Chance = value;
         return s;
       }
     }
@@ -1075,7 +1075,7 @@ const LEGS_PANTS_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.01, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_legs_pants_shorts_innate');
-        s.MultiHit.FlatChance = value;
+        s.MultiHit.Chance = value;
         return s;
       }
     }
@@ -1092,7 +1092,7 @@ const LEGS_PANTS_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.01, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_legs_pants_armored_pants_innate');
-        s.Bleeding.FlatChance = value;
+        s.Bleeding.Chance = value;
         return s;
       }
     }
@@ -1109,7 +1109,7 @@ const LEGS_PANTS_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.01, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_legs_pants_loin_cloth_innate');
-        s.MultiHit.FlatChance = value;
+        s.MultiHit.Chance = value;
         return s;
       }
     }
@@ -1128,7 +1128,7 @@ const LEGS_SKIRT_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.01, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_legs_skirt_skirt_innate');
-        s.CriticalHit.FlatChance = value;
+        s.CriticalHit.Chance = value;
         return s;
       }
     }
@@ -1145,7 +1145,7 @@ const LEGS_SKIRT_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.01, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_legs_skirt_metal_skirt_innate');
-        s.CriticalHit.FlatChance = value;
+        s.CriticalHit.Chance = value;
         return s;
       }
     }
