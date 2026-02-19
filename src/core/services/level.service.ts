@@ -2,6 +2,7 @@ import {
   AttributePointsForGainedLevels,
   ClampLevel,
   ComputeProgressFromTotalXP,
+  MaxPlayerLevel,
   XpToNextLevel
 } from '../systems/progression';
 import { InitialLevelState, LevelProgress, LevelState } from '../models';
@@ -24,6 +25,7 @@ export class LevelService {
     const s = this.State();
     return s.ExperienceToNext > 0 ? s.ExperienceInLevel / s.ExperienceToNext : 0;
   });
+  public readonly IsMaxLevel = computed(() => this.State().Level === MaxPlayerLevel());
 
   /**
    * Increments XP, handles multi-level ups, awards points
