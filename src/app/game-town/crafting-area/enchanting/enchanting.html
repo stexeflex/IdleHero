@@ -57,78 +57,159 @@
       }
     </div>
 
-    <div class="affixes">
-      @if (MaxAffixSlots() === 0) {
-        <div class="empty-state">
-          <span class="muted">This item rarity cannot have affixes.</span>
-        </div>
-      } @else {
-        @for (slotIndex of VisibleSlotIndices(); track slotIndex) {
-          <div class="affix-actions">
-            @if (SelectedAffixIndex() === slotIndex && HasAffix(slotIndex)) {
-              <button
-                class="ih-button-icon ih-button-icon-border"
-                [disabled]="!EnoughGoldForReroll(slotIndex)"
-                (click)="RerollSlot(slotIndex)"
-                title="Reroll Affix">
-                <app-icon ui="cycle" size="sm"></app-icon>
-              </button>
-            }
+    <div class="right">
+      <div class="affixes">
+        @if (MaxAffixSlots() === 0) {
+          <div class="empty-state">
+            <span class="muted">This item rarity cannot have affixes.</span>
           </div>
-          <div class="affix-content">
-            <button
-              class="affix"
-              (click)="SelectSlot(slotIndex)"
-              [class.selected]="SelectedAffixIndex() === slotIndex">
-              @if (HasAffix(slotIndex)) {
-                @let affixInfo = GetAffixInfo(slotIndex);
-                <div
-                  class="affix-header"
-                  [class.common--font]="affixInfo.Tier === 'Common'"
-                  [class.magic--font]="affixInfo.Tier === 'Magic'"
-                  [class.rare--font]="affixInfo.Tier === 'Rare'"
-                  [class.epic--font]="affixInfo.Tier === 'Epic'"
-                  [class.legendary--font]="affixInfo.Tier === 'Legendary'">
-                  <app-icon symbol="polarstar" size="sm"></app-icon>
-                  <div class="affix-title">{{ affixInfo.Tier.toUpperCase() }} AFFIX</div>
-                </div>
-                <div class="affix-label">
-                  {{ affixInfo.Label }}
-                  <span class="affix-range">
-                    [
-                    <span>{{ affixInfo.MinRoll }}</span>
-                    -
-                    <span>{{ affixInfo.MaxRoll }}</span>
-                    ]
-                  </span>
-                </div>
-              } @else {
-                <div class="empty-slot">
-                  <app-gold [amount]="AddAffixCost()" [size]="'md'" [fontSize]="'1rem'"></app-gold>
-                  <button
-                    class="ih-button-tertiary"
-                    (click)="AddAffixSlot()"
-                    [disabled]="!CanAddAffixSlot()">
-                    ADD AFFIX
-                  </button>
-                </div>
+        } @else {
+          @for (slotIndex of VisibleSlotIndices(); track slotIndex) {
+            <div class="affix-actions">
+              @if (SelectedAffixIndex() === slotIndex && HasAffix(slotIndex)) {
+                <button
+                  class="ih-button-icon ih-button-icon-border"
+                  [disabled]="AutoRerollRunning() || !EnoughGoldForReroll(slotIndex)"
+                  (click)="RerollSlot(slotIndex)"
+                  title="Reroll Affix">
+                  <app-icon ui="cycle" size="sm"></app-icon>
+                </button>
+
+                <button
+                  class="ih-button-icon ih-button-icon-border"
+                  [disabled]="AutoRerollRunning()"
+                  (click)="ToggleAutoRerollOpen()"
+                  title="Edit auto reroll settings">
+                  <app-icon ui="cog" size="sm"></app-icon>
+                </button>
               }
+            </div>
+            <div class="affix-content">
+              <button
+                class="affix"
+                (click)="SelectSlot(slotIndex)"
+                [class.selected]="SelectedAffixIndex() === slotIndex">
+                @if (HasAffix(slotIndex)) {
+                  @let affixInfo = GetAffixInfo(slotIndex);
+                  <div
+                    class="affix-header"
+                    [class.common--font]="affixInfo.Tier === 'Common'"
+                    [class.magic--font]="affixInfo.Tier === 'Magic'"
+                    [class.rare--font]="affixInfo.Tier === 'Rare'"
+                    [class.epic--font]="affixInfo.Tier === 'Epic'"
+                    [class.legendary--font]="affixInfo.Tier === 'Legendary'">
+                    <app-icon symbol="polarstar" size="sm"></app-icon>
+                    <div class="affix-title">{{ affixInfo.Tier.toUpperCase() }} AFFIX</div>
+                  </div>
+                  <div class="affix-label">
+                    {{ affixInfo.Label }}
+                    <span class="affix-range">
+                      [
+                      <span>{{ affixInfo.MinRoll }}</span>
+                      -
+                      <span>{{ affixInfo.MaxRoll }}</span>
+                      ]
+                    </span>
+                  </div>
+                } @else {
+                  <div class="empty-slot">
+                    <app-gold
+                      [amount]="AddAffixCost()"
+                      [size]="'md'"
+                      [fontSize]="'1rem'"></app-gold>
+                    <button
+                      class="ih-button-tertiary"
+                      (click)="AddAffixSlot()"
+                      [disabled]="!CanAddAffixSlot()">
+                      ADD AFFIX
+                    </button>
+                  </div>
+                }
+              </button>
+            </div>
+            <div class="affix-actions">
+              @if (
+                SelectedAffixIndex() === slotIndex && HasAffix(slotIndex) && !IsMaxedSlot(slotIndex)
+              ) {
+                <button
+                  class="ih-button-icon ih-button-icon-border"
+                  (click)="UpgradeSlot(slotIndex)"
+                  [disabled]="!CanUpgradeSlot(slotIndex)"
+                  title="Enchant Affix">
+                  <app-icon class="rotate-180" ui="arrow" size="sm"></app-icon>
+                </button>
+              }
+            </div>
+          }
+        }
+      </div>
+
+      @if (
+        SelectedAffixIndex() !== null &&
+        HasAffix(SelectedAffixIndex()!) &&
+        (AutoRerollOpen() || AutoRerollRunning())
+      ) {
+        <div class="auto-reroll">
+          <div class="auto-reroll-top">
+            <div class="auto-reroll-title">
+              <app-icon ui="cycle" size="sm"></app-icon>
+              <span>AUTO REROLL</span>
+            </div>
+
+            <button
+              class="ih-button-icon ih-button-icon-border"
+              title="Close auto reroll"
+              (click)="CloseAutoRerollPanel()">
+              <app-icon ui="close" size="sm"></app-icon>
             </button>
           </div>
-          <div class="affix-actions">
-            @if (
-              SelectedAffixIndex() === slotIndex && HasAffix(slotIndex) && !IsMaxedSlot(slotIndex)
-            ) {
-              <button
-                class="ih-button-icon ih-button-icon-border"
-                (click)="UpgradeSlot(slotIndex)"
-                [disabled]="!CanUpgradeSlot(slotIndex)"
-                title="Enchant Affix">
-                <app-icon class="rotate-180" ui="arrow" size="sm"></app-icon>
+
+          <div class="auto-reroll-row">
+            <span class="muted">Cost per reroll</span>
+            <app-gold
+              [amount]="RerollCost(SelectedAffixIndex()!)"
+              [size]="'md'"
+              [fontSize]="'1rem'"></app-gold>
+          </div>
+
+          <div class="auto-reroll-row">
+            <label class="muted">Target stat</label>
+            <select
+              [disabled]="AutoRerollRunning()"
+              [value]="AutoRerollTargetId()"
+              (change)="SetAutoRerollTargetId($any($event.target).value)">
+              <option value="">Pick stat...</option>
+              @for (opt of AutoRerollOptions(); track opt.Id) {
+                <option [value]="opt.Id">{{ opt.Label }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="auto-reroll-actions">
+            <button
+              class="ih-button-secondary"
+              [disabled]="AutoRerollRunning() || !AutoRerollTargetId()"
+              title="Auto reroll until target stat (or until you run out of gold)"
+              (click)="StartAutoReroll()">
+              <app-icon ui="cycle" size="sm"></app-icon>
+              START AUTO
+            </button>
+
+            @if (AutoRerollRunning()) {
+              <button class="ih-button-tertiary" title="Stop auto reroll" (click)="StopAutoReroll()">
+                <app-icon ui="close" size="sm"></app-icon>
+                STOP
               </button>
             }
           </div>
-        }
+
+          <div class="auto-reroll-meta">
+            <span class="muted">Attempts: {{ AutoRerollAttempts() }}</span>
+            @if (AutoRerollStatus()) {
+              <span class="muted">{{ AutoRerollStatus() }}</span>
+            }
+          </div>
+        </div>
       }
     </div>
   </div>

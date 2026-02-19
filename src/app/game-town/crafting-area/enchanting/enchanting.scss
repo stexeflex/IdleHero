@@ -66,6 +66,74 @@
   gap: $gap;
 }
 
+.right {
+  align-self: start;
+  display: grid;
+  gap: $gap;
+}
+
+.auto-reroll {
+  @include panel($bg: rgba(0, 0, 0, 0.2));
+  @include panel-shadow($border-width: 1px, $border-color: $clr-border);
+  padding: calc($gap / 2);
+
+  display: grid;
+  gap: calc($gap / 2);
+}
+
+.auto-reroll-top {
+  @include flexbox($justify: space-between, $align: center);
+  gap: $gap;
+}
+
+.auto-reroll-title {
+  @include disable-text-selection();
+  @include flexbox($align: center);
+  gap: calc($gap / 2);
+
+  font-family: $font-family-header;
+  letter-spacing: 0.02em;
+}
+
+.auto-reroll-row {
+  @include flexbox($justify: flex-start, $align: center);
+  gap: calc($gap / 2);
+
+  label {
+    min-width: 92px;
+  }
+
+  select {
+    @include button-focus-visible-outline();
+
+    flex: 1 1 auto;
+    min-width: 240px;
+
+    background: color.scale($clr-ui-bg, $lightness: 10%);
+    border: 1px solid $clr-border;
+    color: $clr-text-primary;
+    padding: 6px 10px;
+    border-radius: 6px;
+  }
+}
+
+.auto-reroll-actions {
+  @include flexbox($justify: center, $align: center);
+  gap: calc($gap / 2);
+
+  button {
+    display: inline-flex;
+    align-items: center;
+    gap: calc($gap / 2);
+  }
+}
+
+.auto-reroll-meta {
+  @include flexbox($justify: space-between, $align: center);
+  gap: $gap;
+  font-size: 0.9rem;
+}
+
 .affixes {
   display: grid;
   grid-template-columns: auto 1fr auto;
