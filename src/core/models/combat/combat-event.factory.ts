@@ -58,7 +58,6 @@ export function CreateDamageOverTimeEvent(
   atMs: number,
   dotType: 'Bleed',
   target: Target,
-  damage: DamageResult,
   tickCount: number,
   totalTicks: number
 ): DamageOverTimeEvent {
@@ -67,7 +66,6 @@ export function CreateDamageOverTimeEvent(
     DotType: dotType,
     AtMs: atMs,
     Target: target,
-    Damage: damage,
     Tick: tickCount,
     TotalTicks: totalTicks
   };

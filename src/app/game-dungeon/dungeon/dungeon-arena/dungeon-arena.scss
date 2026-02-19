@@ -64,11 +64,11 @@
   gap: $gap;
 
   .bleeding-icon {
-    color: $clr-log-bleed;
+    color: $clr-bleed;
 
     border-radius: 50%;
     border-style: solid;
-    border-color: $clr-log-bleed;
+    border-color: $clr-bleed;
 
     padding: calc($gap / 3);
 
@@ -88,7 +88,7 @@
       border-style: solid;
       border-color: $clr-black;
 
-      background-color: $clr-log-bleed;
+      background-color: $clr-bleed;
       opacity: 0.5;
 
       &.active {

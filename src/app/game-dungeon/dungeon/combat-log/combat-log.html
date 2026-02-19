@@ -47,54 +47,56 @@
                 Size="md"></app-combat-actor-icon>
 
               <span>{{ damageLogEntry.ActionContent }}</span>
+              <!-- <app-icon combat="bleedingwound" size="sm" class="log-bleed"></app-icon> -->
 
               <app-combat-actor-icon
                 [Actor]="entry.Target"
                 Size="md"
                 class="log-damage"></app-combat-actor-icon>
 
-              <!-- <span> {{ Separator }} </span> -->
-            </div>
+              <span class="dot">•</span>
 
-            <div>
-              <span class="log-damage" [class]="damageLogEntry.ActorClass">
-                {{ damageLogEntry.DamageDetails }}
-              </span>
-            </div>
-
-            <div class="log-damage-values">
               <span class="log-damage" [class]="damageLogEntry.ActorClass">
                 {{ damageLogEntry.TotalDamage | number: "1.0-0" }}
               </span>
-              @if (entry.IsMultiHit) {
+            </div>
+
+            <div class="log-damage-details">
+              @if (damageLogEntry.DamageDetails.length > 0) {
+                <span class="log-damage" [class]="damageLogEntry.ActorClass">
+                  {{ damageLogEntry.DamageDetails }}
+                </span>
+                @if (damageLogEntry.AdditionalDetails.length > 0) {
+                  <span class="dot">•</span>
+                }
+              }
+              @if (damageLogEntry.AdditionalDetails.length > 0) {
+                @for (detail of damageLogEntry.AdditionalDetails; track $index) {
+                  <span class="log-damage" [class]="detail.class">
+                    {{ detail.value }}
+                    @if ($index < damageLogEntry.AdditionalDetails.length - 1) {
+                      <span class="dot">•</span>
+                    }
+                  </span>
+                }
+              }
+            </div>
+
+            @if (entry.IsMultiHit) {
+              <div class="log-damage-values">
                 [
-                @for (tag of entry.Damage; track tag) {
+                @for (tag of entry.Damage; track $index) {
                   <span
                     class="log-damage"
-                    [class.log-multi]="!tag.IsCritical"
-                    [class.log-critical]="tag.IsCritical">
+                    [class.log-multi]="!tag.IsCritical && !tag.IsBleeding"
+                    [class.log-critical]="tag.IsCritical"
+                    [class.log-bleed]="tag.IsBleeding">
                     {{ tag.Amount | number: "1.0-0" }}
                   </span>
                 }
                 ]
-              }
-            </div>
-          </div>
-        }
-        <!-- BLEED -->
-        @case ("Bleed") {
-          <div class="log-damage-entry">
-            <div class="log-damage-header">
-              <app-icon combat="bleedingwound" size="sm" class="log-bleed"></app-icon>
-              <app-combat-actor-icon
-                [Actor]="entry.Target"
-                Size="md"
-                class="log-damage"></app-combat-actor-icon>
-              <span class="log-bleed"> [{{ entry.Tick }} / {{ entry.TotalTicks }}] </span>
-            </div>
-            <span class="log-bleed">
-              {{ entry.Damage.Amount | number: "1.0-0" }}
-            </span>
+              </div>
+            }
           </div>
         }
         <!-- MISS -->

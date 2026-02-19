@@ -13,6 +13,8 @@
 
   // Horizontal gap between separators and list
   gap: calc($gap / 2);
+  padding: calc($gap / 2);
+  min-width: 575px;
 }
 
 @media (max-width: $bp-xl) {
@@ -46,9 +48,19 @@
 }
 
 .log-damage-values,
-.log-rewards-values {
+.log-rewards-values,
+.log-damage-details {
   display: flex;
   gap: calc($gap / 2);
+}
+
+.log-damage-details {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.log-damage-values {
+  flex-wrap: wrap;
 }
 
 .log-time {
@@ -78,10 +90,16 @@
 
 .log-damage {
   color: $clr-log-damage;
+  font-weight: bold;
 }
 
 .log-bleed {
   color: $clr-log-bleed;
+  font-weight: bold;
+}
+
+.log-charged {
+  color: $clr-log-charged;
   font-weight: bold;
 }
 
@@ -122,4 +140,8 @@
 .log-dungeon-cleared {
   color: $clr-log-dungeon-cleared;
   font-weight: bold;
+}
+
+.dot {
+  color: #ddd;
 }

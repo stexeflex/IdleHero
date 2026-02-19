@@ -67,7 +67,6 @@ export class EventHandler {
 
       case 'DamageOverTime':
         this.HandleDamageOverTimeEvent(event);
-        this.Logger.DoT(event);
         break;
 
       case 'Charge':
@@ -119,11 +118,6 @@ export class EventHandler {
       if (hero) {
         this.HandleHeroHitEvent(hero, event);
       }
-
-      // const boss = event.Actor as Boss;
-      // if (boss) {
-      //   this.HandleBossHitEvent(boss, event);
-      // }
     }
 
     // Nächsten Angriff des Actors planen
@@ -139,7 +133,6 @@ export class EventHandler {
     const actor = hero;
     const target = event.Target;
     const damages: DamageResult[] = [];
-    let bleedDamage: DamageResult | undefined = undefined;
 
     // Multi-Hit Chain berechnen
     const totalHits: number = this.RollMultiHitChain(
@@ -152,9 +145,6 @@ export class EventHandler {
     if (totalHits === 1) {
       const damageResult: DamageResult = this.CalculateHeroDamage(actor, false);
       damages.push(damageResult);
-
-      // Bleed Hit
-      bleedDamage = this.CreateBleedDamage(actor);
     }
     // Multi-Hits
     else if (totalHits > 1) {
@@ -162,18 +152,41 @@ export class EventHandler {
       const damageResult: DamageResult = this.CalculateHeroDamage(actor, false);
       damages.push(damageResult);
 
-      // Bleed Hit
-      bleedDamage = this.CreateBleedDamage(actor);
-
       // Additional Hits with Multi-Hit Bonus
       for (let hitNumber = 1; hitNumber < totalHits; hitNumber++) {
         const damageResult: DamageResult = this.CalculateHeroDamage(actor, true);
         damages.push(damageResult);
+      }
+    }
 
-        // Bleed Hit
-        if (bleedDamage === undefined) {
-          bleedDamage = this.CreateBleedDamage(actor);
-        }
+    // Bleeding
+    if (this.TargetIsBleeding(target as Boss)) {
+      const bleedDamage: DamageResult = this.CalculateBleedDamage(actor, damages);
+      damages.push(bleedDamage);
+
+      const nextTick = this.NextBleedingTick(target as Boss);
+
+      const damageOverTimeEvent: DamageOverTimeEvent = CreateDamageOverTimeEvent(
+        event.AtMs + this.EventDelayMs,
+        'Bleed',
+        target,
+        nextTick,
+        STATS_CONFIG.BASE.BLEEDING_TICKS
+      );
+      this.CombatState.Queue.Push(damageOverTimeEvent);
+    } else if (this.TargetIsNotBleeding(target as Boss)) {
+      const createdBleeding: boolean = this.CalculateBleedHit(actor);
+
+      if (createdBleeding) {
+        const damageOverTimeEvent: DamageOverTimeEvent = CreateDamageOverTimeEvent(
+          event.AtMs + this.EventDelayMs,
+          'Bleed',
+          target,
+          0,
+          STATS_CONFIG.BASE.BLEEDING_TICKS
+        );
+
+        this.CombatState.Queue.Push(damageOverTimeEvent);
       }
     }
 
@@ -185,22 +198,6 @@ export class EventHandler {
       damages
     );
     this.CombatState.Queue.Push(damageEvent);
-
-    // Bleed Event
-    if (bleedDamage) {
-      const damageOverTimeEvent: DamageOverTimeEvent = CreateDamageOverTimeEvent(
-        event.AtMs + STATS_CONFIG.BASE.BLEEDING_TICK_INTERVAL_MS,
-        'Bleed',
-        target,
-        bleedDamage,
-        1,
-        STATS_CONFIG.BASE.BLEEDING_TICKS
-      );
-
-      this.SetBleeding(target as Boss, 0);
-      this.CombatState.Queue.Push(damageOverTimeEvent);
-      this.CombatState.PublishState();
-    }
 
     // Charge Event
     if (!hero.Charge.Charged) {
@@ -215,7 +212,18 @@ export class EventHandler {
 
   /** MISSED HIT */
   private HandleMissEvent(event: MissEvent): void {
-    // Nur für Log/Animation relevant
+    if (this.TargetIsBleeding(event.Target as Boss)) {
+      const nextTick = this.NextBleedingTick(event.Target as Boss);
+
+      const damageOverTimeEvent: DamageOverTimeEvent = CreateDamageOverTimeEvent(
+        event.AtMs + this.EventDelayMs,
+        'Bleed',
+        event.Target,
+        nextTick,
+        STATS_CONFIG.BASE.BLEEDING_TICKS
+      );
+      this.CombatState.Queue.Push(damageOverTimeEvent);
+    }
   }
 
   /** DEAL DAMAGE */
@@ -247,31 +255,12 @@ export class EventHandler {
     if (!target) return;
     if (!target.Life.Alive) return;
 
-    this.Statistics.UpdateDamage({ HighestBleedingTick: event.Damage.Amount });
     this.SetBleeding(target as Boss, event.Tick);
-    target.Life = TakeDamage(target.Life, event.Damage.Amount);
 
-    if (!target.Life.Alive) {
-      const deathEvent: DeathEvent = CreateDeathEvent(event.AtMs, target);
-      this.CombatState.Queue.Push(deathEvent);
-    }
-    // Next DoT Tick
-    else if (event.Tick < event.TotalTicks) {
-      const nextTick = event.Tick + 1;
-      const damage = Math.max(Math.round(event.Damage.Amount * nextTick), 1);
-      const nextDot = CreateDamageOverTimeEvent(
-        event.AtMs + STATS_CONFIG.BASE.BLEEDING_TICK_INTERVAL_MS,
-        event.DotType,
-        target,
-        { ...event.Damage, Amount: damage },
-        nextTick,
-        event.TotalTicks
-      );
-
-      this.CombatState.Queue.Push(nextDot);
-    } else {
+    // Clear Bleeding after last Tick
+    if (event.Tick === event.TotalTicks) {
       const clearDotEvent = CreateClearEvent(
-        event.AtMs + STATS_CONFIG.BASE.BLEEDING_TICK_INTERVAL_MS,
+        event.AtMs + DELAYS.BLEEDING_CLEAR_MS,
         target,
         'Bleed'
       );
@@ -420,13 +409,38 @@ export class EventHandler {
     return { Amount: damage, IsCharged: false, IsCritical: isCritical, IsBleeding: false };
   }
 
-  private CalculateBleedHit(hero: Hero): DamageResult {
+  private CalculateBleedHit(hero: Hero): boolean {
     const isBleedHit = ChanceUtils.success(hero.Stats.BleedingChance ?? 0);
-    const damage = isBleedHit
-      ? Math.max(Math.round(hero.Stats.Damage * (hero.Stats.BleedingDamage ?? 0)), 1)
-      : 0;
+    return isBleedHit;
+  }
 
-    return { Amount: damage, IsCharged: false, IsCritical: false, IsBleeding: isBleedHit };
+  private TargetIsBleeding(target: Boss): boolean {
+    return (
+      target.State.IsBleeding &&
+      (target.State.BleedingState?.Tick || 0) < (target.State.BleedingState?.TotalTicks || 0)
+    );
+  }
+
+  private TargetIsNotBleeding(target: Boss): boolean {
+    return !target.State.IsBleeding;
+  }
+
+  private SetBleeding(boss: Boss, tick: number): void {
+    boss.State.IsBleeding = true;
+    boss.State.BleedingState = {
+      Tick: tick,
+      TotalTicks: STATS_CONFIG.BASE.BLEEDING_TICKS
+    };
+  }
+
+  private NextBleedingTick(target: Boss): number {
+    return (target.State.BleedingState?.Tick || 0) + 1;
+  }
+
+  private CalculateBleedDamage(hero: Hero, currentDamages: DamageResult[]): DamageResult {
+    const sum = currentDamages.reduce((acc, dmg) => acc + dmg.Amount, 0);
+    const damage = Math.max(Math.round(sum * (hero.Stats.BleedingDamage ?? 0)), 1);
+    return { Amount: damage, IsCharged: false, IsCritical: false, IsBleeding: true };
   }
 
   private CalculateHeroDamage(hero: Hero, multiHit: boolean): DamageResult {
@@ -449,63 +463,49 @@ export class EventHandler {
     return damageResult;
   }
 
-  private CreateBleedDamage(hero: Hero): DamageResult | undefined {
-    const boss = this.CombatState.Boss();
-    if (!boss) return undefined;
-    if (boss.State.IsBleeding) return undefined;
-
-    const isBleedHitResult: DamageResult = this.CalculateBleedHit(hero);
-    if (!isBleedHitResult.IsBleeding) return undefined;
-
-    return isBleedHitResult;
-  }
-
-  private SetBleeding(boss: Boss, tick: number): void {
-    boss.State.IsBleeding = true;
-    boss.State.BleedingState = {
-      Tick: tick,
-      TotalTicks: STATS_CONFIG.BASE.BLEEDING_TICKS
-    };
-  }
-
   private UpdateDamageStatistics(damage: DamageResult[]): void {
-    // Single Hit Statistics
-    if (damage.length === 1) {
-      const damageAmount = damage[0].Amount;
+    const totalDamage = damage.reduce((sum, d) => sum + d.Amount, 0);
+    const damageWithoutBleed = damage.filter((d) => !d.IsBleeding);
+    const totalDamageWithoutBleed = damageWithoutBleed.reduce((sum, d) => sum + d.Amount, 0);
+    const bleedingDamage = damage.filter((d) => d.IsBleeding);
 
-      if (damage[0].IsCharged && damage[0].IsCritical) {
-        this.Statistics.UpdateDamage({ HighestChargedCriticalHit: damageAmount });
-        this.Statistics.UpdateDamage({ HighestChargedTotalHit: damageAmount });
-      } else if (damage[0].IsCharged) {
-        this.Statistics.UpdateDamage({ HighestChargedHit: damageAmount });
-        this.Statistics.UpdateDamage({ HighestChargedTotalHit: damageAmount });
-      } else if (damage[0].IsCritical) {
-        this.Statistics.UpdateDamage({ HighestCriticalHit: damageAmount });
-        this.Statistics.UpdateDamage({ HighestTotalHit: damageAmount });
+    // Single Hit Statistics
+    if (damageWithoutBleed.length === 1) {
+      if (damageWithoutBleed[0].IsCharged && damageWithoutBleed[0].IsCritical) {
+        this.Statistics.UpdateDamage({ HighestChargedCriticalHit: totalDamageWithoutBleed });
+        this.Statistics.UpdateDamage({ HighestChargedTotalHit: totalDamage });
+      } else if (damageWithoutBleed[0].IsCharged) {
+        this.Statistics.UpdateDamage({ HighestChargedHit: totalDamageWithoutBleed });
+        this.Statistics.UpdateDamage({ HighestChargedTotalHit: totalDamage });
+      } else if (damageWithoutBleed[0].IsCritical) {
+        this.Statistics.UpdateDamage({ HighestCriticalHit: totalDamageWithoutBleed });
+        this.Statistics.UpdateDamage({ HighestTotalHit: totalDamage });
       } else {
-        this.Statistics.UpdateDamage({ HighestSingleHit: damageAmount });
-        this.Statistics.UpdateDamage({ HighestTotalHit: damageAmount });
+        this.Statistics.UpdateDamage({ HighestSingleHit: totalDamageWithoutBleed });
+        this.Statistics.UpdateDamage({ HighestTotalHit: totalDamage });
       }
     }
     // Multi-Hit Statistics
     else {
-      const totalDamage = damage.reduce((sum, d) => sum + d.Amount, 0);
-      this.Statistics.UpdateDamage({ HighestMultiHitChain: damage.length });
+      this.Statistics.UpdateDamage({ HighestMultiHitChain: damageWithoutBleed.length });
 
-      if (damage.some((d) => d.IsCharged && d.IsCritical)) {
-        this.Statistics.UpdateDamage({ HighestChargedCriticalMultiHit: totalDamage });
+      if (damageWithoutBleed.some((d) => d.IsCharged && d.IsCritical)) {
+        this.Statistics.UpdateDamage({ HighestChargedCriticalMultiHit: totalDamageWithoutBleed });
         this.Statistics.UpdateDamage({ HighestChargedTotalHit: totalDamage });
-      } else if (damage.some((d) => d.IsCharged)) {
-        this.Statistics.UpdateDamage({ HighestChargedMultiHit: totalDamage });
+      } else if (damageWithoutBleed.some((d) => d.IsCharged)) {
+        this.Statistics.UpdateDamage({ HighestChargedMultiHit: totalDamageWithoutBleed });
         this.Statistics.UpdateDamage({ HighestChargedTotalHit: totalDamage });
-      } else if (damage.some((d) => d.IsCritical)) {
-        this.Statistics.UpdateDamage({ HighestCriticalMultiHit: totalDamage });
+      } else if (damageWithoutBleed.some((d) => d.IsCritical)) {
+        this.Statistics.UpdateDamage({ HighestCriticalMultiHit: totalDamageWithoutBleed });
         this.Statistics.UpdateDamage({ HighestTotalHit: totalDamage });
       } else {
-        this.Statistics.UpdateDamage({ HighestMultiHit: totalDamage });
+        this.Statistics.UpdateDamage({ HighestMultiHit: totalDamageWithoutBleed });
         this.Statistics.UpdateDamage({ HighestTotalHit: totalDamage });
       }
     }
+
+    const bleedingDamageAmount = bleedingDamage.reduce((sum, d) => sum + d.Amount, 0);
+    this.Statistics.UpdateDamage({ HighestBleedingTick: bleedingDamageAmount });
   }
   //#endregion
 }

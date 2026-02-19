@@ -12,6 +12,12 @@ interface DamageLogEntryExtended {
   ActionContent: string;
   TotalDamage: number;
   DamageDetails: string;
+  AdditionalDetails: AdditionalDetail[];
+}
+
+interface AdditionalDetail {
+  value: string;
+  class: string;
 }
 
 @Component({
@@ -27,10 +33,6 @@ export class CombatLog {
   private readonly Entries = this.Log.Entries;
   protected readonly VisibleEntries = computed<CombatLogEntry[]>(() => this.Entries());
 
-  protected get Separator(): string {
-    return '\u2013'; // en dash
-  }
-
   protected DamageLogEntryExtended(entry: DamageLogEntry): DamageLogEntryExtended {
     const totalDamage = entry.Damage.reduce((sum, dmg) => sum + dmg.Amount, 0);
 
@@ -38,7 +40,8 @@ export class CombatLog {
       ActorClass: this.DamageActorClass(entry),
       ActionContent: this.ActionContent(entry),
       TotalDamage: totalDamage,
-      DamageDetails: this.DamageDetails(entry)
+      DamageDetails: this.DamageDetails(entry),
+      AdditionalDetails: this.AdditionalDetails(entry)
     };
   }
 
@@ -82,6 +85,20 @@ export class CombatLog {
     }
 
     return damageDetails === 'HIT' ? '' : damageDetails;
+  }
+
+  private AdditionalDetails(entry: DamageLogEntry): AdditionalDetail[] {
+    const details: AdditionalDetail[] = [];
+
+    if (entry.Damage.some((d) => d.IsBleeding)) {
+      details.push({ value: 'BLEEDING', class: 'log-bleed' });
+    }
+
+    if (entry.Damage.some((d) => d.IsCharged)) {
+      details.push({ value: 'CHARGED', class: 'log-charged' });
+    }
+
+    return details;
   }
 
   protected FormatTimestamp(timestampMs: number): string {

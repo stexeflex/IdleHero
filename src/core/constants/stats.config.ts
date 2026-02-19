@@ -5,7 +5,6 @@ export const STATS_CONFIG = {
     BLEEDING_CHANCE: 0.0, // 0% Base Bleeding Chance
     BLEEDING_DAMAGE: 0.25, // 25% Base Bleeding Damage
     BLEEDING_TICKS: 3, // Basis Anzahl Bleeding Ticks
-    BLEEDING_TICK_INTERVAL_MS: 1000, // Basis Intervall zwischen Bleeding Ticks in Millisekunden
     CRIT_CHANCE: 0.0, // 0% Base CHC
     CRIT_DAMAGE: 1.5, // 150% Base CHD
     MULTI_HIT_CHANCE: 0.0, // 0% Base MHC
