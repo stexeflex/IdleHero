@@ -6,6 +6,7 @@ import { CombatLog } from './combat-log/combat-log';
 import { DELAYS } from '../../../core/constants';
 import { DungeonArena } from './dungeon-arena/dungeon-arena';
 import { DungeonRoomService } from '../../../core/services';
+import { DungeonType } from '../../../core/models';
 
 @Component({
   selector: 'app-inner-dungeon',
@@ -29,6 +30,14 @@ export class InnerDungeon implements OnDestroy {
 
   // Derived view states
   public readonly IsInArena = computed<boolean>(() => this.InCombat());
+  public readonly IsBossRoom = computed<boolean>(() => this.CurrentDungeon()?.Type === DungeonType.Boss);
+  public readonly HeaderTitle = computed<string>(() => {
+    if (this.IsBossRoom()) {
+      return this.IsInArena() ? 'BOSS ARENA' : 'BOSS ENTRANCE';
+    }
+
+    return this.IsInArena() ? 'DUNGEON ARENA' : 'DUNGEON ENTRANCE';
+  });
 
   ngOnDestroy(): void {
     if (this.restartTimer) {

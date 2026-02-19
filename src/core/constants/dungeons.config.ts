@@ -3,8 +3,11 @@ import {
   DungeonRoom,
   DungeonRoomKey,
   DungeonType,
-  NormalDungeonRoom
+  NormalDungeonRoom,
+  AnyDungeonRoom
 } from '../models/combat/dungeon-room';
+
+import { BOSS_ROOMS } from './dungeon-boss.config';
 
 export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
   {
@@ -113,6 +116,6 @@ export function GetAllDungeons(): DungeonRoom[] {
   return [...NORMAL_DUNGEONS, ...CAPSTONE_DUNGEONS];
 }
 
-export function GetDungeonById(id: string): DungeonRoom | null {
-  return [...NORMAL_DUNGEONS, ...CAPSTONE_DUNGEONS].find((d) => d.Id === id) ?? null;
+export function GetDungeonById(id: string): AnyDungeonRoom | null {
+  return [...NORMAL_DUNGEONS, ...CAPSTONE_DUNGEONS, ...BOSS_ROOMS].find((d) => d.Id === id) ?? null;
 }

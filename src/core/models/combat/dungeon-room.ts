@@ -4,7 +4,8 @@ export type DungeonRoomKey = 'Silver Key' | 'Magic Key' | 'Golden Key';
 
 export enum DungeonType {
   Normal = 'Normal',
-  Capstone = 'Capstone'
+  Capstone = 'Capstone',
+  Boss = 'Boss'
 }
 
 export interface DungeonRoomPrerequisites {
@@ -44,3 +45,9 @@ export interface CapstoneDungeonRoom extends DungeonRoom {
   Prerequisites: DungeonRoomPrerequisites;
   Rewards: DungeonRoomRewards;
 }
+
+export interface BossDungeonRoom extends DungeonRoom {
+  Type: DungeonType.Boss;
+}
+
+export type AnyDungeonRoom = NormalDungeonRoom | CapstoneDungeonRoom | BossDungeonRoom;

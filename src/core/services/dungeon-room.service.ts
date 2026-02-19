@@ -1,7 +1,8 @@
-import { Boss, CapstoneDungeonRoom, DungeonRoom, DungeonType } from '../models';
+import { AnyDungeonRoom, Boss, CapstoneDungeonRoom, DungeonRoom, DungeonType } from '../models';
 import { Injectable, computed, inject, signal } from '@angular/core';
 
 import { BossSelectionService } from '../systems/combat';
+import { BossRewardsService } from '../systems/combat/bosses/boss-rewards.service';
 import { ClampUtils } from '../../shared/utils';
 import { DungeonKeyService } from './dungeon-key.service';
 import { DungeonRewardsService } from '../systems/combat/dungeons/dungeon-rewards.service';
@@ -14,6 +15,7 @@ export class DungeonRoomService {
   private readonly Statistics = inject<StatisticsService>(StatisticsService);
   private readonly Bosses = inject(BossSelectionService);
   private readonly Rewards = inject(DungeonRewardsService);
+  private readonly BossRewards = inject(BossRewardsService);
   private readonly Keys = inject(DungeonKeyService);
   private readonly Gold = inject(GoldService);
 
@@ -23,7 +25,7 @@ export class DungeonRoomService {
   // Current Dungeon ID
   public readonly CurrentDungeonId = computed<string | null>(() => this.CurrentDungeonIdState());
   // Current Dungeon Room
-  public readonly CurrentDungeon = computed<DungeonRoom | null>(() => {
+  public readonly CurrentDungeon = computed<AnyDungeonRoom | null>(() => {
     const id = this.CurrentDungeonIdState();
     return id !== null ? GetDungeonById(id) : null;
   });
@@ -129,7 +131,11 @@ export class DungeonRoomService {
     }
     // At final stage: grant completion rewards and capstone key reward if any
     else {
-      this.Rewards.GrantCompletionRewards(dungeon);
+      if (dungeon.Type === DungeonType.Boss) {
+        this.BossRewards.GrantCompletionRewards(dungeon);
+      } else {
+        this.Rewards.GrantCompletionRewards(dungeon);
+      }
       // already at max; no further advancement
       return false;
     }
@@ -172,10 +178,11 @@ export class DungeonRoomService {
     };
 
     switch (currentDungeon.Type) {
-      case 'Normal':
+      case DungeonType.Normal:
+      case DungeonType.Boss:
         this.Statistics.UpdateDungeon({ Dungeon: dungeonRoomStat });
         break;
-      case 'Capstone':
+      case DungeonType.Capstone:
         this.Statistics.UpdateDungeon({ Capstone: dungeonRoomStat });
         break;
     }

@@ -1,2 +1,12 @@
 @use "sass:color";
 @use "index" as *;
+
+.dungeon-area {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tab-content {
+  margin-top: 8px;
+}

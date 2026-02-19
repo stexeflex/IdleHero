@@ -1,8 +1,10 @@
 import {
+  AngelParagon,
   BattleMechGolem,
   Brute,
   BullyMinion,
   CobraSnake,
+  DemonOverlord,
   EvilMinion,
   Gooey,
   IceGolem,
@@ -23,7 +25,38 @@ import {
   ViperSnake
 } from '../systems/combat/dungeons/boss.factory';
 
-import { Boss } from '../models';
+import { BossDungeonRoom, DungeonType } from '../models/combat/dungeon-room';
+import { Boss } from '../models/combat/actors/boss.';
+import { Rewards } from '../models/economy/rewards';
+
+export const BOSS_ROOMS: BossDungeonRoom[] = [
+  {
+    Id: 'B1',
+    Title: 'Demon Boss',
+    Description: 'A single demon boss encounter.',
+    Icon: 'demonoverlord',
+    Type: DungeonType.Boss,
+    StagesBase: 1,
+    MidStages: [],
+    StagesMax: 1,
+    XpBase: 0,
+    GoldBase: 0,
+    Locked: false
+  },
+  {
+    Id: 'B2',
+    Title: 'Angel Boss',
+    Description: 'A single angel boss encounter.',
+    Icon: 'angelparagon',
+    Type: DungeonType.Boss,
+    StagesBase: 1,
+    MidStages: [],
+    StagesMax: 1,
+    XpBase: 0,
+    GoldBase: 0,
+    Locked: false
+  }
+];
 
 export type BossFactory = () => Boss;
 
@@ -118,6 +151,14 @@ export const DUNGEON_BOSS_CONFIGS: Record<string, DungeonBossConfig> = {
       [80, [ShamblingMound, RobotGolem]],
       [90, [RobotGolem, BattleMechGolem]]
     ])
+  },
+  B1: {
+    StageSpecific: new Map<number, BossFactory>([[1, DemonOverlord]]),
+    BossPools: new Map<number, BossFactory[]>([[1, [DemonOverlord]]])
+  },
+  B2: {
+    StageSpecific: new Map<number, BossFactory>([[1, AngelParagon]]),
+    BossPools: new Map<number, BossFactory[]>([[1, [AngelParagon]]])
   }
 };
 
@@ -135,6 +176,9 @@ export interface DungeonBossScalingParams {
   b: number; // polynomial exponent (e.g., 1.5 – 2.5)
   MidBossMultiplier: number; // multiplier for mid-boss stages (e.g., ×3–×6)
   EndBossMultiplier: number; // multiplier for end-boss stages (e.g., ×8–×20)
+
+  // Optional completion rewards for single-stage boss rooms (e.g. B1/B2).
+  Rewards?: Rewards;
 }
 
 export const DUNGEON_BOSS_SCALING: Record<string, DungeonBossScalingParams> = {
@@ -169,6 +213,24 @@ export const DUNGEON_BOSS_SCALING: Record<string, DungeonBossScalingParams> = {
     b: 1.5,
     MidBossMultiplier: 4,
     EndBossMultiplier: 8
+  },
+  B1: {
+    BossBaseHealth: 1000000,
+    r: 1,
+    a: 0,
+    b: 1,
+    MidBossMultiplier: 1,
+    EndBossMultiplier: 1,
+    Rewards: { Gold: 50000, Experience: 2000 }
+  },
+  B2: {
+    BossBaseHealth: 1000000,
+    r: 1,
+    a: 0,
+    b: 1,
+    MidBossMultiplier: 1,
+    EndBossMultiplier: 1,
+    Rewards: { Gold: 5000, Experience: 20000 }
   }
 };
 
@@ -178,4 +240,15 @@ export function GetBossConfigForDungeon(dungeonId: string): DungeonBossConfig {
 
 export function GetScalingParamsForDungeon(dungeonId: string): DungeonBossScalingParams {
   return DUNGEON_BOSS_SCALING[dungeonId];
+}
+
+export function GetBossRoomRewards(bossRoomId: string): Rewards {
+  const scaling = GetScalingParamsForDungeon(bossRoomId);
+  const rewards = scaling?.Rewards;
+
+  if (!rewards) {
+    throw new Error(`No boss room rewards configured for id=${bossRoomId}`);
+  }
+
+  return rewards;
 }

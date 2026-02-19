@@ -27,6 +27,15 @@ export function GetHealthForBossAtStage(dungeonId: string, stage: number): numbe
   const dungeon = GetDungeonById(dungeonId)!;
   const scaling = GetScalingParamsForDungeon(dungeonId);
 
+  if (!dungeon || !scaling) {
+    return 1;
+  }
+
+  // Single-stage boss dungeons use config HP directly (no stage scaling curve).
+  if (dungeon.StagesMax <= 1) {
+    return Math.max(1, Math.round(scaling.BossBaseHealth));
+  }
+
   let hp = ComputeBossBaseHealth(stage, scaling);
 
   if (stage === dungeon.StagesMax) {

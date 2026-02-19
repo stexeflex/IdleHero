@@ -233,3 +233,25 @@ export function BattleMechGolem(): Boss {
   };
 }
 //#endregion GOLEMS
+
+//#region BOSS TAB
+export function DemonOverlord(): Boss {
+  const boss = DefaultBoss() as Boss;
+  return {
+    ...boss,
+    Id: 'demon-boss-1',
+    Name: 'Demon Overlord',
+    BossIcon: BossIcon('demonoverlord')
+  };
+}
+
+export function AngelParagon(): Boss {
+  const boss = DefaultBoss() as Boss;
+  return {
+    ...boss,
+    Id: 'angel-boss-1',
+    Name: 'Angel Paragon',
+    BossIcon: BossIcon('angelparagon')
+  };
+}
+//#endregion BOSS TAB
