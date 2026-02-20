@@ -59,6 +59,16 @@ export function MinLevelForTier(tier: ItemTier): ItemLevel {
   return rules.MinItemLevel;
 }
 
+export function MaxLevelForTier(tier: ItemTier): ItemLevel {
+  const rules = ITEM_TIER_RULES[tier];
+  return rules.MaxItemLevel;
+}
+
+export function MaxLevelForRarity(rarity: ItemRarity): ItemLevel {
+  const rules = ITEM_RARITY_RULES[rarity];
+  return rules.MaxItemLevel;
+}
+
 export function NextLevel(item: Item): ItemLevel {
   // TODO: Respect max level per rarity
   const nextLevel: ItemLevel = Math.min(ITEM_LEVEL_CONFIG.LEVEL.MAX, item.Level + 1) as ItemLevel;

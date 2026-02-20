@@ -3,15 +3,11 @@
     <div class="title">
       <h3>ITEM ENCHANTING</h3>
       <div class="subtitle">
-        <span class="rarity">{{ Rarity() }}</span>
+        <span class="rarity">{{ Rarity() }} Item</span>
+        <span class="dot">•</span>
+        <span class="muted">Level: {{ Item().Level }}/{{ MaxItemLevel() }}</span>
         <span class="dot">•</span>
         <span class="muted">Affixes: {{ Item().Affixes.length }}/{{ MaxAffixSlots() }}</span>
-        <span class="dot">•</span>
-        <span class="muted">
-          Enchanted Affixes: {{ EnchantedAffixes() }}/{{ MaxEnchantedAffixes() }}
-        </span>
-        <span class="dot">•</span>
-        <span class="muted">Max Affix Tier: {{ MaxAffixTier() }}</span>
       </div>
     </div>
 

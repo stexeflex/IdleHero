@@ -68,39 +68,44 @@ export const ITEM_TIER_RULES: Record<ItemTier, ItemTierRule> = {
 
 export const ITEM_RARITY_RULES: RarityRulesMap = {
   Common: {
+    MinItemLevel: ITEM_LEVEL_CONFIG.LEVEL.COMMON.MIN,
+    MaxItemLevel: ITEM_LEVEL_CONFIG.LEVEL.COMMON.MAX,
     MaxAffixes: 1,
     MaxEnchantableAffixes: 1,
     MaxAffixTier: 'Common',
-    AllowAffixReroll: true,
-    AllowedRuneQualities: []
+    AllowAffixReroll: true
   },
   Magic: {
+    MinItemLevel: ITEM_LEVEL_CONFIG.LEVEL.MAGIC.MIN,
+    MaxItemLevel: ITEM_LEVEL_CONFIG.LEVEL.MAGIC.MAX,
     MaxAffixes: 2,
     MaxEnchantableAffixes: 2,
     MaxAffixTier: 'Magic',
-    AllowAffixReroll: true,
-    AllowedRuneQualities: ['Magic']
+    AllowAffixReroll: true
   },
   Rare: {
+    MinItemLevel: ITEM_LEVEL_CONFIG.LEVEL.RARE.MIN,
+    MaxItemLevel: ITEM_LEVEL_CONFIG.LEVEL.RARE.MAX,
     MaxAffixes: 2,
     MaxEnchantableAffixes: 2,
     MaxAffixTier: 'Rare',
-    AllowAffixReroll: true,
-    AllowedRuneQualities: ['Magic', 'Rare']
+    AllowAffixReroll: true
   },
   Epic: {
+    MinItemLevel: ITEM_LEVEL_CONFIG.LEVEL.EPIC.MIN,
+    MaxItemLevel: ITEM_LEVEL_CONFIG.LEVEL.EPIC.MAX,
     MaxAffixes: 3,
     MaxEnchantableAffixes: 3,
     MaxAffixTier: 'Epic',
-    AllowAffixReroll: true,
-    AllowedRuneQualities: ['Magic', 'Rare', 'Epic']
+    AllowAffixReroll: true
   },
   Legendary: {
+    MinItemLevel: ITEM_LEVEL_CONFIG.LEVEL.LEGENDARY.MIN,
+    MaxItemLevel: ITEM_LEVEL_CONFIG.LEVEL.LEGENDARY.MAX,
     MaxAffixes: 3,
     MaxEnchantableAffixes: 3,
     MaxAffixTier: 'Legendary',
-    AllowAffixReroll: true,
-    AllowedRuneQualities: ['Magic', 'Rare', 'Epic', 'Legendary']
+    AllowAffixReroll: true
   }
 };
 
