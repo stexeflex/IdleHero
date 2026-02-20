@@ -1,5 +1,7 @@
 import {
+  AmuletState,
   Attributes,
+  CreateLockedAmuletState,
   CreateEmptyLoadout,
   DamageStatistics,
   DungeonKeysState,
@@ -13,10 +15,13 @@ import {
   InitialInventoryState,
   InitialLevelState,
   InventoryState,
+  RuneInventoryState,
+  CreateEmptyRuneInventoryState,
   ZeroAttributes
 } from '../../core/models';
 
 import { ATTRIBUTES_CONFIG } from '../../core/constants';
+import { RUNE_DEFINITIONS } from '../../core/constants/items/runes.config';
 import { CharactersIconName } from '../../shared/components';
 
 export interface Schema {
@@ -35,6 +40,8 @@ export interface Schema {
   Gold: GoldState;
   DungeonKeys: DungeonKeysState;
   Loadout: GearLoadout;
+  Amulet: AmuletState;
+  RuneInventory: RuneInventoryState;
   Inventory: InventoryState;
   Statistics: {
     Dungeon: DungeonStatistics;
@@ -56,6 +63,8 @@ export function InitialSchema(): Schema {
     Gold: InitialGoldState(),
     DungeonKeys: InitialDungeonKeysState(),
     Loadout: CreateEmptyLoadout(),
+    Amulet: CreateLockedAmuletState(),
+    RuneInventory: CreateEmptyRuneInventoryState(RUNE_DEFINITIONS.map((rune) => rune.Id)),
     Inventory: InitialInventoryState(),
     Statistics: {
       Dungeon: InitialDungeonStatistics(),
@@ -75,6 +84,8 @@ export function MergeSchemas(base: Schema, updates: Partial<Schema>): Schema {
     Gold: updates.Gold ?? base.Gold,
     DungeonKeys: updates.DungeonKeys ?? base.DungeonKeys,
     Loadout: updates.Loadout ?? base.Loadout,
+    Amulet: updates.Amulet ?? base.Amulet,
+    RuneInventory: updates.RuneInventory ?? base.RuneInventory,
     Inventory: updates.Inventory ?? base.Inventory,
     Statistics: {
       Dungeon: updates.Statistics?.Dungeon ?? base.Statistics.Dungeon,

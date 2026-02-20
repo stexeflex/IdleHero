@@ -1,4 +1,5 @@
 import {
+  AmuletService,
   AttributesService,
   DungeonKeyService,
   GearLoadoutService,
@@ -6,6 +7,7 @@ import {
   InventoryService,
   LevelService,
   PlayerHeroService,
+  RuneService,
   StatisticsService
 } from '../core/services';
 import { InitialSchema, Schema } from './models/schema';
@@ -19,6 +21,8 @@ export class StateCollectionService {
   private goldService = inject(GoldService);
   private dungeonKeyService = inject(DungeonKeyService);
   private loadoutService = inject(GearLoadoutService);
+  private amuletService = inject(AmuletService);
+  private runeService = inject(RuneService);
   private inventoryService = inject(InventoryService);
   private statisticsService = inject(StatisticsService);
 
@@ -41,6 +45,8 @@ export class StateCollectionService {
 
     // Loadout & Inventory
     schema.Loadout = this.loadoutService.GetState();
+    schema.Amulet = this.amuletService.GetState();
+    schema.RuneInventory = this.runeService.GetState();
     schema.Inventory = this.inventoryService.GetState();
 
     // Statistics

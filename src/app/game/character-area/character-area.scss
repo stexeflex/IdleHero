@@ -10,3 +10,9 @@
   @include overflow($max-height: $size-character-stats-height);
   @include scrollbar($size: 0.75rem);
 }
+
+@media (max-height: $bp-xl-height) {
+  .stats {
+    @include overflow($max-height: $size-character-stats-height-responsive);
+  }
+}

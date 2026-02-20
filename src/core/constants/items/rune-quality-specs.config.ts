@@ -56,12 +56,20 @@ export const RUNE_MULTI_HIT_CHAIN: RuneQualitySpec[] = [
   { Quality: 'Legendary', Value: { Min: 0.4, Max: 0.5, Type: 'Percent' } }
 ];
 
+export const RUNE_ATTACK_POWER: RuneQualitySpec[] = [
+  { Quality: 'Common', Value: { Min: 1, Max: 5, Type: 'Flat' } },
+  { Quality: 'Magic', Value: { Min: 5, Max: 20, Type: 'Flat' } },
+  { Quality: 'Rare', Value: { Min: 20, Max: 50, Type: 'Flat' } },
+  { Quality: 'Epic', Value: { Min: 50, Max: 100, Type: 'Flat' } },
+  { Quality: 'Legendary', Value: { Min: 100, Max: 150, Type: 'Flat' } }
+];
+
 export const RUNE_CHARGE_GAIN: RuneQualitySpec[] = [
-  { Quality: 'Common', Value: { Min: 0.01, Max: 0.1, Type: 'Flat' } },
-  { Quality: 'Magic', Value: { Min: 0.1, Max: 0.2, Type: 'Flat' } },
-  { Quality: 'Rare', Value: { Min: 0.2, Max: 0.3, Type: 'Flat' } },
-  { Quality: 'Epic', Value: { Min: 0.3, Max: 0.4, Type: 'Flat' } },
-  { Quality: 'Legendary', Value: { Min: 0.4, Max: 0.5, Type: 'Flat' } }
+  { Quality: 'Common', Value: { Min: 1, Max: 5, Type: 'Flat' } },
+  { Quality: 'Magic', Value: { Min: 5, Max: 15, Type: 'Flat' } },
+  { Quality: 'Rare', Value: { Min: 15, Max: 25, Type: 'Flat' } },
+  { Quality: 'Epic', Value: { Min: 25, Max: 40, Type: 'Flat' } },
+  { Quality: 'Legendary', Value: { Min: 40, Max: 50, Type: 'Flat' } }
 ];
 
 export const RUNE_CHARGE_DAMAGE: RuneQualitySpec[] = [

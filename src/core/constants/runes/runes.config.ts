@@ -194,7 +194,7 @@ export const RUNE_DEFINITIONS: RuneDefinition[] = [
     Name: 'Charging Strike Damage Rune',
     Qualities: RUNE_CHARGE_DAMAGE,
     Effect: {
-      ToLabel: (value: number) => FlatAdditiveLabel('Charged Damage', value),
+      ToLabel: (value: number) => PercentageAdditiveLabel('Charged Damage', value),
       MapToStatSource: (source: string, value: number): StatSource => {
         const s = EmptyStatSource(
           source + '_rune_charge_damage' + `_${TimestampUtils.GetTimestampNow()}`

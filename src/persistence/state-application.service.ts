@@ -1,4 +1,5 @@
 import {
+  AmuletService,
   AttributesService,
   DungeonKeyService,
   GearLoadoutService,
@@ -6,6 +7,7 @@ import {
   InventoryService,
   LevelService,
   PlayerHeroService,
+  RuneService,
   StatisticsService
 } from '../core/services';
 import { Injectable, inject } from '@angular/core';
@@ -20,6 +22,8 @@ export class StateApplicationService {
   private goldService = inject(GoldService);
   private dungeonKeyService = inject(DungeonKeyService);
   private loadoutService = inject(GearLoadoutService);
+  private amuletService = inject(AmuletService);
+  private runeService = inject(RuneService);
   private inventoryService = inject(InventoryService);
   private statisticsService = inject(StatisticsService);
 
@@ -40,6 +44,8 @@ export class StateApplicationService {
 
     // Loadout & Inventory
     this.loadoutService.SetState(schema.Loadout);
+    this.amuletService.SetState(schema.Amulet);
+    this.runeService.SetState(schema.RuneInventory);
     this.inventoryService.SetState(schema.Inventory);
 
     // Statistics

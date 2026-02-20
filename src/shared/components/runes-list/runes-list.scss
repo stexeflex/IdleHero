@@ -1,0 +1,95 @@
+@use "sass:color";
+@use "index" as *;
+
+.runes_list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $gap;
+
+  .rune_slot {
+    border-width: 2px;
+    border-style: solid;
+    border-radius: $border-radius;
+
+    background: $grad-ui-bg-lighten-revert;
+
+    padding: calc($gap / 2);
+
+    width: 500px;
+
+    &.empty {
+      opacity: 0.5;
+      border-color: $clr-mute;
+    }
+
+    &:hover {
+      transform: scale(1.015);
+      transition: transform 0.2s;
+    }
+
+    .rune_slot_content {
+      display: grid;
+      grid-template:
+        "icon separator name actions" auto
+        "id separator description actions" auto
+        / auto auto 1fr 100px;
+      gap: calc($gap / 2) $gap;
+
+      align-items: center;
+      justify-items: center;
+
+      .separator {
+        grid-area: separator;
+      }
+
+      .rune_icon {
+        grid-area: icon;
+      }
+
+      .rune_id {
+        grid-area: id;
+      }
+
+      .rune_name {
+        grid-area: name;
+        display: flex;
+        gap: calc($gap / 2);
+
+        justify-self: start;
+        align-items: baseline;
+
+        &.empty {
+          grid-row: 1 / span 2;
+        }
+      }
+
+      .rune_id,
+      .rune_name {
+        color: $clr-highlight;
+
+        &.empty {
+          color: $clr-mute;
+        }
+      }
+
+      .rune_effect {
+        @include disable-text-selection();
+        grid-area: description;
+
+        justify-self: start;
+
+        color: $clr-text-primary;
+        font-weight: bold;
+
+        .min-max-roll {
+          color: $clr-mute;
+          font-size: 0.9rem;
+        }
+      }
+
+      .actions {
+        grid-area: actions;
+      }
+    }
+  }
+}

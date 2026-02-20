@@ -1,4 +1,5 @@
 export * from './affix-slot-icon/affix-slot-icon';
+export * from './amulet-preview/amulet-preview';
 export * from './buffs-bar/buffs-bar';
 export * from './charge-bar/charge-bar';
 export * from './experience-bar/experience-bar';
@@ -20,5 +21,6 @@ export * from './item-preview/item-variant-preview';
 export * from './loading-spinner/loading-spinner';
 export * from './number-value/number-value';
 export * from './panel-header/panel-header';
+export * from './runes-list/runes-list';
 export * from './separator/separator';
 export * from './tab-strip/tab-strip';

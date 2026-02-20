@@ -1,0 +1,54 @@
+<div class="container">
+  <div class="panel-header">
+    <div class="title">
+      <h3>RUNE SOCKETING</h3>
+    </div>
+    <div class="actions">
+      <div class="action-info">
+        <span>Socket Rune</span>
+        <app-gold [amount]="RuneSocketCost()" [size]="'md'" [fontSize]="'1rem'"></app-gold>
+      </div>
+      <div class="action-info">
+        <span>Unsocket Rune</span>
+        <app-gold [amount]="RuneUnsocketCost()" [size]="'md'" [fontSize]="'1rem'"></app-gold>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel-body">
+    <!-- AMULET PREVIEW -->
+    <div class="amulet_display">
+      <app-amulet-preview
+        [Amulet]="Amulet()"
+        [UnsockableRuneSlots]="UnsockableRuneSlots()"
+        (OnUnsocket)="UnsocketRune($event)"></app-amulet-preview>
+      @if (ShowUpgradeAmuletButton()) {
+        <div class="amulet_upgrade">
+          <button
+            class="ih-button-tertiary"
+            [disabled]="!CanUpgradeAmulet()"
+            (click)="UpgradeAmulet()">
+            @if (Unlocked()) {
+              UPGRADE AMULET
+            } @else {
+              UNLOCK AMULET
+            }
+          </button>
+          <div class="amulet_upgrade_cost">
+            @if (Unlocked()) {
+              <h3>UPGRADE COST</h3>
+            } @else {
+              <h3>UNLOCK COST</h3>
+            }
+            <app-gold [amount]="AmuletUpgradeCost()"></app-gold>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- LIST OF RUNES -->
+    <div class="runes_list">
+      <app-runes-list [RuneSlotsInfo]="RuneSlotsInfo()"></app-runes-list>
+    </div>
+  </div>
+</div>

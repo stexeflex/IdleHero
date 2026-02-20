@@ -1,4 +1,5 @@
 export * from './attributes.service';
+export * from './amulet.service';
 export * from './combat-log.service';
 export * from './combat-stats.service';
 export * from './crafting.service';
@@ -12,4 +13,5 @@ export * from './item-management.service';
 export * from './level.service';
 export * from './player-hero.service';
 export * from './respec.service';
+export * from './rune.service';
 export * from './statistics.service';

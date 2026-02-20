@@ -1,11 +1,119 @@
+import { DecimalPipe, PercentPipe } from '@angular/common';
+import {
+  LabelToString,
+  Rune,
+  RuneDefinition,
+  RuneInfo,
+  RuneQuality,
+  RuneQualitySpec,
+  RuneSlotInfo
+} from '../../models';
 import { RUNE_DEFINITIONS, RUNE_QUALITY_ORDER } from '../../constants';
-import { Rune, RuneDefinition, RuneQuality, RuneQualitySpec } from '../../models';
 
 import { ComputeRolledValue } from './stat-value.utils';
 
 export function QualityIndex(quality: RuneQuality): number {
   const idx = RUNE_QUALITY_ORDER.indexOf(quality);
   return idx >= 0 ? idx : 0;
+}
+
+export function GetRuneInfo(rune: Rune, locale: string): RuneInfo {
+  const decimalPipe = new DecimalPipe(locale);
+  const percentPipe = new PercentPipe(locale);
+
+  const definition: RuneDefinition = GetRuneDefinition(rune.DefinitionId);
+  const qualitySpec: RuneQualitySpec = GetRuneQualitySpec(definition, rune.Quality);
+  const minMax: { min: number; max: number } = GetRuneMinMaxRoll(qualitySpec);
+  const rolledValue = ComputeRolledValue(
+    minMax.min,
+    minMax.max,
+    rune.ValueRangePercentage,
+    qualitySpec.Value.Type
+  );
+  const label: string = LabelToString(definition.Effect.ToLabel(rolledValue), decimalPipe);
+
+  let minRollLabel: string = minMax.min.toString();
+  let maxRollLabel: string = minMax.max.toString();
+
+  switch (qualitySpec.Value.Type) {
+    case 'Flat':
+      minRollLabel = decimalPipe.transform(minMax.min, '1.0-0')!;
+      maxRollLabel = decimalPipe.transform(minMax.max, '1.0-0')!;
+      break;
+
+    case 'Percent':
+      minRollLabel = percentPipe.transform(minMax.min, '1.0-0')!;
+      maxRollLabel = percentPipe.transform(minMax.max, '1.0-0')!;
+      break;
+  }
+
+  return {
+    Quality: rune.Quality,
+    Label: label,
+    Value: rolledValue,
+    MinRoll: minRollLabel,
+    MaxRoll: maxRollLabel
+  };
+}
+
+export function GetRuneSlotInfo(
+  definitionId: string,
+  rune: Rune | null,
+  locale: string
+): RuneSlotInfo {
+  const definition: RuneDefinition = GetRuneDefinition(definitionId);
+
+  if (rune === null) {
+    return {
+      DefinitionId: definitionId,
+      DefinitionName: definition.Name,
+      IsEmpty: true,
+      Quality: null,
+      Label: null,
+      Value: null,
+      MinRoll: null,
+      MaxRoll: null
+    };
+  } else {
+    const decimalPipe = new DecimalPipe(locale);
+    const percentPipe = new PercentPipe(locale);
+
+    const qualitySpec: RuneQualitySpec = GetRuneQualitySpec(definition, rune.Quality);
+    const minMax: { min: number; max: number } = GetRuneMinMaxRoll(qualitySpec);
+    const rolledValue = ComputeRolledValue(
+      minMax.min,
+      minMax.max,
+      rune.ValueRangePercentage,
+      qualitySpec.Value.Type
+    );
+    const label: string = LabelToString(definition.Effect.ToLabel(rolledValue), decimalPipe);
+
+    let minRollLabel: string = minMax.min.toString();
+    let maxRollLabel: string = minMax.max.toString();
+
+    switch (qualitySpec.Value.Type) {
+      case 'Flat':
+        minRollLabel = decimalPipe.transform(minMax.min, '1.0-0')!;
+        maxRollLabel = decimalPipe.transform(minMax.max, '1.0-0')!;
+        break;
+
+      case 'Percent':
+        minRollLabel = percentPipe.transform(minMax.min, '1.0-0')!;
+        maxRollLabel = percentPipe.transform(minMax.max, '1.0-0')!;
+        break;
+    }
+
+    return {
+      DefinitionId: definitionId,
+      DefinitionName: definition.Name,
+      IsEmpty: false,
+      Quality: rune.Quality,
+      Label: label,
+      Value: rolledValue,
+      MinRoll: minRollLabel,
+      MaxRoll: maxRollLabel
+    };
+  }
 }
 
 export function GetRuneValue(rune: Rune): number {
@@ -19,6 +127,10 @@ export function GetRuneValue(rune: Rune): number {
     qualitySpec.Value.Type
   );
   return rolledValue;
+}
+
+export function GetRuneDefinitions(): RuneDefinition[] {
+  return RUNE_DEFINITIONS;
 }
 
 export function GetRuneDefinition(definitionId: string): RuneDefinition {
