@@ -23,7 +23,8 @@ import { Separator } from '../separator/separator';
 export class AmuletPreview implements OnDestroy {
   private readonly locale = inject(LOCALE_ID);
   public readonly Amulet = input.required<AmuletState>();
-  public readonly UnsockableRuneSlots = input.required<number[]>();
+  public readonly AllowUnsocketRunes = input<boolean>(true);
+  public readonly UnsockableRuneSlots = input<number[]>([]);
   public readonly OnUnsocket = output<number>();
 
   ngOnDestroy(): void {
@@ -59,6 +60,7 @@ export class AmuletPreview implements OnDestroy {
   protected readonly SelectedIndex = signal<number | null>(null);
 
   protected SelectSlot(index: number): void {
+    if (!this.AllowUnsocketRunes()) return;
     if (this.SlotIsEmpty(index)) return;
     this.SelectedIndex.set(index);
 

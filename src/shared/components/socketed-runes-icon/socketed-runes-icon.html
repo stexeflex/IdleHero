@@ -1,0 +1,15 @@
+<div class="runes">
+  @for (rune of runes(); track $index) {
+    @let runeInfo = GetRuneInfo($index);
+    <div
+      class="rune"
+      [class.empty]="runeInfo.IsEmpty"
+      [class.common--font]="runeInfo.IsCommon"
+      [class.magic--font]="runeInfo.IsMagic"
+      [class.rare--font]="runeInfo.IsRare"
+      [class.epic--font]="runeInfo.IsEpic"
+      [class.legendary--font]="runeInfo.IsLegendary">
+      <app-icon symbol="runestone" size="mini"></app-icon>
+    </div>
+  }
+</div>
