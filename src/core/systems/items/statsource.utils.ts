@@ -1,14 +1,16 @@
-import { AFFIX_DEFINITIONS, ITEM_VARIANTS, RUNE_DEFINITIONS, STATS_CONFIG } from '../../constants';
 import {
   AffixDefinition,
   EmptyStatSource,
   Item,
   ItemVariantDefinition,
+  Rune,
   RuneDefinition,
   StatSource
 } from '../../models';
+import { GetAffixDefinition, GetAffixValue } from './affix.utils';
+import { ITEM_VARIANTS, STATS_CONFIG } from '../../constants';
 
-import { GetAffixValue } from './affix.utils';
+import { GetRuneDefinition } from './rune.utils';
 
 export function MapItemToStatSources(item: Item): StatSource[] {
   const statSources: StatSource[] = [];
@@ -46,9 +48,7 @@ export function MapItemToStatSources(item: Item): StatSource[] {
 
   // Map affix stats
   for (const affix of item.Affixes) {
-    const affixDefinition: AffixDefinition | undefined = AFFIX_DEFINITIONS.find(
-      (a) => a.Id === affix.DefinitionId
-    );
+    const affixDefinition: AffixDefinition | undefined = GetAffixDefinition(affix.DefinitionId);
 
     if (!affixDefinition) {
       continue;
@@ -61,17 +61,21 @@ export function MapItemToStatSources(item: Item): StatSource[] {
     statSources.push(affixStatSource);
   }
 
-  // Map rune stats
-  if (item.Rune) {
-    const runeDefinition: RuneDefinition | undefined = RUNE_DEFINITIONS.find(
-      (r) => r.Id === item.Rune!.DefinitionId
-    );
+  return statSources;
+}
+
+export function MapRunesToStatSources(runes: Rune[]): StatSource[] {
+  const statSources: StatSource[] = [];
+
+  for (const rune of runes) {
+    const runeDefinition: RuneDefinition | undefined = GetRuneDefinition(rune.DefinitionId);
 
     if (runeDefinition) {
       const runeStatSource: StatSource = runeDefinition.Effect.MapToStatSource(
-        item.Id,
-        item.Rune.RolledValue
+        rune.Id,
+        rune.ValueRangePercentage
       );
+
       statSources.push(runeStatSource);
     }
   }

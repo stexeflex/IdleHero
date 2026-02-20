@@ -12,17 +12,7 @@ import {
 import { DecimalPipe, PercentPipe } from '@angular/common';
 import { GetItemRarity, GetMaxAffixTier } from './item.utils';
 
-import { ClampUtils } from '../../../shared/utils';
-
-function ComputeRolledValue(
-  min: number,
-  max: number,
-  percentage: number,
-  type: 'Flat' | 'Percent'
-): number {
-  const result = min + (max - min) * ClampUtils.clamp(percentage, 0, 1);
-  return type === 'Flat' ? Math.round(result) : result;
-}
+import { ComputeRolledValue } from './stat-value.utils';
 
 export function GetAffixInfo(affix: Affix, locale: string): AffixInfo {
   const decimalPipe = new DecimalPipe(locale);
@@ -30,7 +20,7 @@ export function GetAffixInfo(affix: Affix, locale: string): AffixInfo {
 
   const definition: AffixDefinition = GetAffixDefinition(affix.DefinitionId);
   const affixTierSpec: AffixTierSpec = GetAffixTierSpec(definition, affix.Tier);
-  const minMax: { min: number; max: number } = GetMinMaxRoll(affixTierSpec);
+  const minMax: { min: number; max: number } = GetAffixMinMaxRoll(affixTierSpec);
   const rolledValue = ComputeRolledValue(
     minMax.min,
     minMax.max,
@@ -67,7 +57,7 @@ export function GetAffixInfo(affix: Affix, locale: string): AffixInfo {
 export function GetAffixValue(affix: Affix): number {
   const definition: AffixDefinition = GetAffixDefinition(affix.DefinitionId);
   const affixTierSpec: AffixTierSpec = GetAffixTierSpec(definition, affix.Tier);
-  const minMax: { min: number; max: number } = GetMinMaxRoll(affixTierSpec);
+  const minMax: { min: number; max: number } = GetAffixMinMaxRoll(affixTierSpec);
   const rolledValue = ComputeRolledValue(
     minMax.min,
     minMax.max,
@@ -85,7 +75,7 @@ export function GetAffixTierSpec(definition: AffixDefinition, tier: AffixTier): 
   return definition.Tiers.find((t) => t.Tier === tier)!;
 }
 
-export function GetMinMaxRoll(affixTierSpec: AffixTierSpec): { min: number; max: number } {
+export function GetAffixMinMaxRoll(affixTierSpec: AffixTierSpec): { min: number; max: number } {
   return { min: affixTierSpec.Value.Min, max: affixTierSpec.Value.Max };
 }
 

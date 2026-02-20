@@ -136,39 +136,39 @@ export class CraftingService {
    * @param provider Optional cost provider.
    * @returns Operation result with success flag and updated item.
    */
-  public SocketRune(
-    item: Item,
-    definition: RuneDefinition,
-    quality: RuneQuality,
-    provider?: CraftingCostProvider
-  ): OperationResult {
-    const rarity = GetItemRarity(item.Level);
-    const rules: RarityRules = GetItemRarityRule(rarity);
+  // public SocketRune(
+  //   item: Item,
+  //   definition: RuneDefinition,
+  //   quality: RuneQuality,
+  //   provider?: CraftingCostProvider
+  // ): OperationResult {
+  //   const rarity = GetItemRarity(item.Level);
+  //   const rules: RarityRules = GetItemRarityRule(rarity);
 
-    if (!definition.AllowedSlots.includes(item.Slot)) return { Success: false, Item: item };
-    if (!rules.AllowedRuneQualities.includes(quality)) return { Success: false, Item: item };
+  //   if (!definition.AllowedSlots.includes(item.Slot)) return { Success: false, Item: item };
+  //   if (!rules.AllowedRuneQualities.includes(quality)) return { Success: false, Item: item };
 
-    const cost = provider?.GetSocketRuneCost(item, definition, quality) ?? 0;
-    if (provider && !provider.CanAfford(cost)) return { Success: false, Item: item };
+  //   const cost = provider?.GetSocketRuneCost(item, definition, quality) ?? 0;
+  //   if (provider && !provider.CanAfford(cost)) return { Success: false, Item: item };
 
-    const spec = definition.Qualities.find((q) => q.Quality === quality);
-    if (!spec) return { Success: false, Item: item };
+  //   const spec = definition.Qualities.find((q) => q.Quality === quality);
+  //   if (!spec) return { Success: false, Item: item };
 
-    const rolled = RandomInRange(spec.Value.Min, spec.Value.Max, spec.Value.Type);
+  //   const rolled = RandomInRange(spec.Value.Min, spec.Value.Max, spec.Value.Type);
 
-    const newRune: Rune = {
-      Id: `rune_${Date.now()}_${Math.random().toString(36).slice(2)}`,
-      DefinitionId: definition.Id,
-      Quality: quality,
-      RolledValue: rolled
-    };
+  //   const newRune: Rune = {
+  //     Id: `rune_${Date.now()}_${Math.random().toString(36).slice(2)}`,
+  //     DefinitionId: definition.Id,
+  //     Quality: quality,
+  //     RolledValue: rolled
+  //   };
 
-    const next: Item = { ...item, Rune: newRune };
+  //   const next: Item = { ...item, Rune: newRune };
 
-    if (provider) provider.Charge(cost);
+  //   if (provider) provider.Charge(cost);
 
-    return { Success: true, Item: next, Cost: cost };
-  }
+  //   return { Success: true, Item: next, Cost: cost };
+  // }
 
   /**
    * Unsockets the rune from the item (clears rune).
@@ -176,15 +176,15 @@ export class CraftingService {
    * @param provider Optional cost provider.
    * @returns Operation result with success flag and updated item.
    */
-  public UnsocketRune(item: Item, provider?: CraftingCostProvider): OperationResult {
-    const cost = provider?.GetUnsocketRuneCost(item) ?? 0;
+  // public UnsocketRune(item: Item, provider?: CraftingCostProvider): OperationResult {
+  //   const cost = provider?.GetUnsocketRuneCost(item) ?? 0;
 
-    if (provider && !provider.CanAfford(cost)) return { Success: false, Item: item };
+  //   if (provider && !provider.CanAfford(cost)) return { Success: false, Item: item };
 
-    const next: Item = { ...item, Rune: null };
+  //   const next: Item = { ...item, Rune: null };
 
-    if (provider) provider.Charge(cost);
+  //   if (provider) provider.Charge(cost);
 
-    return { Success: true, Item: next, Cost: cost };
-  }
+  //   return { Success: true, Item: next, Cost: cost };
+  // }
 }

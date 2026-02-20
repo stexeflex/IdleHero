@@ -80,8 +80,7 @@ export function CreateItem(variant: ItemVariantDefinition): Item {
     Type: variant.Type,
     Tier: variant.Tier,
     Level: MinLevelForTier(variant.Tier),
-    Affixes: [],
-    Rune: null
+    Affixes: []
   };
   return item;
 }
