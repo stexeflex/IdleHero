@@ -10,7 +10,7 @@ import {
 } from '../../models';
 import { RUNE_DEFINITIONS, RUNE_QUALITY_ORDER } from '../../constants';
 
-import { ComputeRolledValue } from './stat-value.utils';
+import { ComputeRolledValue } from '../stats/stat-value.utils';
 
 export function QualityIndex(quality: RuneQuality): number {
   const idx = RUNE_QUALITY_ORDER.indexOf(quality);

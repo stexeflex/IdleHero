@@ -1,8 +1,9 @@
 import {
   AmuletState,
   Attributes,
-  CreateLockedAmuletState,
   CreateEmptyLoadout,
+  CreateEmptyRuneInventoryState,
+  CreateLockedAmuletState,
   DamageStatistics,
   DungeonKeysState,
   DungeonStatistics,
@@ -16,13 +17,12 @@ import {
   InitialLevelState,
   InventoryState,
   RuneInventoryState,
-  CreateEmptyRuneInventoryState,
   ZeroAttributes
 } from '../../core/models';
 
 import { ATTRIBUTES_CONFIG } from '../../core/constants';
-import { RUNE_DEFINITIONS } from '../../core/constants/items/runes.config';
 import { CharactersIconName } from '../../shared/components';
+import { RUNE_DEFINITIONS } from '../../core/constants/runes/runes.config';
 
 export interface Schema {
   Player: {

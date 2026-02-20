@@ -4,7 +4,7 @@ import {
   Rune,
   RuneInventoryState
 } from '../models';
-import { GetRuneDefinitions, GetRuneValue, QualityIndex } from '../systems/items';
+import { GetRuneDefinitions, GetRuneValue, QualityIndex } from '../systems/runes';
 import { Injectable, computed, signal } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })

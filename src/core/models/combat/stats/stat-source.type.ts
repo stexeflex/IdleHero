@@ -20,8 +20,6 @@ export type StatSource = {
   MultiHit: MultiHitStatSource;
 
   Accuracy: AccuracyStatSource;
-  ArmorPenetration: ArmorPenetrationStatSource;
-  ResistancePenetration: ResistancePenetrationStatSource;
 
   ChargingStrike: ChargingStrikeStatSource;
 };
@@ -38,26 +36,21 @@ export type ArmorStatSource = {
 
 export type StrengthStatSource = {
   Flat: number;
-  Multiplier: number;
 };
 
 export type IntelligenceStatSource = {
   Flat: number;
-  Multiplier: number;
 };
 
 export type DexterityStatSource = {
   Flat: number;
-  Multiplier: number;
 };
 
 export type DamageStatSource = {
   Flat: number;
-  Multiplier: number;
 };
 
 export type AttackSpeedStatSource = {
-  Flat: number;
   Multiplier: number;
 };
 
@@ -85,17 +78,6 @@ export type MultiHitStatSource = {
 };
 
 export type AccuracyStatSource = {
-  Flat: number;
-  Multiplier: number;
-};
-
-export type ArmorPenetrationStatSource = {
-  Flat: number;
-  Multiplier: number;
-};
-
-export type ResistancePenetrationStatSource = {
-  Flat: number;
   Multiplier: number;
 };
 
@@ -108,11 +90,11 @@ export type ChargingStrikeStatSource = {
 export function EmptyStatSource(id: string): StatSource {
   return {
     Id: id,
-    Strength: { Flat: 0, Multiplier: 0 },
-    Intelligence: { Flat: 0, Multiplier: 0 },
-    Dexterity: { Flat: 0, Multiplier: 0 },
-    Damage: { Flat: 0, Multiplier: 0 },
-    AttackSpeed: { Flat: 0, Multiplier: 0 },
+    Strength: { Flat: 0 },
+    Intelligence: { Flat: 0 },
+    Dexterity: { Flat: 0 },
+    Damage: { Flat: 0 },
+    AttackSpeed: { Multiplier: 0 },
     Bleeding: {
       Chance: 0,
       FlatDamage: 0,
@@ -129,9 +111,7 @@ export function EmptyStatSource(id: string): StatSource {
       FlatDamage: 0,
       MultiplierDamage: 0
     },
-    Accuracy: { Flat: 0, Multiplier: 0 },
-    ArmorPenetration: { Flat: 0, Multiplier: 0 },
-    ResistancePenetration: { Flat: 0, Multiplier: 0 },
+    Accuracy: { Multiplier: 0 },
     ChargingStrike: { ChargeGain: 0, ChargeDamage: 0, ChargeDuration: 0 }
   };
 }

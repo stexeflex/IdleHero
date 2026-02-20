@@ -2,7 +2,7 @@ import { CreateEmptyLoadout, GearLoadout } from '../models/items/gear-loadout';
 import { Injectable, computed, signal } from '@angular/core';
 import { Item, ItemSlot, StatSource } from '../models';
 
-import { MapItemToStatSources } from '../systems/items/statsource.utils';
+import { MapItemToStatSources } from '../systems/stats/statsource.utils';
 
 @Injectable({ providedIn: 'root' })
 export class GearLoadoutService {

@@ -12,5 +12,3 @@ export * from './engine/models/damage-result';
 export * from './engine/models/event';
 export * from './engine/models/timestamp';
 export * from './life.utils';
-export * from './stat-computing';
-export * from './stat-scalings';

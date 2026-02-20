@@ -3,13 +3,15 @@ import {
   AmuletState,
   CreateLockedAmuletState,
   CreateUnlockedAmuletState,
-  Rune
+  Rune,
+  StatSource
 } from '../models';
-import { GetNextQuality, GetSlotAmountForQuality, QualityIndex } from '../systems/items';
+import { GetNextQuality, GetSlotAmountForQuality, QualityIndex } from '../systems/runes';
 import { Injectable, computed, inject, signal } from '@angular/core';
 
 import { GoldService } from './gold.service';
-import { RUNES_COST_CONFIG } from '../constants/items/runes-cost.config';
+import { MapRuneToStatSources } from '../systems/stats';
+import { RUNES_COST_CONFIG } from '../constants/runes/runes-cost.config';
 
 @Injectable({ providedIn: 'root' })
 export class AmuletService {
@@ -49,6 +51,13 @@ export class AmuletService {
     const slotAmount = GetSlotAmountForQuality(state.Quality);
     this.State.set(CreateUnlockedAmuletState(state.Quality, slotAmount, state.Slots));
   }
+
+  /**
+   * The stat sources provided by socketed runes.
+   */
+  public readonly StatSources = computed<StatSource[]>(() => {
+    return this.SocketedRunes().flatMap((rune) => MapRuneToStatSources(rune));
+  });
 
   /**
    * Gets the gold cost for unlocking the amulet.

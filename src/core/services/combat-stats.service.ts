@@ -1,7 +1,8 @@
-import { Attributes, ComputedHeroStats, HeroStats, InitialHeroStats } from '../models';
-import { ComputeAttributes, ComputeStats } from '../systems/combat';
+import { Attributes, ComputedHeroStats, HeroStats, InitialHeroStats, StatSource } from '../models';
+import { ComputeAttributes, ComputeStats } from '../systems/stats';
 import { Injectable, computed, inject, signal } from '@angular/core';
 
+import { AmuletService } from './amulet.service';
 import { AttributesService } from './attributes.service';
 import { GearLoadoutService } from './gear-loadout.service';
 
@@ -9,6 +10,7 @@ import { GearLoadoutService } from './gear-loadout.service';
 export class CombatStatsService {
   private readonly AttributesService = inject<AttributesService>(AttributesService);
   private readonly GearLoadout = inject<GearLoadoutService>(GearLoadoutService);
+  private readonly AmuletRunes = inject<AmuletService>(AmuletService);
 
   private readonly BaseStats = signal<HeroStats>(InitialHeroStats());
 
@@ -17,7 +19,10 @@ export class CombatStatsService {
    */
   public readonly EffectiveAttributes = computed<Attributes>(() => {
     const attributes = this.AttributesService.Effective();
-    const statSources = this.GearLoadout.StatSources();
+    const itemSources = this.GearLoadout.StatSources();
+    const amuletRunes = this.AmuletRunes.StatSources();
+
+    const statSources: StatSource[] = [...itemSources, ...amuletRunes];
 
     // Compute effective attributes
     return ComputeAttributes(attributes, statSources);
@@ -29,7 +34,10 @@ export class CombatStatsService {
   public readonly Effective = computed<ComputedHeroStats>(() => {
     const baseStats = this.BaseStats();
     const attributes = this.EffectiveAttributes();
-    const statSources = this.GearLoadout.StatSources();
+    const itemSources = this.GearLoadout.StatSources();
+    const amuletRunes = this.AmuletRunes.StatSources();
+
+    const statSources: StatSource[] = [...itemSources, ...amuletRunes];
 
     // Compute effective combat stats
     return ComputeStats(attributes, baseStats, statSources);

@@ -11,10 +11,11 @@ import {
   RuneDefinition,
   RuneQuality
 } from '../models';
-import { GetItemRarity, MinLevelForTier, QualityIndex, TierIndex } from '../systems/items';
+import { GetItemRarity, MinLevelForTier, TierIndex } from '../systems/items';
 import { Injectable, inject } from '@angular/core';
 
 import { GoldService } from './gold.service';
+import { QualityIndex } from '../systems/runes';
 
 @Injectable({ providedIn: 'root' })
 export class GoldCostProvider implements CraftingCostProvider {

@@ -20,18 +20,15 @@ export function ComputeAttributes(attributes: Attributes, statSources: StatSourc
   const baseIntelligence = attributes.Intelligence - ATTRIBUTES_CONFIG.BASE.INTELLIGENCE;
   const baseDexterity = attributes.Dexterity - ATTRIBUTES_CONFIG.BASE.DEXTERITY;
 
-  // Effektive Attribute: (base + sum(flat)) * product(1 + multiplier)
-  const addStr = sources.reduce((sum, s) => Flat(sum, s.Strength.Flat), 0);
-  const multiplyStr = sources.reduce((prod, s) => Multiplier(prod, s.Strength.Multiplier), 1);
-  const effectiveStr = Effective(baseStrength, addStr, multiplyStr);
+  // Effektive Attribute
+  const addStr = sources.reduce((sum, s) => Sum(sum, s.Strength.Flat), 0);
+  const effectiveStr = Math.max(0, baseStrength + addStr);
 
-  const addInt = sources.reduce((sum, s) => Flat(sum, s.Intelligence.Flat), 0);
-  const multiplyInt = sources.reduce((prod, s) => Multiplier(prod, s.Intelligence.Multiplier), 1);
-  const effectiveInt = Effective(baseIntelligence, addInt, multiplyInt);
+  const addInt = sources.reduce((sum, s) => Sum(sum, s.Intelligence.Flat), 0);
+  const effectiveInt = Math.max(0, baseIntelligence + addInt);
 
-  const addDex = sources.reduce((sum, s) => Flat(sum, s.Dexterity.Flat), 0);
-  const multiplyDex = sources.reduce((prod, s) => Multiplier(prod, s.Dexterity.Multiplier), 1);
-  const effectiveDex = Effective(baseDexterity, addDex, multiplyDex);
+  const addDex = sources.reduce((sum, s) => Sum(sum, s.Dexterity.Flat), 0);
+  const effectiveDex = Math.max(0, baseDexterity + addDex);
 
   return { Strength: effectiveStr, Intelligence: effectiveInt, Dexterity: effectiveDex };
 }
@@ -44,8 +41,8 @@ export function ComputeStats(
   const sources: StatSource[] = statSources ?? [];
 
   // Damage & Attack Speed
-  const damage = ComputeDamage(sources, baseStats.Damage);
-  const attackSpeed = ComputeAttackSpeed(sources, baseStats.AttackSpeed);
+  const damage = ComputeDamage(sources);
+  const attackSpeed = ComputeAttackSpeed(sources);
 
   // Bleeding Chance & Damage
   const { BleedingChance: bleedingChance, BleedingDamage: bleedingDamage } = ComputeBleeding(
@@ -67,24 +64,16 @@ export function ComputeStats(
   } = ComputeMultiHit(sources, attributes.Dexterity);
 
   // Accuracy
-  const accuracy = ComputeAccuracy(sources, baseStats.Accuracy);
-
-  // Penetrations
-  const armorPenetration = ComputeArmorPenetration(sources, baseStats.ArmorPenetration);
-  const resistancePenetration = ComputeResistancePenetration(
-    sources,
-    baseStats.ResistancePenetration
-  );
+  const accuracy = ComputeAccuracy(sources);
 
   // Charging Strike
   const chargeGain =
-    baseStats.ChargeGain + sources.reduce((sum, s) => Flat(sum, s.ChargingStrike.ChargeGain), 0);
+    baseStats.ChargeGain + sources.reduce((sum, s) => Sum(sum, s.ChargingStrike.ChargeGain), 0);
   const chargeDamage =
-    baseStats.ChargeDamage +
-    sources.reduce((sum, s) => Flat(sum, s.ChargingStrike.ChargeDamage), 0);
+    baseStats.ChargeDamage + sources.reduce((sum, s) => Sum(sum, s.ChargingStrike.ChargeDamage), 0);
   const chargeDuration =
     baseStats.ChargeDuration +
-    sources.reduce((sum, s) => Flat(sum, s.ChargingStrike.ChargeDuration), 0);
+    sources.reduce((sum, s) => Sum(sum, s.ChargingStrike.ChargeDuration), 0);
 
   const stats: ComputedHeroStats = {
     AttackSpeed: attackSpeed,
@@ -97,8 +86,6 @@ export function ComputeStats(
     MultiHitDamage: multiHitDamage,
     MultiHitChainFactor: multiHitChainFactor,
     Accuracy: accuracy,
-    ArmorPenetration: armorPenetration,
-    ResistancePenetration: resistancePenetration,
     ChargeGain: chargeGain,
     ChargeDamage: chargeDamage,
     ChargeDuration: chargeDuration
@@ -109,20 +96,20 @@ export function ComputeStats(
 }
 
 //#region Computing Functions
-function ComputeDamage(sources: StatSource[], baseDamage: number): number {
-  const addDmg = sources.reduce((sum, s) => Flat(sum, s.Damage.Flat), 0);
-  const multiplyDmg = sources.reduce((prod, s) => Multiplier(prod, s.Damage.Multiplier), 1);
-  const effectiveDamage = Math.round(Effective(baseDamage ?? 0, addDmg, multiplyDmg, 1));
+function ComputeDamage(sources: StatSource[]): number {
+  const addDmg = sources.reduce((sum, s) => Sum(sum, s.Damage.Flat), 0);
+  const effectiveDamage = ClampUtils.clamp(
+    addDmg,
+    STATS_CONFIG.BASE.DAMAGE,
+    Number.POSITIVE_INFINITY
+  );
 
   return effectiveDamage;
 }
 
-function ComputeAttackSpeed(sources: StatSource[], baseSpeed: number): number {
-  const baseAPS = baseSpeed ?? STATS_CONFIG.BASE.ATTACK_SPEED;
-  const addAPS = sources.reduce((sum, s) => Flat(sum, s.AttackSpeed.Flat), 0);
-  const multiplyAPS = sources.reduce((prod, s) => Multiplier(prod, s.AttackSpeed.Multiplier), 1);
-
-  const effectiveAttackSpeed = Effective(baseAPS, addAPS, multiplyAPS, 0.1);
+function ComputeAttackSpeed(sources: StatSource[]): number {
+  const addIAS = sources.reduce((prod, s) => Sum(prod, s.AttackSpeed.Multiplier), 1);
+  const effectiveAttackSpeed = ClampUtils.clamp(addIAS, 0, STATS_CONFIG.CAPS.MAX_ATTACK_SPEED);
   return effectiveAttackSpeed;
 }
 
@@ -134,7 +121,7 @@ function ComputeBleeding(
   const baseBleedChance = STATS_CONFIG.BASE.BLEEDING_CHANCE;
   const maxBleedChance = STATS_CONFIG.CAPS.MAX_BLEEDING_CHANCE;
   const strBleedChance = MapStrengthToBleedChance(strength);
-  const addBleedChance = sources.reduce((sum, s) => Flat(sum, s.Bleeding.Chance), 0);
+  const addBleedChance = sources.reduce((sum, s) => Sum(sum, s.Bleeding.Chance), 0);
   const bleedChance = ClampUtils.clamp(
     baseBleedChance + strBleedChance + addBleedChance,
     baseBleedChance,
@@ -164,7 +151,7 @@ function ComputeCriticalHit(
   const baseCritChance = STATS_CONFIG.BASE.CRIT_CHANCE;
   const maxCritChance = STATS_CONFIG.CAPS.MAX_CRIT_CHANCE;
   const intelligenceCritChance = MapIntelligenceToCritChance(intelligence);
-  const addCritChance = sources.reduce((sum, s) => Flat(sum, s.CriticalHit.Chance), 0);
+  const addCritChance = sources.reduce((sum, s) => Sum(sum, s.CriticalHit.Chance), 0);
   const critChance = ClampUtils.clamp(
     baseCritChance + intelligenceCritChance + addCritChance,
     baseCritChance,
@@ -197,7 +184,7 @@ function ComputeMultiHit(
   const baseMultiHitChance = STATS_CONFIG.BASE.MULTI_HIT_CHANCE;
   const maxMultiHitChance = STATS_CONFIG.CAPS.MAX_MULTI_HIT_CHANCE;
   const dexMultiHitChance = MapDexterityToMultiHitChance(dexterity);
-  const addMulti = sources.reduce((sum, s) => Flat(sum, s.MultiHit.Chance), 0);
+  const addMulti = sources.reduce((sum, s) => Sum(sum, s.MultiHit.Chance), 0);
   const multiHitChance = ClampUtils.clamp(
     baseMultiHitChance + dexMultiHitChance + addMulti,
     baseMultiHitChance,
@@ -237,54 +224,17 @@ function ComputeMultiHit(
   };
 }
 
-function ComputeAccuracy(sources: StatSource[], baseAccuracy: number): number {
-  const baseAcc = baseAccuracy ?? STATS_CONFIG.BASE.ACCURACY;
-  const addAcc = sources.reduce((sum, s) => Flat(sum, s.Accuracy.Flat), 0);
-  const mulAcc = sources.reduce((prod, s) => Multiplier(prod, s.Accuracy.Multiplier), 1);
-  const accuracy = ClampUtils.clamp01((baseAcc + addAcc) * mulAcc);
-
+function ComputeAccuracy(sources: StatSource[]): number {
+  const minAcc = STATS_CONFIG.BASE.ACCURACY;
+  const maxAcc = STATS_CONFIG.CAPS.MAX_ACCURACY;
+  const addedAcc = sources.reduce((prod, s) => Sum(prod, s.Accuracy.Multiplier), 0);
+  const accuracy = ClampUtils.clamp(minAcc + addedAcc, minAcc, maxAcc);
   return accuracy;
-}
-
-function ComputeArmorPenetration(sources: StatSource[], baseArmorPenetration: number): number {
-  const baseAcc = baseArmorPenetration ?? STATS_CONFIG.BASE.ARMOR_PENETRATION;
-  const addAcc = sources.reduce((sum, s) => Flat(sum, s.ArmorPenetration.Flat), 0);
-  const mulAcc = sources.reduce((prod, s) => Multiplier(prod, s.ArmorPenetration.Multiplier), 1);
-  const armorPenetration = ClampUtils.clamp01((baseAcc + addAcc) * mulAcc);
-
-  return armorPenetration;
-}
-
-function ComputeResistancePenetration(
-  sources: StatSource[],
-  baseResistancePenetration: number
-): number {
-  const baseAcc = baseResistancePenetration ?? STATS_CONFIG.BASE.RESISTANCE_PENETRATION;
-  const addAcc = sources.reduce((sum, s) => Flat(sum, s.ResistancePenetration.Flat), 0);
-  const mulAcc = sources.reduce(
-    (prod, s) => Multiplier(prod, s.ResistancePenetration.Multiplier),
-    1
-  );
-  const resistancePenetration = ClampUtils.clamp01((baseAcc + addAcc) * mulAcc);
-
-  return resistancePenetration;
 }
 //#endregion
 
 //#region Helpers
-function Flat(currentFlat: number, additionalFlat: number): number {
-  return currentFlat + (additionalFlat ?? 0);
-}
-
 function Sum(currentSum: number, additionalValue: number): number {
   return currentSum + (additionalValue ?? 0);
-}
-
-function Multiplier(currentMultiplier: number, additionalMultiplier: number): number {
-  return currentMultiplier * (1 + (additionalMultiplier ?? 0));
-}
-
-function Effective(base: number, flat: number, multiplier: number, max: number = 0): number {
-  return Math.max(max, (base + flat) * multiplier);
 }
 //#endregion

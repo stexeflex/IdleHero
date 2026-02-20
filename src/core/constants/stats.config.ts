@@ -11,8 +11,6 @@ export const STATS_CONFIG = {
     MULTI_HIT_DAMAGE: 0.5, // 50% Base MHD
     MULTI_HIT_CHAIN_FACTOR: 0.4, // 40% Base Chain Factor
     ACCURACY: 0.7, // Basis-Accuracy
-    ARMOR_PENETRATION: 0.1, // 10% Basis Armor Penetration
-    RESISTANCE_PENETRATION: 0.1, // 10% Basis Magic Penetration
     CHARGE_GAIN: 1, // Basis Charge Gain
     CHARGE_DAMAGE: 1.5, // 150% Basis Charge Damage
     CHARGE_DURATION: 5, // Basis Charge Dauer in Sekunden
@@ -28,11 +26,13 @@ export const STATS_CONFIG = {
     DEX_TO_CHAIN_FACTOR: 0.2 // Maximal +20% MHCF durch DEX
   },
   CAPS: {
+    MAX_ACCURACY: 1.0, // Maximal 100% Accuracy
     MAX_BLEEDING_CHANCE: 1.0, // Maximal 100% BHC
     MAX_CRIT_CHANCE: 1.0, // Maximal 100% CHC
     MAX_MULTI_HIT_CHANCE: 1.0, // Maximal 100% MHC
     MAX_MULTI_HIT_CHAIN_FACTOR: 0.9, // Maximal 90% Chain Factor
-    MAX_CHAIN_HITS: 8 // Maximal 8 Hits in Multi-Hit Chain
+    MAX_CHAIN_HITS: 8, // Maximal 8 Hits in Multi-Hit Chain
+    MAX_ATTACK_SPEED: 2.5 // Maximal 250% Angriffsgeschwindigkeit
   },
   MAPPINGS: {
     // Attribute-Scaling (Attribute liegen effektiv bei 0..50)
