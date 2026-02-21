@@ -3,6 +3,8 @@ import {
   EmptyStatSource,
   Item,
   ItemVariantDefinition,
+  PassiveSkillDefinition,
+  Passives,
   Rune,
   RuneDefinition,
   Skill,
@@ -12,7 +14,11 @@ import {
 import { GetAffixDefinition, GetAffixValue } from '../items/affix.utils';
 import { GetRuneDefinition, GetRuneValue } from '../runes/rune.utils';
 import { ITEM_VARIANTS, STATS_CONFIG } from '../../constants';
-import { IsStatSkillDefinition, SkillDefinitionsById } from '../skills/skills.utils';
+import {
+  IsPassiveSkillDefinition,
+  IsStatSkillDefinition,
+  SkillDefinitionsById
+} from '../skills/skills.utils';
 
 export function MapItemToStatSources(item: Item): StatSource[] {
   const statSources: StatSource[] = [];
@@ -105,4 +111,11 @@ export function MapSkillToStatSources(skill: Skill): StatSource[] {
   }
 
   return statSources;
+}
+
+export function MapSkillToPassiveEffect(skill: Skill, passives: Passives): Partial<Passives> {
+  const definition = SkillDefinitionsById.get(skill.DefinitionId);
+  if (!definition || !IsPassiveSkillDefinition(definition)) return {};
+  const passiveDef = definition as PassiveSkillDefinition;
+  return passiveDef.MapToPassiveEffect(passives);
 }

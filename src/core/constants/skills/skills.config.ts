@@ -3,6 +3,7 @@ import {
   EmptyStatSource,
   FlatAdditiveLabel,
   PassiveSkillDefinition,
+  Passives,
   PercentageAdditiveLabel,
   StatSkillDefinition
 } from '../../models';
@@ -10,7 +11,7 @@ import {
 import { TimestampUtils } from '../../../shared/utils';
 
 const ATTACK_POWER_I_SKILL: StatSkillDefinition = {
-  Id: 'ATPI',
+  Id: 'ATP_I',
   Name: 'Vile Strike',
   Description: 'Increases the damage of your attacks.',
   Tier: 'I',
@@ -31,7 +32,7 @@ const ATTACK_POWER_I_SKILL: StatSkillDefinition = {
 };
 
 const ATTACK_POWER_II_SKILL: StatSkillDefinition = {
-  Id: 'ATPII',
+  Id: 'ATP_II',
   Name: 'Vile Strike+',
   Description: 'Increases the damage of your attacks even further.',
   Tier: 'II',
@@ -52,7 +53,7 @@ const ATTACK_POWER_II_SKILL: StatSkillDefinition = {
 };
 
 const ATTACK_POWER_III_SKILL: StatSkillDefinition = {
-  Id: 'ATPIII',
+  Id: 'ATP_III',
   Name: 'Vile Strike++',
   Description: 'Increases the damage of your attacks to the maximum level.',
   Tier: 'III',
@@ -74,7 +75,7 @@ const ATTACK_POWER_III_SKILL: StatSkillDefinition = {
 
 const ATTACK_SPEED_SKILL: StatSkillDefinition = {
   Id: 'IAS',
-  Name: 'Swift Strikes',
+  Name: 'Haste',
   Description: 'Increases the speed of your attacks.',
   Tier: 'I',
   Type: 'StatBoost',
@@ -117,7 +118,7 @@ const BLEEDING_TICKS_SKILL: StatSkillDefinition = {
 };
 
 const MULTI_HIT_CHAIN_SKILL: StatSkillDefinition = {
-  Id: 'MMHC',
+  Id: 'MAX_MH_CHAIN',
   Name: 'Chain Reaction',
   Description: 'Increases the maximum chain length of your multi hit attacks.',
   Tier: 'II',
@@ -142,7 +143,7 @@ const MULTI_HIT_CHAIN_SKILL: StatSkillDefinition = {
 
 const CHARGING_STRIKE_LOSS_SKILL: StatSkillDefinition = {
   Id: 'CSLS',
-  Name: 'Keep on Charging',
+  Name: 'Unyielding Charge',
   Description: 'Reduces the charge loss from missed attacks on your Charging Strike.',
   Tier: 'I',
   Type: 'StatBoost',
@@ -164,7 +165,7 @@ const CHARGING_STRIKE_LOSS_SKILL: StatSkillDefinition = {
 
 const CHARGING_STRIKE_DURATION_SKILL: StatSkillDefinition = {
   Id: 'CSD',
-  Name: 'Extended Charge',
+  Name: 'Enduring Charge',
   Description: 'Increases the duration of your Charging Strike.',
   Tier: 'III',
   Type: 'StatBoost',
@@ -195,5 +196,34 @@ export const STAT_SKILL_DEFINITIONS: StatSkillDefinition[] = [
   CHARGING_STRIKE_LOSS_SKILL,
   CHARGING_STRIKE_DURATION_SKILL
 ];
+
 export const ACTIVE_SKILL_DEFINITIONS: ActiveSkillDefinition[] = [];
-export const PASSIVE_SKILL_DEFINITIONS: PassiveSkillDefinition[] = [];
+
+const MULTI_HIT_CRIT_SKILL: PassiveSkillDefinition = {
+  Id: 'CRITICAL_MH',
+  Name: 'Deadly Flurry',
+  Description: 'Your multi hit attacks have a chance to critically strike on each hit.',
+  Tier: 'II',
+  Type: 'Passive',
+  MapToPassiveEffect: (passives: Passives) => {
+    passives.CriticalMultiHit = true;
+    return passives;
+  }
+};
+
+const SPLASH_DAMAGE_SKILL: PassiveSkillDefinition = {
+  Id: 'SPLASH_DAMAGE',
+  Name: 'Overflowing Splashes',
+  Description: 'Your damage overflow from attacks hits the next enemy.',
+  Tier: 'II',
+  Type: 'Passive',
+  MapToPassiveEffect: (passives: Passives) => {
+    passives.SplashDamage = true;
+    return passives;
+  }
+};
+
+export const PASSIVE_SKILL_DEFINITIONS: PassiveSkillDefinition[] = [
+  MULTI_HIT_CRIT_SKILL,
+  SPLASH_DAMAGE_SKILL
+];

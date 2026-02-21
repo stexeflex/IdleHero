@@ -1,4 +1,5 @@
 import { Label } from '../items/labels/label';
+import { Passives } from '../combat/actors/hero';
 import { SkillTier } from './skill-tier.type';
 import { SkillType } from './skill.type';
 import { StatSource } from '../combat/stats/stat-source.type';
@@ -30,7 +31,13 @@ export interface StatSkillDefinition extends SkillDefinition {
 
 export interface ActiveSkillDefinition extends SkillDefinition {}
 
-export interface PassiveSkillDefinition extends SkillDefinition {}
+export interface PassiveSkillDefinition extends SkillDefinition {
+  /**
+   * A function that maps a value to a Passives contribution.
+   * This is used for skills that provide passive effects rather than direct stat boosts.
+   */
+  MapToPassiveEffect: (passives: Passives) => Passives;
+}
 
 export interface SkillDefinition {
   Id: string;

@@ -16,9 +16,7 @@ export class RuneService {
     CreateEmptyRuneInventoryState(this.RuneDefinitionIds)
   );
 
-  public readonly SlotsById = computed<Record<string, Rune | null>>(
-    () => this.State().SlotsByDefinitionId
-  );
+  public readonly SlotsById = computed<Record<string, Rune | null>>(() => this.State().Runes);
 
   public readonly Runes = computed<Rune[]>(() => {
     return Object.values(this.SlotsById()).filter((rune): rune is Rune => rune != null);
@@ -31,7 +29,7 @@ export class RuneService {
   public GetState(): RuneInventoryState {
     const currentState = this.State();
     return {
-      SlotsByDefinitionId: { ...currentState.SlotsByDefinitionId }
+      Runes: { ...currentState.Runes }
     };
   }
 
@@ -40,7 +38,7 @@ export class RuneService {
    * @param state state to set
    */
   public SetState(state: RuneInventoryState): void {
-    if (!state?.SlotsByDefinitionId) {
+    if (!state?.Runes) {
       this.Clear();
       return;
     }
@@ -55,7 +53,7 @@ export class RuneService {
    */
   public GetRune(runeDefinitionId: string): Rune | null {
     if (!this.IsKnownRuneDefinition(runeDefinitionId)) return null;
-    return this.State().SlotsByDefinitionId[runeDefinitionId] ?? null;
+    return this.State().Runes[runeDefinitionId] ?? null;
   }
 
   /**
@@ -79,7 +77,7 @@ export class RuneService {
     const runeDefinitionId = rune.DefinitionId;
     if (!this.IsKnownRuneDefinition(runeDefinitionId)) return false;
 
-    const currentlyStoredRune = this.State().SlotsByDefinitionId[runeDefinitionId];
+    const currentlyStoredRune = this.State().Runes[runeDefinitionId];
     if (currentlyStoredRune == null) {
       this.SetRuneForDefinition(runeDefinitionId, rune);
       return true;
@@ -108,7 +106,7 @@ export class RuneService {
     const runeDefinitionId = rune.DefinitionId;
     if (!this.IsKnownRuneDefinition(runeDefinitionId)) return false;
 
-    const currentlyStoredRune = this.State().SlotsByDefinitionId[runeDefinitionId];
+    const currentlyStoredRune = this.State().Runes[runeDefinitionId];
     if (currentlyStoredRune == null) return true;
 
     return this.IsBetterRune(rune, currentlyStoredRune);
@@ -128,8 +126,8 @@ export class RuneService {
 
   private SetRuneForDefinition(runeDefinitionId: string, rune: Rune): void {
     this.State.update((currentState) => ({
-      SlotsByDefinitionId: {
-        ...currentState.SlotsByDefinitionId,
+      Runes: {
+        ...currentState.Runes,
         [runeDefinitionId]: rune
       }
     }));

@@ -1,0 +1,8 @@
+<div class="exp-display" [style.fontSize]="fontSize()">
+  <div class="exp">
+    {{ exp() | number: "1.0-0" }}
+  </div>
+  <div class="exp-icon">
+    <app-icon symbol="starsstack" [size]="size()"></app-icon>
+  </div>
+</div>

@@ -7,6 +7,7 @@ import {
   InitialActorState,
   InitialHeroCharge,
   InitialLife,
+  InitialPassives,
   NoArmor,
   ResetLife
 } from '../../../models';
@@ -14,7 +15,8 @@ import {
   CombatLogService,
   CombatStatsService,
   DungeonRoomService,
-  PlayerHeroService
+  PlayerHeroService,
+  SkillsService
 } from '../../../services';
 import {
   ComputeAttackInterval,
@@ -36,6 +38,7 @@ export class CombatState {
   private readonly PlayerHero = inject<PlayerHeroService>(PlayerHeroService);
   private readonly DungeonRoom = inject<DungeonRoomService>(DungeonRoomService);
   private readonly CombatStats = inject<CombatStatsService>(CombatStatsService);
+  private readonly Skills = inject<SkillsService>(SkillsService);
   private readonly Log = inject<CombatLogService>(CombatLogService);
   private readonly GameSaver = inject<GameSaverService>(GameSaverService);
 
@@ -174,6 +177,7 @@ export class CombatState {
   //#region Setup
   private SetupHero(): Hero {
     const computedStats = this.CombatStats.Effective();
+    const passives = this.Skills.Passives();
 
     const hero: Hero = {
       Name: this.PlayerHero.Name(),
@@ -183,7 +187,9 @@ export class CombatState {
       Stats: computedStats,
       AttackInterval: ComputeInitialAttackInterval(computedStats.AttackSpeed),
       State: InitialActorState(),
-      Charge: InitialHeroCharge()
+      Passives: passives,
+      Charge: InitialHeroCharge(),
+      SplashDamage: 0
     };
 
     return hero;

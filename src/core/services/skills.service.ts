@@ -1,10 +1,11 @@
 import {
   CreateEmptySkillTreeState,
+  InitialPassives,
+  Passives,
   Skill,
   SkillDefinition,
   SkillTier,
   SkillTreeState,
-  StatSkillDefinition,
   StatSource
 } from '../models';
 import {
@@ -14,16 +15,15 @@ import {
   GetSkillUnlockCost,
   GetSkillUpgradeCost,
   GetTierMeta,
-  IsStatSkillDefinition,
   SkillDefinitionsById,
   SkillDefinitionsByTier,
   TierOrder
 } from '../systems/skills';
 import { Injectable, LOCALE_ID, computed, inject, signal } from '@angular/core';
+import { MapSkillToPassiveEffect, MapSkillToStatSources } from '../systems/stats';
 
 import { GoldService } from './gold.service';
 import { LevelService } from './level.service';
-import { MapSkillToStatSources } from '../systems/stats';
 
 export interface SkillViewModel {
   Definition: SkillDefinition;
@@ -116,6 +116,16 @@ export class SkillsService {
   public readonly StatSources = computed<StatSource[]>(() =>
     this.SkillTreeState().SkillState.flatMap((skill) => MapSkillToStatSources(skill))
   );
+
+  /**
+   * Returns the combined passive effects provided by unlocked skills.
+   */
+  public readonly Passives = computed<Passives>(() => {
+    const state = this.SkillTreeState();
+    const passives = InitialPassives();
+    state.SkillState.flatMap((skill) => MapSkillToPassiveEffect(skill, passives));
+    return passives;
+  });
 
   /**
    * Returns whether a tier has already been unlocked.

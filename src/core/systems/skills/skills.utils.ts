@@ -1,4 +1,10 @@
-import { LabelToString, SkillDefinition, SkillTier, StatSkillDefinition } from '../../models';
+import {
+  LabelToString,
+  PassiveSkillDefinition,
+  SkillDefinition,
+  SkillTier,
+  StatSkillDefinition
+} from '../../models';
 import {
   SKILL_COST_CONFIG,
   SKILL_TIER_1_SKILLS,
@@ -77,6 +83,12 @@ export function IsStatSkillDefinition(
   definition: SkillDefinition
 ): definition is StatSkillDefinition {
   return definition.Type === 'StatBoost';
+}
+
+export function IsPassiveSkillDefinition(
+  definition: SkillDefinition
+): definition is PassiveSkillDefinition {
+  return definition.Type === 'Passive';
 }
 
 export function GetSkillEffect(skillId: string, level: number, locale: string): string {

@@ -1,7 +1,8 @@
 import { Rune } from './rune';
 
 export interface RuneInventoryState {
-  SlotsByDefinitionId: Record<string, Rune | null>;
+  /** Mapping of rune definition id to equipped rune or null if slot is empty. */
+  Runes: Record<string, Rune | null>;
 }
 
 /**
@@ -19,7 +20,7 @@ export function CreateEmptyRuneInventoryState(runeDefinitionIds: string[]): Rune
   );
 
   return {
-    SlotsByDefinitionId: slotsByDefinitionId
+    Runes: slotsByDefinitionId
   };
 }
 
@@ -37,8 +38,7 @@ export function NormalizeRuneInventoryState(
   const normalizedState = CreateEmptyRuneInventoryState(runeDefinitionIds);
 
   for (const runeDefinitionId of runeDefinitionIds) {
-    normalizedState.SlotsByDefinitionId[runeDefinitionId] =
-      state.SlotsByDefinitionId[runeDefinitionId] ?? null;
+    normalizedState.Runes[runeDefinitionId] = state.Runes[runeDefinitionId] ?? null;
   }
 
   return normalizedState;

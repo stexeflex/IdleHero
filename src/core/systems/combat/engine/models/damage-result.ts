@@ -3,4 +3,5 @@ export interface DamageResult {
   IsCharged: boolean;
   IsCritical: boolean;
   IsBleeding: boolean;
+  IsSplash: boolean;
 }

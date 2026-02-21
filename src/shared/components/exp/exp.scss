@@ -1,0 +1,29 @@
+@use "sass:color";
+@use "index" as *;
+
+.exp-display {
+  @include disable-text-selection();
+  display: flex;
+  gap: calc($gap / 2);
+  color: $clr-log-rewards-xp;
+  font-weight: bold;
+
+  .exp {
+    display: grid;
+    grid-auto-flow: column;
+
+    /* Prevent wrapping */
+    white-space: nowrap;
+
+    span {
+      font-weight: bold;
+      text-align: center;
+      align-self: center;
+    }
+  }
+
+  .exp-icon {
+    display: flex;
+    align-self: center;
+  }
+}

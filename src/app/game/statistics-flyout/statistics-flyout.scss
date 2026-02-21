@@ -1,9 +1,6 @@
 @use "sass:color";
 @use "index" as *;
 
-.container {
-}
-
 .flyout-button {
   @include button-text-font($shadow: false);
   @include button-sizing($font-size: 0.9rem, $min-width: auto);
@@ -40,14 +37,19 @@
     display: none;
     position: absolute;
 
+    .header {
+      text-align: center;
+      color: $clr-highlight;
+    }
+
     .grid {
       @include disable-text-selection();
 
       .row {
         display: grid;
         grid-template-columns: auto 1fr;
-        gap: calc($gap / 2);
-        padding: calc($gap / 2);
+        gap: $gap 0;
+        padding: 2px 0;
 
         &:hover {
           cursor: pointer;
@@ -59,7 +61,7 @@
       .grid__label {
         text-align: left;
         font-weight: bold;
-        width: 270px;
+        width: 250px;
       }
 
       .grid__value {

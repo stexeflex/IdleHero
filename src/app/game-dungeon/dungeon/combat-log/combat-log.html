@@ -24,30 +24,12 @@
               <span>Completed Stage {{ entry.Stage }}</span>
             </div>
             <div class="log-rewards-values">
-              <span class="log-rewards-gold">
-                +{{ entry.Rewards.Gold | number: "1.0-0" }}
-                <app-icon symbol="twocoins" size="sm"></app-icon>
-              </span>
+              <app-gold [amount]="entry.Rewards.Gold" size="sm" fontSize="1.2rem"></app-gold>
               <span class="dot">•</span>
-              <span class="log-rewards-xp">
-                +{{ entry.Rewards.Experience | number: "1.0-0" }}
-                <app-icon symbol="starsstack" size="sm"></app-icon>
-              </span>
+              <app-exp [exp]="entry.Rewards.Experience" size="sm" fontSize="1.2rem"></app-exp>
               @if (entry.Rewards.Rune) {
                 <span class="dot">•</span>
-                <span
-                  class="log-rewards-rune"
-                  [class.common--font]="entry.Rewards.Rune.Quality === 'Common'"
-                  [class.magic--font]="entry.Rewards.Rune.Quality === 'Magic'"
-                  [class.rare--font]="entry.Rewards.Rune.Quality === 'Rare'"
-                  [class.epic--font]="entry.Rewards.Rune.Quality === 'Epic'"
-                  [class.legendary--font]="entry.Rewards.Rune.Quality === 'Legendary'">
-                  <app-icon symbol="runestone" size="sm"></app-icon>
-                  {{ entry.Rewards.Rune.DefinitionId }}
-                  <span class="log-rewards-rune-value">
-                    [{{ entry.Rewards.Rune.ValueRangePercentage | percent: "1.0-0" }}]
-                  </span>
-                </span>
+                <app-rune [rune]="entry.Rewards.Rune" size="sm" fontSize="1.2rem"></app-rune>
               }
             </div>
           </div>
@@ -64,7 +46,6 @@
                 Size="md"></app-combat-actor-icon>
 
               <span>{{ damageLogEntry.ActionContent }}</span>
-              <!-- <app-icon combat="bleedingwound" size="sm" class="log-bleed"></app-icon> -->
 
               <app-combat-actor-icon
                 [Actor]="entry.Target"
@@ -105,9 +86,10 @@
                 @for (tag of entry.Damage; track $index) {
                   <span
                     class="log-damage"
-                    [class.log-multi]="!tag.IsCritical && !tag.IsBleeding"
+                    [class.log-multi]="!tag.IsCritical && !tag.IsBleeding && !tag.IsSplash"
                     [class.log-critical]="tag.IsCritical"
-                    [class.log-bleed]="tag.IsBleeding">
+                    [class.log-bleed]="tag.IsBleeding"
+                    [class.log-splash]="tag.IsSplash">
                     {{ tag.Amount | number: "1.0-0" }}
                     @if ($index < entry.Damage.length - 1) {
                       <span class="dot">•</span>

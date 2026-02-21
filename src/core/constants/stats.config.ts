@@ -1,7 +1,7 @@
 export const STATS_CONFIG = {
   BASE: {
     ATTACK_SPEED: 1.0, // Basis-Angriffe pro Sekunde
-    DAMAGE: 0, // Basis-Schaden
+    DAMAGE: 1, // Basis-Schaden
     BLEEDING_CHANCE: 0.0, // 0% Base Bleeding Chance
     BLEEDING_DAMAGE: 0.25, // 25% Base Bleeding Damage
     BLEEDING_TICKS: 2, // Basis Anzahl Bleeding Ticks

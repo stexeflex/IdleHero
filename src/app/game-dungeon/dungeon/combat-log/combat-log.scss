@@ -83,25 +83,7 @@
 .log-rewards,
 .log-rewards-header {
   color: $clr-highlight;
-}
-
-.log-rewards-gold {
-  color: $clr-log-rewards-gold;
   font-weight: bold;
-}
-
-.log-rewards-xp {
-  color: $clr-log-rewards-xp;
-  font-weight: bold;
-}
-
-.log-rewards-rune {
-  font-weight: bold;
-}
-
-.log-rewards-rune-value {
-  font-weight: normal;
-  font-size: 0.9rem;
 }
 
 .log-damage {
@@ -116,6 +98,11 @@
 
 .log-charged {
   color: $clr-log-charged;
+  font-weight: bold;
+}
+
+.log-splash {
+  color: $clr-log-splash;
   font-weight: bold;
 }
 

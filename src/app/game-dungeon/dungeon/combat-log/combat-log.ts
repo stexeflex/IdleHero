@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { CombatLogEntry, DamageLogEntry } from '../../../../core/models';
-import { DecimalPipe, PercentPipe } from '@angular/common';
-import { IconComponent, Separator } from '../../../../shared/components';
+import { Exp, Gold, IconComponent, RuneIcon, Separator } from '../../../../shared/components';
 
 import { CombatActorIcon } from './combat-actor-icon/combat-actor-icon';
 import { CombatLogService } from '../../../../core/services';
+import { DecimalPipe } from '@angular/common';
 import { TimestampUtils } from '../../../../shared/utils';
 
 interface DamageLogEntryExtended {
@@ -22,7 +22,7 @@ interface AdditionalDetail {
 
 @Component({
   selector: 'app-combat-log',
-  imports: [DecimalPipe, PercentPipe, CombatActorIcon, IconComponent, Separator],
+  imports: [DecimalPipe, CombatActorIcon, IconComponent, Separator, Gold, Exp, RuneIcon],
   templateUrl: './combat-log.html',
   styleUrl: './combat-log.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -75,9 +75,10 @@ export class CombatLog {
 
   private DamageDetails(entry: DamageLogEntry): string {
     let damageDetails = 'HIT';
+    const multiHitCount = entry.Damage.filter((d) => !d.IsSplash).length ?? 0;
 
-    if (entry.Damage.length > 1) {
-      damageDetails = 'MULTI ' + damageDetails + ' [x' + entry.Damage.length + ']';
+    if (multiHitCount > 1) {
+      damageDetails = 'MULTI ' + damageDetails + ' [x' + multiHitCount + ']';
     }
 
     if (entry.Damage.some((d) => d.IsCritical)) {
@@ -96,6 +97,10 @@ export class CombatLog {
 
     if (entry.Damage.some((d) => d.IsCharged)) {
       details.push({ value: 'CHARGED', class: 'log-charged' });
+    }
+
+    if (entry.Damage.some((d) => d.IsSplash)) {
+      details.push({ value: 'SPLASH', class: 'log-splash' });
     }
 
     return details;

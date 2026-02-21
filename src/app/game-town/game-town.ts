@@ -20,7 +20,7 @@ export class GameTown {
     ];
   }
 
-  protected SelectedTab = signal<TabDefinition['id']>('skills');
+  protected SelectedTab = signal<TabDefinition['id']>('inventory');
 
   protected onTabSelected(tabId: TabDefinition['id']): void {
     this.SelectedTab.set(tabId);
