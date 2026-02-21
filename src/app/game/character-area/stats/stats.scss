@@ -71,21 +71,27 @@ $grid-header-padding: calc($gap / 2);
   }
 }
 
-.skill-points {
-  font-family: $font-family-header;
-  font-size: 1.4rem;
-  font-weight: bold;
-  color: $clr-highlight;
+.respec {
+  @include flexbox($dir: row, $align: center, $justify: flex-start);
+  gap: $gap;
+  min-width: 250px;
 
-  text-shadow:
-    -1px -1px 0 $clr-text-shadow,
-    1px -1px 0 $clr-text-shadow,
-    -1px 1px 0 $clr-text-shadow,
-    1px 1px 0 $clr-text-shadow;
+  .skill-points {
+    font-family: $font-family-header;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: $clr-highlight;
 
-  .skill-points__icon {
-    vertical-align: top;
-    margin: 0 0.25rem;
+    text-shadow:
+      -1px -1px 0 $clr-text-shadow,
+      1px -1px 0 $clr-text-shadow,
+      -1px 1px 0 $clr-text-shadow,
+      1px 1px 0 $clr-text-shadow;
+
+    .skill-points__icon {
+      vertical-align: top;
+      margin: 0 0.25rem;
+    }
   }
 }
 

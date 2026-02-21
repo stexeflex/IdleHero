@@ -3,12 +3,24 @@
   <div class="category">
     <div class="grid-header" [class.grid-header--expanded]="AttributesExpanded()">
       <h3>ATTRIBUTES</h3>
-      @if (ShowAttributePoints()) {
-        <div class="skill-points">
-          {{ AttributePoints() }}
-          <app-icon class="skill-points__icon" symbol="orb" size="sm"></app-icon>
-        </div>
-      }
+      <div class="respec">
+        <button class="ih-button-quaternary" (click)="ToggleRespecMode()">
+          @if (IsRespecMode()) {
+            CONFIRM
+          } @else {
+            RESPEC
+          }
+        </button>
+        @if (IsRespecMode()) {
+          <app-gold [amount]="RespecCost()"></app-gold>
+        }
+        @if (ShowAttributePoints() && !IsRespecMode()) {
+          <div class="skill-points">
+            {{ AttributePoints() }}
+            <app-icon class="skill-points__icon" symbol="orb" size="sm"></app-icon>
+          </div>
+        }
+      </div>
       <button
         class="ih-button-icon grid-header__toggle"
         (click)="AttributesExpanded.set(!AttributesExpanded())">
