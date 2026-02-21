@@ -3,6 +3,7 @@ import {
   Attributes,
   CreateEmptyLoadout,
   CreateEmptyRuneInventoryState,
+  CreateEmptySkillTreeState,
   CreateLockedAmuletState,
   DamageStatistics,
   DungeonKeysState,
@@ -17,6 +18,7 @@ import {
   InitialLevelState,
   InventoryState,
   RuneInventoryState,
+  SkillTreeState,
   ZeroAttributes
 } from '../../core/models';
 
@@ -43,6 +45,7 @@ export interface Schema {
   Amulet: AmuletState;
   RuneInventory: RuneInventoryState;
   Inventory: InventoryState;
+  Skills: SkillTreeState;
   Statistics: {
     Dungeon: DungeonStatistics;
     Damage: DamageStatistics;
@@ -66,6 +69,7 @@ export function InitialSchema(): Schema {
     Amulet: CreateLockedAmuletState(),
     RuneInventory: CreateEmptyRuneInventoryState(RUNE_DEFINITIONS.map((rune) => rune.Id)),
     Inventory: InitialInventoryState(),
+    Skills: CreateEmptySkillTreeState(),
     Statistics: {
       Dungeon: InitialDungeonStatistics(),
       Damage: InitialDamageStatistics()
@@ -87,6 +91,7 @@ export function MergeSchemas(base: Schema, updates: Partial<Schema>): Schema {
     Amulet: updates.Amulet ?? base.Amulet,
     RuneInventory: updates.RuneInventory ?? base.RuneInventory,
     Inventory: updates.Inventory ?? base.Inventory,
+    Skills: updates.Skills ?? base.Skills,
     Statistics: {
       Dungeon: updates.Statistics?.Dungeon ?? base.Statistics.Dungeon,
       Damage: updates.Statistics?.Damage ?? base.Statistics.Damage
