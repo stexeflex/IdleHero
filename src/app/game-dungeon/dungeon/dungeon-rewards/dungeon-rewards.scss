@@ -1,0 +1,60 @@
+@use "sass:color";
+@use "index" as *;
+
+.rewards-panel {
+  @include disable-text-selection();
+  @include panel();
+  @include panel-shadow($border-width: 2px, $border-color: $clr-border);
+  display: flex;
+  flex-direction: column;
+  gap: $gap 0;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+
+  .title {
+    display: flex;
+    flex-direction: row;
+    gap: $gap;
+    justify-content: space-between;
+
+    h2 {
+      color: $clr-highlight;
+    }
+
+    .elapsed-time {
+      font-size: 1.2rem;
+      color: $clr-mute;
+    }
+  }
+}
+
+.rewards {
+  display: flex;
+  flex-direction: row;
+  gap: $gap;
+}
+
+.rewards-runes {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: $gap;
+}
+
+.runes-header {
+  display: flex;
+  flex-direction: row;
+  gap: calc($gap / 2);
+
+  .rune-count {
+    font-size: 1rem;
+    color: $clr-mute;
+  }
+}
+
+.dot {
+  align-self: center;
+}

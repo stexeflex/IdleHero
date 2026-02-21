@@ -7,7 +7,6 @@ import {
   InitialActorState,
   InitialHeroCharge,
   InitialLife,
-  InitialPassives,
   NoArmor,
   ResetLife
 } from '../../../models';
@@ -25,6 +24,7 @@ import {
 } from '../attack-interval-computing';
 import { Injectable, inject, signal } from '@angular/core';
 
+import { DungeonRunService } from '../dungeons/dungeon-run.service';
 import { EventQueue } from './event.queue';
 import { GameSaverService } from '../../../../persistence';
 import { TimestampUtils } from '../../../../shared/utils';
@@ -37,6 +37,7 @@ export class CombatState {
   // Services
   private readonly PlayerHero = inject<PlayerHeroService>(PlayerHeroService);
   private readonly DungeonRoom = inject<DungeonRoomService>(DungeonRoomService);
+  private readonly DungeonRun = inject<DungeonRunService>(DungeonRunService);
   private readonly CombatStats = inject<CombatStatsService>(CombatStatsService);
   private readonly Skills = inject<SkillsService>(SkillsService);
   private readonly Log = inject<CombatLogService>(CombatLogService);
@@ -71,6 +72,7 @@ export class CombatState {
 
   private ClearedDungeon() {
     this.Completed.set(true);
+    this.DungeonRun.StopRun();
 
     this.Log.Info(`${this.DungeonRoom.CurrentDungeon()?.Title.toUpperCase()}: Dungeon Cleared!`);
 
@@ -83,6 +85,7 @@ export class CombatState {
   private Reset() {
     this.InProgress.set(false);
     this.Completed.set(false);
+    this.DungeonRun.StopRun();
     this.Queue.Clear();
     this.Log.Clear();
     this.ClearActors();
@@ -103,6 +106,7 @@ export class CombatState {
     this.Reset();
     this.InProgress.set(true);
     this.GameSaver.SaveGame();
+    this.DungeonRun.StartRun();
 
     // Set Combat Actors
     const hero: Hero = this.SetupHero();

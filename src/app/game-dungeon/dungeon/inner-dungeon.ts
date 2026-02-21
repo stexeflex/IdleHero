@@ -5,11 +5,19 @@ import { IconComponent, LoadingSpinner, PanelHeader } from '../../../shared/comp
 import { CombatLog } from './combat-log/combat-log';
 import { DELAYS } from '../../../core/constants';
 import { DungeonArena } from './dungeon-arena/dungeon-arena';
+import { DungeonRewardsScreen } from './dungeon-rewards/dungeon-rewards';
 import { DungeonRoomService } from '../../../core/services';
 
 @Component({
   selector: 'app-inner-dungeon',
-  imports: [PanelHeader, IconComponent, DungeonArena, CombatLog, LoadingSpinner],
+  imports: [
+    PanelHeader,
+    IconComponent,
+    DungeonArena,
+    CombatLog,
+    LoadingSpinner,
+    DungeonRewardsScreen
+  ],
   templateUrl: './inner-dungeon.html',
   styleUrl: './inner-dungeon.scss'
 })

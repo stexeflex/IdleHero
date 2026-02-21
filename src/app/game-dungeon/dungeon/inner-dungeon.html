@@ -38,11 +38,14 @@
     <div class="inner-dungeon">
       @if (ShowCompletion()) {
         <div class="dungeon-completion">
-          <h2>DUNGEON COMPLETED!</h2>
+          <app-dungeon-rewards></app-dungeon-rewards>
         </div>
         <app-combat-log></app-combat-log>
       } @else {
-        <app-dungeon-arena></app-dungeon-arena>
+        <div class="dungeon-arena">
+          <app-dungeon-arena></app-dungeon-arena>
+          <app-dungeon-rewards></app-dungeon-rewards>
+        </div>
         <app-combat-log></app-combat-log>
       }
     </div>

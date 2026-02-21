@@ -10,6 +10,7 @@ import { Injectable, inject } from '@angular/core';
 
 import { DropRandomRuneForDungeon } from '../../runes';
 import { DungeonKeyService } from '../../../services/dungeon-key.service';
+import { DungeonRunService } from './dungeon-run.service';
 import { GoldService } from '../../../services/gold.service';
 import { LevelService } from '../../../services/level.service';
 import { StatisticsService } from '../../../services/statistics.service';
@@ -22,6 +23,7 @@ export class DungeonRewardsService {
   private readonly Runes = inject(RuneService);
   private readonly Log = inject<CombatLogService>(CombatLogService);
   private readonly Statistics = inject(StatisticsService);
+  private readonly DungeonRun = inject(DungeonRunService);
 
   /**
    * Computes rewards for a single stage within a dungeon.
@@ -33,7 +35,7 @@ export class DungeonRewardsService {
     const f = StageFactor(stageId);
     const gold = Math.round(dungeon.Rewards.GoldBase * f);
     const xp = ComputeDampedExperience(dungeon, stageId, this.Statistics.DungeonStatistics());
-    const rune = DropRandomRuneForDungeon(dungeon.Id);
+    const rune = stageId === 1 ? null : DropRandomRuneForDungeon(dungeon.Id);
     const runeIsUpgrade = rune ? this.Runes.IsUpgrade(rune) : false;
 
     return {
@@ -55,6 +57,7 @@ export class DungeonRewardsService {
     this.Gold.Add(rewards.Gold);
     this.Level.AddExperience(rewards.Experience);
     if (rewards.Rune) this.Runes.AddOrUpgradeRune(rewards.Rune);
+    this.DungeonRun.AddRewards(rewards);
     return rewards;
   }
 
@@ -93,6 +96,7 @@ export class DungeonRewardsService {
     this.Gold.Add(rewards.Gold);
     this.Level.AddExperience(rewards.Experience);
     if (rewards.Rune) this.Runes.AddOrUpgradeRune(rewards.Rune);
+    this.DungeonRun.AddRewards(rewards);
     return rewards;
   }
 
@@ -147,6 +151,7 @@ export class DungeonRewardsService {
     this.Gold.Add(rewards.Gold);
     this.Level.AddExperience(rewards.Experience);
     if (rewards.Rune) this.Runes.AddOrUpgradeRune(rewards.Rune);
+    this.DungeonRun.AddRewards(rewards);
 
     return rewards;
   }
