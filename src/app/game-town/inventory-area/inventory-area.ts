@@ -8,13 +8,14 @@ import {
 } from '@angular/core';
 import {
   GearSlotIconName,
+  Gold,
   IconComponent,
   ItemPreview,
   LoadingSpinner,
   Separator
 } from '../../../shared/components';
-import { GetItemRarity, GetItemVariant } from '../../../core/systems/items';
-import { InventoryService, ItemManagementService } from '../../../core/services';
+import { GetDismantleRefund, GetItemRarity, GetItemVariant } from '../../../core/systems/items';
+import { GoldService, InventoryService, ItemManagementService } from '../../../core/services';
 import { Item, ItemRarity, ItemSlot, ItemTier, ItemVariantDefinition } from '../../../core/models';
 
 import { ICONS_CONFIG } from '../../../core/constants';
@@ -26,7 +27,7 @@ interface ItemCard {
 
 @Component({
   selector: 'app-inventory-area',
-  imports: [ItemPreview, IconComponent, Separator, LoadingSpinner],
+  imports: [ItemPreview, IconComponent, Separator, LoadingSpinner, Gold],
   templateUrl: './inventory-area.html',
   styleUrl: './inventory-area.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -34,6 +35,7 @@ interface ItemCard {
 export class InventoryArea implements OnDestroy {
   private readonly Inventory = inject(InventoryService);
   private readonly ItemManagement = inject(ItemManagementService);
+  private readonly Gold = inject(GoldService);
 
   protected readonly IsDismantlingItem = signal<Item | undefined>(undefined);
   private timeout: number = 0;
@@ -199,8 +201,15 @@ export class InventoryArea implements OnDestroy {
     this.ItemManagement.EquipItem(item.Id);
   }
 
-  protected DismantleItem(item: Item) {
+  protected DismantleRefund(item: Item): number {
+    return GetDismantleRefund(item);
+  }
+
+  protected DismantleItem() {
+    const item = this.IsDismantlingItem();
     if (!item) return;
+    const refund = GetDismantleRefund(item);
+    this.Gold.Add(refund);
     this.ItemManagement.DismantleItem(item.Id);
   }
 

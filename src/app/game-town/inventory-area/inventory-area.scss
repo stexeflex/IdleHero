@@ -139,4 +139,14 @@
     background-color: $clr-black;
     color: $clr-text-primary;
   }
+
+  .refund-info {
+    @include flexbox();
+    gap: $gap;
+
+    > span {
+      font-family: $font-family-header;
+      color: $clr-mute;
+    }
+  }
 }

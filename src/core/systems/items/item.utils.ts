@@ -1,7 +1,10 @@
 import {
   AFFIX_DEFINITIONS,
+  CRAFTING_COST_CONFIG,
   ITEM_LEVEL_CONFIG,
+  ITEM_RARITY_COST_MULTIPLIER,
   ITEM_RARITY_RULES,
+  ITEM_TIER_COST_MULTIPLIER,
   ITEM_TIER_RULES,
   ITEM_VARIANTS
 } from '../../constants';
@@ -17,6 +20,7 @@ import {
   RarityRules
 } from '../../models';
 
+import { TierIndex } from './affix.utils';
 import { TimestampUtils } from '../../../shared/utils';
 
 export function GetItemVariant(definitionId: string): ItemVariantDefinition {
@@ -89,4 +93,33 @@ export function CreateItem(variant: ItemVariantDefinition): Item {
     Affixes: []
   };
   return item;
+}
+
+export function GetDismantleRefund(item: Item): number {
+  const definition = GetItemVariant(item.DefinitionId);
+  const itemRarity = GetItemRarity(item.Level);
+  const minLevel = MinLevelForTier(definition.Tier);
+
+  const baseCost =
+    definition.Slot === 'Weapon'
+      ? CRAFTING_COST_CONFIG.ITEM_WEAPON_CRAFT_BASE_COST
+      : CRAFTING_COST_CONFIG.ITEM_CRAFT_BASE_COST;
+
+  const levelMultiplier = 1 + (item.Level - minLevel);
+  const rarityMultiplier = ITEM_RARITY_COST_MULTIPLIER[itemRarity];
+  const tierMultiplier = ITEM_TIER_COST_MULTIPLIER[definition.Tier];
+
+  const itemRefund = baseCost * levelMultiplier * rarityMultiplier * tierMultiplier;
+
+  const affixRefund = item.Affixes.length * CRAFTING_COST_CONFIG.AFFIX_ADD_BASE_COST;
+  const affixTierRefund = item.Affixes.reduce((sum, affix) => {
+    const tierMultiplier = affix ? TierIndex(affix.Tier) + 1 : 0;
+    return sum + CRAFTING_COST_CONFIG.AFFIX_ENCHANT_BASE_COST * tierMultiplier;
+  }, 0);
+
+  const affixesRefund = affixRefund + affixTierRefund;
+
+  const totalRefund = Math.round(itemRefund + affixesRefund);
+
+  return Math.round(totalRefund * CRAFTING_COST_CONFIG.REFUND_MULTIPLIER);
 }

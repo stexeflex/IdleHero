@@ -3,8 +3,7 @@ import {
   CraftingCostProvider,
   Item,
   ItemVariantDefinition,
-  OperationResult,
-  RarityRules
+  OperationResult
 } from '../models';
 import {
   CreateItem,
