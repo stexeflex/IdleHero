@@ -9,13 +9,15 @@
     </div>
   </div>
 </div>
+<separator class="ih-separator"></separator>
 
 <!-- Summary -->
 <div class="summary">
   @for (summaryStat of SummaryStats; track summaryStat.label) {
     <div class="summary__item">
-      <div class="item__value">{{ summaryStat.value }}</div>
       <div class="item__label">{{ summaryStat.label }}</div>
+      <div class="item__value">{{ summaryStat.value }}</div>
     </div>
   }
+  <separator class="ih-separator"></separator>
 </div>
