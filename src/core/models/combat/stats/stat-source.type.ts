@@ -99,7 +99,7 @@ export function EmptyStatSource(id: string): StatSource {
     Accuracy: { Value: 0 },
     ChargingStrike: {
       ChargeGain: 0,
-      ChargeLossPercentage: 100,
+      ChargeLossPercentage: 0,
       ChargeDamage: 0,
       ChargeDuration: 0
     }

@@ -25,10 +25,17 @@
 .header__level {
   display: inline-flex;
   align-items: center;
+  justify-items: center;
+  gap: calc($gap / 2);
 
-  .level-icon {
-    color: $clr-highlight;
-    margin: 0 0 calc($gap / 4) calc($gap / 2);
+  .level_title {
+    color: $clr-text-primary;
+    font-family: $font-family-header;
+    font-size: 1.4rem;
+    font-weight: bold;
+  }
+
+  .level_value {
   }
 }
 

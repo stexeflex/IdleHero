@@ -48,10 +48,6 @@ export class Stats {
 
   protected readonly AttributePoints = computed<string>(() => {
     const unspent: number = this.attributesService.UnallocatedPoints();
-    // const total: number = AttributePointsForGainedLevels(this.levelService.Level() - 1);
-    // const spent: number = this.attributesService.AllocatedTotal();
-    // const unspentTotal: number = total - spent;
-    // return `${unspent} / ${unspentTotal}`;
     return `${unspent}`;
   });
 
@@ -130,6 +126,10 @@ export class Stats {
         value: this.decimalPipe.transform(combatStats.ChargeGain, '1.0-0') + ' / Hit'
       },
       {
+        label: 'Charge Loss',
+        value: this.percentPipe.transform(combatStats.ChargeLoss, '1.0-0') + ' / Miss'
+      },
+      {
         label: 'Charged Damage',
         value: this.percentPipe.transform(combatStats.ChargeDamage, '1.0-0')
       },
@@ -165,10 +165,6 @@ export class Stats {
         value: this.percentPipe.transform(combatStats.MultiHitChance, '1.0-0')
       },
       {
-        label: 'Multi Hit Chain',
-        value: this.percentPipe.transform(combatStats.MultiHitChainFactor, '1.0-0')
-      },
-      {
         label: 'Multi Hit Damage',
         value: this.percentPipe.transform(combatStats.MultiHitDamage, '1.0-0')
       }
@@ -186,6 +182,18 @@ export class Stats {
       {
         label: 'Accuracy',
         value: this.percentPipe.transform(combatStats.Accuracy, '1.0-0')
+      },
+      {
+        label: 'Bleeding Ticks',
+        value: this.decimalPipe.transform(combatStats.BleedingTicks, '1.0-0')
+      },
+      {
+        label: 'Multi Hit Chain',
+        value: this.decimalPipe.transform(combatStats.MultiHitChain, '1.0-0')
+      },
+      {
+        label: 'Multi Hit Chain Factor',
+        value: this.percentPipe.transform(combatStats.MultiHitChainFactor, '1.0-0')
       }
       // {
       //   label: 'Armor Penetration',

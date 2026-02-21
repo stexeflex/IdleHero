@@ -45,10 +45,11 @@ export function ComputeStats(
   const attackSpeed = ComputeAttackSpeed(sources);
 
   // Bleeding Chance & Damage
-  const { BleedingChance: bleedingChance, BleedingDamage: bleedingDamage } = ComputeBleeding(
-    sources,
-    attributes.Strength
-  );
+  const {
+    BleedingChance: bleedingChance,
+    BleedingDamage: bleedingDamage,
+    BleedingTicks: bleedingTicks
+  } = ComputeBleeding(sources, attributes.Strength);
 
   // Crit Chance & Damage
   const { CriticalHitChance: critChance, CriticalHitDamage: critMultiplier } = ComputeCriticalHit(
@@ -59,34 +60,37 @@ export function ComputeStats(
   // Multi-Hit Chance
   const {
     MultiHitChance: multiHitChance,
-    MultiHitDamage: multiHitDamage,
-    MultiHitChainFactor: multiHitChainFactor
+    MultiHitChain: multiHitChain,
+    MultiHitChainFactor: multiHitChainFactor,
+    MultiHitDamage: multiHitDamage
   } = ComputeMultiHit(sources, attributes.Dexterity);
 
   // Accuracy
   const accuracy = ComputeAccuracy(sources);
 
   // Charging Strike
-  const chargeGain =
-    baseStats.ChargeGain + sources.reduce((sum, s) => Sum(sum, s.ChargingStrike.ChargeGain), 0);
-  const chargeDamage =
-    baseStats.ChargeDamage + sources.reduce((sum, s) => Sum(sum, s.ChargingStrike.ChargeDamage), 0);
-  const chargeDuration =
-    baseStats.ChargeDuration +
-    sources.reduce((sum, s) => Sum(sum, s.ChargingStrike.ChargeDuration), 0);
+  const {
+    ChargeGain: chargeGain,
+    ChargeLoss: chargeLoss,
+    ChargeDamage: chargeDamage,
+    ChargeDuration: chargeDuration
+  } = ComputeChargingStrike(sources, baseStats);
 
   const stats: ComputedHeroStats = {
     AttackSpeed: attackSpeed,
     Damage: damage,
     BleedingChance: bleedingChance,
     BleedingDamage: bleedingDamage,
+    BleedingTicks: bleedingTicks,
     CriticalHitChance: critChance,
     CriticalHitDamage: critMultiplier,
     MultiHitChance: multiHitChance,
     MultiHitDamage: multiHitDamage,
+    MultiHitChain: multiHitChain,
     MultiHitChainFactor: multiHitChainFactor,
     Accuracy: accuracy,
     ChargeGain: chargeGain,
+    ChargeLoss: chargeLoss,
     ChargeDamage: chargeDamage,
     ChargeDuration: chargeDuration
   };
@@ -116,7 +120,7 @@ function ComputeAttackSpeed(sources: StatSource[]): number {
 function ComputeBleeding(
   sources: StatSource[],
   strength: number
-): { BleedingChance: number; BleedingDamage: number } {
+): { BleedingChance: number; BleedingDamage: number; BleedingTicks: number } {
   // Bleeding Chance
   const baseBleedChance = STATS_CONFIG.BASE.BLEEDING_CHANCE;
   const maxBleedChance = STATS_CONFIG.CAPS.MAX_BLEEDING_CHANCE;
@@ -137,9 +141,20 @@ function ComputeBleeding(
     baseBleedDamage + strengthBleedDamage + increasedBleedDamage
   );
 
+  // Bleeding Ticks
+  const baseBleedTicks = STATS_CONFIG.BASE.BLEEDING_TICKS;
+  const maxBleedTicks = STATS_CONFIG.CAPS.MAX_BLEEDING_TICKS;
+  const addBleedTicks = sources.reduce((sum, s) => Sum(sum, s.Bleeding.Ticks), 0);
+  const bleedTicks = ClampUtils.clamp(
+    baseBleedTicks + addBleedTicks,
+    baseBleedTicks,
+    maxBleedTicks
+  );
+
   return {
     BleedingChance: bleedChance,
-    BleedingDamage: bleedMultiplier
+    BleedingDamage: bleedMultiplier,
+    BleedingTicks: bleedTicks
   };
 }
 
@@ -176,7 +191,12 @@ function ComputeCriticalHit(
 function ComputeMultiHit(
   sources: StatSource[],
   dexterity: number
-): { MultiHitChance: number; MultiHitChainFactor: number; MultiHitDamage: number } {
+): {
+  MultiHitChance: number;
+  MultiHitChain: number;
+  MultiHitChainFactor: number;
+  MultiHitDamage: number;
+} {
   // Multi-Hit Chance
   const baseMultiHitChance = STATS_CONFIG.BASE.MULTI_HIT_CHANCE;
   const maxMultiHitChance = STATS_CONFIG.CAPS.MAX_MULTI_HIT_CHANCE;
@@ -197,6 +217,16 @@ function ComputeMultiHit(
     baseMultiHitDamage + dexterityMultiHitDamage + increaseMultiHitDamage
   );
 
+  // Multi-Hit Chain
+  const baseMultiHitChain = STATS_CONFIG.BASE.MULTI_HIT_CHAIN;
+  const maxMultiHitChain = STATS_CONFIG.CAPS.MAX_CHAIN_HITS;
+  const addMultiHitChain = sources.reduce((sum, s) => Sum(sum, s.MultiHit.Chain), 0);
+  const multiHitChain = ClampUtils.clamp(
+    baseMultiHitChain + addMultiHitChain,
+    baseMultiHitChain,
+    maxMultiHitChain
+  );
+
   // Multi-Hit Chain Factor
   const baseMultiHitChainFactor = STATS_CONFIG.BASE.MULTI_HIT_CHAIN_FACTOR;
   const maxMultiHitChainFactor = STATS_CONFIG.CAPS.MAX_MULTI_HIT_CHAIN_FACTOR;
@@ -213,6 +243,7 @@ function ComputeMultiHit(
 
   return {
     MultiHitChance: multiHitChance,
+    MultiHitChain: multiHitChain,
     MultiHitChainFactor: multiHitChainFactor,
     MultiHitDamage: multiHitDamage
   };
@@ -224,6 +255,33 @@ function ComputeAccuracy(sources: StatSource[]): number {
   const addedAcc = sources.reduce((prod, s) => Sum(prod, s.Accuracy.Value), 0);
   const accuracy = ClampUtils.clamp(minAcc + addedAcc, minAcc, maxAcc);
   return accuracy;
+}
+
+function ComputeChargingStrike(
+  sources: StatSource[],
+  baseStats: HeroStats
+): { ChargeGain: number; ChargeLoss: number; ChargeDamage: number; ChargeDuration: number } {
+  const chargeGain =
+    baseStats.ChargeGain + sources.reduce((sum, s) => Sum(sum, s.ChargingStrike.ChargeGain), 0);
+
+  const chargeLoss =
+    baseStats.ChargeLoss +
+    sources.reduce((sum, s) => Sum(sum, s.ChargingStrike.ChargeLossPercentage), 0);
+  const decreasedChargeLoss = ClampUtils.clamp(chargeLoss, 0, 1);
+
+  const chargeDamage =
+    baseStats.ChargeDamage + sources.reduce((sum, s) => Sum(sum, s.ChargingStrike.ChargeDamage), 0);
+
+  const chargeDuration =
+    baseStats.ChargeDuration +
+    sources.reduce((sum, s) => Sum(sum, s.ChargingStrike.ChargeDuration), 0);
+
+  return {
+    ChargeGain: chargeGain,
+    ChargeLoss: decreasedChargeLoss,
+    ChargeDamage: chargeDamage,
+    ChargeDuration: chargeDuration
+  };
 }
 //#endregion
 

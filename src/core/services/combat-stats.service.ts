@@ -5,12 +5,14 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { AmuletService } from './amulet.service';
 import { AttributesService } from './attributes.service';
 import { GearLoadoutService } from './gear-loadout.service';
+import { SkillsService } from './skills.service';
 
 @Injectable({ providedIn: 'root' })
 export class CombatStatsService {
   private readonly AttributesService = inject<AttributesService>(AttributesService);
   private readonly GearLoadout = inject<GearLoadoutService>(GearLoadoutService);
   private readonly AmuletRunes = inject<AmuletService>(AmuletService);
+  private readonly Skills = inject<SkillsService>(SkillsService);
 
   private readonly BaseStats = signal<HeroStats>(InitialHeroStats());
 
@@ -20,9 +22,8 @@ export class CombatStatsService {
   public readonly EffectiveAttributes = computed<Attributes>(() => {
     const attributes = this.AttributesService.Effective();
     const itemSources = this.GearLoadout.StatSources();
-    const amuletRunes = this.AmuletRunes.StatSources();
 
-    const statSources: StatSource[] = [...itemSources, ...amuletRunes];
+    const statSources: StatSource[] = [...itemSources];
 
     // Compute effective attributes
     return ComputeAttributes(attributes, statSources);
@@ -36,8 +37,9 @@ export class CombatStatsService {
     const attributes = this.EffectiveAttributes();
     const itemSources = this.GearLoadout.StatSources();
     const amuletRunes = this.AmuletRunes.StatSources();
+    const skillSources = this.Skills.StatSources();
 
-    const statSources: StatSource[] = [...itemSources, ...amuletRunes];
+    const statSources: StatSource[] = [...itemSources, ...amuletRunes, ...skillSources];
 
     // Compute effective combat stats
     return ComputeStats(attributes, baseStats, statSources);

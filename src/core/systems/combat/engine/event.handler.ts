@@ -24,12 +24,12 @@ import {
 } from '../../../models';
 import { ChanceUtils, ClampUtils } from '../../../../shared/utils';
 import { CombatLogService, StatisticsService } from '../../../services';
-import { DELAYS, STATS_CONFIG } from '../../../constants';
 import { HealLife, TakeDamage } from '../life.utils';
 import { Injectable, inject } from '@angular/core';
 
 import { CombatState } from './combat.state';
 import { ComputeNextIntervalMs } from '../attack-interval-computing';
+import { DELAYS } from '../../../constants';
 import { DamageResult } from './models/damage-result';
 
 /**
@@ -138,7 +138,7 @@ export class EventHandler {
     const totalHits: number = this.RollMultiHitChain(
       actor.Stats.MultiHitChance,
       actor.Stats.MultiHitChainFactor,
-      STATS_CONFIG.CAPS.MAX_CHAIN_HITS
+      actor.Stats.MultiHitChain
     );
 
     // Single Hits
@@ -171,7 +171,7 @@ export class EventHandler {
         'Bleed',
         target,
         nextTick,
-        STATS_CONFIG.BASE.BLEEDING_TICKS
+        actor.Stats.BleedingTicks
       );
       this.CombatState.Queue.Push(damageOverTimeEvent);
     } else if (this.TargetIsNotBleeding(target as Boss)) {
@@ -183,7 +183,7 @@ export class EventHandler {
           'Bleed',
           target,
           0,
-          STATS_CONFIG.BASE.BLEEDING_TICKS
+          actor.Stats.BleedingTicks
         );
 
         this.CombatState.Queue.Push(damageOverTimeEvent);
@@ -212,6 +212,9 @@ export class EventHandler {
 
   /** MISSED HIT */
   private HandleMissEvent(event: MissEvent): void {
+    const actor = event.Actor as Hero;
+
+    // Consume Bleeding Tick on Miss
     if (this.TargetIsBleeding(event.Target as Boss)) {
       const nextTick = this.NextBleedingTick(event.Target as Boss);
 
@@ -220,9 +223,16 @@ export class EventHandler {
         'Bleed',
         event.Target,
         nextTick,
-        STATS_CONFIG.BASE.BLEEDING_TICKS
+        actor.Stats.BleedingTicks
       );
       this.CombatState.Queue.Push(damageOverTimeEvent);
+    }
+
+    // Lose Charge on Miss
+    if (!actor.Charge.Charged) {
+      const amount = Math.round(actor.Stats.ChargeGain * actor.Stats.ChargeLoss);
+      const chargeEvent = CreateChargeEvent(event.AtMs + this.EventDelayMs, actor, -amount);
+      this.CombatState.Queue.Push(chargeEvent);
     }
   }
 
@@ -255,7 +265,7 @@ export class EventHandler {
     if (!target) return;
     if (!target.Life.Alive) return;
 
-    this.SetBleeding(target as Boss, event.Tick);
+    this.SetBleeding(target as Boss, event.Tick, event.TotalTicks);
 
     // Clear Bleeding after last Tick
     if (event.Tick === event.TotalTicks) {
@@ -425,11 +435,11 @@ export class EventHandler {
     return !target.State.IsBleeding;
   }
 
-  private SetBleeding(boss: Boss, tick: number): void {
+  private SetBleeding(boss: Boss, tick: number, maxTicks: number): void {
     boss.State.IsBleeding = true;
     boss.State.BleedingState = {
       Tick: tick,
-      TotalTicks: STATS_CONFIG.BASE.BLEEDING_TICKS
+      TotalTicks: maxTicks
     };
   }
 

@@ -3,8 +3,10 @@
   @let hero = HeroInfo;
   <div class="header__name">{{ hero.name.toUpperCase() }}</div>
   <div class="header__level">
-    <app-number-value [label]="'Level:'" [value]="hero.level"></app-number-value>
-    <app-icon class="level-icon" symbol="roundstar" size="sm"></app-icon>
+    <div class="level_title">Level:</div>
+    <div class="level_value">
+      <app-level [level]="hero.level" fontSize="1.3rem" size="sm" title="Hero Level"></app-level>
+    </div>
   </div>
 </div>
 

@@ -1,13 +1,13 @@
 @use "sass:color";
 @use "index" as *;
 
-.gold-display {
+.level-display {
   @include disable-text-selection();
   display: flex;
   gap: calc($gap / 2);
-  color: $clr-gold;
+  color: $clr-highlight;
 
-  .gold-amount {
+  .level {
     display: grid;
     grid-auto-flow: column;
 
@@ -15,18 +15,13 @@
     white-space: nowrap;
 
     span {
-      width: 13px;
-      font-family: $font-family-title;
+      font-weight: bold;
       text-align: center;
       align-self: center;
-
-      &.thousands-separator {
-        width: 7px;
-      }
     }
   }
 
-  .gold-icon {
+  .level-icon {
     display: flex;
     align-self: center;
   }

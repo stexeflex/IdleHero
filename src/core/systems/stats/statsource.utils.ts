@@ -5,11 +5,14 @@ import {
   ItemVariantDefinition,
   Rune,
   RuneDefinition,
+  Skill,
+  StatSkillDefinition,
   StatSource
 } from '../../models';
 import { GetAffixDefinition, GetAffixValue } from '../items/affix.utils';
 import { GetRuneDefinition, GetRuneValue } from '../runes/rune.utils';
 import { ITEM_VARIANTS, STATS_CONFIG } from '../../constants';
+import { IsStatSkillDefinition, SkillDefinitionsById } from '../skills/skills.utils';
 
 export function MapItemToStatSources(item: Item): StatSource[] {
   const statSources: StatSource[] = [];
@@ -75,6 +78,30 @@ export function MapRuneToStatSources(rune: Rune): StatSource[] {
     );
 
     statSources.push(runeStatSource);
+  }
+
+  return statSources;
+}
+
+export function MapSkillToStatSources(skill: Skill): StatSource[] {
+  const statSources: StatSource[] = [];
+
+  if (skill.Level <= 0) return statSources;
+
+  const definition = SkillDefinitionsById.get(skill.DefinitionId);
+  if (!definition || !IsStatSkillDefinition(definition)) return statSources;
+
+  const statSkillDefinition = definition as StatSkillDefinition;
+  const levelSpec = statSkillDefinition.Levels[skill.Level - 1];
+  if (!levelSpec) return statSources;
+
+  const statSource = statSkillDefinition.Effect.MapToStatSource(
+    skill.DefinitionId,
+    levelSpec.Value
+  );
+
+  if (statSource) {
+    statSources.push(statSource);
   }
 
   return statSources;

@@ -4,14 +4,16 @@ export const STATS_CONFIG = {
     DAMAGE: 0, // Basis-Schaden
     BLEEDING_CHANCE: 0.0, // 0% Base Bleeding Chance
     BLEEDING_DAMAGE: 0.25, // 25% Base Bleeding Damage
-    BLEEDING_TICKS: 3, // Basis Anzahl Bleeding Ticks
+    BLEEDING_TICKS: 2, // Basis Anzahl Bleeding Ticks
     CRIT_CHANCE: 0.0, // 0% Base CHC
     CRIT_DAMAGE: 1.5, // 150% Base CHD
     MULTI_HIT_CHANCE: 0.0, // 0% Base MHC
     MULTI_HIT_DAMAGE: 0.5, // 50% Base MHD
     MULTI_HIT_CHAIN_FACTOR: 0.4, // 40% Base Chain Factor
+    MULTI_HIT_CHAIN: 2, // 2 Base Chain Hits
     ACCURACY: 0.7, // Basis-Accuracy
     CHARGE_GAIN: 1, // Basis Charge Gain
+    CHARGE_LOSS: 1.0, // 100% Basis Charge Loss
     CHARGE_DAMAGE: 1.5, // 150% Basis Charge Damage
     CHARGE_DURATION: 5, // Basis Charge Dauer in Sekunden
     CHARGE_MAX: 100 // Basis Maximaler Charge-Wert
@@ -28,6 +30,7 @@ export const STATS_CONFIG = {
   CAPS: {
     MAX_ACCURACY: 1.0, // Maximal 100% Accuracy
     MAX_BLEEDING_CHANCE: 1.0, // Maximal 100% BHC
+    MAX_BLEEDING_TICKS: 5, // Maximal 5 Bleeding Ticks
     MAX_CRIT_CHANCE: 1.0, // Maximal 100% CHC
     MAX_MULTI_HIT_CHANCE: 1.0, // Maximal 100% MHC
     MAX_MULTI_HIT_CHAIN_FACTOR: 0.9, // Maximal 90% Chain Factor

@@ -11,6 +11,17 @@
   gap: $gap;
 }
 
+@media (max-height: $bp-xl-height) {
+  .container {
+    @include overflow($display: grid, $max-height: $size-skills-height);
+    @include scrollbar($size: 0.75rem);
+  }
+
+  .tiers {
+    margin-right: $gap;
+  }
+}
+
 .skills {
   display: grid;
   gap: $gap;

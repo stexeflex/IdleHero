@@ -95,6 +95,14 @@
   padding: $gap;
 }
 
+@media (max-height: $bp-xl-height) {
+  .grid {
+    min-height: $size-inventory-grid-height-responsive;
+    @include overflow($display: flex, $max-height: $size-inventory-grid-height-responsive);
+    @include scrollbar();
+  }
+}
+
 .empty {
   @include panel($bg: rgba(0, 0, 0, 0.2));
   @include flexbox($dir: column, $justify: center, $align: center);

@@ -1,37 +1,43 @@
-import { Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { GetSkillUnlockCost, GetSkillUpgradeCost } from '../../../../core/systems/skills';
+import { Gold, IconComponent } from '../../../../shared/components';
 
-import { IconComponent } from '../../../../shared/components';
-import { Skill } from '../../../../shared/models';
+import { SkillViewModel } from '../../../../core/services';
 
 @Component({
   selector: 'app-skill-area',
-  imports: [IconComponent],
+  imports: [IconComponent, Gold],
   templateUrl: './skill-area.html',
-  styleUrl: './skill-area.scss'
+  styleUrl: './skill-area.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SkillArea {
-  readonly skill = input.required<Skill>();
+  readonly skill = input.required<SkillViewModel>();
   readonly unlockable = input.required<boolean>();
 
   readonly canUnlock = input.required<boolean>();
   readonly canLevel = input.required<boolean>();
 
-  readonly unlockSkill = output<Skill>();
-  readonly upgradeSkill = output<Skill>();
+  readonly unlockSkill = output<SkillViewModel>();
+  readonly upgradeSkill = output<SkillViewModel>();
 
   protected get unlocked() {
-    return this.skill().Level > 0;
+    const skill = this.skill();
+    return skill.IsUnlocked;
   }
 
   protected get isMaxed() {
-    return this.skill().Level >= this.skill().MaxLevel;
+    const skill = this.skill();
+    return skill.Level >= skill.MaxLevel;
   }
 
-  protected get hasDependencies(): boolean {
-    return this.skill().Dependencies.length > 0;
+  protected get UnlockCost(): number {
+    const skill = this.skill();
+    return GetSkillUnlockCost(skill.Definition.Tier);
   }
 
-  protected get skillDependencies(): string {
-    return this.skill().Dependencies.join(', ');
+  protected get UpgradeCost(): number {
+    const skill = this.skill();
+    return GetSkillUpgradeCost(skill.Definition.Tier, skill.Level);
   }
 }
