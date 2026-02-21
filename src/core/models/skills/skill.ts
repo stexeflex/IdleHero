@@ -21,6 +21,14 @@ export interface SkillEffectMapping {
   MapToStatSource: (source: string, value: number) => StatSource;
 }
 
+interface TemporarySkillDefinition extends SkillDefinition {
+  // Duration of the active skill effect in seconds
+  Duration: number;
+
+  // Cooldown of the active skill in seconds
+  Cooldown: number;
+}
+
 export interface StatSkillDefinition extends SkillDefinition {
   /** Min/Max ranges per level for upgrading this skill. */
   Levels: SkillLevelSpec[];
@@ -29,7 +37,13 @@ export interface StatSkillDefinition extends SkillDefinition {
   Effect: SkillEffectMapping;
 }
 
-export interface ActiveSkillDefinition extends SkillDefinition {}
+export interface ActiveSkillDefinition extends TemporarySkillDefinition {
+  /**
+   * A function that maps a numeric value to a StatSource contribution.
+   * Implementations will apply the numeric value to the appropriate StatSource fields.
+   */
+  MapToStatSource: (source: string) => StatSource;
+}
 
 export interface PassiveSkillDefinition extends SkillDefinition {
   /**
@@ -38,6 +52,8 @@ export interface PassiveSkillDefinition extends SkillDefinition {
    */
   MapToPassiveEffect: (passives: Passives) => Passives;
 }
+
+export interface BuffSkillDefinition extends TemporarySkillDefinition, PassiveSkillDefinition {}
 
 export interface SkillDefinition {
   Id: string;

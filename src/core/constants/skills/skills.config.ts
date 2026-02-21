@@ -1,5 +1,6 @@
 import {
   ActiveSkillDefinition,
+  BuffSkillDefinition,
   EmptyStatSource,
   FlatAdditiveLabel,
   PassiveSkillDefinition,
@@ -11,7 +12,7 @@ import {
 import { TimestampUtils } from '../../../shared/utils';
 
 const ATTACK_POWER_I_SKILL: StatSkillDefinition = {
-  Id: 'ATP_I',
+  Id: 'STAT_ATP_I',
   Name: 'Vile Strike',
   Description: 'Increases the damage of your attacks.',
   Tier: 'I',
@@ -32,7 +33,7 @@ const ATTACK_POWER_I_SKILL: StatSkillDefinition = {
 };
 
 const ATTACK_POWER_II_SKILL: StatSkillDefinition = {
-  Id: 'ATP_II',
+  Id: 'STAT_ATP_II',
   Name: 'Vile Strike+',
   Description: 'Increases the damage of your attacks even further.',
   Tier: 'II',
@@ -53,9 +54,9 @@ const ATTACK_POWER_II_SKILL: StatSkillDefinition = {
 };
 
 const ATTACK_POWER_III_SKILL: StatSkillDefinition = {
-  Id: 'ATP_III',
+  Id: 'STAT_ATP_III',
   Name: 'Vile Strike++',
-  Description: 'Increases the damage of your attacks to the maximum level.',
+  Description: 'Increases the damage of your attacks to their maximum potential.',
   Tier: 'III',
   Type: 'StatBoost',
   Levels: [
@@ -74,8 +75,8 @@ const ATTACK_POWER_III_SKILL: StatSkillDefinition = {
 };
 
 const ATTACK_SPEED_SKILL: StatSkillDefinition = {
-  Id: 'IAS',
-  Name: 'Haste',
+  Id: 'STAT_IAS',
+  Name: 'Quickening',
   Description: 'Increases the speed of your attacks.',
   Tier: 'I',
   Type: 'StatBoost',
@@ -97,7 +98,7 @@ const ATTACK_SPEED_SKILL: StatSkillDefinition = {
 };
 
 const BLEEDING_TICKS_SKILL: StatSkillDefinition = {
-  Id: 'BTS',
+  Id: 'STAT_BLEEDING_TICKS',
   Name: 'Hemorrhage',
   Description: 'Increases the number of bleeding ticks applied by your attacks.',
   Tier: 'II',
@@ -118,7 +119,7 @@ const BLEEDING_TICKS_SKILL: StatSkillDefinition = {
 };
 
 const MULTI_HIT_CHAIN_SKILL: StatSkillDefinition = {
-  Id: 'MAX_MH_CHAIN',
+  Id: 'STAT_MAX_MH_CHAIN',
   Name: 'Chain Reaction',
   Description: 'Increases the maximum chain length of your multi hit attacks.',
   Tier: 'II',
@@ -142,7 +143,7 @@ const MULTI_HIT_CHAIN_SKILL: StatSkillDefinition = {
 };
 
 const CHARGING_STRIKE_LOSS_SKILL: StatSkillDefinition = {
-  Id: 'CSLS',
+  Id: 'STAT_CS_LOSS',
   Name: 'Unyielding Charge',
   Description: 'Reduces the charge loss from missed attacks on your Charging Strike.',
   Tier: 'I',
@@ -164,7 +165,7 @@ const CHARGING_STRIKE_LOSS_SKILL: StatSkillDefinition = {
 };
 
 const CHARGING_STRIKE_DURATION_SKILL: StatSkillDefinition = {
-  Id: 'CSD',
+  Id: 'STAT_CS_DURATION',
   Name: 'Enduring Charge',
   Description: 'Increases the duration of your Charging Strike.',
   Tier: 'III',
@@ -197,10 +198,91 @@ export const STAT_SKILL_DEFINITIONS: StatSkillDefinition[] = [
   CHARGING_STRIKE_DURATION_SKILL
 ];
 
-export const ACTIVE_SKILL_DEFINITIONS: ActiveSkillDefinition[] = [];
+const ACTIVE_ATTACK_SPEED_SKILL: ActiveSkillDefinition = {
+  Id: 'ACTIVE_ATTACK_SPEED',
+  Name: 'Haste',
+  Description: 'Increases your Attack Speed by 50% for a short duration.',
+  Tier: 'I',
+  Type: 'Active',
+  Duration: 20,
+  Cooldown: 60,
+  MapToStatSource: (source: string) => {
+    const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
+    s.AttackSpeed.Value = 0.5;
+    return s;
+  }
+};
+
+const ACTIVE_BLEED_CHANCE_SKILL: ActiveSkillDefinition = {
+  Id: 'ACTIVE_BLEED_CHANCE',
+  Name: 'Bleeding Edge',
+  Description: 'Increases your Bleed Chance by 25% for a short duration.',
+  Tier: 'I',
+  Type: 'Active',
+  Duration: 20,
+  Cooldown: 60,
+  MapToStatSource: (source: string) => {
+    const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
+    s.Bleeding.Chance = 0.25;
+    return s;
+  }
+};
+
+const ACTIVE_CRIT_CHANCE_SKILL: ActiveSkillDefinition = {
+  Id: 'ACTIVE_CRIT_CHANCE',
+  Name: 'Critical Focus',
+  Description: 'Increases your Critical Hit Chance by 25% for a short duration.',
+  Tier: 'I',
+  Type: 'Active',
+  Duration: 20,
+  Cooldown: 60,
+  MapToStatSource: (source: string) => {
+    const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
+    s.CriticalHit.Chance = 0.25;
+    return s;
+  }
+};
+
+const ACTIVE_MULTI_HIT_CHANCE_SKILL: ActiveSkillDefinition = {
+  Id: 'ACTIVE_MULTI_HIT_CHANCE',
+  Name: 'Frenzy',
+  Description: 'Increases your Multi Hit Chance by 25% for a short duration.',
+  Tier: 'I',
+  Type: 'Active',
+  Duration: 20,
+  Cooldown: 60,
+  MapToStatSource: (source: string) => {
+    const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
+    s.MultiHit.Chance = 0.25;
+    return s;
+  }
+};
+
+export const ACTIVE_SKILL_DEFINITIONS: ActiveSkillDefinition[] = [
+  ACTIVE_ATTACK_SPEED_SKILL,
+  ACTIVE_BLEED_CHANCE_SKILL,
+  ACTIVE_CRIT_CHANCE_SKILL,
+  ACTIVE_MULTI_HIT_CHANCE_SKILL
+];
+
+const BUFF_DAMAGE_SKILL: BuffSkillDefinition = {
+  Id: 'BUFF_WAR_CRY',
+  Name: 'War Cry',
+  Description: 'Unleashes a powerful war cry increasing your damage for a short duration.',
+  Tier: 'III',
+  Type: 'Buff',
+  Duration: 20,
+  Cooldown: 120,
+  MapToPassiveEffect: (passives: Passives) => {
+    passives.WarCry = true;
+    return passives;
+  }
+};
+
+export const BUFF_SKILL_DEFINITIONS: BuffSkillDefinition[] = [BUFF_DAMAGE_SKILL];
 
 const MULTI_HIT_CRIT_SKILL: PassiveSkillDefinition = {
-  Id: 'CRITICAL_MH',
+  Id: 'PASSIVE_CRITICAL_MH',
   Name: 'Deadly Flurry',
   Description: 'Your multi hit attacks have a chance to critically strike on each hit.',
   Tier: 'II',
@@ -212,7 +294,7 @@ const MULTI_HIT_CRIT_SKILL: PassiveSkillDefinition = {
 };
 
 const SPLASH_DAMAGE_SKILL: PassiveSkillDefinition = {
-  Id: 'SPLASH_DAMAGE',
+  Id: 'PASSIVE_SPLASH_DAMAGE',
   Name: 'Overflowing Splashes',
   Description: 'Your damage overflow from attacks hits the next enemy.',
   Tier: 'III',
@@ -226,4 +308,11 @@ const SPLASH_DAMAGE_SKILL: PassiveSkillDefinition = {
 export const PASSIVE_SKILL_DEFINITIONS: PassiveSkillDefinition[] = [
   MULTI_HIT_CRIT_SKILL,
   SPLASH_DAMAGE_SKILL
+];
+
+export const ALL_SKILL_DEFINITIONS = [
+  ...STAT_SKILL_DEFINITIONS,
+  ...ACTIVE_SKILL_DEFINITIONS,
+  ...BUFF_SKILL_DEFINITIONS,
+  ...PASSIVE_SKILL_DEFINITIONS
 ];

@@ -1,1 +1,1 @@
-export type SkillType = 'Active' | 'Passive' | 'StatBoost';
+export type SkillType = 'Active' | 'Passive' | 'StatBoost' | 'Buff';

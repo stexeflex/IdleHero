@@ -2,6 +2,8 @@
 @use "index" as *;
 
 .container {
+  @include overflow($display: grid, $max-height: $size-skills-height);
+  @include scrollbar($size: 0.75rem);
   display: grid;
   gap: $gap;
 }
@@ -9,16 +11,12 @@
 .tiers {
   display: grid;
   gap: $gap;
+  margin-right: $gap;
 }
 
 @media (max-height: $bp-xl-height) {
   .container {
-    @include overflow($display: grid, $max-height: $size-skills-height);
-    @include scrollbar($size: 0.75rem);
-  }
-
-  .tiers {
-    margin-right: $gap;
+    @include overflow($display: grid, $max-height: $size-skills-height-responsive);
   }
 }
 

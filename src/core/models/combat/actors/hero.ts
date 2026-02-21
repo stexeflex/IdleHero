@@ -9,6 +9,9 @@ export interface Passives {
 
   /** Whether the hero's attacks can deal splash damage. */
   SplashDamage: boolean;
+
+  /** Whether the hero's War Cry skill is currently active. */
+  WarCry: boolean;
 }
 
 export interface ChargeState {
@@ -32,7 +35,8 @@ export interface Hero extends CombatActor {
 export function InitialPassives(): Passives {
   return {
     CriticalMultiHit: false,
-    SplashDamage: false
+    SplashDamage: false,
+    WarCry: false
   };
 }
 
