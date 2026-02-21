@@ -48,8 +48,6 @@ export class EventHandler {
    * @param event The combat event to handle
    */
   public async HandleEvent(event: CombatEvent): Promise<void> {
-    this.CombatState.Events$.next(event);
-
     switch (event.Type) {
       case 'Attack':
         this.HandleAttackEvent(event);
@@ -62,8 +60,8 @@ export class EventHandler {
 
       case 'Damage':
         const damages = this.HandleDamageEvent(event);
-        const updatedEvent = { ...event, Damage: damages };
-        this.Logger.Damage(updatedEvent);
+        event = { ...event, Damage: damages };
+        this.Logger.Damage(event);
         break;
 
       case 'DamageOverTime':
@@ -92,6 +90,8 @@ export class EventHandler {
         this.HandleStageAdvanceEvent(event);
         break;
     }
+
+    this.CombatState.Events$.next(event);
   }
 
   /** ATTACK */

@@ -130,7 +130,17 @@
 }
 
 .hero-icon.crit-multi .icon {
+  animation: hero-multi-attack 300ms ease-out;
   filter: drop-shadow(0 0 20px $clr-log-crit-multi);
+}
+
+.hero-icon.bleed .icon {
+  filter: drop-shadow(0 0 20px $clr-log-bleed);
+}
+
+.hero-icon.splash .icon {
+  animation: hero-multi-attack 300ms ease-out;
+  filter: drop-shadow(0 0 30px $clr-log-splash);
 }
 
 @keyframes hero-attack {

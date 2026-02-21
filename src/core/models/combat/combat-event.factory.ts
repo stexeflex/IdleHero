@@ -44,13 +44,14 @@ export function CreateDamageEvent(
   target: Target,
   damage: DamageResult[]
 ): DamageEvent {
+  const rawDamages = damage.filter((d) => !d.IsBleeding && !d.IsSplash);
   return {
     Type: 'Damage',
     AtMs: atMs,
     Actor: actor,
     Target: target,
     Damage: damage,
-    IsMultiHit: damage.length > 1
+    IsMultiHit: rawDamages.length > 1
   };
 }
 

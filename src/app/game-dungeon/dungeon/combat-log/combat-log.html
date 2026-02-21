@@ -80,18 +80,20 @@
               }
             </div>
 
-            @if (entry.IsMultiHit) {
+            @if (entry.Damage.length > 1) {
               <div class="log-damage-values">
                 [
                 @for (tag of entry.Damage; track $index) {
                   <span
                     class="log-damage"
-                    [class.log-multi]="!tag.IsCritical && !tag.IsBleeding && !tag.IsSplash"
+                    [class.log-multi]="
+                      entry.IsMultiHit && !tag.IsCritical && !tag.IsBleeding && !tag.IsSplash
+                    "
                     [class.log-critical]="tag.IsCritical"
                     [class.log-bleed]="tag.IsBleeding"
                     [class.log-splash]="tag.IsSplash">
                     {{ tag.Amount | number: "1.0-0" }}
-                    @if ($index < entry.Damage.length - 1) {
+                    @if (!$last) {
                       <span class="dot">•</span>
                     }
                   </span>

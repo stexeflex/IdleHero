@@ -215,7 +215,7 @@ const SPLASH_DAMAGE_SKILL: PassiveSkillDefinition = {
   Id: 'SPLASH_DAMAGE',
   Name: 'Overflowing Splashes',
   Description: 'Your damage overflow from attacks hits the next enemy.',
-  Tier: 'II',
+  Tier: 'III',
   Type: 'Passive',
   MapToPassiveEffect: (passives: Passives) => {
     passives.SplashDamage = true;

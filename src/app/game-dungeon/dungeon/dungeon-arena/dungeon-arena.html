@@ -59,7 +59,9 @@
           [class.attack]="isAttacking()"
           [class.crit]="isCrit()"
           [class.multi]="isMulti()"
-          [class.crit-multi]="isCritMulti()">
+          [class.crit-multi]="isCritMulti()"
+          [class.bleed]="isBleed()"
+          [class.splash]="isSplash()">
           <app-icon class="icon" [character]="hero.HeroIcon" size="4x"></app-icon>
         </div>
         <div class="actor-info bottom">

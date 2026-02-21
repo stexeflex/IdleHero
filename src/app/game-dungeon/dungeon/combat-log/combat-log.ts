@@ -75,9 +75,10 @@ export class CombatLog {
 
   private DamageDetails(entry: DamageLogEntry): string {
     let damageDetails = 'HIT';
-    const multiHitCount = entry.Damage.filter((d) => !d.IsSplash).length ?? 0;
 
-    if (multiHitCount > 1) {
+    if (entry.IsMultiHit) {
+      const rawDamages = entry.Damage.filter((d) => !d.IsBleeding && !d.IsSplash);
+      const multiHitCount = rawDamages.length ?? 0;
       damageDetails = 'MULTI ' + damageDetails + ' [x' + multiHitCount + ']';
     }
 
