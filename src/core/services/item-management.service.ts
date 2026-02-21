@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 
 import { GearLoadoutService } from './gear-loadout.service';
+import { GetItemVariant } from '../systems/items';
 import { InventoryService } from './inventory.service';
 
 @Injectable({ providedIn: 'root' })
@@ -28,7 +29,8 @@ export class ItemManagementService {
     const item = this.Loadout.EquippedItems().find((i) => i.Id === itemId);
     if (!item) return false;
 
-    const unequipped = this.Loadout.Unequip(item.Slot);
+    const definition = GetItemVariant(item.DefinitionId);
+    const unequipped = this.Loadout.Unequip(definition.Slot);
     // If an item was unequipped, add it back to inventory
     if (unequipped) this.Inventory.Add(unequipped);
     return true;

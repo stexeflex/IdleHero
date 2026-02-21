@@ -1,5 +1,5 @@
 <div class="list-item" [class.selected]="selected()" (click)="SelectItem()">
-  <app-icon class="gear-slot__icon" [gear]="item().Icon" size="md"></app-icon>
+  <app-icon class="gear-slot__icon" [gear]="Variant().Icon" size="md"></app-icon>
   <div class="info">
     <div
       class="name"
@@ -8,12 +8,12 @@
       [class.rare--font]="Rarity() === 'Rare'"
       [class.epic--font]="Rarity() === 'Epic'"
       [class.legendary--font]="Rarity() === 'Legendary'">
-      {{ item().Name.toUpperCase() }}
+      {{ Variant().Name.toUpperCase() }}
     </div>
     <div class="meta">
-      <span class="tier">{{ item().Tier }}</span>
+      <span class="tier">{{ Variant().Tier }}</span>
       <span>•</span>
-      <span>{{ Rarity() }} {{ item().Type }}</span>
+      <span>{{ Rarity() }} {{ Variant().Type }}</span>
       <span
         [class.common--font]="Rarity() === 'Common'"
         [class.magic--font]="Rarity() === 'Magic'"

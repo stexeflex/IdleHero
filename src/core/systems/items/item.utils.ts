@@ -76,7 +76,8 @@ export function NextLevel(item: Item): ItemLevel {
 }
 
 export function IsMaxLevel(item: Item): boolean {
-  const tierRules = ITEM_TIER_RULES[item.Tier];
+  const definition = GetItemVariant(item.DefinitionId);
+  const tierRules = ITEM_TIER_RULES[definition.Tier];
   return item.Level >= tierRules.MaxItemLevel;
 }
 
@@ -84,11 +85,6 @@ export function CreateItem(variant: ItemVariantDefinition): Item {
   const item: Item = {
     Id: `item_${variant.Id}_${TimestampUtils.GetTimestampNow()}`,
     DefinitionId: variant.Id,
-    Name: variant.Name,
-    Icon: variant.Icon,
-    Slot: variant.Slot,
-    Type: variant.Type,
-    Tier: variant.Tier,
     Level: MinLevelForTier(variant.Tier),
     Affixes: []
   };

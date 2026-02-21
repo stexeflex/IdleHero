@@ -7,16 +7,16 @@
   [class.legendary--border]="Rarity() === 'Legendary'">
   <!-- ITEM ICON -->
   <div class="item-icon">
-    <app-icon [gear]="Item().Icon" size="3x"></app-icon>
+    <app-icon [gear]="Variant().Icon" size="3x"></app-icon>
   </div>
 
   <div class="item-info">
     <!-- ITEM NAME -->
-    <span class="item-name common--font">{{ Item().Name.toUpperCase() }}</span>
+    <span class="item-name common--font">{{ Variant().Name.toUpperCase() }}</span>
 
     <!-- ITEM TYPE -->
     <div class="item-type-info">
-      <span class="item-tier">{{ Item().Tier }}</span>
+      <span class="item-tier">{{ Variant().Tier }}</span>
       <span class="separator">•</span>
       <span class="item-type">{{ Rarity() }} {{ Variant().Type }}</span>
       <span

@@ -86,11 +86,11 @@ export class InventoryArea implements OnDestroy {
         let rarityMatch = true;
 
         if (selectedSlots.size > 0) {
-          slotMatch = selectedSlots.has(card.Item.Slot);
+          slotMatch = selectedSlots.has(card.Variant.Slot);
         }
 
         if (selectedTiers.size > 0) {
-          tierMatch = selectedTiers.has(card.Item.Tier);
+          tierMatch = selectedTiers.has(card.Variant.Tier);
         }
 
         if (selectedRarities.size > 0) {
@@ -101,16 +101,16 @@ export class InventoryArea implements OnDestroy {
         return slotMatch && tierMatch && rarityMatch;
       })
       .sort((a, b) => {
-        const slotA = this.SlotOrder.get(a.Item.Slot) ?? 999;
-        const slotB = this.SlotOrder.get(b.Item.Slot) ?? 999;
+        const slotA = this.SlotOrder.get(a.Variant.Slot) ?? 999;
+        const slotB = this.SlotOrder.get(b.Variant.Slot) ?? 999;
         if (slotA !== slotB) return slotA - slotB;
 
-        const tierA = this.TierOrder.get(a.Item.Tier) ?? 999;
-        const tierB = this.TierOrder.get(b.Item.Tier) ?? 999;
+        const tierA = this.TierOrder.get(a.Variant.Tier) ?? 999;
+        const tierB = this.TierOrder.get(b.Variant.Tier) ?? 999;
         if (tierA !== tierB) return tierA - tierB;
 
         if (a.Item.Level !== b.Item.Level) return b.Item.Level - a.Item.Level;
-        return a.Item.Name.localeCompare(b.Item.Name);
+        return a.Variant.Name.localeCompare(b.Variant.Name);
       });
   });
 

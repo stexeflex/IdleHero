@@ -58,12 +58,6 @@ export interface Item {
   /** References the ItemVariantDefinition this item is based on. */
   DefinitionId: string;
 
-  Name: string;
-  Icon: GearSlotIconName;
-
-  Slot: ItemSlot;
-  Type: ItemType;
-  Tier: ItemTier;
   Level: ItemLevel;
 
   /** Rolled/enchanted affixes currently on the item */

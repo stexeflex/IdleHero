@@ -8,19 +8,19 @@ import {
   Rune
 } from '../../../core/models';
 import {
+  AffixSlotIcon,
   AmuletPreview,
   GearSlotIconName,
   IconComponent,
   ItemPreview,
-  Separator
+  Separator,
+  SocketedRunesIcon
 } from '../../../shared/components';
 import { AmuletService, GearLoadoutService } from '../../../core/services';
-import { Component, computed, inject, output, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { GetItemRarity, GetItemVariant } from '../../../core/systems/items';
 
-import { AffixSlotIcon } from '../../../shared/components/affix-slot-icon/affix-slot-icon';
 import { ICONS_CONFIG } from '../../../core/constants';
-import { SocketedRunesIcon } from '../../../shared/components/socketed-runes-icon/socketed-runes-icon';
 
 interface ItemSlotDefinition {
   slot: ItemSlot | 'Amulet';
@@ -74,13 +74,14 @@ export class CharacterLoadout {
 
   protected ItemInfo(slot: ItemSlot): ItemSlotInfo {
     const item = this.gearLoadoutService.Get(slot as ItemSlot);
+    const definition = item ? GetItemVariant(item.DefinitionId) : null;
     const rarity = item?.Level ? GetItemRarity(item.Level) : undefined;
 
     return {
       IsSelected: false,
       IsEquipped: this.gearLoadoutService.IsEquipped(slot),
-      Icon: item ? item.Icon : this.ItemSlots.find((s) => s.slot === slot)!.icon,
-      Tier: item?.Tier || undefined,
+      Icon: definition ? definition.Icon : this.ItemSlots.find((s) => s.slot === slot)!.icon,
+      Tier: definition?.Tier || undefined,
       IsCommon: rarity === 'Common',
       IsMagic: rarity === 'Magic',
       IsRare: rarity === 'Rare',

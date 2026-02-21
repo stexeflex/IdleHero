@@ -2,6 +2,7 @@ import { CreateEmptyLoadout, GearLoadout } from '../models/items/gear-loadout';
 import { Injectable, computed, signal } from '@angular/core';
 import { Item, ItemSlot, StatSource } from '../models';
 
+import { GetItemVariant } from '../systems/items';
 import { MapItemToStatSources } from '../systems/stats/statsource.utils';
 
 @Injectable({ providedIn: 'root' })
@@ -45,8 +46,9 @@ export class GearLoadoutService {
    * @returns the previously equipped item in that slot, or null if none
    */
   public Equip(item: Item): Item | null {
-    const previous = this.equipped()[item.Slot] ?? null;
-    this.equipped.update((eq) => ({ ...eq, [item.Slot]: item }));
+    const definition = GetItemVariant(item.DefinitionId);
+    const previous = this.equipped()[definition.Slot] ?? null;
+    this.equipped.update((eq) => ({ ...eq, [definition.Slot]: item }));
     return previous;
   }
 
