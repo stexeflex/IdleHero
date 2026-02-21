@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { CombatLogEntry, DamageLogEntry } from '../../../../core/models';
+import { DecimalPipe, PercentPipe } from '@angular/common';
 import { IconComponent, Separator } from '../../../../shared/components';
 
 import { CombatActorIcon } from './combat-actor-icon/combat-actor-icon';
 import { CombatLogService } from '../../../../core/services';
-import { DecimalPipe } from '@angular/common';
 import { TimestampUtils } from '../../../../shared/utils';
 
 interface DamageLogEntryExtended {
@@ -22,7 +22,7 @@ interface AdditionalDetail {
 
 @Component({
   selector: 'app-combat-log',
-  imports: [DecimalPipe, CombatActorIcon, IconComponent, Separator],
+  imports: [DecimalPipe, PercentPipe, CombatActorIcon, IconComponent, Separator],
   templateUrl: './combat-log.html',
   styleUrl: './combat-log.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

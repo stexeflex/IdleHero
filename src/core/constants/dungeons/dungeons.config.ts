@@ -4,7 +4,7 @@ import {
   DungeonRoomKey,
   DungeonType,
   NormalDungeonRoom
-} from '../models/combat/dungeon-room';
+} from '../../models/combat/dungeon-room';
 
 export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
   {
@@ -16,8 +16,13 @@ export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
     StagesBase: 1,
     MidStages: [25, 50, 75],
     StagesMax: 100,
-    XpBase: 10,
-    GoldBase: 10,
+
+    Rewards: {
+      XpBase: 10,
+      GoldBase: 10,
+      RuneDropChances: { Common: 0.08, Magic: 0.01, Rare: 0.0, Epic: 0.0, Legendary: 0.0 }
+    },
+
     Locked: false
   },
   {
@@ -26,11 +31,17 @@ export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
     Description: 'A dark cave infested with mischievous brutes.',
     Icon: 'brute',
     Type: DungeonType.Normal,
+
     StagesBase: 1,
     MidStages: [25, 50, 75],
     StagesMax: 100,
-    XpBase: 15,
-    GoldBase: 25,
+
+    Rewards: {
+      XpBase: 15,
+      GoldBase: 25,
+      RuneDropChances: { Common: 0.25, Magic: 0.08, Rare: 0.01, Epic: 0.0, Legendary: 0.0 }
+    },
+
     Locked: false
   },
   {
@@ -39,11 +50,17 @@ export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
     Description: 'A winding den crawling with venomous snakes.',
     Icon: 'snake',
     Type: DungeonType.Normal,
+
     StagesBase: 1,
     MidStages: [20, 35, 50, 65, 80],
     StagesMax: 100,
-    XpBase: 20,
-    GoldBase: 35,
+
+    Rewards: {
+      XpBase: 20,
+      GoldBase: 35,
+      RuneDropChances: { Common: 0.0, Magic: 0.25, Rare: 0.08, Epic: 0.01, Legendary: 0.0 }
+    },
+
     Locked: false
   },
   {
@@ -52,11 +69,17 @@ export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
     Description: 'A rocky quarry guarded by stone golems.',
     Icon: 'rockgolem',
     Type: DungeonType.Normal,
+
     StagesBase: 1,
     MidStages: [20, 40, 60, 80],
     StagesMax: 100,
-    XpBase: 25,
-    GoldBase: 65,
+
+    Rewards: {
+      XpBase: 25,
+      GoldBase: 65,
+      RuneDropChances: { Common: 0.0, Magic: 0.0, Rare: 0.25, Epic: 0.08, Legendary: 0.01 }
+    },
+
     Locked: false
   }
 ];
@@ -68,13 +91,20 @@ export const CAPSTONE_DUNGEONS: CapstoneDungeonRoom[] = [
     Description: 'Prove your worth against the spectral guardians.',
     Icon: 'spectre',
     Type: DungeonType.Capstone,
+
     StagesBase: 1,
     MidStages: [20, 40],
     StagesMax: 60,
-    XpBase: 100,
-    GoldBase: 100,
+
+    Rewards: {
+      XpBase: 100,
+      GoldBase: 100,
+      RuneDropChances: { Common: 0.0, Magic: 0.0, Rare: 0.5, Epic: 0.375, Legendary: 0.125 }
+    },
+
     Prerequisites: { Gold: 500, Key: null },
-    Rewards: { Gold: 2500, Key: 'Silver Key' as DungeonRoomKey },
+    CapstoneRewards: { Gold: 50_000, Key: 'Silver Key' as DungeonRoomKey },
+
     Locked: true
   },
   {
@@ -83,13 +113,19 @@ export const CAPSTONE_DUNGEONS: CapstoneDungeonRoom[] = [
     Description: 'Arcane creatures test your mastery.',
     Icon: 'harpy',
     Type: DungeonType.Capstone,
+
     StagesBase: 1,
     MidStages: [20, 40],
     StagesMax: 60,
-    XpBase: 150,
-    GoldBase: 150,
+
+    Rewards: {
+      XpBase: 150,
+      GoldBase: 150,
+      RuneDropChances: { Common: 0.0, Magic: 0.0, Rare: 0.75, Epic: 0.5, Legendary: 0.25 }
+    },
+
     Prerequisites: { Gold: 2500, Key: 'Silver Key' as DungeonRoomKey },
-    Rewards: { Gold: 10000, Key: 'Magic Key' as DungeonRoomKey },
+    CapstoneRewards: { Gold: 100_000, Key: 'Magic Key' as DungeonRoomKey },
     Locked: true
   },
   {
@@ -98,13 +134,20 @@ export const CAPSTONE_DUNGEONS: CapstoneDungeonRoom[] = [
     Description: 'The final trial guarded by ancient dragons.',
     Icon: 'hydra',
     Type: DungeonType.Capstone,
+
     StagesBase: 1,
     MidStages: [20, 40],
     StagesMax: 60,
-    XpBase: 200,
-    GoldBase: 200,
-    Prerequisites: { Gold: 10000, Key: 'Magic Key' as DungeonRoomKey },
-    Rewards: { Gold: 50000, Key: 'Golden Key' as DungeonRoomKey },
+
+    Rewards: {
+      XpBase: 200,
+      GoldBase: 200,
+      RuneDropChances: { Common: 0.0, Magic: 0.0, Rare: 0.0, Epic: 0.75, Legendary: 0.5 }
+    },
+
+    Prerequisites: { Gold: 10_000, Key: 'Magic Key' as DungeonRoomKey },
+    CapstoneRewards: { Gold: 500_000, Key: 'Golden Key' as DungeonRoomKey },
+
     Locked: true
   }
 ];

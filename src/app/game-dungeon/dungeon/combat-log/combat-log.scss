@@ -45,13 +45,19 @@
 .log-rewards-entry {
   flex-direction: column;
   align-items: flex-start;
+  justify-items: flex-end;
 }
 
 .log-damage-values,
 .log-rewards-values,
-.log-damage-details {
+.log-damage-details,
+.log-rewards-values {
   display: flex;
   gap: calc($gap / 2);
+}
+
+.total-damage {
+  font-size: 1.3rem;
 }
 
 .log-damage-details {
@@ -61,6 +67,7 @@
 
 .log-damage-values {
   flex-wrap: wrap;
+  font-size: 1rem;
 }
 
 .log-time {
@@ -86,6 +93,15 @@
 .log-rewards-xp {
   color: $clr-log-rewards-xp;
   font-weight: bold;
+}
+
+.log-rewards-rune {
+  font-weight: bold;
+}
+
+.log-rewards-rune-value {
+  font-weight: normal;
+  font-size: 0.9rem;
 }
 
 .log-damage {

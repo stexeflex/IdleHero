@@ -102,6 +102,18 @@ export class RuneService {
     return this.RuneDefinitionIds.includes(runeDefinitionId);
   }
 
+  public IsUpgrade(rune: Rune): boolean {
+    if (!rune) return false;
+
+    const runeDefinitionId = rune.DefinitionId;
+    if (!this.IsKnownRuneDefinition(runeDefinitionId)) return false;
+
+    const currentlyStoredRune = this.State().SlotsByDefinitionId[runeDefinitionId];
+    if (currentlyStoredRune == null) return true;
+
+    return this.IsBetterRune(rune, currentlyStoredRune);
+  }
+
   public IsBetterRune(candidateRune: Rune, currentRune: Rune): boolean {
     const candidateQualityIndex = QualityIndex(candidateRune.Quality);
     const currentQualityIndex = QualityIndex(currentRune.Quality);

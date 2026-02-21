@@ -28,10 +28,27 @@
                 +{{ entry.Rewards.Gold | number: "1.0-0" }}
                 <app-icon symbol="twocoins" size="sm"></app-icon>
               </span>
+              <span class="dot">•</span>
               <span class="log-rewards-xp">
                 +{{ entry.Rewards.Experience | number: "1.0-0" }}
                 <app-icon symbol="starsstack" size="sm"></app-icon>
               </span>
+              @if (entry.Rewards.Rune) {
+                <span class="dot">•</span>
+                <span
+                  class="log-rewards-rune"
+                  [class.common--font]="entry.Rewards.Rune.Quality === 'Common'"
+                  [class.magic--font]="entry.Rewards.Rune.Quality === 'Magic'"
+                  [class.rare--font]="entry.Rewards.Rune.Quality === 'Rare'"
+                  [class.epic--font]="entry.Rewards.Rune.Quality === 'Epic'"
+                  [class.legendary--font]="entry.Rewards.Rune.Quality === 'Legendary'">
+                  <app-icon symbol="runestone" size="sm"></app-icon>
+                  {{ entry.Rewards.Rune.DefinitionId }}
+                  <span class="log-rewards-rune-value">
+                    [{{ entry.Rewards.Rune.ValueRangePercentage | percent: "1.0-0" }}]
+                  </span>
+                </span>
+              }
             </div>
           </div>
         }
@@ -56,7 +73,7 @@
 
               <span class="dot">•</span>
 
-              <span class="log-damage" [class]="damageLogEntry.ActorClass">
+              <span class="log-damage total-damage" [class]="damageLogEntry.ActorClass">
                 {{ damageLogEntry.TotalDamage | number: "1.0-0" }}
               </span>
             </div>
@@ -92,6 +109,9 @@
                     [class.log-critical]="tag.IsCritical"
                     [class.log-bleed]="tag.IsBleeding">
                     {{ tag.Amount | number: "1.0-0" }}
+                    @if ($index < entry.Damage.length - 1) {
+                      <span class="dot">•</span>
+                    }
                   </span>
                 }
                 ]

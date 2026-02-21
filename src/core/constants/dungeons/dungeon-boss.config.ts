@@ -21,9 +21,9 @@ import {
   Troglodyte,
   VileFluid,
   ViperSnake
-} from '../systems/combat/dungeons/boss.factory';
+} from '../../systems/combat/dungeons/boss.factory';
 
-import { Boss } from '../models';
+import { Boss } from '../../models';
 
 export type BossFactory = () => Boss;
 

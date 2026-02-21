@@ -21,7 +21,7 @@ export function ComputeDampedExperience(
   statistics: DungeonStatistics
 ): number {
   const f = StageFactor(stageId);
-  const rawExperience = Math.round(dungeon.XpBase * f);
+  const rawExperience = Math.round(dungeon.Rewards.XpBase * f);
 
   const config = REWARDS_CONFIG.EXPERIENCE_DAMPING;
 

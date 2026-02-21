@@ -1,4 +1,7 @@
+import { ChanceUtils, TimestampUtils } from '../../../shared/utils';
+import { ComputeRolledValue, RandomInRange } from '../stats/stat-value.utils';
 import { DecimalPipe, PercentPipe } from '@angular/common';
+import { GetDungeonById, RUNE_DEFINITIONS, RUNE_QUALITY_ORDER } from '../../constants';
 import {
   LabelToString,
   Rune,
@@ -8,9 +11,6 @@ import {
   RuneQualitySpec,
   RuneSlotInfo
 } from '../../models';
-import { RUNE_DEFINITIONS, RUNE_QUALITY_ORDER } from '../../constants';
-
-import { ComputeRolledValue } from '../stats/stat-value.utils';
 
 export function QualityIndex(quality: RuneQuality): number {
   const idx = RUNE_QUALITY_ORDER.indexOf(quality);
@@ -146,4 +146,44 @@ export function GetRuneQualitySpec(
 
 export function GetRuneMinMaxRoll(qualitySpec: RuneQualitySpec): { min: number; max: number } {
   return { min: qualitySpec.Value.Min, max: qualitySpec.Value.Max };
+}
+
+export function CreateRandomRuneForQuality(quality: RuneQuality): Rune {
+  const definitions = RUNE_DEFINITIONS.filter((def) =>
+    def.Qualities.some((q) => q.Quality === quality)
+  );
+  const definition = definitions[Math.floor(Math.random() * definitions.length)];
+  const qualitySpec = GetRuneQualitySpec(definition, quality);
+  const rune: Rune = {
+    Id: `rune_${definition.Id}_${TimestampUtils.GetTimestampNow()}`,
+    DefinitionId: definition.Id,
+    Quality: quality,
+    ValueRangePercentage: RandomInRange(
+      qualitySpec.Value.Min,
+      qualitySpec.Value.Max,
+      qualitySpec.Value.Type
+    )
+  };
+  return rune;
+}
+
+export function DropRandomRuneForDungeon(dungeonId: string): Rune | null {
+  const dungeonConfig = GetDungeonById(dungeonId);
+  if (!dungeonConfig) return null;
+
+  const reversedQualityOrder = RUNE_QUALITY_ORDER.slice().reverse();
+  const chances = dungeonConfig.Rewards.RuneDropChances;
+  const rolled = ChanceUtils.Roll();
+  let cumulative = 0.0;
+
+  for (const quality of reversedQualityOrder) {
+    const chance = chances[quality] ?? 0.0;
+    cumulative += chance;
+
+    if (ChanceUtils.isSuccess(cumulative, rolled)) {
+      return CreateRandomRuneForQuality(quality);
+    }
+  }
+
+  return null;
 }
