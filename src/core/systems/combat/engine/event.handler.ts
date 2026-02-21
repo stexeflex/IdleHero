@@ -504,8 +504,14 @@ export class EventHandler {
       }
     }
 
+    // Bleeding Tick Statistics
     const bleedingDamageAmount = bleedingDamage.reduce((sum, d) => sum + d.Amount, 0);
-    this.Statistics.UpdateDamage({ HighestBleedingTick: bleedingDamageAmount });
+
+    if (damageWithoutBleed.some((d) => d.IsCharged)) {
+      this.Statistics.UpdateDamage({ HighestChargedBleedingTick: bleedingDamageAmount });
+    } else {
+      this.Statistics.UpdateDamage({ HighestBleedingTick: bleedingDamageAmount });
+    }
   }
   //#endregion
 }

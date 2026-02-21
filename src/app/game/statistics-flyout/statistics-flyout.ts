@@ -106,6 +106,10 @@ export class StatisticsFlyout implements OnDestroy {
         value: this.decimalPipe.transform(damageStats.HighestChargedHit, '1.0-0')
       },
       {
+        label: 'Highest Charged Bleeding Tick',
+        value: this.decimalPipe.transform(damageStats.HighestChargedBleedingTick, '1.0-0')
+      },
+      {
         label: 'Highest Charged Critical Hit',
         value: this.decimalPipe.transform(damageStats.HighestChargedCriticalHit, '1.0-0')
       },

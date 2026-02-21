@@ -8,6 +8,7 @@ export interface DamageStatistics {
   HighestMultiHitChain: number;
 
   HighestChargedHit: number;
+  HighestChargedBleedingTick: number;
   HighestChargedCriticalHit: number;
   HighestChargedMultiHit: number;
   HighestChargedCriticalMultiHit: number;
@@ -29,6 +30,7 @@ export function InitialDamageStatistics(): DamageStatistics {
     HighestMultiHitChain: 0,
 
     HighestChargedHit: 0,
+    HighestChargedBleedingTick: 0,
     HighestChargedCriticalHit: 0,
     HighestChargedMultiHit: 0,
     HighestChargedCriticalMultiHit: 0,
