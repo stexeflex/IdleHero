@@ -35,7 +35,7 @@ const ATTRIBUTES_AFFIX_DEFINITIONS: AffixDefinition[] = [
         const s = EmptyStatSource(
           source + `_affix_strength_flat_${TimestampUtils.GetTimestampNow()}`
         );
-        s.Strength.Flat = value;
+        s.Strength.Value = value;
         return s;
       }
     }
@@ -51,7 +51,7 @@ const ATTRIBUTES_AFFIX_DEFINITIONS: AffixDefinition[] = [
         const s = EmptyStatSource(
           source + `_affix_intelligence_flat_${TimestampUtils.GetTimestampNow()}`
         );
-        s.Intelligence.Flat = value;
+        s.Intelligence.Value = value;
         return s;
       }
     }
@@ -67,7 +67,7 @@ const ATTRIBUTES_AFFIX_DEFINITIONS: AffixDefinition[] = [
         const s = EmptyStatSource(
           source + `_affix_dexterity_flat_${TimestampUtils.GetTimestampNow()}`
         );
-        s.Dexterity.Flat = value;
+        s.Dexterity.Value = value;
         return s;
       }
     }
@@ -85,7 +85,7 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
         const s = EmptyStatSource(
           source + `_affix_damage_flat_${TimestampUtils.GetTimestampNow()}`
         );
-        s.Damage.Flat = value;
+        s.Damage.Value = value;
         return s;
       }
     }
@@ -163,7 +163,7 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
         const s = EmptyStatSource(
           source + `_affix_bleeding_damage_percent_${TimestampUtils.GetTimestampNow()}`
         );
-        s.Bleeding.MultiplierDamage = value;
+        s.Bleeding.Damage = value;
         return s;
       }
     }
@@ -179,7 +179,7 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
         const s = EmptyStatSource(
           source + `_affix_crit_damage_percent_${TimestampUtils.GetTimestampNow()}`
         );
-        s.CriticalHit.MultiplierDamage = value;
+        s.CriticalHit.Damage = value;
         return s;
       }
     }
@@ -195,7 +195,7 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
         const s = EmptyStatSource(
           source + `_affix_multihit_damage_percent_${TimestampUtils.GetTimestampNow()}`
         );
-        s.MultiHit.MultiplierDamage = value;
+        s.MultiHit.Damage = value;
         return s;
       }
     }
@@ -230,7 +230,7 @@ const UTILITY_AFFIX_DEFINITIONS: AffixDefinition[] = [
         const s = EmptyStatSource(
           source + `_affix_attack_speed_percent_${TimestampUtils.GetTimestampNow()}`
         );
-        s.AttackSpeed.Multiplier = value;
+        s.AttackSpeed.Value = value;
         return s;
       }
     }
@@ -246,7 +246,7 @@ const UTILITY_AFFIX_DEFINITIONS: AffixDefinition[] = [
         const s = EmptyStatSource(
           source + `_affix_accuracy_percent_${TimestampUtils.GetTimestampNow()}`
         );
-        s.Accuracy.Multiplier = value;
+        s.Accuracy.Value = value;
         return s;
       }
     }

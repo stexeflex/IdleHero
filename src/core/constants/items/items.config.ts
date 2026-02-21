@@ -211,7 +211,7 @@ const WEAPON_SWORDS_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: WEAPON_INNATE_CONFIG.DAMAGE_BASE1,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t3_weapon_sword_heavy_innate');
-        s.Damage.Flat = value;
+        s.Damage.Value = value;
         return s;
       }
     }
@@ -230,7 +230,7 @@ const WEAPON_SWORDS_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: WEAPON_INNATE_CONFIG.DAMAGE_BASE1,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t3_weapon_sword_powerful_innate');
-        s.Damage.Flat = value;
+        s.Damage.Value = value;
         return s;
       }
     }
@@ -289,7 +289,7 @@ const WEAPON_AXES_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: WEAPON_INNATE_CONFIG.DAMAGE_BASE1,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t3_weapon_axe_heavy_innate');
-        s.Damage.Flat = value;
+        s.Damage.Value = value;
         return s;
       }
     }
@@ -405,7 +405,7 @@ const WEAPON_BOWS_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: WEAPON_INNATE_CONFIG.DAMAGE_BASE1,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t3_weapon_bow_heavy_innate');
-        s.Damage.Flat = value;
+        s.Damage.Value = value;
         return s;
       }
     }
@@ -502,7 +502,7 @@ const WEAPON_DAGGER_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: WEAPON_INNATE_CONFIG.DAMAGE_BASE1,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t3_weapon_dagger_powerful_innate');
-        s.Damage.Flat = value;
+        s.Damage.Value = value;
         return s;
       }
     }
@@ -542,7 +542,7 @@ const WEAPON_STAFF_WAND_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: WEAPON_INNATE_CONFIG.CRIT_DAMAGE_BASE10,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_weapon_staff_crit_damage_innate');
-        s.CriticalHit.MultiplierDamage = value;
+        s.CriticalHit.Damage = value;
         return s;
       }
     }
@@ -561,7 +561,7 @@ const WEAPON_STAFF_WAND_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: WEAPON_INNATE_CONFIG.CRIT_DAMAGE_BASE25,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t3_weapon_wand_crit_damage_innate');
-        s.CriticalHit.MultiplierDamage = value;
+        s.CriticalHit.Damage = value;
         return s;
       }
     }
@@ -610,7 +610,7 @@ const OFFHAND_SHIELDS_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.07, 0.04),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_offhand_shield_starter_innate');
-        s.Bleeding.MultiplierDamage = value;
+        s.Bleeding.Damage = value;
         return s;
       }
     }
@@ -627,7 +627,7 @@ const OFFHAND_SHIELDS_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.07, 0.04),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_offhand_shield_templar_innate');
-        s.Bleeding.MultiplierDamage = value;
+        s.Bleeding.Damage = value;
         return s;
       }
     }
@@ -647,7 +647,7 @@ const OFFHAND_ORBS_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.1, 0.05),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_offhand_orb_starter_innate');
-        s.CriticalHit.MultiplierDamage = value;
+        s.CriticalHit.Damage = value;
         return s;
       }
     }
@@ -667,7 +667,7 @@ const OFFHAND_QUIVERS_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.05, 0.03),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_offhand_quiver_starter_innate');
-        s.MultiHit.MultiplierDamage = value;
+        s.MultiHit.Damage = value;
         return s;
       }
     }
@@ -684,7 +684,7 @@ const OFFHAND_QUIVERS_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.05, 0.03),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_offhand_quiver_hunting_quiver_innate');
-        s.MultiHit.MultiplierDamage = value;
+        s.MultiHit.Damage = value;
         return s;
       }
     }
@@ -704,7 +704,7 @@ const OFFHAND_DAGGERS_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.05, 0.05),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_offhand_dagger_starter_innate');
-        s.CriticalHit.MultiplierDamage = value;
+        s.CriticalHit.Damage = value;
         return s;
       }
     }
@@ -724,7 +724,7 @@ const OFFHAND_SHURIKEN_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.05, 0.05),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_offhand_shuriken_star_innate');
-        s.CriticalHit.MultiplierDamage = value;
+        s.CriticalHit.Damage = value;
         return s;
       }
     }
@@ -754,7 +754,7 @@ const HEAD_HELMET_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_head_helmet_warrior_starter_innate');
-        s.Accuracy.Multiplier = value;
+        s.Accuracy.Value = value;
         return s;
       }
     }
@@ -771,7 +771,7 @@ const HEAD_HELMET_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_head_helmet_warrior_brutal_helmet_innate');
-        s.Accuracy.Multiplier = value;
+        s.Accuracy.Value = value;
         return s;
       }
     }
@@ -790,7 +790,7 @@ const HEAD_HOOD_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_head_hood_rogue_starter_innate');
-        s.Accuracy.Multiplier = value;
+        s.Accuracy.Value = value;
         return s;
       }
     }
@@ -807,7 +807,7 @@ const HEAD_HOOD_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_head_hood_rogue_cowled_innate');
-        s.Accuracy.Multiplier = value;
+        s.Accuracy.Value = value;
         return s;
       }
     }
@@ -826,7 +826,7 @@ const HEAD_HAT_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_head_hat_mage_starter_innate');
-        s.Accuracy.Multiplier = value;
+        s.Accuracy.Value = value;
         return s;
       }
     }
@@ -843,7 +843,7 @@ const HEAD_HAT_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_head_hat_bowman_starter_innate');
-        s.Accuracy.Multiplier = value;
+        s.Accuracy.Value = value;
         return s;
       }
     }
@@ -860,7 +860,7 @@ const HEAD_HAT_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_head_hat_outback_innate');
-        s.Accuracy.Multiplier = value;
+        s.Accuracy.Value = value;
         return s;
       }
     }
@@ -879,7 +879,7 @@ const HEAD_CROWN_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.02, 0.01),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_head_crown_crenelated_crown_innate');
-        s.Accuracy.Multiplier = value;
+        s.Accuracy.Value = value;
         return s;
       }
     }
@@ -1172,7 +1172,7 @@ const FEET_BOOTS_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.01, 0.005),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_feet_boots_leather_boots_innate');
-        s.AttackSpeed.Multiplier = value;
+        s.AttackSpeed.Value = value;
         return s;
       }
     }
@@ -1189,7 +1189,7 @@ const FEET_BOOTS_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.01, 0.005),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_feet_boots_armored_boots_innate');
-        s.AttackSpeed.Multiplier = value;
+        s.AttackSpeed.Value = value;
         return s;
       }
     }
@@ -1206,7 +1206,7 @@ const FEET_BOOTS_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.01, 0.005),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_feet_boots_leather_boots_innate');
-        s.AttackSpeed.Multiplier = value;
+        s.AttackSpeed.Value = value;
         return s;
       }
     }
@@ -1225,7 +1225,7 @@ const FEET_SHOES_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.01, 0.005),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t1_feet_boots_leather_shoes_innate');
-        s.AttackSpeed.Multiplier = value;
+        s.AttackSpeed.Value = value;
         return s;
       }
     }
@@ -1242,7 +1242,7 @@ const FEET_SHOES_VARIANTS: ItemVariantDefinition[] = [
       ValuesByLevel: ScaleLinearValueCurve(0.01, 0.005),
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_feet_boots_leather_shoes_innate');
-        s.AttackSpeed.Multiplier = value;
+        s.AttackSpeed.Value = value;
         return s;
       }
     }

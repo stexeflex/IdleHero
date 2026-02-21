@@ -28,7 +28,7 @@ export function MapItemToStatSources(item: Item): StatSource[] {
     const weaponBaseDamage = itemDefinition.WeaponBaseDamage;
     if (weaponBaseDamage !== undefined) {
       const weaponBaseDamageStatSource = EmptyStatSource(`${item.Id}_weapon_base_damage`);
-      weaponBaseDamageStatSource.Damage.Flat += weaponBaseDamage[item.Level];
+      weaponBaseDamageStatSource.Damage.Value += weaponBaseDamage[item.Level];
       statSources.push(weaponBaseDamageStatSource);
     }
 
@@ -39,7 +39,7 @@ export function MapItemToStatSources(item: Item): StatSource[] {
     if (weaponBaseAttackSpeedMultiplier !== 1) {
       const weaponBaseAttackSpeed = EmptyStatSource(`${item.Id}_weapon_base_attackspeed`);
 
-      weaponBaseAttackSpeed.AttackSpeed.Multiplier = weaponBaseAttackSpeedMultiplier - 1.0;
+      weaponBaseAttackSpeed.AttackSpeed.Value = weaponBaseAttackSpeedMultiplier - 1.0;
 
       statSources.push(weaponBaseAttackSpeed);
     }

@@ -34,7 +34,7 @@ export const RUNE_DEFINITIONS: RuneDefinition[] = [
         const s = EmptyStatSource(
           source + '_rune_accuracy' + `_${TimestampUtils.GetTimestampNow()}`
         );
-        s.Accuracy.Multiplier = value;
+        s.Accuracy.Value = value;
         return s;
       }
     }
@@ -49,7 +49,7 @@ export const RUNE_DEFINITIONS: RuneDefinition[] = [
         const s = EmptyStatSource(
           source + '_rune_attack_speed' + `_${TimestampUtils.GetTimestampNow()}`
         );
-        s.AttackSpeed.Multiplier = value;
+        s.AttackSpeed.Value = value;
         return s;
       }
     }
@@ -79,7 +79,7 @@ export const RUNE_DEFINITIONS: RuneDefinition[] = [
         const s = EmptyStatSource(
           source + '_rune_bleeding_damage' + `_${TimestampUtils.GetTimestampNow()}`
         );
-        s.Bleeding.MultiplierDamage = value;
+        s.Bleeding.Damage = value;
         return s;
       }
     }
@@ -109,7 +109,7 @@ export const RUNE_DEFINITIONS: RuneDefinition[] = [
         const s = EmptyStatSource(
           source + '_rune_critical_hit_damage' + `_${TimestampUtils.GetTimestampNow()}`
         );
-        s.CriticalHit.MultiplierDamage = value;
+        s.CriticalHit.Damage = value;
         return s;
       }
     }
@@ -139,7 +139,7 @@ export const RUNE_DEFINITIONS: RuneDefinition[] = [
         const s = EmptyStatSource(
           source + '_rune_multi_hit_damage' + `_${TimestampUtils.GetTimestampNow()}`
         );
-        s.MultiHit.MultiplierDamage = value;
+        s.MultiHit.Damage = value;
         return s;
       }
     }
@@ -169,7 +169,7 @@ export const RUNE_DEFINITIONS: RuneDefinition[] = [
         const s = EmptyStatSource(
           source + '_rune_attack_power' + `_${TimestampUtils.GetTimestampNow()}`
         );
-        s.Damage.Flat = value;
+        s.Damage.Value = value;
         return s;
       }
     }

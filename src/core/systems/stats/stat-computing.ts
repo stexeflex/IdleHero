@@ -21,13 +21,13 @@ export function ComputeAttributes(attributes: Attributes, statSources: StatSourc
   const baseDexterity = attributes.Dexterity - ATTRIBUTES_CONFIG.BASE.DEXTERITY;
 
   // Effektive Attribute
-  const addStr = sources.reduce((sum, s) => Sum(sum, s.Strength.Flat), 0);
+  const addStr = sources.reduce((sum, s) => Sum(sum, s.Strength.Value), 0);
   const effectiveStr = Math.max(0, baseStrength + addStr);
 
-  const addInt = sources.reduce((sum, s) => Sum(sum, s.Intelligence.Flat), 0);
+  const addInt = sources.reduce((sum, s) => Sum(sum, s.Intelligence.Value), 0);
   const effectiveInt = Math.max(0, baseIntelligence + addInt);
 
-  const addDex = sources.reduce((sum, s) => Sum(sum, s.Dexterity.Flat), 0);
+  const addDex = sources.reduce((sum, s) => Sum(sum, s.Dexterity.Value), 0);
   const effectiveDex = Math.max(0, baseDexterity + addDex);
 
   return { Strength: effectiveStr, Intelligence: effectiveInt, Dexterity: effectiveDex };
@@ -97,7 +97,7 @@ export function ComputeStats(
 
 //#region Computing Functions
 function ComputeDamage(sources: StatSource[]): number {
-  const addDmg = sources.reduce((sum, s) => Sum(sum, s.Damage.Flat), 0);
+  const addDmg = sources.reduce((sum, s) => Sum(sum, s.Damage.Value), 0);
   const effectiveDamage = ClampUtils.clamp(
     addDmg,
     STATS_CONFIG.BASE.DAMAGE,
@@ -108,7 +108,7 @@ function ComputeDamage(sources: StatSource[]): number {
 }
 
 function ComputeAttackSpeed(sources: StatSource[]): number {
-  const addIAS = sources.reduce((prod, s) => Sum(prod, s.AttackSpeed.Multiplier), 1);
+  const addIAS = sources.reduce((prod, s) => Sum(prod, s.AttackSpeed.Value), 1);
   const effectiveAttackSpeed = ClampUtils.clamp(addIAS, 0, STATS_CONFIG.CAPS.MAX_ATTACK_SPEED);
   return effectiveAttackSpeed;
 }
@@ -131,7 +131,7 @@ function ComputeBleeding(
   // Bleeding Damage
   const baseBleedDamage = STATS_CONFIG.BASE.BLEEDING_DAMAGE;
   const strengthBleedDamage = MapStrengthToBleedDamage(strength);
-  const increasedBleedDamage = sources.reduce((sum, s) => Sum(sum, s.Bleeding.MultiplierDamage), 0);
+  const increasedBleedDamage = sources.reduce((sum, s) => Sum(sum, s.Bleeding.Damage), 0);
   const bleedMultiplier = Math.max(
     baseBleedDamage,
     baseBleedDamage + strengthBleedDamage + increasedBleedDamage
@@ -161,10 +161,7 @@ function ComputeCriticalHit(
   // Crit Damage
   const baseCritDamage = STATS_CONFIG.BASE.CRIT_DAMAGE;
   const intelligenceCritDamage = MapIntelligenceToCritDamage(intelligence);
-  const increasedCritDamage = sources.reduce(
-    (sum, s) => Sum(sum, s.CriticalHit.MultiplierDamage),
-    0
-  );
+  const increasedCritDamage = sources.reduce((sum, s) => Sum(sum, s.CriticalHit.Damage), 0);
   const critDamage = Math.max(
     baseCritDamage,
     baseCritDamage + intelligenceCritDamage + increasedCritDamage
@@ -194,10 +191,7 @@ function ComputeMultiHit(
   // Multi-Hit Damage
   const baseMultiHitDamage = STATS_CONFIG.BASE.MULTI_HIT_DAMAGE;
   const dexterityMultiHitDamage = MapDexterityToMultiHitDamage(dexterity);
-  const increaseMultiHitDamage = sources.reduce(
-    (sum, s) => Sum(sum, s.MultiHit.MultiplierDamage),
-    0
-  );
+  const increaseMultiHitDamage = sources.reduce((sum, s) => Sum(sum, s.MultiHit.Damage), 0);
   const multiHitDamage = Math.max(
     baseMultiHitDamage,
     baseMultiHitDamage + dexterityMultiHitDamage + increaseMultiHitDamage
@@ -227,7 +221,7 @@ function ComputeMultiHit(
 function ComputeAccuracy(sources: StatSource[]): number {
   const minAcc = STATS_CONFIG.BASE.ACCURACY;
   const maxAcc = STATS_CONFIG.CAPS.MAX_ACCURACY;
-  const addedAcc = sources.reduce((prod, s) => Sum(prod, s.Accuracy.Multiplier), 0);
+  const addedAcc = sources.reduce((prod, s) => Sum(prod, s.Accuracy.Value), 0);
   const accuracy = ClampUtils.clamp(minAcc + addedAcc, minAcc, maxAcc);
   return accuracy;
 }
