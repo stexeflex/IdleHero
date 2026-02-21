@@ -18,7 +18,8 @@ import {
   IsMaxTier,
   ItemAffixService,
   ItemLevelService,
-  MaxLevelForRarity
+  MaxLevelForRarity,
+  NextItemRarity
 } from '../../../../core/systems/items';
 import { Gold, IconComponent, ItemPreview } from '../../../../shared/components';
 
@@ -51,6 +52,7 @@ export class Enchanting {
     () => this.Item().Affixes.filter((a) => a.Improved).length
   );
   protected readonly MaxAffixSlots = computed<number>(() => this.Rules().MaxAffixes);
+  protected readonly NextItemRarity = computed<ItemRarity>(() => NextItemRarity(this.Item()));
 
   protected readonly VisibleSlotIndices = computed<number[]>(() => {
     const item = this.Item();

@@ -64,6 +64,27 @@
   align-self: start;
   display: grid;
   gap: $gap;
+
+  .item-rarity-upgrade {
+    @include disable-text-selection();
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: $gap;
+
+    > button {
+      color: $clr-highlight;
+    }
+
+    .item-rarity-upgrade-info {
+      @include panel();
+      @include panel-shadow($border-width: 1px, $border-color: $clr-border);
+
+      font-weight: bold;
+      text-align: center;
+
+      margin-right: calc(42px + $gap);
+    }
+  }
 }
 
 .affixes {
@@ -140,46 +161,6 @@
   gap: $gap;
   min-width: 42px;
 }
-
-// .slot-title {
-//   @include flexbox($align: baseline);
-//   gap: calc($gap / 2);
-// }
-
-// .slot-name {
-//   font-family: $font-family-header;
-//   font-weight: bold;
-//   color: $clr-highlight;
-// }
-
-// .slot-tier {
-//   font-size: 0.9rem;
-// }
-
-// .slot-actions {
-//   @include flexbox($align: center);
-//   gap: calc($gap / 2);
-// }
-
-// .action {
-//   min-height: 35px;
-//   min-width: 92px;
-//   font-size: 1.05rem;
-// }
-
-// .slot-body {
-//   display: grid;
-//   gap: calc($gap / 4);
-// }
-
-// .affix-label {
-//   font-size: 0.95rem;
-//   color: $clr-text-primary;
-// }
-
-// .affix-meta {
-//   font-size: 0.85rem;
-// }
 
 .empty-state {
   @include panel($bg: rgba(0, 0, 0, 0.2));

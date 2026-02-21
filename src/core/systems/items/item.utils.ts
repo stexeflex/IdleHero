@@ -49,6 +49,22 @@ export function GetItemRarity(itemLevel: ItemLevel): ItemRarity {
   return 'Common';
 }
 
+export function NextItemRarity(item: Item): ItemRarity {
+  const currentRarity = GetItemRarity(item.Level);
+  switch (currentRarity) {
+    case 'Common':
+      return 'Magic';
+    case 'Magic':
+      return 'Rare';
+    case 'Rare':
+      return 'Epic';
+    case 'Epic':
+      return 'Legendary';
+    case 'Legendary':
+      return 'Legendary';
+  }
+}
+
 export function MinRarityForTier(tier: ItemTier): ItemRarity {
   const rules = ITEM_TIER_RULES[tier];
   return rules.MinRarity;

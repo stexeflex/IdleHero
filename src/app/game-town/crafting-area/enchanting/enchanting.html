@@ -44,12 +44,44 @@
     <div class="preview">
       <app-item-preview [Item]="Item()" [Variant]="Variant()"> </app-item-preview>
       @if (CanUpgradeItem()) {
-        <button
-          class="ih-button-tertiary"
-          [disabled]="!EnoughGoldForUpgrade()"
-          (click)="UpgradeItem()">
-          UPGRADE ITEM
-        </button>
+        @if (Item().Level === MaxItemLevel()) {
+          <div class="item-rarity-upgrade">
+            <button
+              class="ih-button-icon ih-button-icon-border"
+              (click)="UpgradeItem()"
+              title="Upgrade Item Rarity">
+              <app-icon class="rotate-180" ui="arrow" size="sm"></app-icon>
+            </button>
+            <div class="item-rarity-upgrade-info">
+              @let currentRarity = Rarity();
+              @let nextRarity = NextItemRarity();
+              <span
+                [class.common--font]="currentRarity === 'Common'"
+                [class.magic--font]="currentRarity === 'Magic'"
+                [class.rare--font]="currentRarity === 'Rare'"
+                [class.epic--font]="currentRarity === 'Epic'"
+                [class.legendary--font]="currentRarity === 'Legendary'">
+                {{ currentRarity.toUpperCase() }}
+              </span>
+              >
+              <span
+                [class.common--font]="nextRarity === 'Common'"
+                [class.magic--font]="nextRarity === 'Magic'"
+                [class.rare--font]="nextRarity === 'Rare'"
+                [class.epic--font]="nextRarity === 'Epic'"
+                [class.legendary--font]="nextRarity === 'Legendary'">
+                {{ nextRarity.toUpperCase() }}
+              </span>
+            </div>
+          </div>
+        } @else {
+          <button
+            class="ih-button-tertiary"
+            [disabled]="!EnoughGoldForUpgrade()"
+            (click)="UpgradeItem()">
+            UPGRADE ITEM
+          </button>
+        }
       }
     </div>
 
