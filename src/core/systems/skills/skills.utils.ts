@@ -30,7 +30,7 @@ export const SkillDefinitionsById = new Map<string, SkillDefinition>(
   [...ALL_SKILL_DEFINITIONS].map((definition) => [definition.Id, definition])
 );
 
-export function GetMetaInfo(definition: SkillDefinition): string {
+export function GetSkillMetaInfo(definition: SkillDefinition): string {
   switch (definition.Type) {
     case 'StatBoost':
       return 'Improvement';

@@ -1,0 +1,39 @@
+<section class="skill-bar">
+  <h3>COMBAT SKILLS</h3>
+
+  @if (Buffs().length === 0) {
+    <p class="empty-state">Unlock Buffs or Effects in the Skill Tree to use them in combat.</p>
+  } @else {
+    <div class="skills">
+      @for (skill of Buffs(); track skill.Definition.Id) {
+        <button
+          class="skill-button"
+          [title]="skill.Definition.Description"
+          [class.skill-button-active]="skill.IsActive"
+          [class.skill-button-cooldown]="!skill.IsActive && !skill.CanActivate"
+          [disabled]="!skill.CanActivate"
+          (click)="ActivateSkill(skill.Definition.Id)">
+          <div class="skill-icon" [class]="IconClass(skill.Definition)">
+            <app-icon [skills]="skill.Definition.Icon" size="lg"></app-icon>
+            <separator [vertical]="true"></separator>
+          </div>
+
+          <div class="skill-title-row">
+            <span class="skill-name">{{ skill.Definition.Name.toUpperCase() }}</span>
+            <span class="skill-type">{{ SkillTypeText(skill.Definition) }}</span>
+          </div>
+
+          <div class="skill-state">
+            @if (skill.IsActive) {
+              <span class="state active">ACTIVE · {{ skill.RemainingDurationSeconds }}s</span>
+            } @else if (!skill.CanActivate) {
+              <span class="state cooldown"> COOLDOWN · {{ skill.RemainingCooldownSeconds }}s </span>
+            } @else {
+              <span class="state ready">READY</span>
+            }
+          </div>
+        </button>
+      }
+    </div>
+  }
+</section>

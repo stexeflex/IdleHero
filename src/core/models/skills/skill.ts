@@ -3,6 +3,7 @@ import { Passives } from '../combat/actors/skill-passives';
 import { SkillEffects } from '../combat/actors/skill-effects';
 import { SkillTier } from './skill-tier.type';
 import { SkillType } from './skill.type';
+import { SkillsIconName } from '../../../shared/components/icon/skills.icons';
 import { StatSource } from '../combat/stats/stat-source.type';
 
 export interface SkillLevelSpec {
@@ -58,6 +59,8 @@ export interface BuffSkillDefinition extends SkillDefinition {
   // Cooldown of the active skill in seconds
   Cooldown: number;
 
+  Icon: SkillsIconName;
+
   /** Human-readable label */
   ToLabel: () => Label[];
 
@@ -71,6 +74,8 @@ export interface BuffSkillDefinition extends SkillDefinition {
 export interface EffectSkillDefinition extends SkillDefinition {
   /** Min/Max ranges per level for upgrading this skill. */
   Levels: SkillLevelSpec[];
+
+  Icon: SkillsIconName;
 
   /**
    * A function that maps a value to an Effect contribution.

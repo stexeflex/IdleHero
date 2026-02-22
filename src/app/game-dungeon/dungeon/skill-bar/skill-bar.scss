@@ -1,0 +1,129 @@
+@use "sass:color";
+@use "index" as *;
+
+.skill-bar {
+  @include panel();
+  @include panel-shadow($border-width: 2px, $border-color: $clr-border);
+  @include disable-text-selection();
+
+  display: flex;
+  flex-direction: column;
+  gap: calc($gap / 2);
+
+  h3 {
+    color: $clr-highlight;
+  }
+}
+
+.empty-state {
+  color: $clr-mute;
+  font-size: 1.1rem;
+}
+
+.skills {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: calc($gap / 2) $gap;
+}
+
+@media (max-width: $bp-xl) {
+  .skills {
+    grid-template-columns: repeat(2, minmax(200px, 1fr));
+  }
+}
+
+@media (max-width: $bp-sm) {
+  .skills {
+    grid-template-columns: 1fr;
+  }
+}
+
+.skill-button {
+  cursor: pointer;
+  @include panel($padding: calc($gap / 2));
+  @include panel-shadow($border-width: 1px, $border-color: unset);
+
+  display: grid;
+  grid:
+    "icon title" auto
+    "icon state" auto
+    / auto 1fr;
+
+  gap: $gap;
+
+  text-align: left;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  &.skill-button-active {
+    border-color: $clr-highlight;
+  }
+
+  &.skill-button-cooldown {
+    border-color: $clr-mute;
+  }
+}
+
+.skill-icon {
+  grid-area: icon;
+  display: flex;
+  align-items: center;
+  gap: calc($gap / 2);
+}
+
+.skill-title-row {
+  grid-area: title;
+  display: flex;
+  justify-content: space-between;
+  gap: calc($gap / 2);
+
+  .skill-name {
+    font-family: $font-family-header;
+    font-weight: bold;
+    color: $clr-highlight;
+    font-size: 1.1rem;
+  }
+
+  .skill-type {
+    font-family: $font-family-header;
+    color: $clr-mute;
+    font-size: 0.9rem;
+  }
+}
+
+.skill-state {
+  grid-area: state;
+
+  .state {
+    font-size: 0.95rem;
+    font-weight: bold;
+
+    &.active {
+      color: $clr-highlight;
+    }
+
+    &.cooldown {
+      color: $clr-mute;
+    }
+
+    &.ready {
+      color: $clr-log-level-up;
+    }
+  }
+}
+
+.skill-icon-haste {
+  color: $clr-haste;
+}
+.skill-icon-bleed {
+  color: $clr-bleed;
+}
+.skill-icon-crit {
+  color: $clr-crit;
+}
+.skill-icon-multi {
+  color: $clr-multi;
+}

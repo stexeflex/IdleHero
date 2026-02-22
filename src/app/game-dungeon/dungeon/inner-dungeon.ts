@@ -7,6 +7,7 @@ import { DELAYS } from '../../../core/constants';
 import { DungeonArena } from './dungeon-arena/dungeon-arena';
 import { DungeonRewardsScreen } from './dungeon-rewards/dungeon-rewards';
 import { DungeonRoomService } from '../../../core/services';
+import { SkillBar } from './skill-bar/skill-bar';
 
 @Component({
   selector: 'app-inner-dungeon',
@@ -16,7 +17,8 @@ import { DungeonRoomService } from '../../../core/services';
     DungeonArena,
     CombatLog,
     LoadingSpinner,
-    DungeonRewardsScreen
+    DungeonRewardsScreen,
+    SkillBar
   ],
   templateUrl: './inner-dungeon.html',
   styleUrl: './inner-dungeon.scss'
@@ -41,9 +43,7 @@ export class InnerDungeon implements OnDestroy {
   public readonly ShowCompletion = computed<boolean>(() => this.CompletedDungeon());
 
   ngOnDestroy(): void {
-    if (this.restartTimer) {
-      clearTimeout(this.restartTimer);
-    }
+    if (this.restartTimer) clearTimeout(this.restartTimer);
   }
 
   // Actions
@@ -57,8 +57,8 @@ export class InnerDungeon implements OnDestroy {
     this.DelayRestart();
 
     // End fight and keep player in dungeon arena
-    this.combat.Prestige();
     this.engine.Stop();
+    this.combat.Prestige();
   }
 
   public ExitDungeon(): void {

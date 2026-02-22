@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import {
-  GetMetaInfo,
+  GetSkillMetaInfo,
   GetSkillUnlockCost,
   GetSkillUpgradeCost
 } from '../../../../core/systems/skills';
@@ -37,7 +37,7 @@ export class SkillArea {
 
   protected get MetaInfo(): string {
     const skill = this.skill();
-    return GetMetaInfo(skill.Definition);
+    return GetSkillMetaInfo(skill.Definition);
   }
 
   protected get UnlockCost(): number {

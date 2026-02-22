@@ -33,6 +33,10 @@ $clr-exp-green: #4caf50;
 $clr-exp-blue: #2196f3;
 $clr-charge-yellow: #fbbf24;
 $clr-bleed: #8a0303;
+$clr-haste: #999999;
+$clr-crit: #eee000;
+$clr-multi: #8b5cf6;
+$clr-crit-multi: #ff8800;
 
 $clr-gold: $clr-highlight;
 
@@ -51,9 +55,9 @@ $clr-log-damage: #ddd;
 $clr-log-bleed: #ee4444;
 $clr-log-charged: $clr-charge-yellow;
 $clr-log-splash: #128aaf;
-$clr-log-crit: $clr-rare;
-$clr-log-multi: $clr-epic;
-$clr-log-crit-multi: $clr-legendary;
+$clr-log-crit: $clr-crit;
+$clr-log-multi: $clr-multi;
+$clr-log-crit-multi: $clr-crit-multi;
 $clr-log-boss-defeat: color.scale($clr-accent, $lightness: 40%);
 $clr-log-level-up: #00aaff;
 $clr-log-dungeon-cleared: #00aaff;

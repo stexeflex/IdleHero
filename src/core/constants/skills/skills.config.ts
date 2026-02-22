@@ -241,6 +241,7 @@ const BUFF_ATTACK_SPEED_SKILL: BuffSkillDefinition = {
   Type: 'Buff',
   Duration: 20,
   Cooldown: 60,
+  Icon: 'runningninja',
   ToLabel: () => [PercentageAdditiveLabel('Attack Speed', 0.5)],
   MapToStatSource: (source: string) => {
     const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
@@ -258,6 +259,7 @@ const BUFF_BLEED_CHANCE_SKILL: BuffSkillDefinition = {
   Type: 'Buff',
   Duration: 20,
   Cooldown: 60,
+  Icon: 'drippingblade',
   ToLabel: () => [PercentageAdditiveLabel('Bleed Chance', 0.25)],
   MapToStatSource: (source: string) => {
     const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
@@ -274,6 +276,7 @@ const BUFF_CRIT_CHANCE_SKILL: BuffSkillDefinition = {
   Type: 'Buff',
   Duration: 20,
   Cooldown: 60,
+  Icon: 'lightningtrio',
   ToLabel: () => [PercentageAdditiveLabel('Critical Hit Chance', 0.25)],
   MapToStatSource: (source: string) => {
     const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
@@ -291,6 +294,7 @@ const BUFF_MULTI_HIT_CHANCE_SKILL: BuffSkillDefinition = {
   Type: 'Buff',
   Duration: 20,
   Cooldown: 60,
+  Icon: 'crossedswords',
   ToLabel: () => [
     PercentageAdditiveLabel('Multi Hit Chance', 0.25),
     PercentageAdditiveLabel('Multi Hit Chain', 0.1)
@@ -319,6 +323,7 @@ const EFFECT_WARCRY_SKILL: EffectSkillDefinition = {
     'Unleashes a powerful war cry increasing your damage against the current boss for a short duration.',
   Tier: 'III',
   Type: 'Effect',
+  Icon: 'wolfhead',
   Levels: [{ Level: 1, Value: 0.25, Type: 'Percent' }],
   MapToEffect: (effects: SkillEffects, value: number) => {
     effects.WarCry = {
@@ -336,6 +341,7 @@ const EFFECT_STRICKEN_SKILL: EffectSkillDefinition = {
     'Each attack you make against the current boss increases the damage it takes from your attacks.',
   Tier: 'III',
   Type: 'Effect',
+  Icon: 'imbricatedarrows',
   Levels: [
     { Level: 1, Value: 0.008, Type: 'Percent' },
     { Level: 2, Value: 0.01, Type: 'Percent' },
