@@ -17,11 +17,12 @@
   border-style: solid;
 
   min-height: 152px;
+  height: 100%;
 }
 
 .variant {
   grid:
-    "info icon" auto
+    "info icon" 95px
     "innate innate" auto
     / 190px 100px;
 
@@ -33,7 +34,7 @@
 
 .item {
   grid:
-    "info icon" auto
+    "info icon" 95px
     "innate innate" auto
     "affix affix" auto
     "actions actions" auto
@@ -111,7 +112,7 @@
 .item-innate {
   grid-area: innate;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 
   .icon {
     margin-right: calc($gap / 2);
@@ -151,4 +152,7 @@
 
 .actions {
   grid-area: actions;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
