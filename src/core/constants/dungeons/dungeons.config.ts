@@ -109,7 +109,7 @@ export const CAPSTONE_DUNGEONS: CapstoneDungeonRoom[] = [
 
     Prerequisites: { Key: 'Silver Key' as DungeonRoomKey },
 
-    Locked: false
+    Locked: true
   },
   {
     Id: 'C2',
@@ -131,7 +131,7 @@ export const CAPSTONE_DUNGEONS: CapstoneDungeonRoom[] = [
 
     Prerequisites: { Key: 'Magic Key' as DungeonRoomKey },
 
-    Locked: false
+    Locked: true
   },
   {
     Id: 'C3',
@@ -153,7 +153,7 @@ export const CAPSTONE_DUNGEONS: CapstoneDungeonRoom[] = [
 
     Prerequisites: { Key: 'Golden Key' as DungeonRoomKey },
 
-    Locked: false
+    Locked: true
   }
 ];
 
