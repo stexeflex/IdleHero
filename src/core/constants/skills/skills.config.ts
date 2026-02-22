@@ -359,8 +359,8 @@ const EFFECT_STRICKEN_SKILL: EffectSkillDefinition = {
 };
 
 export const EFFECT_SKILL_DEFINITIONS: EffectSkillDefinition[] = [
-  EFFECT_WARCRY_SKILL,
-  EFFECT_STRICKEN_SKILL
+  // EFFECT_WARCRY_SKILL,
+  // EFFECT_STRICKEN_SKILL
 ];
 //#endregion Effect Skill Definitions
 
