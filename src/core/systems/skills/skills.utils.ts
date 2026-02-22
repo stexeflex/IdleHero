@@ -7,6 +7,8 @@ import {
   SKILL_TIER_CONFIG
 } from '../../constants';
 import {
+  BuffSkillDefinition,
+  EffectSkillDefinition,
   LabelToString,
   PassiveSkillDefinition,
   SkillDefinition,
@@ -27,6 +29,19 @@ export const SkillDefinitionsByTier: Record<SkillTier, SkillDefinition[]> = {
 export const SkillDefinitionsById = new Map<string, SkillDefinition>(
   [...ALL_SKILL_DEFINITIONS].map((definition) => [definition.Id, definition])
 );
+
+export function GetMetaInfo(definition: SkillDefinition): string {
+  switch (definition.Type) {
+    case 'StatBoost':
+      return 'Improvement';
+    case 'Passive':
+      return 'Passive';
+    case 'Buff':
+      return 'Buff';
+    case 'Effect':
+      return 'Special Effect';
+  }
+}
 
 export function GetSkillUnlockCost(tier: SkillTier): number {
   const baseCost = SKILL_COST_CONFIG.SKILL_UNLOCK_COST;
@@ -72,6 +87,12 @@ export function GetSkillMaxLevel(skillId: string): number {
 
   if (IsStatSkillDefinition(definition)) {
     return definition.Levels.length;
+  } else if (IsBuffSkillDefinition(definition)) {
+    return 1; // Buff-Skills haben nur 1 Level
+  } else if (IsPassiveSkillDefinition(definition)) {
+    return 1; // Passive-Skills haben nur 1 Level
+  } else if (IsEffectSkillDefinition(definition)) {
+    return definition.Levels.length;
   }
 
   return 1;
@@ -89,19 +110,44 @@ export function IsPassiveSkillDefinition(
   return definition.Type === 'Passive';
 }
 
-export function GetSkillEffect(skillId: string, level: number, locale: string): string {
+export function IsBuffSkillDefinition(
+  definition: SkillDefinition
+): definition is BuffSkillDefinition {
+  return definition.Type === 'Buff';
+}
+
+export function IsEffectSkillDefinition(
+  definition: SkillDefinition
+): definition is EffectSkillDefinition {
+  return definition.Type === 'Effect';
+}
+
+export function GetSkillEffect(skillId: string, level: number, locale: string): string[] {
   const decimalPipe = new DecimalPipe(locale);
   const definition = SkillDefinitionsById.get(skillId);
-  if (!definition) return '';
+  if (!definition) return [];
+
+  const skillEffects: string[] = [];
 
   switch (definition.Type) {
     case 'StatBoost':
       const statSkillDefinition = definition as StatSkillDefinition;
       const value = statSkillDefinition.Levels[level > 0 ? level - 1 : 0]?.Value;
-      if (value === undefined) return '';
+      if (value === undefined) return [];
       const label = statSkillDefinition.Effect.ToLabel(value);
-      return LabelToString(label, decimalPipe);
-    default:
-      return '';
+      const labelString = LabelToString(label, decimalPipe);
+      skillEffects.push(labelString);
+      break;
+
+    case 'Buff':
+      const buffSkillDefinition = definition as BuffSkillDefinition;
+      const buffLabels = buffSkillDefinition.ToLabel();
+      buffLabels.forEach((label) => {
+        const labelString = LabelToString(label, decimalPipe);
+        skillEffects.push(labelString);
+      });
+      break;
   }
+
+  return skillEffects;
 }

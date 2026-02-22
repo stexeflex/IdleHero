@@ -22,19 +22,34 @@
 
     <div class="skill-description">{{ skill().Definition.Description }}</div>
 
-    @if (unlocked && skill().Effect) {
+    @if (unlocked && skill().Effects.length > 0) {
+      @for (effect of skill().Effects; track effect) {
+        <div class="skill-effect">
+          <div class="skill-effect__icon">
+            <app-icon symbol="beveledstar" size="mini"></app-icon>
+          </div>
+          <div class="skill-effect-label">
+            {{ effect }}
+            @if (!isMaxed && skill().NextEffects[$index]) {
+              <div class="next-level-effect">
+                <span>[🡒 {{ skill().NextEffects[$index] }}]</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    }
+    @if (unlocked && skill().Duration) {
       <div class="skill-effect">
         <div class="skill-effect__icon">
-          <app-icon symbol="beveledstar" size="mini"></app-icon>
+          <app-icon symbol="stopwatch" size="mini"></app-icon>
         </div>
-        <div class="skill-effect-label">
-          {{ skill().Effect }}
-          @if (!isMaxed) {
-            <div class="next-level-effect">
-              <span>[🡒 {{ skill().NextEffect }}]</span>
-            </div>
-          }
+        <div class="skill-effect-label">Duration: {{ skill().Duration!.Duration }}s</div>
+        <span class="dot">•</span>
+        <div class="skill-effect__icon">
+          <app-icon symbol="stopwatch" size="mini"></app-icon>
         </div>
+        <div class="skill-effect-label">Cooldown: {{ skill().Duration!.Cooldown }}s</div>
       </div>
     }
   </div>

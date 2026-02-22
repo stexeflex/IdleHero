@@ -1,5 +1,9 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { GetSkillUnlockCost, GetSkillUpgradeCost } from '../../../../core/systems/skills';
+import {
+  GetMetaInfo,
+  GetSkillUnlockCost,
+  GetSkillUpgradeCost
+} from '../../../../core/systems/skills';
 import { Gold, IconComponent } from '../../../../shared/components';
 
 import { SkillViewModel } from '../../../../core/services';
@@ -33,17 +37,7 @@ export class SkillArea {
 
   protected get MetaInfo(): string {
     const skill = this.skill();
-
-    switch (skill.Definition.Type) {
-      case 'StatBoost':
-        return 'Improvement';
-      case 'Passive':
-        return 'Passive';
-      case 'Buff':
-        return 'Buff';
-      case 'Effect':
-        return 'Special Effect';
-    }
+    return GetMetaInfo(skill.Definition);
   }
 
   protected get UnlockCost(): number {

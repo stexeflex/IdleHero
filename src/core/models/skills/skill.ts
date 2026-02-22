@@ -58,6 +58,9 @@ export interface BuffSkillDefinition extends SkillDefinition {
   // Cooldown of the active skill in seconds
   Cooldown: number;
 
+  /** Human-readable label */
+  ToLabel: () => Label[];
+
   /**
    * A function that maps a numeric value to a StatSource contribution.
    * Implementations will apply the numeric value to the appropriate StatSource fields.
@@ -66,10 +69,13 @@ export interface BuffSkillDefinition extends SkillDefinition {
 }
 
 export interface EffectSkillDefinition extends SkillDefinition {
+  /** Min/Max ranges per level for upgrading this skill. */
+  Levels: SkillLevelSpec[];
+
   /**
    * A function that maps a value to an Effect contribution.
    */
-  MapToEffect: (effects: SkillEffects) => SkillEffects;
+  MapToEffect: (effects: SkillEffects, value: number) => SkillEffects;
 }
 
 export interface Skill {

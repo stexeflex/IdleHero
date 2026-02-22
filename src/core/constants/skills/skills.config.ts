@@ -236,11 +236,12 @@ export const PASSIVE_SKILL_DEFINITIONS: PassiveSkillDefinition[] = [
 const BUFF_ATTACK_SPEED_SKILL: BuffSkillDefinition = {
   Id: 'BUFF_ATTACK_SPEED',
   Name: 'Haste',
-  Description: 'Increases your Attack Speed by 50% for a short duration.',
+  Description: 'Your movements accelerate to a relentless pace for a short duration.',
   Tier: 'I',
   Type: 'Buff',
   Duration: 20,
   Cooldown: 60,
+  ToLabel: () => [PercentageAdditiveLabel('Attack Speed', 0.5)],
   MapToStatSource: (source: string) => {
     const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
     s.AttackSpeed.Value = 0.5;
@@ -250,12 +251,14 @@ const BUFF_ATTACK_SPEED_SKILL: BuffSkillDefinition = {
 
 const BUFF_BLEED_CHANCE_SKILL: BuffSkillDefinition = {
   Id: 'BUFF_BLEED_CHANCE',
-  Name: 'Bleeding Edge',
-  Description: 'Increases your Bleed Chance by 25% for a short duration.',
+  Name: 'Weeping Wounds',
+  Description:
+    'Inflicts your attacks with an increased chance to cause bleeding for a short duration.',
   Tier: 'I',
   Type: 'Buff',
   Duration: 20,
   Cooldown: 60,
+  ToLabel: () => [PercentageAdditiveLabel('Bleed Chance', 0.25)],
   MapToStatSource: (source: string) => {
     const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
     s.Bleeding.Chance = 0.25;
@@ -266,11 +269,12 @@ const BUFF_BLEED_CHANCE_SKILL: BuffSkillDefinition = {
 const BUFF_CRIT_CHANCE_SKILL: BuffSkillDefinition = {
   Id: 'BUFF_CRIT_CHANCE',
   Name: 'Critical Focus',
-  Description: 'Increases your Critical Hit Chance by 25% for a short duration.',
+  Description: 'You lock onto every vulnerability with absolute precision for a short duration.',
   Tier: 'I',
   Type: 'Buff',
   Duration: 20,
   Cooldown: 60,
+  ToLabel: () => [PercentageAdditiveLabel('Critical Hit Chance', 0.25)],
   MapToStatSource: (source: string) => {
     const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
     s.CriticalHit.Chance = 0.25;
@@ -281,11 +285,16 @@ const BUFF_CRIT_CHANCE_SKILL: BuffSkillDefinition = {
 const BUFF_MULTI_HIT_CHANCE_SKILL: BuffSkillDefinition = {
   Id: 'BUFF_MULTI_HIT_CHANCE',
   Name: 'Frenzy',
-  Description: 'Increases your Multi Hit Chance and Chain for a short duration.',
+  Description:
+    'Puts yourself in a frenzy, increasing the chance for your attacks to strike multiple times for a short duration.',
   Tier: 'I',
   Type: 'Buff',
   Duration: 20,
   Cooldown: 60,
+  ToLabel: () => [
+    PercentageAdditiveLabel('Multi Hit Chance', 0.25),
+    PercentageAdditiveLabel('Multi Hit Chain', 0.1)
+  ],
   MapToStatSource: (source: string) => {
     const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
     s.MultiHit.Chance = 0.25;
@@ -306,23 +315,39 @@ export const BUFF_SKILL_DEFINITIONS: BuffSkillDefinition[] = [
 const EFFECT_WARCRY_SKILL: EffectSkillDefinition = {
   Id: 'BUFF_WAR_CRY',
   Name: 'War Cry',
-  Description: 'Unleashes a powerful war cry increasing your damage for a short duration.',
+  Description:
+    'Unleashes a powerful war cry increasing your damage against the current boss for a short duration.',
   Tier: 'III',
   Type: 'Effect',
-  MapToEffect: (effects: SkillEffects) => {
-    effects.WarCry = { Active: true };
+  Levels: [{ Level: 1, Value: 0.25, Type: 'Percent' }],
+  MapToEffect: (effects: SkillEffects, value: number) => {
+    effects.WarCry = {
+      ...effects.WarCry,
+      DamageIncreasePercent: value
+    };
     return effects;
   }
 };
 
 const EFFECT_STRICKEN_SKILL: EffectSkillDefinition = {
   Id: 'BUFF_STRICKEN',
-  Name: 'Stricken',
-  Description: 'Your attacks apply Stricken, increasing damage against bosses.',
+  Name: 'Bane of the Stricken',
+  Description:
+    'Each attack you make against the current boss increases the damage it takes from your attacks.',
   Tier: 'III',
   Type: 'Effect',
-  MapToEffect: (effects: SkillEffects) => {
-    effects.Stricken = { Active: true };
+  Levels: [
+    { Level: 1, Value: 0.008, Type: 'Percent' },
+    { Level: 2, Value: 0.01, Type: 'Percent' },
+    { Level: 3, Value: 0.012, Type: 'Percent' },
+    { Level: 4, Value: 0.014, Type: 'Percent' },
+    { Level: 5, Value: 0.016, Type: 'Percent' }
+  ],
+  MapToEffect: (effects: SkillEffects, value: number) => {
+    effects.Stricken = {
+      ...effects.Stricken,
+      DamageIncreasePerHit: value
+    };
     return effects;
   }
 };

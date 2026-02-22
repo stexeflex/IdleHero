@@ -1,4 +1,5 @@
 import {
+  BuffSkillDefinition,
   CreateEmptySkillTreeState,
   InitialPassives,
   Passives,
@@ -25,12 +26,21 @@ import { MapSkillToPassiveEffect, MapSkillToStatSources } from '../systems/stats
 import { GoldService } from './gold.service';
 import { LevelService } from './level.service';
 
+export interface SkillDurationViewModel {
+  Duration: number;
+  Cooldown: number;
+}
+
 export interface SkillViewModel {
   Definition: SkillDefinition;
-  Effect: string;
-  NextEffect: string;
+
   Level: number;
   MaxLevel: number;
+
+  Effects: string[];
+  NextEffects: string[];
+  Duration: SkillDurationViewModel | null;
+
   IsUnlocked: boolean;
   CanUnlock: boolean;
   CanUpgrade: boolean;
@@ -69,15 +79,17 @@ export class SkillsService {
         Skills: SkillDefinitionsByTier[tier].map((definition) => {
           const level = this.GetSkillLevel(definition.Id);
           const maxLevel = GetSkillMaxLevel(definition.Id);
-          const effect = GetSkillEffect(definition.Id, level, this.Locale);
-          const nextEffect = GetSkillEffect(definition.Id, level + 1, this.Locale);
+          const effects = GetSkillEffect(definition.Id, level, this.Locale);
+          const nextEffects = GetSkillEffect(definition.Id, level + 1, this.Locale);
+          const duration = this.GetSkillDuration(definition);
 
           return {
             Definition: definition,
             Level: level,
             MaxLevel: maxLevel,
-            Effect: effect,
-            NextEffect: nextEffect,
+            Effects: effects,
+            NextEffects: nextEffects,
+            Duration: duration,
             IsUnlocked: level > 0,
             CanUnlock: this.CanUnlockSkill(definition.Id),
             CanUpgrade: this.CanUpgradeSkill(definition.Id)
@@ -325,5 +337,14 @@ export class SkillsService {
     return this.SkillTreeState().SkillState.find(
       (stateSkill) => stateSkill.DefinitionId === skillId
     );
+  }
+
+  private GetSkillDuration(definition: SkillDefinition): SkillDurationViewModel | null {
+    return definition.Type === 'Buff'
+      ? {
+          Duration: (definition as BuffSkillDefinition).Duration,
+          Cooldown: (definition as BuffSkillDefinition).Cooldown
+        }
+      : null;
   }
 }

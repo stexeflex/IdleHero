@@ -35,7 +35,8 @@ export const STATS_CONFIG = {
     MAX_MULTI_HIT_CHANCE: 1.0, // Maximal 100% MHC
     MAX_MULTI_HIT_CHAIN_FACTOR: 0.9, // Maximal 90% Chain Factor
     MAX_CHAIN_HITS: 8, // Maximal 8 Hits in Multi-Hit Chain
-    MAX_ATTACK_SPEED: 2.5 // Maximal 250% Angriffsgeschwindigkeit
+    MAX_ATTACK_SPEED: 2.5, // Maximal 250% Angriffsgeschwindigkeit
+    MAX_STRICKEN: 5.0 // Maximal +500% Stricken-Schaden
   },
   MAPPINGS: {
     // Attribute-Scaling (Attribute liegen effektiv bei 0..50)
