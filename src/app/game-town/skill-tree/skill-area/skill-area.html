@@ -12,10 +12,12 @@
         @if (isMaxed) {
           <strong class="skill-title__level">MAX</strong>
         } @else {
-          <span>Level</span>
+          <span class="skill-title__level-label">Level</span>
           <strong class="skill-title__level"> {{ skill().Level }} / {{ skill().MaxLevel }} </strong>
         }
       }
+      <span class="dot">•</span>
+      <span class="skill-title__type">{{ MetaInfo.toUpperCase() }}</span>
     </div>
 
     <div class="skill-description">{{ skill().Definition.Description }}</div>

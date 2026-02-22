@@ -51,9 +51,19 @@
     color: $clr-highlight;
   }
 
+  .skill-title__level-label {
+    font-family: $font-family-header;
+  }
+
   .skill-title__level {
     font-family: $font-family-header;
     color: $clr-highlight;
+  }
+
+  .skill-title__type {
+    font-family: $font-family-header;
+    color: $clr-mute;
+    font-size: 0.9rem;
   }
 }
 

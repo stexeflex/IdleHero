@@ -31,6 +31,21 @@ export class SkillArea {
     return skill.Level >= skill.MaxLevel;
   }
 
+  protected get MetaInfo(): string {
+    const skill = this.skill();
+
+    switch (skill.Definition.Type) {
+      case 'StatBoost':
+        return 'Improvement';
+      case 'Passive':
+        return 'Passive';
+      case 'Buff':
+        return 'Buff';
+      case 'Effect':
+        return 'Special Effect';
+    }
+  }
+
   protected get UnlockCost(): number {
     const skill = this.skill();
     return GetSkillUnlockCost(skill.Definition.Tier);
