@@ -8,6 +8,8 @@ import {
 } from '../../progression';
 import { Injectable, inject } from '@angular/core';
 
+import { BossSelectionService } from './boss-selection.service';
+import { DUNGEON_MIMIC_BOSS_CONFIG } from '../../../constants';
 import { DropRandomRuneForDungeon } from '../../runes';
 import { DungeonKeyService } from '../../../services/dungeon-key.service';
 import { DungeonRunService } from './dungeon-run.service';
@@ -17,6 +19,7 @@ import { StatisticsService } from '../../../services/statistics.service';
 
 @Injectable({ providedIn: 'root' })
 export class DungeonRewardsService {
+  private readonly BossSelection = inject(BossSelectionService);
   private readonly Level = inject(LevelService);
   private readonly Gold = inject(GoldService);
   private readonly Keys = inject(DungeonKeyService);
@@ -29,11 +32,13 @@ export class DungeonRewardsService {
    * Computes rewards for a single stage within a dungeon.
    * @param dungeon The dungeon definition containing base reward values.
    * @param stageId The stage number for which to compute rewards.
+   * @param isMimic Whether the stage was completed by defeating a Mimic boss, which affects gold rewards.
    * @returns The computed rewards (gold, experience, and rune).
    */
-  public ComputeStageRewards(dungeon: DungeonRoom, stageId: number): Rewards {
+  public ComputeStageRewards(dungeon: DungeonRoom, stageId: number, isMimic: boolean): Rewards {
     const f = StageFactor(stageId);
-    const gold = Math.round(dungeon.Rewards.GoldBase * f);
+    const mimicGoldMultiplier = this.GetMimicGoldMultiplier(isMimic);
+    const gold = Math.round(dungeon.Rewards.GoldBase * f * mimicGoldMultiplier);
     const xp = ComputeDampedExperience(dungeon, stageId, this.Statistics.DungeonStatistics());
     const rune = stageId === 1 ? null : DropRandomRuneForDungeon(dungeon.Id);
     const runeIsUpgrade = rune ? this.Runes.IsUpgrade(rune) : false;
@@ -49,10 +54,11 @@ export class DungeonRewardsService {
    * Grants rewards for a single stage by applying them to services.
    * @param dungeon The dungeon definition containing base reward values.
    * @param stageId The stage number to grant rewards for.
+   * @param isMimic Whether the stage was completed by defeating a Mimic boss, which affects gold rewards.
    * @returns The granted rewards (gold, experience, and rune).
    */
-  public GrantStageRewards(dungeon: DungeonRoom, stageId: number): Rewards {
-    const rewards = this.ComputeStageRewards(dungeon, stageId);
+  public GrantStageRewards(dungeon: DungeonRoom, stageId: number, isMimic: boolean): Rewards {
+    const rewards = this.ComputeStageRewards(dungeon, stageId, isMimic);
     this.Log.Rewards(stageId, rewards);
     this.Gold.Add(rewards.Gold);
     this.Level.AddExperience(rewards.Experience);
@@ -68,7 +74,7 @@ export class DungeonRewardsService {
    * @returns The computed rewards (gold, experience, and rune).
    */
   public ComputeMidBossRewards(dungeon: DungeonRoom, stageId: number): Rewards {
-    const base = this.ComputeStageRewards(dungeon, stageId);
+    const base = this.ComputeStageRewards(dungeon, stageId, false);
 
     const mGold = MidBossFactor('GOLD');
     const mExp = MidBossFactor('EXPERIENCE');
@@ -108,7 +114,7 @@ export class DungeonRewardsService {
    */
   public ComputeCompletionRewards(dungeon: DungeonRoom): Rewards {
     const finalStage = Math.max(dungeon.StagesBase, dungeon.StagesMax);
-    const base = this.ComputeStageRewards(dungeon, finalStage);
+    const base = this.ComputeStageRewards(dungeon, finalStage, false);
 
     const cGold = CompletionFactor('GOLD');
     const cExp = CompletionFactor('EXPERIENCE');
@@ -153,5 +159,9 @@ export class DungeonRewardsService {
     this.DungeonRun.AddRewards(rewards);
 
     return rewards;
+  }
+
+  private GetMimicGoldMultiplier(isMimic: boolean): number {
+    return isMimic ? DUNGEON_MIMIC_BOSS_CONFIG.MIMIC_GOLD_REWARD_MULTIPLIER : 1;
   }
 }

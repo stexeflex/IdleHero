@@ -41,6 +41,12 @@ export interface DungeonBossConfig {
   BossPools: Map<number, BossFactory[]>;
 }
 
+export const DUNGEON_MIMIC_BOSS_CONFIG = {
+  MIMIC_ID: 'Mimic',
+  MIMIC_SPAWN_RATE: 0.01, // 1% Chance, dass ein Mimic statt eines regulären Bosses spawnt
+  MIMIC_GOLD_REWARD_MULTIPLIER: 10 // Mimics geben das 10-fache an Gold im Vergleich zu regulären Bossen
+};
+
 export const DUNGEON_BOSS_CONFIGS: Record<string, DungeonBossConfig> = {
   D1: {
     StageSpecific: new Map<number, BossFactory>([
