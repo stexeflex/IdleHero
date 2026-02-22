@@ -1,7 +1,7 @@
 <div class="container">
   <!-- ATTRIBUTES -->
   <div class="category">
-    <div class="grid-header" [class.grid-header--expanded]="AttributesExpanded()">
+    <div class="grid-header" [class.grid-header--expanded]="statsState.AttributesExpanded()">
       <h3>ATTRIBUTES</h3>
       <div class="respec">
         <button class="ih-button-quaternary" (click)="ToggleRespecMode()">
@@ -21,13 +21,12 @@
           </div>
         }
       </div>
-      <button
-        class="ih-button-icon grid-header__toggle"
-        (click)="AttributesExpanded.set(!AttributesExpanded())">
-        <app-toggle-icon [direction]="AttributesExpanded() ? 'up' : 'down'"></app-toggle-icon>
+      <button class="ih-button-icon grid-header__toggle" (click)="ToggleAttributesExpanded()">
+        <app-toggle-icon
+          [direction]="statsState.AttributesExpanded() ? 'up' : 'down'"></app-toggle-icon>
       </button>
     </div>
-    @if (AttributesExpanded()) {
+    @if (statsState.AttributesExpanded()) {
       <div class="grid">
         @for (attribute of Attributes(); track attribute.label) {
           <div class="grid__label">{{ attribute.label }}</div>

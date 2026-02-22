@@ -6,6 +6,7 @@ import { Gold, IconComponent } from '../../../../shared/components';
 import { ATTRIBUTES_CONFIG } from '../../../../core/constants';
 import { Attributes } from '../../../../core/models';
 import { CombatState } from '../../../../core/systems/combat';
+import { HeroStatsStateService } from '../../../../shared/services';
 import { ToggleIcon } from './toggle-icon/toggle-icon';
 
 interface StatsItem {
@@ -27,6 +28,7 @@ interface StatsGrid {
 })
 export class Stats {
   private readonly locale = inject(LOCALE_ID);
+  protected readonly statsState = inject(HeroStatsStateService);
   private readonly combatState = inject(CombatState);
   private readonly attributesService = inject(AttributesService);
   private readonly statsService = inject(CombatStatsService);
@@ -34,12 +36,6 @@ export class Stats {
 
   private readonly decimalPipe: DecimalPipe = new DecimalPipe(this.locale);
   private readonly percentPipe: PercentPipe = new PercentPipe(this.locale);
-
-  // UI State
-  protected AttributesExpanded = signal<boolean>(true);
-  protected ChargingStrikeStatsExpanded = signal<boolean>(true);
-  protected OffenseStatsExpanded = signal<boolean>(true);
-  protected UtilityStatsExpanded = signal<boolean>(true);
 
   protected IsRespecMode = signal<boolean>(false);
   protected ToggleRespecMode() {
@@ -96,6 +92,10 @@ export class Stats {
     this.DecreasedPoints.set(this.DecreasedPoints() + 1);
     this.attributesService.Deallocate(attribute as 'Strength' | 'Intelligence' | 'Dexterity', 1);
   }
+
+  protected ToggleAttributesExpanded() {
+    this.statsState.AttributesExpanded.set(!this.statsState.AttributesExpanded());
+  }
   //#endregion ATTRIBUTES
 
   //#region STATS
@@ -103,17 +103,17 @@ export class Stats {
     {
       title: 'CHARGING STRIKE',
       items: this.ChargingStrikeStats(),
-      expanded: this.ChargingStrikeStatsExpanded()
+      expanded: this.statsState.ChargingStrikeStatsExpanded()
     },
     {
       title: 'OFFENSE',
       items: this.OffenseStats(),
-      expanded: this.OffenseStatsExpanded()
+      expanded: this.statsState.OffenseStatsExpanded()
     },
     {
       title: 'UTILITY',
       items: this.UtilityStats(),
-      expanded: this.UtilityStatsExpanded()
+      expanded: this.statsState.UtilityStatsExpanded()
     }
   ]);
 
@@ -219,14 +219,6 @@ export class Stats {
         label: 'Multi Hit Chain Factor',
         value: this.percentPipe.transform(combatStats.MultiHitChainFactor, '1.0-0')
       }
-      // {
-      //   label: 'Armor Penetration',
-      //   value: this.percentPipe.transform(combatStats.ArmorPenetration, '1.0-0')
-      // },
-      // {
-      //   label: 'Resistance Penetration',
-      //   value: this.percentPipe.transform(combatStats.ResistancePenetration, '1.0-0')
-      // }
     ];
   });
   //#endregion STATS
