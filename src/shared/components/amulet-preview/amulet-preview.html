@@ -23,32 +23,34 @@
   </div>
 
   <!-- AMULET SLOTS -->
-  <div class="amulet-slots">
-    @for (slot of Slots(); track $index) {
-      @if (SelectedIndex() === $index) {
-        <button
-          class="ih-button-icon amulet-slot unsocketing"
-          [disabled]="!CanUnsocketRune()"
-          (click)="UnsocketSelectedRune()">
-          <app-icon ui="lobarrow" size="lg"></app-icon>
-        </button>
-      } @else {
-        <div
-          class="amulet-slot"
-          [class.empty]="SlotIsEmpty($index)"
-          [class.common--border]="slot?.Quality === 'Common'"
-          [class.magic--border]="slot?.Quality === 'Magic'"
-          [class.rare--border]="slot?.Quality === 'Rare'"
-          [class.epic--border]="slot?.Quality === 'Epic'"
-          [class.legendary--border]="slot?.Quality === 'Legendary'"
-          (click)="SelectSlot($index)">
-          @if (!SlotIsEmpty($index)) {
-            <app-icon symbol="runestone" size="lg"></app-icon>
-          }
-        </div>
+  @if (!IsLocked()) {
+    <div class="amulet-slots">
+      @for (slot of Slots(); track $index) {
+        @if (SelectedIndex() === $index) {
+          <button
+            class="ih-button-icon amulet-slot unsocketing"
+            [disabled]="!CanUnsocketRune()"
+            (click)="UnsocketSelectedRune()">
+            <app-icon ui="lobarrow" size="lg"></app-icon>
+          </button>
+        } @else {
+          <div
+            class="amulet-slot"
+            [class.empty]="SlotIsEmpty($index)"
+            [class.common--border]="slot?.Quality === 'Common'"
+            [class.magic--border]="slot?.Quality === 'Magic'"
+            [class.rare--border]="slot?.Quality === 'Rare'"
+            [class.epic--border]="slot?.Quality === 'Epic'"
+            [class.legendary--border]="slot?.Quality === 'Legendary'"
+            (click)="SelectSlot($index)">
+            @if (!SlotIsEmpty($index)) {
+              <app-icon symbol="runestone" size="lg"></app-icon>
+            }
+          </div>
+        }
       }
-    }
-  </div>
+    </div>
+  }
 
   <div class="rune-effects">
     @for (affix of Effects(); track $index) {

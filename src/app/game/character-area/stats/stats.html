@@ -4,7 +4,7 @@
     <div class="grid-header" [class.grid-header--expanded]="statsState.AttributesExpanded()">
       <h3>ATTRIBUTES</h3>
       <div class="respec">
-        <button class="ih-button-quaternary" (click)="ToggleRespecMode()">
+        <button class="ih-button-quaternary button-respec" (click)="ToggleRespecMode()">
           @if (IsRespecMode()) {
             CONFIRM
           } @else {

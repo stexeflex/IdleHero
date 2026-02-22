@@ -88,6 +88,6 @@ $slot-size: 80px;
   @include scrollbar($size: 0.8rem);
   flex-wrap: wrap;
   align-content: flex-start;
-  gap: $gap;
-  padding: $gap;
+  gap: calc($gap / 2);
+  padding: calc($gap / 3);
 }

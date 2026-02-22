@@ -18,8 +18,9 @@
           [class.epic--border]="amuletInfo.IsEpic"
           [class.legendary--border]="amuletInfo.IsLegendary">
           <app-icon class="gear-slot__icon" [gear]="itemSlot.icon" size="2x"></app-icon>
-
-          <app-socketed-runes-icon [runes]="Runes()"></app-socketed-runes-icon>
+          @if (amuletInfo.IsUnlocked) {
+            <app-socketed-runes-icon [runes]="Runes()"></app-socketed-runes-icon>
+          }
         </button>
       } @else {
         @let itemSlotInfo = ItemInfo(itemSlot.slot);

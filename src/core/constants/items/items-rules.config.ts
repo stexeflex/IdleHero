@@ -14,7 +14,7 @@ import {
 export const ITEM_LEVEL_CONFIG = {
   LEVEL: {
     MIN: 1 as ItemLevel,
-    MAX: 25 as ItemLevel,
+    MAX: 30 as ItemLevel,
     COMMON: {
       MIN: 1 as CommonItemLevel,
       MAX: 4 as CommonItemLevel
@@ -33,7 +33,7 @@ export const ITEM_LEVEL_CONFIG = {
     },
     LEGENDARY: {
       MIN: 20 as LegendaryItemLevel,
-      MAX: 25 as LegendaryItemLevel
+      MAX: 30 as LegendaryItemLevel
     }
   }
 };
@@ -48,20 +48,20 @@ export interface ItemTierRule {
 export const ITEM_TIER_RULES: Record<ItemTier, ItemTierRule> = {
   I: {
     MinItemLevel: ITEM_LEVEL_CONFIG.LEVEL.COMMON.MIN,
-    MaxItemLevel: ITEM_LEVEL_CONFIG.LEVEL.RARE.MAX,
+    MaxItemLevel: ITEM_LEVEL_CONFIG.LEVEL.MAGIC.MAX,
     MinRarity: 'Common',
-    MaxRarity: 'Rare'
+    MaxRarity: 'Magic'
   },
   II: {
-    MinItemLevel: ITEM_LEVEL_CONFIG.LEVEL.MAGIC.MIN,
+    MinItemLevel: ITEM_LEVEL_CONFIG.LEVEL.RARE.MIN,
     MaxItemLevel: ITEM_LEVEL_CONFIG.LEVEL.EPIC.MAX,
-    MinRarity: 'Magic',
+    MinRarity: 'Rare',
     MaxRarity: 'Epic'
   },
   III: {
-    MinItemLevel: ITEM_LEVEL_CONFIG.LEVEL.RARE.MIN,
+    MinItemLevel: ITEM_LEVEL_CONFIG.LEVEL.LEGENDARY.MIN,
     MaxItemLevel: ITEM_LEVEL_CONFIG.LEVEL.LEGENDARY.MAX,
-    MinRarity: 'Rare',
+    MinRarity: 'Legendary',
     MaxRarity: 'Legendary'
   }
 };
@@ -102,8 +102,8 @@ export const ITEM_RARITY_RULES: RarityRulesMap = {
   Legendary: {
     MinItemLevel: ITEM_LEVEL_CONFIG.LEVEL.LEGENDARY.MIN,
     MaxItemLevel: ITEM_LEVEL_CONFIG.LEVEL.LEGENDARY.MAX,
-    MaxAffixes: 3,
-    MaxEnchantableAffixes: 3,
+    MaxAffixes: 4,
+    MaxEnchantableAffixes: 4,
     MaxAffixTier: 'Legendary',
     AllowAffixReroll: true
   }

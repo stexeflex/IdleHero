@@ -76,6 +76,10 @@ $grid-header-padding: calc($gap / 2);
   gap: $gap;
   min-width: 250px;
 
+  .button-respec {
+    width: 150px;
+  }
+
   .skill-points {
     font-family: $font-family-header;
     font-size: 1.4rem;
