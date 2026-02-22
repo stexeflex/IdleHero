@@ -7,11 +7,13 @@ import {
   InitialActorState,
   InitialHeroCharge,
   InitialLife,
+  InitialSkillEffects,
   NoArmor,
   ResetLife
 } from '../../../models';
 import {
   CombatLogService,
+  CombatSkillsService,
   CombatStatsService,
   DungeonRoomService,
   PlayerHeroService,
@@ -22,7 +24,7 @@ import {
   ComputeFirstIntervalMs,
   ComputeInitialAttackInterval
 } from '../attack-interval-computing';
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, effect, inject, signal } from '@angular/core';
 
 import { DungeonRunService } from '../dungeons/dungeon-run.service';
 import { EventQueue } from './event.queue';
@@ -40,6 +42,7 @@ export class CombatState {
   private readonly DungeonRun = inject<DungeonRunService>(DungeonRunService);
   private readonly CombatStats = inject<CombatStatsService>(CombatStatsService);
   private readonly Skills = inject<SkillsService>(SkillsService);
+  private readonly CombatSkills = inject<CombatSkillsService>(CombatSkillsService);
   private readonly Log = inject<CombatLogService>(CombatLogService);
   private readonly GameSaver = inject<GameSaverService>(GameSaverService);
 
@@ -59,6 +62,15 @@ export class CombatState {
   public readonly Hero$ = new BehaviorSubject<Hero | undefined>(undefined);
   public readonly Boss$ = new BehaviorSubject<Boss | undefined>(undefined);
 
+  public constructor() {
+    effect(() => {
+      this.CombatSkills.StatusRevision();
+      const isInProgress = this.InProgress();
+      if (!isInProgress) return;
+      this.UpdateHero();
+    });
+  }
+
   public Leave() {
     this.Reset();
     this.DungeonRoom.ExitDungeon();
@@ -77,6 +89,7 @@ export class CombatState {
     this.Log.Info(`${this.DungeonRoom.CurrentDungeon()?.Title.toUpperCase()}: Dungeon Cleared!`);
 
     this.DungeonRoom.Prestige(true);
+    this.CombatSkills.Reset();
     this.Queue.Clear();
     this.ClearActors();
     this.GameSaver.SaveGame();
@@ -85,6 +98,7 @@ export class CombatState {
   private Reset() {
     this.InProgress.set(false);
     this.Completed.set(false);
+    this.CombatSkills.Reset();
     this.DungeonRun.StopRun();
     this.Queue.Clear();
     this.Log.Clear();
@@ -134,6 +148,7 @@ export class CombatState {
       // Compute Stats for Hero
       hero.Stats = this.CombatStats.Effective();
       hero.AttackInterval = ComputeAttackInterval(hero.Stats.AttackSpeed, hero.AttackInterval);
+      return hero;
     });
 
     this.PublishState();
@@ -192,6 +207,7 @@ export class CombatState {
       AttackInterval: ComputeInitialAttackInterval(computedStats.AttackSpeed),
       State: InitialActorState(),
       Passives: passives,
+      Effects: InitialSkillEffects(),
       Charge: InitialHeroCharge(),
       SplashDamage: 0
     };
