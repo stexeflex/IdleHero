@@ -27,6 +27,7 @@ export class ExperienceBar implements AfterViewInit {
   currentLevel = input<number>(0);
   currentExp = input<number>(0);
   expToNextLevel = input<number>(100);
+  isMax = input<boolean>(false);
 
   // UI progress state (0..100)
   protected progress = signal<number>(0);

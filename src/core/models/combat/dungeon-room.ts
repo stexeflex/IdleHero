@@ -1,20 +1,23 @@
 import { CreaturesIconName } from '../../../shared/components';
+import { RuneQuality } from '../items/runes/rune-quality.enum';
 
-export type DungeonRoomKey = 'Silver Key' | 'Magic Key' | 'Golden Key';
+export type DungeonRoomKey =
+  | 'Silver Key'
+  | 'Magic Key'
+  | 'Golden Key'
+  | 'Epic Key'
+  | 'Legendary Key';
 
 export enum DungeonType {
   Normal = 'Normal',
   Capstone = 'Capstone'
 }
 
-export interface DungeonRoomPrerequisites {
-  Gold: number;
-  Key?: DungeonRoomKey | null;
-}
-
 export interface DungeonRoomRewards {
-  Gold: number;
-  Key?: DungeonRoomKey | null;
+  XpBase: number;
+  GoldBase: number;
+  RuneDropChances: Record<RuneQuality, number>;
+  Key: DungeonRoomKey | null;
 }
 
 export interface DungeonRoom {
@@ -29,8 +32,7 @@ export interface DungeonRoom {
   MidStages: number[];
   StagesMax: number;
 
-  XpBase: number;
-  GoldBase: number;
+  Rewards: DungeonRoomRewards;
 
   Locked: boolean;
 }
@@ -39,8 +41,11 @@ export interface NormalDungeonRoom extends DungeonRoom {
   Type: DungeonType.Normal;
 }
 
+export interface CapstoneDungeonRoomPrerequisites {
+  Key: DungeonRoomKey;
+}
+
 export interface CapstoneDungeonRoom extends DungeonRoom {
   Type: DungeonType.Capstone;
-  Prerequisites: DungeonRoomPrerequisites;
-  Rewards: DungeonRoomRewards;
+  Prerequisites: CapstoneDungeonRoomPrerequisites;
 }

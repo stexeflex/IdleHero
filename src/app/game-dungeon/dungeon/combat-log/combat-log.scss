@@ -13,12 +13,18 @@
 
   // Horizontal gap between separators and list
   gap: calc($gap / 2);
+  padding: calc($gap / 2);
+  min-width: 575px;
 }
 
 @media (max-width: $bp-xl) {
   .log-list {
     @include overflow($display: flex, $max-height: $size-combat-log-height-xl);
   }
+}
+
+.log-entry {
+  margin-left: $gap;
 }
 
 .log-entry,
@@ -43,12 +49,29 @@
 .log-rewards-entry {
   flex-direction: column;
   align-items: flex-start;
+  justify-items: flex-end;
 }
 
 .log-damage-values,
+.log-rewards-values,
+.log-damage-details,
 .log-rewards-values {
   display: flex;
   gap: calc($gap / 2);
+}
+
+.total-damage {
+  font-size: 1.3rem;
+}
+
+.log-damage-details {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.log-damage-values {
+  flex-wrap: wrap;
+  font-size: 1rem;
 }
 
 .log-time {
@@ -64,24 +87,26 @@
 .log-rewards,
 .log-rewards-header {
   color: $clr-highlight;
-}
-
-.log-rewards-gold {
-  color: $clr-log-rewards-gold;
-  font-weight: bold;
-}
-
-.log-rewards-xp {
-  color: $clr-log-rewards-xp;
   font-weight: bold;
 }
 
 .log-damage {
   color: $clr-log-damage;
+  font-weight: bold;
 }
 
 .log-bleed {
   color: $clr-log-bleed;
+  font-weight: bold;
+}
+
+.log-charged {
+  color: $clr-log-charged;
+  font-weight: bold;
+}
+
+.log-splash {
+  color: $clr-log-splash;
   font-weight: bold;
 }
 
@@ -122,4 +147,8 @@
 .log-dungeon-cleared {
   color: $clr-log-dungeon-cleared;
   font-weight: bold;
+}
+
+.dot {
+  color: #ddd;
 }

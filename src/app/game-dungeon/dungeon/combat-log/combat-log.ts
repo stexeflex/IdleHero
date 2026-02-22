@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { CombatLogEntry, DamageLogEntry } from '../../../../core/models';
-import { IconComponent, Separator } from '../../../../shared/components';
+import { Exp, Gold, IconComponent, RuneIcon, Separator } from '../../../../shared/components';
 
 import { CombatActorIcon } from './combat-actor-icon/combat-actor-icon';
 import { CombatLogService } from '../../../../core/services';
@@ -12,11 +12,17 @@ interface DamageLogEntryExtended {
   ActionContent: string;
   TotalDamage: number;
   DamageDetails: string;
+  AdditionalDetails: AdditionalDetail[];
+}
+
+interface AdditionalDetail {
+  value: string;
+  class: string;
 }
 
 @Component({
   selector: 'app-combat-log',
-  imports: [DecimalPipe, CombatActorIcon, IconComponent, Separator],
+  imports: [DecimalPipe, CombatActorIcon, IconComponent, Separator, Gold, Exp, RuneIcon],
   templateUrl: './combat-log.html',
   styleUrl: './combat-log.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -27,10 +33,6 @@ export class CombatLog {
   private readonly Entries = this.Log.Entries;
   protected readonly VisibleEntries = computed<CombatLogEntry[]>(() => this.Entries());
 
-  protected get Separator(): string {
-    return '\u2013'; // en dash
-  }
-
   protected DamageLogEntryExtended(entry: DamageLogEntry): DamageLogEntryExtended {
     const totalDamage = entry.Damage.reduce((sum, dmg) => sum + dmg.Amount, 0);
 
@@ -38,7 +40,8 @@ export class CombatLog {
       ActorClass: this.DamageActorClass(entry),
       ActionContent: this.ActionContent(entry),
       TotalDamage: totalDamage,
-      DamageDetails: this.DamageDetails(entry)
+      DamageDetails: this.DamageDetails(entry),
+      AdditionalDetails: this.AdditionalDetails(entry)
     };
   }
 
@@ -73,8 +76,10 @@ export class CombatLog {
   private DamageDetails(entry: DamageLogEntry): string {
     let damageDetails = 'HIT';
 
-    if (entry.Damage.length > 1) {
-      damageDetails = 'MULTI ' + damageDetails + ' [x' + entry.Damage.length + ']';
+    if (entry.IsMultiHit) {
+      const rawDamages = entry.Damage.filter((d) => !d.IsBleeding && !d.IsSplash);
+      const multiHitCount = rawDamages.length ?? 0;
+      damageDetails = 'MULTI ' + damageDetails + ' [x' + multiHitCount + ']';
     }
 
     if (entry.Damage.some((d) => d.IsCritical)) {
@@ -82,6 +87,24 @@ export class CombatLog {
     }
 
     return damageDetails === 'HIT' ? '' : damageDetails;
+  }
+
+  private AdditionalDetails(entry: DamageLogEntry): AdditionalDetail[] {
+    const details: AdditionalDetail[] = [];
+
+    if (entry.Damage.some((d) => d.IsBleeding)) {
+      details.push({ value: 'BLEEDING', class: 'log-bleed' });
+    }
+
+    if (entry.Damage.some((d) => d.IsCharged)) {
+      details.push({ value: 'CHARGED', class: 'log-charged' });
+    }
+
+    if (entry.Damage.some((d) => d.IsSplash)) {
+      details.push({ value: 'SPLASH', class: 'log-splash' });
+    }
+
+    return details;
   }
 
   protected FormatTimestamp(timestampMs: number): string {

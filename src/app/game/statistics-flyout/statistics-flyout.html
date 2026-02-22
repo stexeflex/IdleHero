@@ -1,7 +1,9 @@
 <div class="container">
-  <button class="flyout-button" (click)="ToggleFlyout()">STATISTICS</button>
+  <button class="ih-button-quaternary" (click)="ToggleFlyout()">STATISTICS</button>
   <div class="flyout" [class.open]="IsOpen()">
     <div class="flyout-content">
+      <h3 class="header">DAMAGE</h3>
+      <separator class="ih-separator"></separator>
       <div class="grid">
         @for (statistic of Statistics(); track statistic.label) {
           <div class="row">
@@ -10,6 +12,9 @@
           </div>
         }
       </div>
+      <separator class="ih-separator"></separator>
+
+      <h3 class="header">CHARGED</h3>
       <separator class="ih-separator"></separator>
       <div class="grid">
         @for (statistic of ChargedStatistics(); track statistic.label) {
@@ -20,6 +25,9 @@
         }
       </div>
       <separator class="ih-separator"></separator>
+
+      <h3 class="header">TOTAL</h3>
+      <separator class="ih-separator"></separator>
       <div class="grid">
         @for (statistic of TotalStatistics(); track statistic.label) {
           <div class="row">
@@ -28,6 +36,19 @@
           </div>
         }
       </div>
+      <separator class="ih-separator"></separator>
+
+      <h3 class="header">OTHER</h3>
+      <separator class="ih-separator"></separator>
+      <div class="grid">
+        @for (statistic of OtherStatistics(); track statistic.label) {
+          <div class="row">
+            <div class="grid__label">{{ statistic.label }}</div>
+            <div class="grid__value">{{ statistic.value }}</div>
+          </div>
+        }
+      </div>
+
       <separator class="ih-separator"></separator>
       <div class="reset">
         <button

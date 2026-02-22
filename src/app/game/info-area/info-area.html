@@ -3,10 +3,10 @@
     <app-gold [amount]="GoldAmount" size="md"></app-gold>
   </div>
 
-  <separator class="separator visible-in-landscape" [vertical]="true"></separator>
-  <separator class="separator visible-in-portrait" [vertical]="false"></separator>
-
   @if (HasAnyKey) {
+    <separator class="separator visible-in-landscape" [vertical]="true"></separator>
+    <separator class="separator visible-in-portrait" [vertical]="false"></separator>
+
     <div class="info-value dungeon-key">
       @if (HasKey("Silver Key")) {
         <app-icon class="common--font" symbol="skeletonkey" size="sm" title="Silver Key"></app-icon>
@@ -17,19 +17,53 @@
       @if (HasKey("Golden Key")) {
         <app-icon class="rare--font" symbol="skeletonkey" size="sm" title="Golden Key"></app-icon>
       }
+      @if (HasKey("Epic Key")) {
+        <app-icon class="epic--font" symbol="skeletonkey" size="sm" title="Epic Key"></app-icon>
+      }
+      @if (HasKey("Legendary Key")) {
+        <app-icon
+          class="legendary--font"
+          symbol="skeletonkey"
+          size="sm"
+          title="Legendary Key"></app-icon>
+      }
     </div>
-
-    <separator class="separator visible-in-landscape" [vertical]="true"></separator>
-    <separator class="separator visible-in-portrait" [vertical]="false"></separator>
   }
 
-  <div class="info-value" title="Highest Dungeon Stages">
-    <app-icon symbol="achievement" size="sm"></app-icon>
-    <h3>{{ MaxStages }}</h3>
-  </div>
+  @if (DungeonStages.length > 0) {
+    <separator class="separator visible-in-landscape" [vertical]="true"></separator>
+    <separator class="separator visible-in-portrait" [vertical]="false"></separator>
 
-  <div class="info-value" title="Highest Capstone Dungeon Stages">
-    <app-icon symbol="achievement" size="sm"></app-icon>
-    <h3>{{ MaxCapstoneStages }}</h3>
-  </div>
+    <div class="info-value" title="Highest Dungeon Stages">
+      <app-icon symbol="achievement" size="sm"></app-icon>
+      <div class="dungeon-stage-list">
+        @for (dungeonStage of DungeonStages; track dungeonStage.DungeonId) {
+          <div class="dungeon-stage">
+            <app-icon [creatures]="dungeonStage.DungeonIcon" size="sm"></app-icon>
+            <h3>{{ dungeonStage.Stage }}</h3>
+          </div>
+          @if (!$last) {
+            <span class="dot">•</span>
+          }
+        }
+      </div>
+    </div>
+  }
+
+  @if (CapstoneStages.length > 0) {
+    <div class="info-value" title="Highest Capstone Dungeon Stages">
+      <app-icon symbol="achievement" size="sm"></app-icon>
+      <div class="dungeon-stage-list">
+        @for (dungeonStage of CapstoneStages; track dungeonStage.DungeonId) {
+          <div class="dungeon-stage">
+            <app-icon [creatures]="dungeonStage.DungeonIcon" size="sm"></app-icon>
+            <h3>{{ dungeonStage.Stage }}</h3>
+          </div>
+          @if (!$last) {
+            <span class="dot">•</span>
+          }
+        }
+      </div>
+    </div>
+  }
 </div>

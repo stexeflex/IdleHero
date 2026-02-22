@@ -10,7 +10,6 @@ export type EventType =
   | 'Miss'
   | 'Damage'
   | 'DamageOverTime'
-  | 'ClearDamageOverTime'
   | 'Charge'
   | 'Clear'
   | 'Heal'
@@ -45,7 +44,6 @@ export type DamageOverTimeEvent = {
   DotType: 'Bleed';
   AtMs: number;
   Target: Target;
-  Damage: DamageResult;
   Tick: number;
   TotalTicks: number;
 };

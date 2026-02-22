@@ -3,11 +3,8 @@
 
 .slots {
   @include flexbox();
-  gap: $gap;
+  gap: calc($gap / 1.5);
 }
 
 .slot {
-  border-width: 5px;
-  border-style: solid;
-  border-radius: 50%;
 }

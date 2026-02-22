@@ -1,21 +1,32 @@
 <div class="container">
   <!-- ATTRIBUTES -->
   <div class="category">
-    <div class="grid-header" [class.grid-header--expanded]="AttributesExpanded()">
+    <div class="grid-header" [class.grid-header--expanded]="statsState.AttributesExpanded()">
       <h3>ATTRIBUTES</h3>
-      @if (ShowAttributePoints()) {
-        <div class="skill-points">
-          {{ AttributePoints() }}
-          <app-icon class="skill-points__icon" symbol="orb" size="sm"></app-icon>
-        </div>
-      }
-      <button
-        class="ih-button-icon grid-header__toggle"
-        (click)="AttributesExpanded.set(!AttributesExpanded())">
-        <app-toggle-icon [direction]="AttributesExpanded() ? 'up' : 'down'"></app-toggle-icon>
+      <div class="respec">
+        <button class="ih-button-quaternary button-respec" (click)="ToggleRespecMode()">
+          @if (IsRespecMode()) {
+            CONFIRM
+          } @else {
+            RESPEC
+          }
+        </button>
+        @if (IsRespecMode()) {
+          <app-gold [amount]="RespecCost()"></app-gold>
+        }
+        @if (ShowAttributePoints() && !IsRespecMode()) {
+          <div class="skill-points">
+            {{ AttributePoints() }}
+            <app-icon class="skill-points__icon" symbol="orb" size="sm"></app-icon>
+          </div>
+        }
+      </div>
+      <button class="ih-button-icon grid-header__toggle" (click)="ToggleAttributesExpanded()">
+        <app-toggle-icon
+          [direction]="statsState.AttributesExpanded() ? 'up' : 'down'"></app-toggle-icon>
       </button>
     </div>
-    @if (AttributesExpanded()) {
+    @if (statsState.AttributesExpanded()) {
       <div class="grid">
         @for (attribute of Attributes(); track attribute.label) {
           <div class="grid__label">{{ attribute.label }}</div>

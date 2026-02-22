@@ -6,7 +6,7 @@
   @include panel-shadow($border-width: 2px, $border-color: $clr-border);
   @include flexbox($dir: column, $justify: flex-start, $align: stretch);
 
-  gap: $gap;
+  gap: calc($gap / 2);
 }
 
 .header {
@@ -91,8 +91,16 @@
   @include scrollbar();
   flex-wrap: wrap;
   align-content: flex-start;
-  gap: $gap;
-  padding: $gap;
+  gap: calc($gap / 2);
+  padding: calc($gap / 2);
+}
+
+@media (max-height: $bp-xl-height) {
+  .grid {
+    min-height: $size-inventory-grid-height-responsive;
+    @include overflow($display: flex, $max-height: $size-inventory-grid-height-responsive);
+    @include scrollbar();
+  }
 }
 
 .empty {
@@ -130,5 +138,15 @@
     gap: $gap;
     background-color: $clr-black;
     color: $clr-text-primary;
+  }
+
+  .refund-info {
+    @include flexbox();
+    gap: $gap;
+
+    > span {
+      font-family: $font-family-header;
+      color: $clr-mute;
+    }
   }
 }

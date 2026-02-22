@@ -18,13 +18,22 @@ $bp-md: 960px;
 $bp-lg: 1280px;
 $bp-xl: 1920px;
 
+$bp-lg-height: 720px;
+$bp-xl-height: 1080px;
+
 /* ========== Sizes ========== */
 $size-character-stats-height: 64vh;
+$size-character-stats-height-responsive: 54vh;
 $size-inventory-width: 500px;
 $size-inventory-grid-height: 65vh;
+$size-inventory-grid-height-responsive: 56vh;
+$size-skills-height: 85vh;
+$size-skills-height-responsive: 82vh;
 $size-crafting-variants-height: 68vh;
 $size-combat-log-height: 78vh;
 $size-combat-log-height-xl: 44vh;
+$size-runes-list-height-responsive: 69vh;
+$size-runes-list-width-responsive: 500px;
 
 /* ========== Fonts ========== */
 $font-family-title: "Cinzel Decorative", serif;

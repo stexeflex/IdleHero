@@ -1,12 +1,11 @@
 import { Boss, CapstoneDungeonRoom, DungeonRoom, DungeonType } from '../models';
+import { DUNGEON_MIMIC_BOSS_CONFIG, GetDungeonById } from '../constants';
 import { Injectable, computed, inject, signal } from '@angular/core';
 
 import { BossSelectionService } from '../systems/combat';
 import { ClampUtils } from '../../shared/utils';
 import { DungeonKeyService } from './dungeon-key.service';
 import { DungeonRewardsService } from '../systems/combat/dungeons/dungeon-rewards.service';
-import { GetDungeonById } from '../constants';
-import { GoldService } from './gold.service';
 import { StatisticsService } from './statistics.service';
 
 @Injectable({ providedIn: 'root' })
@@ -15,7 +14,6 @@ export class DungeonRoomService {
   private readonly Bosses = inject(BossSelectionService);
   private readonly Rewards = inject(DungeonRewardsService);
   private readonly Keys = inject(DungeonKeyService);
-  private readonly Gold = inject(GoldService);
 
   private readonly CurrentDungeonIdState = signal<string | null>(null);
   private readonly CurrentStageState = signal<number>(1);
@@ -64,11 +62,6 @@ export class DungeonRoomService {
   }
 
   private CanEnterCapstoneDungeon(dungeon: CapstoneDungeonRoom): boolean {
-    // Check gold prerequisite
-    if (!this.Gold.CanAfford(dungeon.Prerequisites.Gold)) {
-      return false;
-    }
-
     // Check key prerequisite
     if (dungeon.Prerequisites.Key && !this.Keys.HasKey(dungeon.Prerequisites.Key)) {
       return false;
@@ -86,16 +79,15 @@ export class DungeonRoomService {
     if (!this.CanEnter(dungeonId)) return false;
 
     const dungeon = GetDungeonById(dungeonId);
-
     if (!dungeon) return false;
 
-    if (dungeon.Type === DungeonType.Capstone) {
-      const capstoneDungeon = dungeon as CapstoneDungeonRoom;
-
-      // Spend gold prerequisite
-      if (!this.Gold.Spend(capstoneDungeon.Prerequisites.Gold)) {
-        return false;
-      }
+    // Check key prerequisite
+    if (
+      dungeon.Type === DungeonType.Capstone &&
+      (dungeon as CapstoneDungeonRoom).Prerequisites.Key &&
+      !this.Keys.HasKey((dungeon as CapstoneDungeonRoom).Prerequisites.Key)
+    ) {
+      return false;
     }
 
     this.CurrentDungeonIdState.set(dungeonId);
@@ -121,7 +113,8 @@ export class DungeonRoomService {
       if (dungeon.MidStages.includes(stage)) {
         this.Rewards.GrantMidBossRewards(dungeon, stage);
       } else {
-        this.Rewards.GrantStageRewards(dungeon, stage);
+        const isMimic = this.CurrentBossIsMimic();
+        this.Rewards.GrantStageRewards(dungeon, stage, isMimic);
       }
 
       this.CurrentStageState.set(stage + 1);
@@ -179,7 +172,11 @@ export class DungeonRoomService {
         this.Statistics.UpdateDungeon({ Capstone: dungeonRoomStat });
         break;
     }
+  }
 
-    this.SetStage(1);
+  private CurrentBossIsMimic(): boolean {
+    const boss = this.CurrentBoss();
+    if (!boss) return false;
+    return boss.Id === DUNGEON_MIMIC_BOSS_CONFIG.MIMIC_ID;
   }
 }

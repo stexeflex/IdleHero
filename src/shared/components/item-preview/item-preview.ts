@@ -20,14 +20,10 @@ import { Separator } from '../separator/separator';
 })
 export class ItemPreview {
   private readonly locale = inject(LOCALE_ID);
-  private readonly decimalPipe: DecimalPipe;
+  private readonly decimalPipe: DecimalPipe = new DecimalPipe(this.locale);
 
   public readonly Item = input.required<Item>();
   public readonly Variant = input.required<ItemVariantDefinition>();
-
-  constructor() {
-    this.decimalPipe = new DecimalPipe(this.locale);
-  }
 
   // UI
   protected readonly Rarity = computed<ItemRarity>(() => {

@@ -1,0 +1,28 @@
+@use "sass:color";
+@use "index" as *;
+
+.level-display {
+  @include disable-text-selection();
+  display: flex;
+  gap: calc($gap / 2);
+  color: $clr-highlight;
+
+  .level {
+    display: grid;
+    grid-auto-flow: column;
+
+    /* Prevent wrapping */
+    white-space: nowrap;
+
+    span {
+      font-weight: bold;
+      text-align: center;
+      align-self: center;
+    }
+  }
+
+  .level-icon {
+    display: flex;
+    align-self: center;
+  }
+}

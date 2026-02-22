@@ -10,7 +10,7 @@
 .dungeon-group {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: $gap;
 }
 
 .group-title {
@@ -20,27 +20,108 @@
 }
 
 .dungeon-card {
+  @include disable-text-selection();
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: 12px;
-  padding: 12px;
+  gap: $gap;
+  padding: $gap;
+
   border: 1px solid $clr-border;
   border-radius: 8px;
+
   background: $clr-ui-bg;
 }
 
+.dungeon-info {
+  display: flex;
+  flex-direction: column;
+  gap: calc($gap / 2);
+}
+
 .dungeon-title {
-  font-weight: 600;
-  color: $clr-text-primary;
+  color: color.adjust($clr-accent, $lightness: 12%);
+  text-shadow:
+    -1px -1px 0 $clr-text-shadow,
+    1px -1px 0 $clr-text-shadow,
+    -1px 1px 0 $clr-text-shadow,
+    1px 1px 0 $clr-text-shadow;
 }
 
 .dungeon-desc {
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: $clr-text-primary;
+  font-family: $font-family-header;
 }
 
 .dungeon-meta {
   font-size: 0.8rem;
   color: $clr-mute;
+}
+
+.dungeon-rewards {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: calc($gap / 2);
+}
+
+.rewards-icon-item {
+  display: flex;
+  align-items: center;
+  gap: calc($gap / 2);
+
+  &.unlock-item {
+    border: 1px solid color.adjust($clr-border, $alpha: -0.4);
+    border-radius: 1000px;
+    padding: calc($gap / 2) $gap;
+
+    &.met {
+      border-color: color.adjust($clr-highlight, $alpha: -0.35);
+    }
+
+    .unlock-state {
+      border: 1px solid color.adjust($clr-border, $alpha: -0.4);
+      border-radius: 1000px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: calc($gap / 2) $gap;
+
+      &.met {
+        border-color: color.adjust($clr-highlight, $alpha: -0.35);
+        color: $clr-highlight;
+      }
+    }
+  }
+
+  &.rune-drop-item {
+    border: 1px solid color.adjust($clr-border, $alpha: -0.4);
+    border-radius: 1000px;
+    gap: calc($gap / 2);
+    padding: calc($gap / 2) $gap;
+
+    .rune-drop-quality {
+      font-size: 0.8rem;
+    }
+
+    .rune-drop-chance {
+      border-left: 1px solid color.adjust($clr-border, $alpha: -0.4);
+      color: $clr-text-primary;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding-left: calc($gap / 2);
+    }
+  }
+
+  &.prerequisite-item {
+    border: 1px solid color.adjust($clr-border, $alpha: -0.35);
+    border-radius: 1000px;
+
+    display: flex;
+    gap: calc($gap / 2);
+    justify-items: center;
+    text-align: center;
+
+    padding: calc($gap / 2) $gap;
+  }
 }

@@ -1,0 +1,37 @@
+@use "sass:color";
+@use "index" as *;
+
+.rune-display {
+  @include disable-text-selection();
+  display: flex;
+  gap: calc($gap / 2);
+}
+
+.rune-icon {
+  display: flex;
+  align-self: center;
+}
+
+.rune-id {
+  span {
+    font-weight: bold;
+    text-align: center;
+    align-self: center;
+  }
+}
+
+.rune-value {
+  display: grid;
+  grid-auto-flow: column;
+
+  /* Prevent wrapping */
+  white-space: nowrap;
+
+  span {
+    font-size: 0.9rem;
+    color: $clr-mute;
+    font-weight: normal;
+    text-align: center;
+    align-self: center;
+  }
+}

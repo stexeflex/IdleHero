@@ -7,7 +7,6 @@ export enum CombatLogType {
   Info = 'Info',
   Rewards = 'Rewards',
   Damage = 'Damage',
-  Bleed = 'Bleed',
   Miss = 'Miss',
   Heal = 'Heal',
   Death = 'Death'
@@ -37,14 +36,6 @@ export interface DamageLogEntry extends BaseCombatLogEntry {
   IsMultiHit: boolean;
 }
 
-export interface BleedLogEntry extends BaseCombatLogEntry {
-  Type: CombatLogType.Bleed;
-  Target: Target;
-  Damage: DamageResult;
-  Tick: number;
-  TotalTicks: number;
-}
-
 export interface MissLogEntry extends BaseCombatLogEntry {
   Type: CombatLogType.Miss;
   Actor: Actor;
@@ -67,7 +58,6 @@ export type CombatLogEntry =
   | InfoLogEntry
   | RewardsLogEntry
   | DamageLogEntry
-  | BleedLogEntry
   | MissLogEntry
   | HealLogEntry
   | DeathLogEntry;

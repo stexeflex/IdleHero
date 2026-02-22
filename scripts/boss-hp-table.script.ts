@@ -4,9 +4,9 @@
 // npm run boss:hp-table -- --dungeon D1
 // npm run boss:hp-table -- --dungeon D1 --dps 10
 
-import { CAPSTONE_DUNGEONS, NORMAL_DUNGEONS } from '../src/core/constants/dungeons.config';
+import { CAPSTONE_DUNGEONS, NORMAL_DUNGEONS } from '../src/core/constants/dungeons/dungeons.config';
 
-import { DUNGEON_BOSS_SCALING } from '../src/core/constants/dungeon-boss.config';
+import { DUNGEON_BOSS_SCALING } from '../src/core/constants/dungeons/dungeon-boss.config';
 import { GetHealthForBossAtStage } from '../src/core/systems/combat/dungeons/boss-health.utils';
 
 interface DungeonDefinition {

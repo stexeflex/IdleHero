@@ -2,9 +2,22 @@
 @use "index" as *;
 
 .tier {
-  border: 1px solid $clr-border;
+  border-width: 2px;
+  border-style: solid;
   border-radius: $border-radius;
-  padding: $gap calc($gap / 2);
+  padding: calc($gap / 2);
+
+  &.locked {
+    border-color: $clr-mute;
+  }
+
+  &.unlocked {
+    border-color: $clr-border;
+  }
+
+  &.maxed {
+    border-color: $clr-highlight;
+  }
 }
 
 .tier-header {
@@ -12,11 +25,21 @@
   gap: $gap;
 
   min-height: 45px;
-  margin-bottom: $gap;
+  margin-bottom: calc($gap / 2);
 
   > h3 {
     margin-left: $gap;
     color: $clr-highlight;
+
+    .tier-number {
+      font-family: $font-family-title;
+      color: $clr-accent;
+      text-shadow:
+        -1px -1px 0 $clr-text-shadow,
+        1px -1px 0 $clr-text-shadow,
+        -1px 1px 0 $clr-text-shadow,
+        1px 1px 0 $clr-text-shadow;
+    }
   }
 }
 
@@ -25,28 +48,19 @@
   gap: $gap;
 }
 
-.level-requirement {
-  font-family: $font-family-title;
-  align-self: baseline;
-  justify-self: baseline;
-
-  font-size: 1.1rem;
-  color: $clr-legendary;
-}
-
 .tier-actions {
   margin-right: 10px;
-}
 
-.badge {
-  @include disable-text-selection();
+  .badge {
+    @include disable-text-selection();
 
-  background: $clr-highlight;
-  color: $clr-black;
+    background: $clr-highlight;
+    color: $clr-black;
 
-  border-radius: $border-radius;
-  padding: calc($gap / 4) $gap;
+    border-radius: $border-radius;
+    padding: calc($gap / 4) $gap;
 
-  font-family: $font-family-header;
-  font-weight: 600;
+    font-family: $font-family-header;
+    font-weight: 600;
+  }
 }

@@ -1,14 +1,16 @@
 import {
   BossFactory,
+  DUNGEON_MIMIC_BOSS_CONFIG,
   DungeonBossConfig,
   GetBossConfigForDungeon,
   GetDungeonById
 } from '../../../constants';
+import { ChanceUtils, RandomUtils } from '../../../../shared/utils';
 import { GetHealthForBossAtStage, SetHealth } from './boss-health.utils';
 
 import { Boss } from '../../../models';
 import { Injectable } from '@angular/core';
-import { RandomUtils } from '../../../../shared/utils';
+import { Mimic } from './boss.factory';
 
 @Injectable({ providedIn: 'root' })
 export class BossSelectionService {
@@ -23,9 +25,10 @@ export class BossSelectionService {
     const dungeonBossConfig = GetBossConfigForDungeon(dungeonId);
 
     let boss = null;
+    const hasStageSpecificBoss = dungeonBossConfig.StageSpecific.has(stageId);
 
     // Stage specific Boss
-    if (dungeonBossConfig.StageSpecific.has(stageId)) {
+    if (hasStageSpecificBoss) {
       const factory = dungeonBossConfig.StageSpecific.get(stageId)!;
       boss = factory();
 
@@ -34,6 +37,10 @@ export class BossSelectionService {
       } else if (stageId === dungeonConfig?.StagesMax) {
         boss.IsEndboss = true;
       }
+    }
+    // Mimic Spawn
+    else if (this.IsMimicStageBoss(dungeonId, stageId)) {
+      boss = Mimic();
     }
     // Random Boss from Pool
     else {
@@ -47,6 +54,18 @@ export class BossSelectionService {
     boss = SetHealth(boss, hpForStage);
 
     return boss;
+  }
+
+  private IsMimicStageBoss(dungeonId: string, stageId: number): boolean {
+    const dungeonBossConfig = GetBossConfigForDungeon(dungeonId);
+    if (dungeonBossConfig.StageSpecific.has(stageId)) return false;
+
+    const spawnRate = DUNGEON_MIMIC_BOSS_CONFIG.MIMIC_SPAWN_RATE;
+    if (spawnRate <= 0) return false;
+    if (spawnRate >= 1) return true;
+
+    const success = ChanceUtils.success(spawnRate);
+    return success;
   }
 
   private ResolvePoolForStage(config: DungeonBossConfig, stageId: number): BossFactory[] {

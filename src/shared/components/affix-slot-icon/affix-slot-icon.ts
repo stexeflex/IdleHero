@@ -1,6 +1,7 @@
 import { Component, input } from '@angular/core';
 
 import { Affix } from '../../../core/models';
+import { IconComponent } from '../icon/icon.component';
 
 interface AffixSlotInfo {
   IsCommon: boolean;
@@ -12,13 +13,12 @@ interface AffixSlotInfo {
 
 @Component({
   selector: 'app-affix-slot-icon',
-  imports: [],
+  imports: [IconComponent],
   templateUrl: './affix-slot-icon.html',
   styleUrl: './affix-slot-icon.scss'
 })
 export class AffixSlotIcon {
   readonly affixes = input.required<Affix[]>();
-  readonly size = input<string>('20px');
 
   protected GetAffixSlotInfo(affixIndex: number): AffixSlotInfo {
     const affix = this.affixes()[affixIndex];

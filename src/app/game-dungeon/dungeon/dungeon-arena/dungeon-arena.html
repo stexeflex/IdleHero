@@ -1,73 +1,78 @@
-<section class="combat">
-  <!-- BOSS -->
-  <div class="boss">
-    @let boss = Boss();
-    @if (boss) {
-      <div class="actor-info">
-        @if (boss.IsElite) {
-          <h2 class="actor-name">ELITE {{ boss.Name }}</h2>
-        } @else if (boss.IsEndboss) {
-          <h2 class="actor-name">END BOSS {{ boss.Name }}</h2>
-        } @else {
-          <h2 class="actor-name">{{ boss.Name }}</h2>
-        }
-        <app-health-bar
-          [currentHealth]="boss.Life.Hp"
-          [maxHealth]="boss.Life.MaxHp"
-          [showHealthValues]="true"></app-health-bar>
-        @if (boss.State.IsBleeding) {
-          <div class="bleed-info">
-            <div class="bleeding-icon" title="Bleeding">
-              <app-icon combat="bleedingwound" size="md"></app-icon>
-            </div>
-            <div class="bleeding-ticks">
-              @for (tick of BleedingTicks(); track tick.Tick) {
-                <div class="bleed-tick" [class.active]="tick.IsActive"></div>
-              }
-            </div>
-          </div>
-        }
-      </div>
+@let boss = Boss();
+@let hero = Hero();
 
-      <div
-        class="boss-icon"
-        [class.taking-hit]="isBossTakingHit()"
-        [class.defeated]="isBossDefeated()">
-        <app-icon
-          class="icon"
-          [creatures]="boss.BossIcon.Icon"
-          [rotate]="boss.BossIcon.Rotate"
-          size="5x"></app-icon>
-      </div>
-    }
-  </div>
+@if (hero || boss) {
+  <section class="combat">
+    <!-- BOSS -->
+    <div class="boss">
+      @if (boss) {
+        <div class="actor-info">
+          @if (boss.IsElite) {
+            <h2 class="actor-name">ELITE {{ boss.Name }}</h2>
+          } @else if (boss.IsEndboss) {
+            <h2 class="actor-name">END BOSS {{ boss.Name }}</h2>
+          } @else {
+            <h2 class="actor-name">{{ boss.Name }}</h2>
+          }
+          <app-health-bar
+            [currentHealth]="boss.Life.Hp"
+            [maxHealth]="boss.Life.MaxHp"
+            [showHealthValues]="true"></app-health-bar>
+          @if (boss.State.IsBleeding) {
+            <div class="bleed-info">
+              <div class="bleeding-icon" title="Bleeding">
+                <app-icon combat="bleedingwound" size="md"></app-icon>
+              </div>
+              <div class="bleeding-ticks">
+                @for (tick of BleedingTicks(); track tick.Tick) {
+                  <div class="bleed-tick" [class.active]="tick.IsActive"></div>
+                }
+              </div>
+            </div>
+          }
+        </div>
 
-  @if (boss) {
-    <div class="arena">
-      <div class="vs">VS</div>
+        <div
+          class="boss-icon"
+          [class.taking-hit]="isBossTakingHit()"
+          [class.defeated]="isBossDefeated()">
+          <app-icon
+            class="icon"
+            [creatures]="boss.BossIcon.Icon"
+            [rotate]="boss.BossIcon.Rotate"
+            size="5x"></app-icon>
+        </div>
+      }
     </div>
-  }
 
-  <!-- HERO -->
-  <div class="hero">
-    @let hero = Hero();
-    @if (hero) {
-      <div
-        class="hero-icon"
-        [class.attack]="isAttacking()"
-        [class.crit]="isCrit()"
-        [class.multi]="isMulti()"
-        [class.crit-multi]="isCritMulti()">
-        <app-icon class="icon" [character]="hero.HeroIcon" size="4x"></app-icon>
-      </div>
-      <div class="actor-info bottom">
-        <h2 class="actor-name right">{{ hero.Name }}</h2>
-        <app-charge-bar
-          [current]="hero.Charge.Current"
-          [max]="hero.Charge.Max"
-          [charged]="hero.Charge.Charged"
-          [showValues]="true"></app-charge-bar>
+    @if (boss) {
+      <div class="arena">
+        <div class="vs">VS</div>
       </div>
     }
-  </div>
-</section>
+
+    <!-- HERO -->
+    <div class="hero">
+      @if (hero) {
+        <div
+          class="hero-icon"
+          [class.attack]="isAttacking()"
+          [class.crit]="isCrit()"
+          [class.multi]="isMulti()"
+          [class.crit-multi]="isCritMulti()"
+          [class.bleed]="isBleed()"
+          [class.splash]="isSplash()">
+          <app-icon class="icon" [character]="hero.HeroIcon" size="4x"></app-icon>
+        </div>
+        <div class="actor-info bottom">
+          <h2 class="actor-name right">{{ hero.Name }}</h2>
+          <app-charge-bar
+            [current]="hero.Charge.Current"
+            [max]="hero.Charge.Max"
+            [charged]="hero.Charge.Charged"
+            [showValues]="true"></app-charge-bar>
+        </div>
+      }
+    </div>
+  </section>
+}

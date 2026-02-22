@@ -1,0 +1,106 @@
+@use "sass:color";
+@use "index" as *;
+
+.amulet {
+  @include disable-text-selection();
+  @include button-text-font();
+  @include button-focus-visible-outline();
+  @include panel($bg: $clr-ui-bg);
+  @include panel-shadow($border-color: unset);
+  @include box-shadow();
+
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: $gap;
+
+  border-width: 2px;
+  border-style: solid;
+
+  width: 410px;
+
+  &.locked {
+    opacity: 0.5;
+  }
+}
+
+.amulet-header {
+  text-align: center;
+  width: 100%;
+  font-family: $font-family-header;
+  font-weight: bold;
+  color: $clr-highlight;
+}
+
+.amulet-icon {
+  @include flexbox($dir: column, $align: center, $justify: center);
+}
+
+.amulet-slots {
+  @include flexbox($align: center, $justify: center);
+  flex-wrap: wrap;
+  gap: $gap;
+
+  height: 65px;
+
+  .amulet-slot {
+    cursor: pointer;
+    @include flexbox($align: center, $justify: center);
+    height: 65px;
+    width: 65px;
+
+    border-width: 2px;
+    border-style: solid;
+    border-radius: $border-radius;
+
+    &.empty {
+      border-color: $clr-border;
+      opacity: 0.5;
+    }
+
+    &:hover {
+      transform: scale(1.05);
+      transition: transform 0.2s;
+    }
+
+    &.unsocketing {
+      border-color: $clr-accent;
+      animation: unsocket-pulse 2s infinite;
+
+      @keyframes unsocket-pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba($clr-accent, 0.7);
+        }
+        70% {
+          box-shadow: 0 0 0 10px rgba($clr-accent, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba($clr-accent, 0);
+        }
+      }
+    }
+  }
+}
+
+.rune-effects {
+  display: flex;
+  flex-direction: column;
+  gap: calc($gap / 2);
+
+  .rune-effect {
+    display: flex;
+
+    .icon {
+      margin-right: calc($gap / 2);
+    }
+
+    .label {
+      font-size: 0.95rem;
+      color: $clr-text-primary;
+    }
+
+    .min-max-roll {
+      font-size: 0.8rem;
+      color: $clr-mute;
+    }
+  }
+}

@@ -3,12 +3,12 @@
     @let affixSlotInfo = GetAffixSlotInfo($index);
     <div
       class="slot"
-      [style.width]="size()"
-      [style.height]="size()"
-      [class.common--border]="affixSlotInfo.IsCommon"
-      [class.magic--border]="affixSlotInfo.IsMagic"
-      [class.rare--border]="affixSlotInfo.IsRare"
-      [class.epic--border]="affixSlotInfo.IsEpic"
-      [class.legendary--border]="affixSlotInfo.IsLegendary"></div>
+      [class.common--font]="affixSlotInfo.IsCommon"
+      [class.magic--font]="affixSlotInfo.IsMagic"
+      [class.rare--font]="affixSlotInfo.IsRare"
+      [class.epic--font]="affixSlotInfo.IsEpic"
+      [class.legendary--font]="affixSlotInfo.IsLegendary">
+      <app-icon symbol="polarstar" size="mini"></app-icon>
+    </div>
   }
 </div>

@@ -5,29 +5,58 @@
   [class.locked]="!unlockable()"
   [class.maxed]="isMaxed">
   <div class="skill-main">
-    <!-- TITLE -->
     <div class="skill-title">
-      <span>{{ skill().Id }}</span>
-      <strong class="skill-title__name">{{ skill().Name }}</strong>
-      @if (unlocked) {
-        <span>[{{ skill().Level }} / {{ skill().MaxLevel }}]</span>
+      <strong class="skill-title__name">{{ skill().Definition.Name.toUpperCase() }}</strong>
+      @if (unlocked && skill().MaxLevel > 1) {
+        <span class="dot">•</span>
+        @if (isMaxed) {
+          <strong class="skill-title__level">MAX</strong>
+        } @else {
+          <span class="skill-title__level-label">Level</span>
+          <strong class="skill-title__level"> {{ skill().Level }} / {{ skill().MaxLevel }} </strong>
+        }
       }
+      <span class="dot">•</span>
+      <span class="skill-title__type">{{ MetaInfo.toUpperCase() }}</span>
     </div>
 
-    <!-- DESCRIPTIONS -->
-    <div class="skill-description">{{ skill().GetDescription(skill().Level) }}</div>
-    @if (!isMaxed) {
-      <div class="skill-description">Next: {{ skill().GetDescription(skill().Level + 1) }}</div>
+    <div class="skill-description">{{ skill().Definition.Description }}</div>
+
+    @if (unlocked && skill().Effects.length > 0) {
+      @for (effect of skill().Effects; track effect) {
+        <div class="skill-effect">
+          <div class="skill-effect__icon">
+            <app-icon symbol="beveledstar" size="mini"></app-icon>
+          </div>
+          <div class="skill-effect-label">
+            {{ effect }}
+            @if (!isMaxed && skill().NextEffects[$index]) {
+              <div class="next-level-effect">
+                <span>[🡒 {{ skill().NextEffects[$index] }}]</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
     }
-    <!-- DEPENDENCIES -->
-    @if (!unlocked && hasDependencies) {
-      <div class="skill-dependencies">Requires: {{ skillDependencies }}</div>
+    @if (unlocked && skill().Duration) {
+      <div class="skill-effect">
+        <div class="skill-effect__icon">
+          <app-icon symbol="stopwatch" size="mini"></app-icon>
+        </div>
+        <div class="skill-effect-label">Duration: {{ skill().Duration!.Duration }}s</div>
+        <span class="dot">•</span>
+        <div class="skill-effect__icon">
+          <app-icon symbol="stopwatch" size="mini"></app-icon>
+        </div>
+        <div class="skill-effect-label">Cooldown: {{ skill().Duration!.Cooldown }}s</div>
+      </div>
     }
   </div>
 
-  <!-- ACTIONS -->
   <div class="skill-actions">
     @if (unlockable() && skill().Level === 0) {
+      <app-gold [amount]="UnlockCost" size="sm"></app-gold>
       <button
         class="ih-button-icon ih-button-icon-border"
         [disabled]="!canUnlock()"
@@ -35,7 +64,8 @@
         (click)="unlockSkill.emit(skill())">
         <app-icon symbol="padlockopen" size="sm"></app-icon>
       </button>
-    } @else if (unlocked && skill().Level < skill().MaxLevel) {
+    } @else if (unlocked && !isMaxed) {
+      <app-gold [amount]="UpgradeCost" size="sm"></app-gold>
       <button
         class="ih-button-icon ih-button-icon-border"
         [disabled]="!canLevel()"

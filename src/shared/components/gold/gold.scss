@@ -2,9 +2,32 @@
 @use "index" as *;
 
 .gold-display {
-  @include disable-text-selection;
-
-  font-family: $font-family-title;
-  font-size: 1.5rem;
+  @include disable-text-selection();
+  display: flex;
+  gap: calc($gap / 2);
   color: $clr-gold;
+
+  .gold-amount {
+    display: grid;
+    grid-auto-flow: column;
+
+    /* Prevent wrapping */
+    white-space: nowrap;
+
+    span {
+      width: 13px;
+      font-family: $font-family-title;
+      text-align: center;
+      align-self: center;
+
+      &.thousands-separator {
+        width: 7px;
+      }
+    }
+  }
+
+  .gold-icon {
+    display: flex;
+    align-self: center;
+  }
 }

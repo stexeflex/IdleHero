@@ -1,0 +1,18 @@
+<div
+  class="rune-display"
+  [style.fontSize]="fontSize()"
+  [class.common--font]="rune().Quality === 'Common'"
+  [class.magic--font]="rune().Quality === 'Magic'"
+  [class.rare--font]="rune().Quality === 'Rare'"
+  [class.epic--font]="rune().Quality === 'Epic'"
+  [class.legendary--font]="rune().Quality === 'Legendary'">
+  <div class="rune-icon">
+    <app-icon symbol="runestone" [size]="size()"></app-icon>
+  </div>
+  <div class="rune-id">
+    <span>{{ rune().DefinitionId }}</span>
+  </div>
+  <div class="rune-value">
+    <span> [{{ rune().ValueRangePercentage | percent: "1.0-0" }}] </span>
+  </div>
+</div>

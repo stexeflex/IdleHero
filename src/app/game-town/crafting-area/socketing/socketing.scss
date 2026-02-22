@@ -1,0 +1,76 @@
+@use "sass:color";
+@use "index" as *;
+
+.container {
+  @include panel();
+  @include panel-shadow($border-width: 2px, $border-color: $clr-border);
+  @include flexbox($dir: column, $align: stretch);
+  gap: $gap;
+}
+
+@media (max-height: $bp-xl-height) {
+  .runes_list {
+    @include overflow($display: flex, $max-height: $size-runes-list-height-responsive);
+    @include scrollbar($size: 0.75rem);
+    width: calc($size-runes-list-width-responsive + 2 * $gap);
+  }
+}
+
+.panel-header {
+  @include flexbox($justify: space-between, $align: center);
+  border-bottom: 1px solid $clr-border;
+  gap: $gap;
+  padding: calc($gap / 2);
+
+  .actions {
+    @include disable-text-selection();
+    @include flexbox($dir: row, $justify: center, $align: flex-end);
+    gap: $gap;
+
+    .action-info {
+      display: inline-flex;
+      align-items: center;
+      gap: calc($gap / 2);
+
+      > span {
+        font-size: 1rem;
+        color: $clr-text-primary;
+        font-family: $font-family-header;
+      }
+    }
+  }
+}
+
+.panel-body {
+  display: grid;
+  grid:
+    "amulet runes" auto
+    / auto 1fr;
+
+  gap: $gap;
+}
+
+.amulet_display {
+  grid-area: amulet;
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+
+  .amulet_upgrade {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: $gap;
+
+    .amulet_upgrade_cost {
+      display: inline-flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: $gap;
+    }
+  }
+}
+
+.runes_list {
+  grid-area: runes;
+}

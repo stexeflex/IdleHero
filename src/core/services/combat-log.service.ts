@@ -1,5 +1,4 @@
 import {
-  BleedLogEntry,
   CombatLogEntry,
   CombatLogType,
   DamageLogEntry,
@@ -9,14 +8,7 @@ import {
   MissLogEntry,
   RewardsLogEntry
 } from '../models/combat/combat-log';
-import {
-  DamageEvent,
-  DamageOverTimeEvent,
-  DeathEvent,
-  HealEvent,
-  MissEvent,
-  Rewards
-} from '../models';
+import { DamageEvent, DeathEvent, HealEvent, MissEvent, Rewards } from '../models';
 import { Injectable, computed, signal } from '@angular/core';
 
 import { TimestampUtils } from '../../shared/utils';
@@ -66,19 +58,6 @@ export class CombatLogService {
       Target: event.Target,
       Damage: event.Damage,
       IsMultiHit: event.IsMultiHit
-    };
-    this.Push(entry);
-    return entry;
-  }
-
-  public DoT(event: DamageOverTimeEvent): BleedLogEntry {
-    const entry: BleedLogEntry = {
-      Type: CombatLogType.Bleed,
-      TimestampMs: event.AtMs,
-      Target: event.Target,
-      Damage: event.Damage,
-      Tick: event.Tick,
-      TotalTicks: event.TotalTicks
     };
     this.Push(entry);
     return entry;

@@ -11,6 +11,7 @@ import { Item, ItemRarity, ItemSlot } from '../../../core/models';
 
 import { Crafting } from './crafting/crafting';
 import { Enchanting } from './enchanting/enchanting';
+import { Socketing } from './socketing/socketing';
 
 interface SelectedItemContext {
   itemId: string;
@@ -19,7 +20,7 @@ interface SelectedItemContext {
 
 @Component({
   selector: 'app-crafting-area',
-  imports: [TabStrip, Crafting, Enchanting, Inventory],
+  imports: [TabStrip, Crafting, Enchanting, Inventory, Socketing],
   templateUrl: './crafting-area.html',
   styleUrl: './crafting-area.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -34,7 +35,7 @@ export class CraftingArea {
     return [
       { id: 'crafting', label: 'CRAFTING', disabled: false },
       { id: 'enchanting', label: 'ENCHANTING', disabled: false },
-      { id: 'socketing', label: 'SOCKETING', disabled: true }
+      { id: 'socketing', label: 'SOCKETING', disabled: false }
     ];
   }
 
@@ -75,7 +76,6 @@ export class CraftingArea {
   // Data
   public readonly GoldBalance = this.gold.Balance;
   public readonly InventoryItems = this.inventory.Items;
-  public readonly InventoryRunes = this.inventory.Runes;
   public readonly EquippedItems = this.gear.EquippedItems;
 
   public OnEnchantingItemChange(next: Item): void {

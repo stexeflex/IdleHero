@@ -1,0 +1,49 @@
+<div class="runes_list">
+  @for (runeSlot of RuneSlotsInfo(); track $index) {
+    <div
+      class="rune_slot"
+      [class.empty]="runeSlot.IsEmpty"
+      [class.common--border]="runeSlot.Quality === 'Common'"
+      [class.magic--border]="runeSlot.Quality === 'Magic'"
+      [class.rare--border]="runeSlot.Quality === 'Rare'"
+      [class.epic--border]="runeSlot.Quality === 'Epic'"
+      [class.legendary--border]="runeSlot.Quality === 'Legendary'">
+      <div class="rune_slot_content">
+        <div class="rune_icon">
+          <app-icon symbol="runestone" size="md"></app-icon>
+        </div>
+        <div class="rune_id" [class.empty]="runeSlot.IsEmpty">
+          <h3>{{ runeSlot.IsEmpty ? "?" : runeSlot.DefinitionId }}</h3>
+        </div>
+        <separator class="ih-separator separator" [vertical]="true"></separator>
+        <div class="rune_name" [class.empty]="runeSlot.IsEmpty">
+          <h3>
+            {{ runeSlot.IsEmpty ? "UNDISCOVERED RUNE" : runeSlot.DefinitionName.toUpperCase() }}
+          </h3>
+
+          @if (UpgradeAvailable(runeSlot.DefinitionId)) {
+            <span class="dot">•</span>
+            <app-icon symbol="growth" size="mini" title="Rune Upgrade Available"></app-icon>
+          }
+        </div>
+        @if (!runeSlot.IsEmpty) {
+          <div class="rune_effect">
+            {{ runeSlot.Label }}
+            <span class="min-max-roll">[{{ runeSlot.MinRoll }} - {{ runeSlot.MaxRoll }}]</span>
+          </div>
+        }
+
+        <div class="actions">
+          @if (ShowSocketButton(runeSlot.DefinitionId)) {
+            <button
+              class="ih-button-tertiary"
+              (click)="SocketRune(runeSlot.DefinitionId)"
+              [disabled]="!CanSocket(runeSlot.DefinitionId)">
+              SOCKET
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>

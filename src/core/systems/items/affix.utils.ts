@@ -10,19 +10,9 @@ import {
   LabelToString
 } from '../../models';
 import { DecimalPipe, PercentPipe } from '@angular/common';
-import { GetItemRarity, GetMaxAffixTier } from './item.utils';
+import { GetItemRarity, GetMaxAffixTier } from '.';
 
-import { ClampUtils } from '../../../shared/utils';
-
-function ComputeRolledValue(
-  min: number,
-  max: number,
-  percentage: number,
-  type: 'Flat' | 'Percent'
-): number {
-  const result = min + (max - min) * ClampUtils.clamp(percentage, 0, 1);
-  return type === 'Flat' ? Math.round(result) : result;
-}
+import { ComputeRolledValue } from '../stats';
 
 export function GetAffixInfo(affix: Affix, locale: string): AffixInfo {
   const decimalPipe = new DecimalPipe(locale);
@@ -30,7 +20,7 @@ export function GetAffixInfo(affix: Affix, locale: string): AffixInfo {
 
   const definition: AffixDefinition = GetAffixDefinition(affix.DefinitionId);
   const affixTierSpec: AffixTierSpec = GetAffixTierSpec(definition, affix.Tier);
-  const minMax: { min: number; max: number } = GetMinMaxRoll(affixTierSpec);
+  const minMax: { min: number; max: number } = GetAffixMinMaxRoll(affixTierSpec);
   const rolledValue = ComputeRolledValue(
     minMax.min,
     minMax.max,
@@ -67,7 +57,7 @@ export function GetAffixInfo(affix: Affix, locale: string): AffixInfo {
 export function GetAffixValue(affix: Affix): number {
   const definition: AffixDefinition = GetAffixDefinition(affix.DefinitionId);
   const affixTierSpec: AffixTierSpec = GetAffixTierSpec(definition, affix.Tier);
-  const minMax: { min: number; max: number } = GetMinMaxRoll(affixTierSpec);
+  const minMax: { min: number; max: number } = GetAffixMinMaxRoll(affixTierSpec);
   const rolledValue = ComputeRolledValue(
     minMax.min,
     minMax.max,
@@ -85,7 +75,7 @@ export function GetAffixTierSpec(definition: AffixDefinition, tier: AffixTier): 
   return definition.Tiers.find((t) => t.Tier === tier)!;
 }
 
-export function GetMinMaxRoll(affixTierSpec: AffixTierSpec): { min: number; max: number } {
+export function GetAffixMinMaxRoll(affixTierSpec: AffixTierSpec): { min: number; max: number } {
   return { min: affixTierSpec.Value.Min, max: affixTierSpec.Value.Max };
 }
 
@@ -131,31 +121,4 @@ export function ExceedsMaximumEnchantableAffixes(item: Item): boolean {
   const rules = ITEM_RARITY_RULES[GetItemRarity(item.Level)];
   const enchantedCount = item.Affixes.filter((a) => a.Improved).length;
   return enchantedCount >= rules.MaxEnchantableAffixes;
-}
-
-/**
- * Generates a random integer within the specified range [min, max].
- * @param min the minimum value (inclusive).
- * @param max the maximum value (inclusive).
- * @returns The percentage rolled within the tier range, as a number between 0 and 1.
- */
-export function RandomInRange(min: number, max: number, type: 'Flat' | 'Percent'): number {
-  const lo = Math.min(min, max);
-  const hi = Math.max(min, max);
-
-  let rolled: number;
-
-  switch (type) {
-    case 'Flat':
-      rolled = Math.floor(lo + Math.random() * (hi - lo + 1));
-      break;
-
-    case 'Percent':
-      rolled = lo + Math.random() * (hi - lo);
-      rolled = Math.round(rolled * 100) / 100;
-      break;
-  }
-
-  const percentage = (rolled - min) / (max - min);
-  return percentage;
 }

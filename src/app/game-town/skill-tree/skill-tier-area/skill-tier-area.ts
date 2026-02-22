@@ -1,18 +1,26 @@
-import { Component, input, output } from '@angular/core';
-import { Gold, IconComponent } from '../../../../shared/components';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { Gold, IconComponent, Level } from '../../../../shared/components';
 
-import { SkillTier } from '../../../../shared/models';
+import { SkillTierViewModel } from '../../../../core/services';
 
 @Component({
   selector: 'app-skill-tier-area',
-  imports: [IconComponent, Gold],
+  imports: [IconComponent, Gold, Level],
   templateUrl: './skill-tier-area.html',
-  styleUrl: './skill-tier-area.scss'
+  styleUrl: './skill-tier-area.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SkillTierArea {
-  readonly tier = input.required<SkillTier>();
+  readonly tier = input.required<SkillTierViewModel>();
   readonly isUnlocked = input.required<boolean>();
   readonly canUnlock = input.required<boolean>();
 
-  readonly unlockTier = output<SkillTier>();
+  readonly unlockTier = output<SkillTierViewModel>();
+
+  protected get isMaxed() {
+    return (
+      this.isUnlocked() &&
+      this.tier().Skills.every((skill) => skill.IsUnlocked && skill.Level >= skill.MaxLevel)
+    );
+  }
 }

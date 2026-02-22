@@ -12,8 +12,8 @@
   display: grid;
 
   grid:
-    "weapon head offhand"
-    "weapon chest offhand"
+    "weapon head amulet"
+    "weapon chest amulet"
     "weapon legs offhand"
     "weapon feet offhand"
     / auto auto auto;
@@ -25,6 +25,7 @@
 $slot-height: 110px;
 $slot-width: 110px;
 $slot-height-large: calc(($slot-height * 2) + $gap);
+$slot-width-large: calc($slot-width * 1.5);
 
 .gear-slot {
   @include button-text-font();
@@ -56,6 +57,10 @@ $slot-height-large: calc(($slot-height * 2) + $gap);
   height: $slot-height-large;
 }
 
+.gear-slot-wide {
+  width: $slot-width-large;
+}
+
 .gear-slot__icon {
   flex: 1;
 }
@@ -77,6 +82,10 @@ $slot-height-large: calc(($slot-height * 2) + $gap);
 }
 .feet {
   grid-area: feet;
+}
+.amulet {
+  grid-area: amulet;
+  align-self: center;
 }
 
 .empty {

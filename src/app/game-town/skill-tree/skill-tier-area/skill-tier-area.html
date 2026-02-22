@@ -1,17 +1,25 @@
-<div class="tier" [class.unlocked]="isUnlocked()" [class.locked]="!isUnlocked()">
+<div
+  class="tier"
+  [class.unlocked]="isUnlocked()"
+  [class.locked]="!isUnlocked()"
+  [class.maxed]="isMaxed">
   <div class="tier-header">
-    <h3>TIER {{ tier().Id }}</h3>
+    <h3>
+      SKILL TIER
+      <span class="tier-number">{{ tier().Tier }}</span>
+    </h3>
     @if (!isUnlocked()) {
       <div class="requirements">
-        <div class="level-requirement" title="Required Level">
-          {{ tier().RequiredLevel }}
-          <app-icon symbol="levelfour" size="sm"></app-icon>
-        </div>
-        <app-gold
-          title="Gold Requirement"
+        <app-level
           fontSize="1.1rem"
           size="sm"
-          [amount]="tier().GoldCost"></app-gold>
+          [level]="tier().RequiredLevel"
+          title="Required Level"></app-level>
+        <app-gold
+          fontSize="1.1rem"
+          size="sm"
+          [amount]="tier().UnlockGoldCost"
+          title="Required Gold"></app-gold>
       </div>
     }
     <div class="tier-actions">
