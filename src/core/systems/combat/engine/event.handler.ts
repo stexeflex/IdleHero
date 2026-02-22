@@ -550,26 +550,30 @@ export class EventHandler {
   }
 
   private UpdateDamageStatistics(damage: DamageResult[]): void {
-    const totalDamage = damage.reduce((sum, d) => sum + d.Amount, 0);
+    const damages = damage.filter((d) => !d.IsSplash).reduce((sum, d) => sum + d.Amount, 0);
     const rawDamages = damage.filter((d) => !d.IsBleeding && !d.IsSplash);
     const rawTotalDamage = rawDamages.reduce((sum, d) => sum + d.Amount, 0);
     const bleedingDamage = damage.filter((d) => d.IsBleeding);
     const splashDamage = damage.filter((d) => d.IsSplash);
+    const totalDamage = damage.reduce((sum, d) => sum + d.Amount, 0);
+
+    // Total Hit Statistics
+    this.Statistics.UpdateDamage({ HighestTotalHit: totalDamage });
 
     // Single Hit Statistics
     if (rawDamages.length === 1) {
       if (rawDamages[0].IsCharged && rawDamages[0].IsCritical) {
         this.Statistics.UpdateDamage({ HighestChargedCriticalHit: rawTotalDamage });
-        this.Statistics.UpdateDamage({ HighestChargedTotalHit: totalDamage });
+        this.Statistics.UpdateDamage({ HighestChargedHit: damages });
       } else if (rawDamages[0].IsCharged) {
-        this.Statistics.UpdateDamage({ HighestChargedHit: rawTotalDamage });
-        this.Statistics.UpdateDamage({ HighestChargedTotalHit: totalDamage });
+        this.Statistics.UpdateDamage({ HighestChargedSingleHit: rawTotalDamage });
+        this.Statistics.UpdateDamage({ HighestChargedHit: damages });
       } else if (rawDamages[0].IsCritical) {
         this.Statistics.UpdateDamage({ HighestCriticalHit: rawTotalDamage });
-        this.Statistics.UpdateDamage({ HighestTotalHit: totalDamage });
+        this.Statistics.UpdateDamage({ HighestHit: damages });
       } else {
         this.Statistics.UpdateDamage({ HighestSingleHit: rawTotalDamage });
-        this.Statistics.UpdateDamage({ HighestTotalHit: totalDamage });
+        this.Statistics.UpdateDamage({ HighestHit: damages });
       }
     }
     // Multi-Hit Statistics
@@ -578,16 +582,16 @@ export class EventHandler {
 
       if (rawDamages.some((d) => d.IsCharged && d.IsCritical)) {
         this.Statistics.UpdateDamage({ HighestChargedCriticalMultiHit: rawTotalDamage });
-        this.Statistics.UpdateDamage({ HighestChargedTotalHit: totalDamage });
+        this.Statistics.UpdateDamage({ HighestChargedHit: damages });
       } else if (rawDamages.some((d) => d.IsCharged)) {
         this.Statistics.UpdateDamage({ HighestChargedMultiHit: rawTotalDamage });
-        this.Statistics.UpdateDamage({ HighestChargedTotalHit: totalDamage });
+        this.Statistics.UpdateDamage({ HighestChargedHit: damages });
       } else if (rawDamages.some((d) => d.IsCritical)) {
         this.Statistics.UpdateDamage({ HighestCriticalMultiHit: rawTotalDamage });
-        this.Statistics.UpdateDamage({ HighestTotalHit: totalDamage });
+        this.Statistics.UpdateDamage({ HighestHit: damages });
       } else {
         this.Statistics.UpdateDamage({ HighestMultiHit: rawTotalDamage });
-        this.Statistics.UpdateDamage({ HighestTotalHit: totalDamage });
+        this.Statistics.UpdateDamage({ HighestHit: damages });
       }
     }
 

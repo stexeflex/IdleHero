@@ -14,18 +14,20 @@
             [{{ requirement.ClearedStage }} / {{ requirement.RequiredStage }}]
           </span>
         </span>
+      } @else {
+        <!-- ACTIONS -->
+        <div class="actions">
+          <app-gold [amount]="CraftCost()" size="sm" fontSize="1.3rem"></app-gold>
+          <button
+            class="ih-button-secondary action"
+            [disabled]="
+              CraftCost() > GoldBalance() || !SelectedVariant() || !CanCraftSelectedTier()
+            "
+            (click)="Craft()">
+            CRAFT
+          </button>
+        </div>
       }
-    } @else {
-      <!-- ACTIONS -->
-      <div class="actions">
-        <app-gold [amount]="CraftCost()" size="sm" fontSize="1.3rem"></app-gold>
-        <button
-          class="ih-button-secondary action"
-          [disabled]="CraftCost() > GoldBalance() || !SelectedVariant() || !CanCraftSelectedTier()"
-          (click)="Craft()">
-          CRAFT
-        </button>
-      </div>
     }
   </div>
 

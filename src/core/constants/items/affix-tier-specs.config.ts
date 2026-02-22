@@ -89,9 +89,9 @@ export const CHARGING_STRIKE_DAMAGE_TIERS: AffixTierSpec[] = [
 ];
 
 export const CHARGED_DURATION_TIERS: AffixTierSpec[] = [
-  { Tier: 'Common', Value: { Min: 0.5, Max: 1.0, Type: 'Percent' } },
-  { Tier: 'Magic', Value: { Min: 1.0, Max: 1.5, Type: 'Percent' } },
-  { Tier: 'Rare', Value: { Min: 1.5, Max: 2.5, Type: 'Percent' } },
-  { Tier: 'Epic', Value: { Min: 2.5, Max: 3.5, Type: 'Percent' } },
-  { Tier: 'Legendary', Value: { Min: 3.5, Max: 5.0, Type: 'Percent' } }
+  { Tier: 'Common', Value: { Min: 1, Max: 1, Type: 'Flat' } },
+  { Tier: 'Magic', Value: { Min: 2, Max: 2, Type: 'Flat' } },
+  { Tier: 'Rare', Value: { Min: 3, Max: 3, Type: 'Flat' } },
+  { Tier: 'Epic', Value: { Min: 4, Max: 4, Type: 'Flat' } },
+  { Tier: 'Legendary', Value: { Min: 5, Max: 5, Type: 'Flat' } }
 ];

@@ -6,6 +6,7 @@ export function ComputeRolledValue(
   percentage: number,
   type: 'Flat' | 'Percent'
 ): number {
+  if (min === max) return type === 'Flat' ? Math.round(max) : max;
   const result = min + (max - min) * ClampUtils.clamp(percentage, 0, 1);
   return type === 'Flat' ? Math.round(result) : result;
 }
@@ -17,6 +18,8 @@ export function ComputeRolledValue(
  * @returns The percentage rolled within the tier range, as a number between 0 and 1.
  */
 export function RandomInRange(min: number, max: number, type: 'Flat' | 'Percent'): number {
+  if (min === max) return 1.0;
+
   const lo = Math.min(min, max);
   const hi = Math.max(min, max);
 

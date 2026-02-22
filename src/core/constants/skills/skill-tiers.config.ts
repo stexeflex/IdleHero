@@ -4,15 +4,15 @@ import { SkillDefinition } from '../../models';
 export const SKILL_TIER_CONFIG = {
   1: {
     REQUIRED_LEVEL: 5,
-    GOLD_COST: 2500
+    GOLD_COST: 2_500
   },
   2: {
     REQUIRED_LEVEL: 15,
-    GOLD_COST: 7500
+    GOLD_COST: 10_000
   },
   3: {
     REQUIRED_LEVEL: 25,
-    GOLD_COST: 10_000
+    GOLD_COST: 25_000
   }
 };
 

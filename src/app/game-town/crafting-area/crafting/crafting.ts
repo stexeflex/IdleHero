@@ -61,7 +61,14 @@ export class Crafting {
     () => {
       const dungeonStatistics = this.statistics.DungeonStatistics().Dungeon;
       return {
-        I: null,
+        I: {
+          Tier: 'I',
+          DungeonId: 'D1',
+          DungeonIcon: GetDungeonById('D1')?.Icon ?? 'slime',
+          RequiredStage: 1,
+          ClearedStage: Math.min(dungeonStatistics['D1'] ?? 0, 1),
+          IsUnlocked: true
+        },
         II: this.CreateTierRequirement('II', 'D1', dungeonStatistics['D1'] ?? 0),
         III: this.CreateTierRequirement('III', 'D2', dungeonStatistics['D2'] ?? 0)
       };
@@ -119,8 +126,8 @@ export class Crafting {
   }
 
   private CreateTierRequirement(
-    tier: Extract<ItemTier, 'II' | 'III'>,
-    dungeonId: 'D1' | 'D2',
+    tier: Extract<ItemTier, 'I' | 'II' | 'III'>,
+    dungeonId: 'D1' | 'D2' | 'D3' | 'D4',
     clearedStage: number
   ): TierCraftRequirement {
     const dungeon = GetDungeonById(dungeonId);
@@ -138,8 +145,8 @@ export class Crafting {
 }
 
 interface TierCraftRequirement {
-  Tier: Extract<ItemTier, 'II' | 'III'>;
-  DungeonId: 'D1' | 'D2';
+  Tier: Extract<ItemTier, 'I' | 'II' | 'III'>;
+  DungeonId: 'D1' | 'D2' | 'D3' | 'D4';
   DungeonIcon: CreaturesIconName;
   RequiredStage: number;
   ClearedStage: number;

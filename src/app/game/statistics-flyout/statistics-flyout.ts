@@ -95,7 +95,7 @@ export class StatisticsFlyout implements OnDestroy {
     return [
       {
         label: 'Charged Single Hit',
-        value: this.decimalPipe.transform(damageStats.HighestChargedHit, '1.0-0')
+        value: this.decimalPipe.transform(damageStats.HighestChargedSingleHit, '1.0-0')
       },
       {
         label: 'Charged Bleeding Tick',
@@ -121,16 +121,20 @@ export class StatisticsFlyout implements OnDestroy {
 
     return [
       {
-        label: 'Total Hit',
-        value: this.decimalPipe.transform(damageStats.HighestTotalHit, '1.0-0')
+        label: 'Hit',
+        value: this.decimalPipe.transform(damageStats.HighestHit, '1.0-0')
       },
       {
-        label: 'Charged Total Hit',
-        value: this.decimalPipe.transform(damageStats.HighestChargedTotalHit, '1.0-0')
+        label: 'Charged Hit',
+        value: this.decimalPipe.transform(damageStats.HighestChargedHit, '1.0-0')
       },
       {
         label: 'Splash Hit',
         value: this.decimalPipe.transform(damageStats.HighestSplashHit, '1.0-0')
+      },
+      {
+        label: 'Total Hit',
+        value: this.decimalPipe.transform(damageStats.HighestTotalHit, '1.0-0')
       }
     ];
   });

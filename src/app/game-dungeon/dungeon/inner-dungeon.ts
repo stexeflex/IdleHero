@@ -44,6 +44,7 @@ export class InnerDungeon implements OnDestroy {
 
   ngOnDestroy(): void {
     if (this.restartTimer) clearTimeout(this.restartTimer);
+    this.engine.Stop();
   }
 
   // Actions
@@ -62,6 +63,7 @@ export class InnerDungeon implements OnDestroy {
   }
 
   public ExitDungeon(): void {
+    this.engine.Stop();
     this.combat.Leave();
   }
 

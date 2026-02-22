@@ -7,16 +7,18 @@ export interface DamageStatistics {
   HighestCriticalMultiHit: number;
   HighestMultiHitChain: number;
 
-  HighestChargedHit: number;
+  HighestChargedSingleHit: number;
   HighestChargedBleedingTick: number;
   HighestChargedCriticalHit: number;
   HighestChargedMultiHit: number;
   HighestChargedCriticalMultiHit: number;
 
-  HighestTotalHit: number;
-  HighestChargedTotalHit: number;
+  HighestHit: number;
+  HighestChargedHit: number;
 
   HighestSplashHit: number;
+
+  HighestTotalHit: number;
 }
 
 export function InitialDamageStatistics(): DamageStatistics {
@@ -29,15 +31,17 @@ export function InitialDamageStatistics(): DamageStatistics {
     HighestCriticalMultiHit: 0,
     HighestMultiHitChain: 0,
 
-    HighestChargedHit: 0,
+    HighestChargedSingleHit: 0,
     HighestChargedBleedingTick: 0,
     HighestChargedCriticalHit: 0,
     HighestChargedMultiHit: 0,
     HighestChargedCriticalMultiHit: 0,
 
-    HighestTotalHit: 0,
-    HighestChargedTotalHit: 0,
+    HighestHit: 0,
+    HighestChargedHit: 0,
 
-    HighestSplashHit: 0
+    HighestSplashHit: 0,
+
+    HighestTotalHit: 0
   };
 }

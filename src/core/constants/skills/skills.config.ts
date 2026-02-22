@@ -20,9 +20,9 @@ const ATTACK_POWER_I_SKILL: StatSkillDefinition = {
   Tier: 'I',
   Type: 'StatBoost',
   Levels: [
-    { Level: 1, Value: 5, Type: 'Flat' },
-    { Level: 2, Value: 10, Type: 'Flat' },
-    { Level: 3, Value: 20, Type: 'Flat' }
+    { Level: 1, Value: 10, Type: 'Flat' },
+    { Level: 2, Value: 20, Type: 'Flat' },
+    { Level: 3, Value: 30, Type: 'Flat' }
   ],
   Effect: {
     ToLabel: (value: number) => FlatAdditiveLabel('Damage', value),
@@ -80,7 +80,7 @@ const ATTACK_SPEED_SKILL: StatSkillDefinition = {
   Id: 'STAT_IAS',
   Name: 'Quickening',
   Description: 'Increases the speed of your attacks.',
-  Tier: 'I',
+  Tier: 'II',
   Type: 'StatBoost',
   Levels: [
     { Level: 1, Value: 0.05, Type: 'Percent' },
@@ -131,8 +131,7 @@ const MULTI_HIT_CHAIN_SKILL: StatSkillDefinition = {
     { Level: 2, Value: 2, Type: 'Flat' },
     { Level: 3, Value: 3, Type: 'Flat' },
     { Level: 4, Value: 4, Type: 'Flat' },
-    { Level: 5, Value: 5, Type: 'Flat' },
-    { Level: 6, Value: 6, Type: 'Flat' }
+    { Level: 5, Value: 5, Type: 'Flat' }
   ],
   Effect: {
     ToLabel: (value: number) => FlatAdditiveLabel('Multi Hit Chain', value),
@@ -148,7 +147,7 @@ const CHARGING_STRIKE_LOSS_SKILL: StatSkillDefinition = {
   Id: 'STAT_CS_LOSS',
   Name: 'Unyielding Charge',
   Description: 'Reduces the charge loss from missed attacks on your Charging Strike.',
-  Tier: 'I',
+  Tier: 'II',
   Type: 'StatBoost',
   Levels: [
     { Level: 1, Value: -0.25, Type: 'Percent' },
@@ -218,7 +217,7 @@ const SPLASH_DAMAGE_SKILL: PassiveSkillDefinition = {
   Id: 'PASSIVE_SPLASH_DAMAGE',
   Name: 'Overflowing Splashes',
   Description: 'Your damage overflow from attacks hits the next enemy.',
-  Tier: 'III',
+  Tier: 'II',
   Type: 'Passive',
   MapToPassiveEffect: (passives: Passives) => {
     passives.SplashDamage = true;
@@ -260,10 +259,14 @@ const BUFF_BLEED_CHANCE_SKILL: BuffSkillDefinition = {
   Duration: 20,
   Cooldown: 60,
   Icon: 'drippingblade',
-  ToLabel: () => [PercentageAdditiveLabel('Bleed Chance', 0.25)],
+  ToLabel: () => [
+    PercentageAdditiveLabel('Bleed Chance', 0.25),
+    PercentageAdditiveLabel('Bleed Damage', 0.25)
+  ],
   MapToStatSource: (source: string) => {
     const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
     s.Bleeding.Chance = 0.25;
+    s.Bleeding.Damage = 0.25;
     return s;
   }
 };
@@ -277,10 +280,14 @@ const BUFF_CRIT_CHANCE_SKILL: BuffSkillDefinition = {
   Duration: 20,
   Cooldown: 60,
   Icon: 'lightningtrio',
-  ToLabel: () => [PercentageAdditiveLabel('Critical Hit Chance', 0.25)],
+  ToLabel: () => [
+    PercentageAdditiveLabel('Critical Hit Chance', 0.25),
+    PercentageAdditiveLabel('Critical Hit Damage', 0.5)
+  ],
   MapToStatSource: (source: string) => {
     const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
     s.CriticalHit.Chance = 0.25;
+    s.CriticalHit.Damage = 0.5;
     return s;
   }
 };
@@ -297,12 +304,14 @@ const BUFF_MULTI_HIT_CHANCE_SKILL: BuffSkillDefinition = {
   Icon: 'crossedswords',
   ToLabel: () => [
     PercentageAdditiveLabel('Multi Hit Chance', 0.25),
-    PercentageAdditiveLabel('Multi Hit Chain', 0.1)
+    PercentageAdditiveLabel('Multi Hit Chain', 0.1),
+    PercentageAdditiveLabel('Multi Hit Damage', 0.25)
   ],
   MapToStatSource: (source: string) => {
     const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
     s.MultiHit.Chance = 0.25;
     s.MultiHit.ChainFactor = 0.1;
+    s.MultiHit.Damage = 0.25;
     return s;
   }
 };
