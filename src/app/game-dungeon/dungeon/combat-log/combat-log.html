@@ -31,6 +31,18 @@
                 <span class="dot">•</span>
                 <app-rune [rune]="entry.Rewards.Rune" size="sm" fontSize="1.2rem"></app-rune>
               }
+              @if (entry.Rewards.Key) {
+                <span class="dot">•</span>
+                <app-icon
+                  [class.common--font]="entry.Rewards.Key === 'Silver Key'"
+                  [class.magic--font]="entry.Rewards.Key === 'Magic Key'"
+                  [class.rare--font]="entry.Rewards.Key === 'Golden Key'"
+                  [class.epic--font]="entry.Rewards.Key === 'Epic Key'"
+                  [class.legendary--font]="entry.Rewards.Key === 'Legendary Key'"
+                  symbol="skeletonkey"
+                  size="sm"
+                  fontSize="1.2rem"></app-icon>
+              }
             </div>
           </div>
         }

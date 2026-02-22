@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
+import { CreaturesIconName, Gold, IconComponent, Separator } from '../../../shared/components';
 import { DungeonKeyService, GoldService, StatisticsService } from '../../../core/services';
-import { Gold, IconComponent, Separator } from '../../../shared/components';
-
-import { DungeonRoomKey } from '../../../core/models';
+import { DungeonRoomKey, DungeonType } from '../../../core/models';
+import { GetAllDungeons, GetDungeonById } from '../../../core/constants';
 
 @Component({
   selector: 'app-info-area',
@@ -11,6 +11,13 @@ import { DungeonRoomKey } from '../../../core/models';
   styleUrl: './info-area.scss'
 })
 export class InfoArea {
+  private readonly dungeonOrderIndexById: Record<string, number> = GetAllDungeons().reduce<
+    Record<string, number>
+  >((indexById, dungeon, index) => {
+    indexById[dungeon.Id] = index;
+    return indexById;
+  }, {});
+
   private readonly goldService = inject<GoldService>(GoldService);
   private readonly dungeonKeyService = inject<DungeonKeyService>(DungeonKeyService);
   private readonly statisticsService = inject<StatisticsService>(StatisticsService);
@@ -19,22 +26,14 @@ export class InfoArea {
     return this.goldService.Balance();
   }
 
-  protected get MaxStages(): string {
+  protected get DungeonStages(): DungeonStageProgress[] {
     const stageStatistics = this.statisticsService.DungeonStatistics();
-    const stages =
-      Object.entries(stageStatistics.Dungeon)
-        .map(([roomId, stage]) => `${roomId} - ${stage}`)
-        .join(' | ') || 'D1 - 0';
-    return stages;
+    return this.BuildDungeonStageProgress(stageStatistics.Dungeon, DungeonType.Normal);
   }
 
-  protected get MaxCapstoneStages(): string {
+  protected get CapstoneStages(): DungeonStageProgress[] {
     const stageStatistics = this.statisticsService.DungeonStatistics();
-    const stages =
-      Object.entries(stageStatistics.Capstone)
-        .map(([roomId, stage]) => `${roomId} - ${stage}`)
-        .join(' | ') || 'C1 - 0';
-    return stages;
+    return this.BuildDungeonStageProgress(stageStatistics.Capstone, DungeonType.Capstone);
   }
 
   protected get HasAnyKey(): boolean {
@@ -44,4 +43,34 @@ export class InfoArea {
   protected HasKey(key: DungeonRoomKey): boolean {
     return this.dungeonKeyService.HasKey(key);
   }
+
+  private BuildDungeonStageProgress(
+    stageByDungeonId: Record<string, number>,
+    dungeonType: DungeonType
+  ): DungeonStageProgress[] {
+    return Object.entries(stageByDungeonId)
+      .filter(([, stage]) => stage >= 1)
+      .map(([dungeonId, stage]) => {
+        const dungeon = GetDungeonById(dungeonId);
+        return {
+          DungeonId: dungeonId,
+          DungeonIcon: dungeon?.Icon ?? 'slime',
+          Type: dungeon?.Type ?? DungeonType.Normal,
+          Stage: stage
+        };
+      })
+      .filter((dungeonStage) => dungeonStage.Type === dungeonType)
+      .sort((left, right) => {
+        const leftOrder = this.dungeonOrderIndexById[left.DungeonId] ?? Number.MAX_SAFE_INTEGER;
+        const rightOrder = this.dungeonOrderIndexById[right.DungeonId] ?? Number.MAX_SAFE_INTEGER;
+        return leftOrder - rightOrder;
+      });
+  }
+}
+
+interface DungeonStageProgress {
+  DungeonId: string;
+  DungeonIcon: CreaturesIconName;
+  Type: DungeonType;
+  Stage: number;
 }

@@ -4,16 +4,29 @@
     <div>
       <h3>ITEM CRAFTING</h3>
     </div>
-    <!-- ACTIONS -->
-    <div class="actions">
-      <app-gold [amount]="CraftCost()" size="sm" fontSize="1.3rem"></app-gold>
-      <button
-        class="ih-button-secondary action"
-        [disabled]="CraftCost() > GoldBalance() || !SelectedVariant()"
-        (click)="Craft()">
-        CRAFT
-      </button>
-    </div>
+    <!-- DUNGEON REQUIREMENT -->
+    @if (SelectedTierRequirement(); as requirement) {
+      @if (!requirement.IsUnlocked) {
+        <span class="tier-lock-info">
+          Unlocked by clearing
+          <app-icon [creatures]="requirement.DungeonIcon" size="mini"></app-icon>
+          <span class="tier-stages">
+            [{{ requirement.ClearedStage }} / {{ requirement.RequiredStage }}]
+          </span>
+        </span>
+      }
+    } @else {
+      <!-- ACTIONS -->
+      <div class="actions">
+        <app-gold [amount]="CraftCost()" size="sm" fontSize="1.3rem"></app-gold>
+        <button
+          class="ih-button-secondary action"
+          [disabled]="CraftCost() > GoldBalance() || !SelectedVariant() || !CanCraftSelectedTier()"
+          (click)="Craft()">
+          CRAFT
+        </button>
+      </div>
+    }
   </div>
 
   <div class="panel-body">
@@ -30,8 +43,9 @@
     <!-- TIERS -->
     <div class="tiers">
       @for (t of Tiers; track t) {
-        <button class="tier" [class.active]="SelectedTier() === t" (click)="SelectedTier.set(t)">
-          TIER {{ t }}
+        <button class="tier" [class.active]="SelectedTier() === t" (click)="SelectTier(t)">
+          <span>TIER</span>
+          <span class="tier-id">{{ t }}</span>
         </button>
       }
     </div>

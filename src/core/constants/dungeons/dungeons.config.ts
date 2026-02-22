@@ -20,7 +20,8 @@ export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
     Rewards: {
       XpBase: 10,
       GoldBase: 10,
-      RuneDropChances: { Common: 0.08, Magic: 0.01, Rare: 0.0, Epic: 0.0, Legendary: 0.0 }
+      RuneDropChances: { Common: 0.08, Magic: 0.01, Rare: 0.0, Epic: 0.0, Legendary: 0.0 },
+      Key: null
     },
 
     Locked: false
@@ -39,7 +40,8 @@ export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
     Rewards: {
       XpBase: 15,
       GoldBase: 25,
-      RuneDropChances: { Common: 0.25, Magic: 0.08, Rare: 0.01, Epic: 0.0, Legendary: 0.0 }
+      RuneDropChances: { Common: 0.15, Magic: 0.08, Rare: 0.01, Epic: 0.0, Legendary: 0.0 },
+      Key: null
     },
 
     Locked: false
@@ -58,7 +60,8 @@ export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
     Rewards: {
       XpBase: 20,
       GoldBase: 35,
-      RuneDropChances: { Common: 0.0, Magic: 0.25, Rare: 0.08, Epic: 0.01, Legendary: 0.0 }
+      RuneDropChances: { Common: 0.0, Magic: 0.15, Rare: 0.08, Epic: 0.01, Legendary: 0.0 },
+      Key: null
     },
 
     Locked: false
@@ -77,7 +80,8 @@ export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
     Rewards: {
       XpBase: 25,
       GoldBase: 65,
-      RuneDropChances: { Common: 0.0, Magic: 0.0, Rare: 0.25, Epic: 0.08, Legendary: 0.01 }
+      RuneDropChances: { Common: 0.0, Magic: 0.0, Rare: 0.15, Epic: 0.08, Legendary: 0.01 },
+      Key: 'Silver Key' as DungeonRoomKey
     },
 
     Locked: false
@@ -99,13 +103,13 @@ export const CAPSTONE_DUNGEONS: CapstoneDungeonRoom[] = [
     Rewards: {
       XpBase: 100,
       GoldBase: 100,
-      RuneDropChances: { Common: 0.0, Magic: 0.0, Rare: 0.5, Epic: 0.375, Legendary: 0.125 }
+      RuneDropChances: { Common: 0.0, Magic: 0.0, Rare: 0.0, Epic: 0.2, Legendary: 0.1 },
+      Key: 'Magic Key' as DungeonRoomKey
     },
 
-    Prerequisites: { Gold: 500, Key: null },
-    CapstoneRewards: { Gold: 50_000, Key: 'Silver Key' as DungeonRoomKey },
+    Prerequisites: { Key: 'Silver Key' as DungeonRoomKey },
 
-    Locked: true
+    Locked: false
   },
   {
     Id: 'C2',
@@ -121,12 +125,13 @@ export const CAPSTONE_DUNGEONS: CapstoneDungeonRoom[] = [
     Rewards: {
       XpBase: 150,
       GoldBase: 150,
-      RuneDropChances: { Common: 0.0, Magic: 0.0, Rare: 0.75, Epic: 0.5, Legendary: 0.25 }
+      RuneDropChances: { Common: 0.0, Magic: 0.0, Rare: 0.0, Epic: 0.35, Legendary: 0.2 },
+      Key: 'Golden Key' as DungeonRoomKey
     },
 
-    Prerequisites: { Gold: 2500, Key: 'Silver Key' as DungeonRoomKey },
-    CapstoneRewards: { Gold: 100_000, Key: 'Magic Key' as DungeonRoomKey },
-    Locked: true
+    Prerequisites: { Key: 'Magic Key' as DungeonRoomKey },
+
+    Locked: false
   },
   {
     Id: 'C3',
@@ -142,13 +147,13 @@ export const CAPSTONE_DUNGEONS: CapstoneDungeonRoom[] = [
     Rewards: {
       XpBase: 200,
       GoldBase: 200,
-      RuneDropChances: { Common: 0.0, Magic: 0.0, Rare: 0.0, Epic: 0.75, Legendary: 0.5 }
+      RuneDropChances: { Common: 0.0, Magic: 0.0, Rare: 0.0, Epic: 0.5, Legendary: 0.25 },
+      Key: 'Epic Key' as DungeonRoomKey
     },
 
-    Prerequisites: { Gold: 10_000, Key: 'Magic Key' as DungeonRoomKey },
-    CapstoneRewards: { Gold: 500_000, Key: 'Golden Key' as DungeonRoomKey },
+    Prerequisites: { Key: 'Golden Key' as DungeonRoomKey },
 
-    Locked: true
+    Locked: false
   }
 ];
 

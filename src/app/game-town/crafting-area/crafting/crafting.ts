@@ -3,15 +3,17 @@ import {
   CraftingService,
   GoldCostProvider,
   GoldService,
-  InventoryService
+  InventoryService,
+  StatisticsService
 } from '../../../../core/services';
 import {
+  CreaturesIconName,
   GearSlotIconName,
   Gold,
   IconComponent,
   ItemVariantPreview
 } from '../../../../shared/components';
-import { ICONS_CONFIG, ITEM_VARIANTS } from '../../../../core/constants';
+import { GetDungeonById, ICONS_CONFIG, ITEM_VARIANTS } from '../../../../core/constants';
 import {
   ItemSlot,
   ItemTier,
@@ -32,6 +34,7 @@ export class Crafting {
   private readonly cost = inject(GoldCostProvider);
   private readonly gold = inject(GoldService);
   private readonly inventory = inject(InventoryService);
+  private readonly statistics = inject(StatisticsService);
 
   // UI State
   public readonly Slots: ItemSlot[] = ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Feet'];
@@ -52,6 +55,26 @@ export class Crafting {
     const id = this.SelectedVariantId();
     const list: ItemVariantDefinition[] = this.VariantsForSlot();
     return id ? (list.find((v) => v.Id === id) ?? null) : null;
+  });
+
+  public readonly TierUnlockRequirements = computed<Record<ItemTier, TierCraftRequirement | null>>(
+    () => {
+      const dungeonStatistics = this.statistics.DungeonStatistics().Dungeon;
+      return {
+        I: null,
+        II: this.CreateTierRequirement('II', 'D1', dungeonStatistics['D1'] ?? 0),
+        III: this.CreateTierRequirement('III', 'D2', dungeonStatistics['D2'] ?? 0)
+      };
+    }
+  );
+
+  public readonly SelectedTierRequirement = computed<TierCraftRequirement | null>(
+    () => this.TierUnlockRequirements()[this.SelectedTier()]
+  );
+
+  public readonly CanCraftSelectedTier = computed<boolean>(() => {
+    const requirement = this.SelectedTierRequirement();
+    return requirement ? requirement.IsUnlocked : true;
   });
 
   // Data
@@ -76,17 +99,49 @@ export class Crafting {
     this.SelectedVariantId.set(null);
   }
 
+  public IsTierUnlocked(tier: ItemTier): boolean {
+    const requirement = this.TierUnlockRequirements()[tier];
+    return requirement ? requirement.IsUnlocked : true;
+  }
+
   public SelectVariant(id: string): void {
     this.SelectedVariantId.set(id);
   }
 
   public Craft(): void {
     const variant: ItemVariantDefinition | null = this.SelectedVariant();
-    if (!variant) return;
+    if (!variant || !this.CanCraftSelectedTier()) return;
 
     const result: OperationResult = this.crafting.CraftNewItem(variant, this.cost);
     if (!result.Success) return;
 
     this.inventory.Add(result.Item);
   }
+
+  private CreateTierRequirement(
+    tier: Extract<ItemTier, 'II' | 'III'>,
+    dungeonId: 'D1' | 'D2',
+    clearedStage: number
+  ): TierCraftRequirement {
+    const dungeon = GetDungeonById(dungeonId);
+    const requiredStage = dungeon?.StagesMax ?? 0;
+
+    return {
+      Tier: tier,
+      DungeonId: dungeonId,
+      DungeonIcon: dungeon?.Icon ?? 'slime',
+      RequiredStage: requiredStage,
+      ClearedStage: Math.min(clearedStage, requiredStage),
+      IsUnlocked: clearedStage >= requiredStage
+    };
+  }
+}
+
+interface TierCraftRequirement {
+  Tier: Extract<ItemTier, 'II' | 'III'>;
+  DungeonId: 'D1' | 'D2';
+  DungeonIcon: CreaturesIconName;
+  RequiredStage: number;
+  ClearedStage: number;
+  IsUnlocked: boolean;
 }

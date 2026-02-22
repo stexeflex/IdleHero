@@ -64,11 +64,6 @@ export class DungeonRoomService {
   }
 
   private CanEnterCapstoneDungeon(dungeon: CapstoneDungeonRoom): boolean {
-    // Check gold prerequisite
-    if (!this.Gold.CanAfford(dungeon.Prerequisites.Gold)) {
-      return false;
-    }
-
     // Check key prerequisite
     if (dungeon.Prerequisites.Key && !this.Keys.HasKey(dungeon.Prerequisites.Key)) {
       return false;
@@ -86,16 +81,15 @@ export class DungeonRoomService {
     if (!this.CanEnter(dungeonId)) return false;
 
     const dungeon = GetDungeonById(dungeonId);
-
     if (!dungeon) return false;
 
-    if (dungeon.Type === DungeonType.Capstone) {
-      const capstoneDungeon = dungeon as CapstoneDungeonRoom;
-
-      // Spend gold prerequisite
-      if (!this.Gold.Spend(capstoneDungeon.Prerequisites.Gold)) {
-        return false;
-      }
+    // Check key prerequisite
+    if (
+      dungeon.Type === DungeonType.Capstone &&
+      (dungeon as CapstoneDungeonRoom).Prerequisites.Key &&
+      !this.Keys.HasKey((dungeon as CapstoneDungeonRoom).Prerequisites.Key)
+    ) {
+      return false;
     }
 
     this.CurrentDungeonIdState.set(dungeonId);

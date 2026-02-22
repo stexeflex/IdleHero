@@ -46,3 +46,14 @@
     min-width: 60px;
   }
 }
+
+.dungeon-stage-list {
+  @include flexbox($align: center);
+  flex-wrap: wrap;
+  gap: calc($gap / 2);
+}
+
+.dungeon-stage {
+  @include flexbox($align: center);
+  gap: calc($gap / 3);
+}

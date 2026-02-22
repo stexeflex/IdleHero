@@ -135,21 +135,20 @@ export class DungeonRewardsService {
     if (dungeon.Type === DungeonType.Capstone) {
       const capstoneDungeon = dungeon as CapstoneDungeonRoom;
 
-      if (capstoneDungeon.CapstoneRewards.Key) {
-        this.Keys.AddKey(capstoneDungeon.CapstoneRewards.Key);
+      if (capstoneDungeon.Rewards.Key) {
+        this.Keys.AddKey(capstoneDungeon.Rewards.Key);
       }
 
       rewards = {
         ...rewards,
-        // Override gold and key rewards with capstone-specific values
-        Gold: capstoneDungeon.CapstoneRewards.Gold,
-        Key: capstoneDungeon.CapstoneRewards.Key || null
+        Key: capstoneDungeon.Rewards.Key || null
       };
     }
 
     this.Log.Rewards(dungeon.StagesMax, rewards);
     this.Gold.Add(rewards.Gold);
     this.Level.AddExperience(rewards.Experience);
+
     if (rewards.Rune) this.Runes.AddOrUpgradeRune(rewards.Rune);
     this.DungeonRun.AddRewards(rewards);
 
