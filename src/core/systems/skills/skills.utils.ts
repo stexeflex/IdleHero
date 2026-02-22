@@ -1,17 +1,18 @@
 import {
-  LabelToString,
-  PassiveSkillDefinition,
-  SkillDefinition,
-  SkillTier,
-  StatSkillDefinition
-} from '../../models';
-import {
+  ALL_SKILL_DEFINITIONS,
   SKILL_COST_CONFIG,
   SKILL_TIER_1_SKILLS,
   SKILL_TIER_2_SKILLS,
   SKILL_TIER_3_SKILLS,
   SKILL_TIER_CONFIG
 } from '../../constants';
+import {
+  LabelToString,
+  PassiveSkillDefinition,
+  SkillDefinition,
+  SkillTier,
+  StatSkillDefinition
+} from '../../models';
 
 import { DecimalPipe } from '@angular/common';
 
@@ -24,10 +25,7 @@ export const SkillDefinitionsByTier: Record<SkillTier, SkillDefinition[]> = {
 };
 
 export const SkillDefinitionsById = new Map<string, SkillDefinition>(
-  [...SKILL_TIER_1_SKILLS, ...SKILL_TIER_2_SKILLS, ...SKILL_TIER_3_SKILLS].map((definition) => [
-    definition.Id,
-    definition
-  ])
+  [...ALL_SKILL_DEFINITIONS].map((definition) => [definition.Id, definition])
 );
 
 export function GetSkillUnlockCost(tier: SkillTier): number {

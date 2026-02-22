@@ -1,16 +1,18 @@
 import {
-  ActiveSkillDefinition,
   BuffSkillDefinition,
+  EffectSkillDefinition,
   EmptyStatSource,
   FlatAdditiveLabel,
   PassiveSkillDefinition,
   Passives,
   PercentageAdditiveLabel,
+  SkillEffects,
   StatSkillDefinition
 } from '../../models';
 
 import { TimestampUtils } from '../../../shared/utils';
 
+//#region Stat Skill Definitions
 const ATTACK_POWER_I_SKILL: StatSkillDefinition = {
   Id: 'STAT_ATP_I',
   Name: 'Vile Strike',
@@ -197,90 +199,9 @@ export const STAT_SKILL_DEFINITIONS: StatSkillDefinition[] = [
   CHARGING_STRIKE_LOSS_SKILL,
   CHARGING_STRIKE_DURATION_SKILL
 ];
+//#endregion Stat Skill Definitions
 
-const ACTIVE_ATTACK_SPEED_SKILL: ActiveSkillDefinition = {
-  Id: 'ACTIVE_ATTACK_SPEED',
-  Name: 'Haste',
-  Description: 'Increases your Attack Speed by 50% for a short duration.',
-  Tier: 'I',
-  Type: 'Active',
-  Duration: 20,
-  Cooldown: 60,
-  MapToStatSource: (source: string) => {
-    const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
-    s.AttackSpeed.Value = 0.5;
-    return s;
-  }
-};
-
-const ACTIVE_BLEED_CHANCE_SKILL: ActiveSkillDefinition = {
-  Id: 'ACTIVE_BLEED_CHANCE',
-  Name: 'Bleeding Edge',
-  Description: 'Increases your Bleed Chance by 25% for a short duration.',
-  Tier: 'I',
-  Type: 'Active',
-  Duration: 20,
-  Cooldown: 60,
-  MapToStatSource: (source: string) => {
-    const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
-    s.Bleeding.Chance = 0.25;
-    return s;
-  }
-};
-
-const ACTIVE_CRIT_CHANCE_SKILL: ActiveSkillDefinition = {
-  Id: 'ACTIVE_CRIT_CHANCE',
-  Name: 'Critical Focus',
-  Description: 'Increases your Critical Hit Chance by 25% for a short duration.',
-  Tier: 'I',
-  Type: 'Active',
-  Duration: 20,
-  Cooldown: 60,
-  MapToStatSource: (source: string) => {
-    const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
-    s.CriticalHit.Chance = 0.25;
-    return s;
-  }
-};
-
-const ACTIVE_MULTI_HIT_CHANCE_SKILL: ActiveSkillDefinition = {
-  Id: 'ACTIVE_MULTI_HIT_CHANCE',
-  Name: 'Frenzy',
-  Description: 'Increases your Multi Hit Chance by 25% for a short duration.',
-  Tier: 'I',
-  Type: 'Active',
-  Duration: 20,
-  Cooldown: 60,
-  MapToStatSource: (source: string) => {
-    const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
-    s.MultiHit.Chance = 0.25;
-    return s;
-  }
-};
-
-export const ACTIVE_SKILL_DEFINITIONS: ActiveSkillDefinition[] = [
-  ACTIVE_ATTACK_SPEED_SKILL,
-  ACTIVE_BLEED_CHANCE_SKILL,
-  ACTIVE_CRIT_CHANCE_SKILL,
-  ACTIVE_MULTI_HIT_CHANCE_SKILL
-];
-
-const BUFF_DAMAGE_SKILL: BuffSkillDefinition = {
-  Id: 'BUFF_WAR_CRY',
-  Name: 'War Cry',
-  Description: 'Unleashes a powerful war cry increasing your damage for a short duration.',
-  Tier: 'III',
-  Type: 'Buff',
-  Duration: 20,
-  Cooldown: 120,
-  MapToPassiveEffect: (passives: Passives) => {
-    passives.WarCry = true;
-    return passives;
-  }
-};
-
-export const BUFF_SKILL_DEFINITIONS: BuffSkillDefinition[] = [BUFF_DAMAGE_SKILL];
-
+//#region Passive Skill Definitions
 const MULTI_HIT_CRIT_SKILL: PassiveSkillDefinition = {
   Id: 'PASSIVE_CRITICAL_MH',
   Name: 'Deadly Flurry',
@@ -309,10 +230,112 @@ export const PASSIVE_SKILL_DEFINITIONS: PassiveSkillDefinition[] = [
   MULTI_HIT_CRIT_SKILL,
   SPLASH_DAMAGE_SKILL
 ];
+//#endregion Passive Skill Definitions
+
+//#region Buff Skill Definitions
+const BUFF_ATTACK_SPEED_SKILL: BuffSkillDefinition = {
+  Id: 'BUFF_ATTACK_SPEED',
+  Name: 'Haste',
+  Description: 'Increases your Attack Speed by 50% for a short duration.',
+  Tier: 'I',
+  Type: 'Buff',
+  Duration: 20,
+  Cooldown: 60,
+  MapToStatSource: (source: string) => {
+    const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
+    s.AttackSpeed.Value = 0.5;
+    return s;
+  }
+};
+
+const BUFF_BLEED_CHANCE_SKILL: BuffSkillDefinition = {
+  Id: 'BUFF_BLEED_CHANCE',
+  Name: 'Bleeding Edge',
+  Description: 'Increases your Bleed Chance by 25% for a short duration.',
+  Tier: 'I',
+  Type: 'Buff',
+  Duration: 20,
+  Cooldown: 60,
+  MapToStatSource: (source: string) => {
+    const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
+    s.Bleeding.Chance = 0.25;
+    return s;
+  }
+};
+
+const BUFF_CRIT_CHANCE_SKILL: BuffSkillDefinition = {
+  Id: 'BUFF_CRIT_CHANCE',
+  Name: 'Critical Focus',
+  Description: 'Increases your Critical Hit Chance by 25% for a short duration.',
+  Tier: 'I',
+  Type: 'Buff',
+  Duration: 20,
+  Cooldown: 60,
+  MapToStatSource: (source: string) => {
+    const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
+    s.CriticalHit.Chance = 0.25;
+    return s;
+  }
+};
+
+const BUFF_MULTI_HIT_CHANCE_SKILL: BuffSkillDefinition = {
+  Id: 'BUFF_MULTI_HIT_CHANCE',
+  Name: 'Frenzy',
+  Description: 'Increases your Multi Hit Chance and Chain for a short duration.',
+  Tier: 'I',
+  Type: 'Buff',
+  Duration: 20,
+  Cooldown: 60,
+  MapToStatSource: (source: string) => {
+    const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
+    s.MultiHit.Chance = 0.25;
+    s.MultiHit.ChainFactor = 0.1;
+    return s;
+  }
+};
+
+export const BUFF_SKILL_DEFINITIONS: BuffSkillDefinition[] = [
+  BUFF_ATTACK_SPEED_SKILL,
+  BUFF_BLEED_CHANCE_SKILL,
+  BUFF_CRIT_CHANCE_SKILL,
+  BUFF_MULTI_HIT_CHANCE_SKILL
+];
+//#endregion Buff Skill Definitions
+
+//#region Effect Skill Definitions
+const EFFECT_WARCRY_SKILL: EffectSkillDefinition = {
+  Id: 'BUFF_WAR_CRY',
+  Name: 'War Cry',
+  Description: 'Unleashes a powerful war cry increasing your damage for a short duration.',
+  Tier: 'III',
+  Type: 'Effect',
+  MapToEffect: (effects: SkillEffects) => {
+    effects.WarCry = { Active: true };
+    return effects;
+  }
+};
+
+const EFFECT_STRICKEN_SKILL: EffectSkillDefinition = {
+  Id: 'BUFF_STRICKEN',
+  Name: 'Stricken',
+  Description: 'Your attacks apply Stricken, increasing damage against bosses.',
+  Tier: 'III',
+  Type: 'Effect',
+  MapToEffect: (effects: SkillEffects) => {
+    effects.Stricken = { Active: true };
+    return effects;
+  }
+};
+
+export const EFFECT_SKILL_DEFINITIONS: EffectSkillDefinition[] = [
+  EFFECT_WARCRY_SKILL,
+  EFFECT_STRICKEN_SKILL
+];
+//#endregion Effect Skill Definitions
 
 export const ALL_SKILL_DEFINITIONS = [
   ...STAT_SKILL_DEFINITIONS,
-  ...ACTIVE_SKILL_DEFINITIONS,
+  ...PASSIVE_SKILL_DEFINITIONS,
   ...BUFF_SKILL_DEFINITIONS,
-  ...PASSIVE_SKILL_DEFINITIONS
+  ...EFFECT_SKILL_DEFINITIONS
 ];
