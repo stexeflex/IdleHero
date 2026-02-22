@@ -211,6 +211,7 @@ export class InventoryArea implements OnDestroy {
     const refund = GetDismantleRefund(item);
     this.Gold.Add(refund);
     this.ItemManagement.DismantleItem(item.Id);
+    this.IsDismantlingItem.set(undefined);
   }
 
   protected StartDismantling(item: Item): void {
