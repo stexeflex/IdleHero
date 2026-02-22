@@ -9,7 +9,7 @@ import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({ providedIn: 'root' })
 export class StatePersistenceService {
-  private readonly STORAGE_KEY = 'idle-hero:save:v2';
+  private readonly STORAGE_KEY = 'idle-hero:save:v3';
 
   private readonly platformId = inject(PLATFORM_ID);
   private readonly AppState = inject(AppStateService);
