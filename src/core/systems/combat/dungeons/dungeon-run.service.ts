@@ -5,13 +5,15 @@ export interface DungeonRunState {
   Gold: number;
   Experience: number;
   Runes: Rune[];
+  MimicsDefeated: number;
 }
 
 function CreateEmptyDungeonRunState(): DungeonRunState {
   return {
     Gold: 0,
     Experience: 0,
-    Runes: []
+    Runes: [],
+    MimicsDefeated: 0
   };
 }
 
@@ -22,10 +24,16 @@ export class DungeonRunService implements OnDestroy {
   private readonly StartedAtMsState = signal<number | null>(null);
   private readonly ElapsedMillisecondsState = signal<number>(0);
 
+  // Current Run Info
+  public readonly DungeonId = signal<string>('');
+  public readonly StageReached = signal<number>(0);
+
+  // Current Run Rewards
   public readonly Gold = computed<number>(() => this.State().Gold);
   public readonly Experience = computed<number>(() => this.State().Experience);
   public readonly Runes = computed<Rune[]>(() => [...this.State().Runes]);
   public readonly RuneCount = computed<number>(() => this.State().Runes.length);
+  public readonly MimicsDefeated = computed<number>(() => this.State().MimicsDefeated);
 
   public readonly IsRunning = computed<boolean>(() => this.IsRunningState());
   public readonly ElapsedMilliseconds = computed<number>(() => this.ElapsedMillisecondsState());
@@ -42,17 +50,19 @@ export class DungeonRunService implements OnDestroy {
    * Cleans up active timers when service is destroyed.
    */
   ngOnDestroy(): void {
-    this.StopRun();
+    this.StopRun(0);
   }
 
   /**
    * Starts a new dungeon run timer and resets the tracked run totals.
    */
-  public StartRun(): void {
+  public StartRun(dungeonId: string): void {
     this.Reset();
 
     this.StopTicker();
     this.IsRunningState.set(true);
+
+    this.DungeonId.set(dungeonId);
 
     const now = Date.now();
     this.StartedAtMsState.set(now);
@@ -69,11 +79,13 @@ export class DungeonRunService implements OnDestroy {
   /**
    * Stops the current dungeon run timer and keeps the last measured duration.
    */
-  public StopRun(): void {
+  public StopRun(stageReached: number): void {
     if (!this.IsRunningState()) {
       this.StopTicker();
       return;
     }
+
+    this.StageReached.set(stageReached);
 
     const startedAtMs = this.StartedAtMsState();
     if (startedAtMs !== null) {
@@ -91,9 +103,20 @@ export class DungeonRunService implements OnDestroy {
    */
   public AddRewards(rewards: Rewards): void {
     this.State.update((state) => ({
+      ...state,
       Gold: state.Gold + Math.max(0, Math.floor(rewards.Gold ?? 0)),
       Experience: state.Experience + Math.max(0, Math.floor(rewards.Experience ?? 0)),
       Runes: rewards.Rune ? [...state.Runes, rewards.Rune] : state.Runes
+    }));
+  }
+
+  /**
+   * Increments the count of defeated Mimics in the current dungeon run totals.
+   */
+  public AddMimicDefeat(): void {
+    this.State.update((state) => ({
+      ...state,
+      MimicsDefeated: state.MimicsDefeated + 1
     }));
   }
 
@@ -106,7 +129,8 @@ export class DungeonRunService implements OnDestroy {
     return {
       Gold: state.Gold,
       Experience: state.Experience,
-      Runes: [...state.Runes]
+      Runes: [...state.Runes],
+      MimicsDefeated: state.MimicsDefeated
     };
   }
 
@@ -118,7 +142,8 @@ export class DungeonRunService implements OnDestroy {
     this.State.set({
       Gold: Math.max(0, Math.floor(state.Gold)),
       Experience: Math.max(0, Math.floor(state.Experience)),
-      Runes: [...state.Runes]
+      Runes: [...state.Runes],
+      MimicsDefeated: state.MimicsDefeated
     });
   }
 

@@ -10,6 +10,10 @@
   gap: $gap 0;
 }
 
+.hidden {
+  display: none;
+}
+
 .header {
   display: flex;
   flex-direction: column;
@@ -35,6 +39,7 @@
   display: flex;
   flex-direction: row;
   gap: $gap;
+  align-items: center;
 }
 
 .rewards-runes {
@@ -50,6 +55,18 @@
   gap: calc($gap / 2);
 
   .rune-count {
+    font-size: 1rem;
+    color: $clr-mute;
+  }
+}
+
+.mimics {
+  display: flex;
+  flex-direction: row;
+  gap: calc($gap / 2);
+  color: $clr-gold;
+
+  .mimics-count {
     font-size: 1rem;
     color: $clr-mute;
   }
