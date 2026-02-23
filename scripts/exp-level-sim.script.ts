@@ -13,7 +13,7 @@
 // - Can optionally "prestige" after each full run to record highest stage reached,
 //   which activates experience damping below mid-stages.
 
-import { CAPSTONE_DUNGEONS, NORMAL_DUNGEONS } from '../src/core/constants/dungeons.config';
+import { CAPSTONE_DUNGEONS, NORMAL_DUNGEONS } from '../src/core/constants/dungeons/dungeons.config';
 import {
   CompletionFactor,
   ComputeProgressFromTotalXP,
@@ -163,7 +163,7 @@ function PrintHeader(dungeon: DungeonRoom, args: ParsedArgs): void {
   );
   console.log(`Dungeon: ${dungeon.Title}`);
   console.log(
-    `XpBase: ${dungeon.XpBase}, StagesMax: ${dungeon.StagesMax}, MidStages: [${dungeon.MidStages.join(', ')}]`
+    `XpBase: ${dungeon.Rewards.XpBase}, StagesMax: ${dungeon.StagesMax}, MidStages: [${dungeon.MidStages.join(', ')}]`
   );
   console.log(
     `Level curve: BASE_XP_TO_NEXT=${LEVELING_CONFIG.BASE_XP_TO_NEXT}, TOTAL_XP_EXPONENT=${LEVELING_CONFIG.TOTAL_XP_EXPONENT}`

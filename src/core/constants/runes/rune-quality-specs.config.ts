@@ -11,9 +11,9 @@ export const RUNE_ACCURACY: RuneQualitySpec[] = [
 export const RUNE_ATTACK_SPEED: RuneQualitySpec[] = [
   { Quality: 'Common', Value: { Min: 0.01, Max: 0.1, Type: 'Percent' } },
   { Quality: 'Magic', Value: { Min: 0.1, Max: 0.2, Type: 'Percent' } },
-  { Quality: 'Rare', Value: { Min: 0.2, Max: 0.3, Type: 'Percent' } },
-  { Quality: 'Epic', Value: { Min: 0.3, Max: 0.4, Type: 'Percent' } },
-  { Quality: 'Legendary', Value: { Min: 0.4, Max: 0.5, Type: 'Percent' } }
+  { Quality: 'Rare', Value: { Min: 0.2, Max: 0.4, Type: 'Percent' } },
+  { Quality: 'Epic', Value: { Min: 0.4, Max: 0.7, Type: 'Percent' } },
+  { Quality: 'Legendary', Value: { Min: 0.7, Max: 1.0, Type: 'Percent' } }
 ];
 
 export const RUNE_CHANCE: RuneQualitySpec[] = [

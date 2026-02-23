@@ -147,7 +147,7 @@ const CHARGING_STRIKE_LOSS_SKILL: StatSkillDefinition = {
   Id: 'STAT_CS_LOSS',
   Name: 'Unyielding Charge',
   Description: 'Reduces the charge loss from missed attacks on your Charging Strike.',
-  Tier: 'II',
+  Tier: 'I',
   Type: 'StatBoost',
   Levels: [
     { Level: 1, Value: -0.25, Type: 'Percent' },

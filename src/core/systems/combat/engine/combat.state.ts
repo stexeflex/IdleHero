@@ -84,7 +84,7 @@ export class CombatState {
 
   private ClearedDungeon() {
     this.Completed.set(true);
-    this.DungeonRun.StopRun();
+    this.DungeonRun.StopRun(this.DungeonRoom.CurrentStage());
 
     this.Log.Info(`${this.DungeonRoom.CurrentDungeon()?.Title.toUpperCase()}: Dungeon Cleared!`);
 
@@ -99,7 +99,7 @@ export class CombatState {
     this.InProgress.set(false);
     this.Completed.set(false);
     this.CombatSkills.Reset();
-    this.DungeonRun.StopRun();
+    this.DungeonRun.StopRun(this.DungeonRoom.CurrentStage());
     this.Queue.Clear();
     this.Log.Clear();
     this.ClearActors();
@@ -120,7 +120,7 @@ export class CombatState {
     this.Reset();
     this.InProgress.set(true);
     this.GameSaver.SaveGame();
-    this.DungeonRun.StartRun();
+    this.DungeonRun.StartRun(this.DungeonRoom.CurrentDungeonId()!);
 
     // Set Combat Actors
     const hero: Hero = this.SetupHero();

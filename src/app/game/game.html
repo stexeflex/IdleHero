@@ -10,19 +10,26 @@
   <!-- INFO AREA -->
   <section class="info">
     <div class="switch-area">
-      <button class="ih-button-icon" (click)="SwitchArea()" [disabled]="!CanSwitchArea">
+      <button
+        class="ih-button-icon switch-button"
+        [class.button-town]="currentArea() === 'Dungeon'"
+        [class.button-dungeon]="currentArea() === 'Town'"
+        (click)="SwitchArea()"
+        [disabled]="!CanSwitchArea">
         @if (currentArea() === "Dungeon") {
           <app-icon
-            class="button-town"
+            class="button-icon"
             places="barrackstent"
-            size="md"
+            size="sm"
             title="Go to Town"></app-icon>
+          <h4>TOWN</h4>
         } @else {
           <app-icon
-            class="button-dungeon"
+            class="button-icon"
             places="dungeongate"
-            size="md"
+            size="sm"
             title="Go to Dungeon"></app-icon>
+          <h4>DUNGEONS</h4>
         }
       </button>
     </div>

@@ -4,6 +4,7 @@ import {
   GoldCostProvider,
   GoldService,
   InventoryService,
+  LevelService,
   StatisticsService
 } from '../../../../core/services';
 import {
@@ -11,9 +12,11 @@ import {
   GearSlotIconName,
   Gold,
   IconComponent,
-  ItemVariantPreview
+  ItemVariantPreview,
+  Level
 } from '../../../../shared/components';
 import { GetDungeonById, ICONS_CONFIG, ITEM_VARIANTS } from '../../../../core/constants';
+import { GetRequiredLevelForCrafting, MinRarityForTier } from '../../../../core/systems/items';
 import {
   ItemSlot,
   ItemTier,
@@ -21,11 +24,15 @@ import {
   OperationResult
 } from '../../../../core/models';
 
-import { MinRarityForTier } from '../../../../core/systems/items';
+interface TierCraftRequirement {
+  Tier: Extract<ItemTier, 'I' | 'II' | 'III'>;
+  RequiredLevel: number;
+  IsUnlocked: boolean;
+}
 
 @Component({
   selector: 'app-crafting',
-  imports: [Gold, IconComponent, ItemVariantPreview],
+  imports: [Gold, IconComponent, ItemVariantPreview, Level],
   templateUrl: './crafting.html',
   styleUrl: './crafting.scss'
 })
@@ -34,7 +41,7 @@ export class Crafting {
   private readonly cost = inject(GoldCostProvider);
   private readonly gold = inject(GoldService);
   private readonly inventory = inject(InventoryService);
-  private readonly statistics = inject(StatisticsService);
+  private readonly level = inject(LevelService);
 
   // UI State
   public readonly Slots: ItemSlot[] = ['Weapon', 'OffHand', 'Head', 'Chest', 'Legs', 'Feet'];
@@ -59,18 +66,11 @@ export class Crafting {
 
   public readonly TierUnlockRequirements = computed<Record<ItemTier, TierCraftRequirement | null>>(
     () => {
-      const dungeonStatistics = this.statistics.DungeonStatistics().Dungeon;
+      const playerLevel = this.level.Level();
       return {
-        I: {
-          Tier: 'I',
-          DungeonId: 'D1',
-          DungeonIcon: GetDungeonById('D1')?.Icon ?? 'slime',
-          RequiredStage: 1,
-          ClearedStage: Math.min(dungeonStatistics['D1'] ?? 0, 1),
-          IsUnlocked: true
-        },
-        II: this.CreateTierRequirement('II', 'D1', dungeonStatistics['D1'] ?? 0),
-        III: this.CreateTierRequirement('III', 'D2', dungeonStatistics['D2'] ?? 0)
+        I: this.CreateTierRequirement('I', playerLevel),
+        II: this.CreateTierRequirement('II', playerLevel),
+        III: this.CreateTierRequirement('III', playerLevel)
       };
     }
   );
@@ -127,28 +127,13 @@ export class Crafting {
 
   private CreateTierRequirement(
     tier: Extract<ItemTier, 'I' | 'II' | 'III'>,
-    dungeonId: 'D1' | 'D2' | 'D3' | 'D4',
-    clearedStage: number
+    currentLevel: number
   ): TierCraftRequirement {
-    const dungeon = GetDungeonById(dungeonId);
-    const requiredStage = dungeon?.StagesMax ?? 0;
-
+    const requiredLevel = GetRequiredLevelForCrafting(tier);
     return {
       Tier: tier,
-      DungeonId: dungeonId,
-      DungeonIcon: dungeon?.Icon ?? 'slime',
-      RequiredStage: requiredStage,
-      ClearedStage: Math.min(clearedStage, requiredStage),
-      IsUnlocked: clearedStage >= requiredStage
+      RequiredLevel: requiredLevel,
+      IsUnlocked: currentLevel >= requiredLevel
     };
   }
-}
-
-interface TierCraftRequirement {
-  Tier: Extract<ItemTier, 'I' | 'II' | 'III'>;
-  DungeonId: 'D1' | 'D2' | 'D3' | 'D4';
-  DungeonIcon: CreaturesIconName;
-  RequiredStage: number;
-  ClearedStage: number;
-  IsUnlocked: boolean;
 }

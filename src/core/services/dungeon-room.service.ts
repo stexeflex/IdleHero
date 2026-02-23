@@ -1,8 +1,8 @@
 import { Boss, CapstoneDungeonRoom, DungeonRoom, DungeonType } from '../models';
+import { BossSelectionService, DungeonRunService } from '../systems/combat';
 import { DUNGEON_MIMIC_BOSS_CONFIG, GetDungeonById } from '../constants';
 import { Injectable, computed, inject, signal } from '@angular/core';
 
-import { BossSelectionService } from '../systems/combat';
 import { ClampUtils } from '../../shared/utils';
 import { DungeonKeyService } from './dungeon-key.service';
 import { DungeonRewardsService } from '../systems/combat/dungeons/dungeon-rewards.service';
@@ -14,6 +14,7 @@ export class DungeonRoomService {
   private readonly Bosses = inject(BossSelectionService);
   private readonly Rewards = inject(DungeonRewardsService);
   private readonly Keys = inject(DungeonKeyService);
+  private readonly DungeonRun = inject(DungeonRunService);
 
   private readonly CurrentDungeonIdState = signal<string | null>(null);
   private readonly CurrentStageState = signal<number>(1);
@@ -114,6 +115,9 @@ export class DungeonRoomService {
         this.Rewards.GrantMidBossRewards(dungeon, stage);
       } else {
         const isMimic = this.CurrentBossIsMimic();
+        if (isMimic) {
+          this.DungeonRun.AddMimicDefeat();
+        }
         this.Rewards.GrantStageRewards(dungeon, stage, isMimic);
       }
 
