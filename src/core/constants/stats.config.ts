@@ -19,11 +19,11 @@ export const STATS_CONFIG = {
     CHARGE_MAX: 100 // Basis Maximaler Charge-Wert
   },
   LIMITS: {
-    STR_TO_BLEED_CHANCE: 0.25, // Maximal +25% BHC durch STR
+    STR_TO_BLEED_CHANCE: 0.5, // Maximal +50% BHC durch STR
     STR_TO_BLEED_DAMAGE: 1.5, // Maximal +150% BHD durch STR
-    INT_TO_CRIT_CHANCE: 0.25, // Maximal +25% CHC durch INT
+    INT_TO_CRIT_CHANCE: 0.5, // Maximal +50% CHC durch INT
     INT_TO_CRIT_DAMAGE: 3.0, // Maximal +300% CHD durch INT
-    DEX_TO_MULTI_HIT_CHANCE: 0.25, // Maximal +25% MHC durch DEX
+    DEX_TO_MULTI_HIT_CHANCE: 0.5, // Maximal +50% MHC durch DEX
     DEX_TO_MULTI_HIT_DAMAGE: 1.0, // Maximal +100% MHD durch DEX
     DEX_TO_CHAIN_FACTOR: 0.1 // Maximal +10% MHCF durch DEX
   },
