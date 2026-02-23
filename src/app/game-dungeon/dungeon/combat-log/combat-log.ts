@@ -1,6 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { CombatLogEntry, DamageLogEntry } from '../../../../core/models';
 import { Exp, Gold, IconComponent, RuneIcon, Separator } from '../../../../shared/components';
+import {
+  GetHitCount,
+  IsBleedingHit,
+  IsChargeHit,
+  IsCriticalHit,
+  IsSplashHit
+} from '../../../../core/systems/combat';
 
 import { CombatActorIcon } from './combat-actor-icon/combat-actor-icon';
 import { CombatLogService } from '../../../../core/services';
@@ -46,7 +53,7 @@ export class CombatLog {
   }
 
   private DamageActorClass(entry: DamageLogEntry): string {
-    const isCritical = entry.Damage.some((d) => d.IsCritical);
+    const isCritical = IsCriticalHit(entry.Damage);
 
     if (isCritical && entry.IsMultiHit) {
       return 'log-critical-multi';
@@ -60,7 +67,7 @@ export class CombatLog {
   }
 
   private ActionContent(entry: DamageLogEntry): string {
-    const isCritical = entry.Damage.some((d) => d.IsCritical);
+    const isCritical = IsCriticalHit(entry.Damage);
 
     if (isCritical && entry.IsMultiHit) {
       return '⚡⚔️';
@@ -77,12 +84,11 @@ export class CombatLog {
     let damageDetails = 'HIT';
 
     if (entry.IsMultiHit) {
-      const rawDamages = entry.Damage.filter((d) => !d.IsBleeding && !d.IsSplash);
-      const multiHitCount = rawDamages.length ?? 0;
+      const multiHitCount = GetHitCount(entry.Damage);
       damageDetails = 'MULTI ' + damageDetails + ' [x' + multiHitCount + ']';
     }
 
-    if (entry.Damage.some((d) => d.IsCritical)) {
+    if (IsCriticalHit(entry.Damage)) {
       damageDetails = 'CRITICAL ' + damageDetails;
     }
 
@@ -92,15 +98,15 @@ export class CombatLog {
   private AdditionalDetails(entry: DamageLogEntry): AdditionalDetail[] {
     const details: AdditionalDetail[] = [];
 
-    if (entry.Damage.some((d) => d.IsBleeding)) {
+    if (IsBleedingHit(entry.Damage)) {
       details.push({ value: 'BLEEDING', class: 'log-bleed' });
     }
 
-    if (entry.Damage.some((d) => d.IsCharged)) {
+    if (IsChargeHit(entry.Damage)) {
       details.push({ value: 'CHARGED', class: 'log-charged' });
     }
 
-    if (entry.Damage.some((d) => d.IsSplash)) {
+    if (IsSplashHit(entry.Damage)) {
       details.push({ value: 'SPLASH', class: 'log-splash' });
     }
 
