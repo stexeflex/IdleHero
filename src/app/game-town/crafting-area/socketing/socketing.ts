@@ -1,7 +1,7 @@
 import { AmuletPreview, Gold, RunesList } from '../../../../shared/components';
 import { AmuletService, RuneService } from '../../../../core/services';
 import { Component, LOCALE_ID, computed, inject } from '@angular/core';
-import { GetNextQuality, GetRuneSlotInfo } from '../../../../core/systems/runes';
+import { GetNextAmuletQuality, GetRuneSlotInfo } from '../../../../core/systems/runes';
 import { Rune, RuneSlotInfo } from '../../../../core/models';
 
 @Component({
@@ -29,7 +29,7 @@ export class Socketing {
 
   protected ShowUpgradeAmuletButton(): boolean {
     if (!this.Unlocked()) return true;
-    else if (GetNextQuality(this.Amulet().Quality) !== null) return true;
+    else if (GetNextAmuletQuality(this.Amulet().Quality) !== null) return true;
     return false;
   }
 

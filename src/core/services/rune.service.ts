@@ -4,7 +4,7 @@ import {
   Rune,
   RuneInventoryState
 } from '../models';
-import { GetRuneDefinitions, GetRuneValue, QualityIndex } from '../systems/runes';
+import { GetRuneDefinitions, GetRuneValue, RuneQualityIndex } from '../systems/runes';
 import { Injectable, computed, signal } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
@@ -113,8 +113,8 @@ export class RuneService {
   }
 
   public IsBetterRune(candidateRune: Rune, currentRune: Rune): boolean {
-    const candidateQualityIndex = QualityIndex(candidateRune.Quality);
-    const currentQualityIndex = QualityIndex(currentRune.Quality);
+    const candidateQualityIndex = RuneQualityIndex(candidateRune.Quality);
+    const currentQualityIndex = RuneQualityIndex(currentRune.Quality);
 
     if (candidateQualityIndex > currentQualityIndex) return true;
     if (candidateQualityIndex < currentQualityIndex) return false;

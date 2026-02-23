@@ -12,7 +12,7 @@ import {
   RuneSlotInfo
 } from '../../models';
 
-export function QualityIndex(quality: RuneQuality): number {
+export function RuneQualityIndex(quality: RuneQuality): number {
   const idx = RUNE_QUALITY_ORDER.indexOf(quality);
   return idx >= 0 ? idx : 0;
 }

@@ -14,7 +14,7 @@ export * from './items/items.config';
 export * from './leveling.config';
 export * from './runes/amulet-rules.config';
 export * from './runes/rune-quality-specs.config';
-export * from './runes/runes-cost.config';
+export * from './runes/amulet-cost.config';
 export * from './runes/runes.config';
 export * from './skills/skill-tiers.config';
 export * from './skills/skills-cost.config';
