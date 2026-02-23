@@ -7,22 +7,26 @@ import {
   InitialActorState,
   InitialHeroCharge,
   InitialLife,
+  InitialSkillEffects,
   NoArmor,
   ResetLife
 } from '../../../models';
 import {
   CombatLogService,
+  CombatSkillsService,
   CombatStatsService,
   DungeonRoomService,
-  PlayerHeroService
+  PlayerHeroService,
+  SkillsService
 } from '../../../services';
 import {
   ComputeAttackInterval,
   ComputeFirstIntervalMs,
   ComputeInitialAttackInterval
 } from '../attack-interval-computing';
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, effect, inject, signal } from '@angular/core';
 
+import { DungeonRunService } from '../dungeons/dungeon-run.service';
 import { EventQueue } from './event.queue';
 import { GameSaverService } from '../../../../persistence';
 import { TimestampUtils } from '../../../../shared/utils';
@@ -35,12 +39,16 @@ export class CombatState {
   // Services
   private readonly PlayerHero = inject<PlayerHeroService>(PlayerHeroService);
   private readonly DungeonRoom = inject<DungeonRoomService>(DungeonRoomService);
+  private readonly DungeonRun = inject<DungeonRunService>(DungeonRunService);
   private readonly CombatStats = inject<CombatStatsService>(CombatStatsService);
+  private readonly Skills = inject<SkillsService>(SkillsService);
+  private readonly CombatSkills = inject<CombatSkillsService>(CombatSkillsService);
   private readonly Log = inject<CombatLogService>(CombatLogService);
   private readonly GameSaver = inject<GameSaverService>(GameSaverService);
 
   // Combat State
   public readonly InProgress = signal<boolean>(false);
+  public readonly Completed = signal<boolean>(false);
 
   // Event Queue
   public readonly Queue = new EventQueue<CombatEvent>();
@@ -49,50 +57,74 @@ export class CombatState {
   public Hero = signal<Hero | undefined>(undefined);
   public Boss = signal<Boss | undefined>(undefined);
 
-  // Observables für UI
+  // Observables for UI
   public readonly Events$ = new Subject<CombatEvent>();
   public readonly Hero$ = new BehaviorSubject<Hero | undefined>(undefined);
   public readonly Boss$ = new BehaviorSubject<Boss | undefined>(undefined);
 
+  public constructor() {
+    effect(() => {
+      this.CombatSkills.StatusRevision();
+      const isInProgress = this.InProgress();
+      if (!isInProgress) return;
+      this.UpdateHero();
+    });
+  }
+
   public Leave() {
+    this.Reset();
     this.DungeonRoom.ExitDungeon();
   }
 
   public Prestige() {
-    this.InProgress.set(false);
-    this.Queue.Clear();
     this.DungeonRoom.Prestige(false);
-    this.Hero.set(undefined);
-    this.Boss.set(undefined);
-    this.PublishState();
-
+    this.Reset();
     this.GameSaver.SaveGame();
   }
 
-  public Cleared() {
+  private ClearedDungeon() {
+    this.Completed.set(true);
+    this.DungeonRun.StopRun();
+
     this.Log.Info(`${this.DungeonRoom.CurrentDungeon()?.Title.toUpperCase()}: Dungeon Cleared!`);
-    this.Queue.Clear();
+
     this.DungeonRoom.Prestige(true);
+    this.CombatSkills.Reset();
+    this.Queue.Clear();
+    this.ClearActors();
+    this.GameSaver.SaveGame();
+  }
+
+  private Reset() {
+    this.InProgress.set(false);
+    this.Completed.set(false);
+    this.CombatSkills.Reset();
+    this.DungeonRun.StopRun();
+    this.Queue.Clear();
+    this.Log.Clear();
+    this.ClearActors();
+    this.DungeonRoom.SetStage(1);
+  }
+
+  private ClearActors() {
+    this.Hero.set(undefined);
     this.Boss.set(undefined);
     this.PublishState();
-
-    this.GameSaver.SaveGame();
   }
 
   /**
    * Setup Combat with Actors
    * @param actors Combat Actors to setup
    */
-  public SetupCombat(dungeonId: string) {
-    this.Log.Clear();
-    this.Queue.Clear();
+  public SetupCombat() {
+    this.Reset();
     this.InProgress.set(true);
-
     this.GameSaver.SaveGame();
+    this.DungeonRun.StartRun();
 
     // Set Combat Actors
     const hero: Hero = this.SetupHero();
-    const firstBoss: Boss = this.SetupBoss(dungeonId);
+    const firstBoss: Boss = this.SetupBoss();
 
     this.Hero.set(hero);
     this.Boss.set(firstBoss);
@@ -116,6 +148,7 @@ export class CombatState {
       // Compute Stats for Hero
       hero.Stats = this.CombatStats.Effective();
       hero.AttackInterval = ComputeAttackInterval(hero.Stats.AttackSpeed, hero.AttackInterval);
+      return hero;
     });
 
     this.PublishState();
@@ -138,7 +171,7 @@ export class CombatState {
     const advanced: boolean = this.DungeonRoom.AdvanceStage();
 
     if (!advanced) {
-      this.Cleared();
+      this.ClearedDungeon();
       return;
     }
 
@@ -163,6 +196,7 @@ export class CombatState {
   //#region Setup
   private SetupHero(): Hero {
     const computedStats = this.CombatStats.Effective();
+    const passives = this.Skills.Passives();
 
     const hero: Hero = {
       Name: this.PlayerHero.Name(),
@@ -172,19 +206,17 @@ export class CombatState {
       Stats: computedStats,
       AttackInterval: ComputeInitialAttackInterval(computedStats.AttackSpeed),
       State: InitialActorState(),
-      Charge: InitialHeroCharge()
+      Passives: passives,
+      Effects: InitialSkillEffects(),
+      Charge: InitialHeroCharge(),
+      SplashDamage: 0
     };
 
     return hero;
   }
 
-  private SetupBoss(dungeonId: string): Boss {
-    const boss: Boss | null = this.DungeonRoom.CurrentBoss();
-
-    if (!boss) {
-      throw new Error(`No boss found for dungeon ID: ${dungeonId}`);
-    }
-
+  private SetupBoss(): Boss {
+    const boss: Boss = this.DungeonRoom.CurrentBoss()!;
     boss.Life = ResetLife(boss.Life);
     return boss;
   }

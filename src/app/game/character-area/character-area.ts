@@ -14,11 +14,12 @@ import { Stats } from './stats/stats';
 export class CharacterArea {
   private readonly levelService = inject(LevelService);
 
-  public get LevelInfo(): { level: number; currentExp: number; expToNext: number } {
+  public get LevelInfo(): { level: number; currentExp: number; expToNext: number; isMax: boolean } {
     return {
       level: this.levelService.Level(),
       currentExp: this.levelService.ExperienceInLevel(),
-      expToNext: this.levelService.ExperienceToNext()
+      expToNext: this.levelService.ExperienceToNext(),
+      isMax: this.levelService.IsMaxLevel()
     };
   }
 }

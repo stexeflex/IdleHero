@@ -8,30 +8,34 @@
     <div class="tab__area">
       @switch (SelectedTab()) {
         @case ("crafting") {
-          <app-crafting></app-crafting>
+          <div class="area_with_inventory">
+            <app-crafting></app-crafting>
+            <app-inventory
+              [ShowEquipped]="true"
+              (ItemSelected)="onInventoryItemSelected($event)"></app-inventory>
+          </div>
         }
         @case ("enchanting") {
-          @if (SelectedItem()) {
-            <app-enchanting
-              [Item]="SelectedItem()!"
-              (ItemChange)="OnEnchantingItemChange($event)"></app-enchanting>
-          } @else {
-            <div class="empty">
-              <div class="headline">Nothing to show</div>
-              <div class="hint">Select an item in your inventory to enchant.</div>
-            </div>
-          }
+          <div class="area_with_inventory">
+            @if (SelectedItem()) {
+              <app-enchanting
+                [Item]="SelectedItem()!"
+                (ItemChange)="OnEnchantingItemChange($event)"></app-enchanting>
+            } @else {
+              <div class="empty">
+                <div class="headline">Nothing to show</div>
+                <div class="hint">Select an item in your inventory to enchant.</div>
+              </div>
+            }
+            <app-inventory
+              [ShowEquipped]="true"
+              (ItemSelected)="onInventoryItemSelected($event)"></app-inventory>
+          </div>
         }
         @case ("socketing") {
-          Coming Soon...
+          <app-socketing></app-socketing>
         }
       }
-    </div>
-    <!-- INVENTORY -->
-    <div>
-      <app-inventory
-        [ShowEquipped]="true"
-        (ItemSelected)="onInventoryItemSelected($event)"></app-inventory>
     </div>
   </div>
 </section>

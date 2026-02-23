@@ -2,6 +2,10 @@ import { ClampUtils } from '../../../shared/utils';
 import { LEVELING_CONFIG } from '../../constants';
 import { LevelProgress } from '../../models';
 
+export function MaxPlayerLevel(): number {
+  return LEVELING_CONFIG.LEVEL_CAP;
+}
+
 export function ComputeProgressFromTotalXP(totalXP: number): LevelProgress {
   const cap = LEVELING_CONFIG.LEVEL_CAP;
 

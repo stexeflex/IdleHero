@@ -1,12 +1,12 @@
 import { CombatStatsService, LevelService, PlayerHeroService } from '../../../../../core/services';
 import { Component, LOCALE_ID, inject } from '@angular/core';
-import { IconComponent, NumberValue } from '../../../../../shared/components';
+import { Level, Separator } from '../../../../../shared/components';
 
 import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-info',
-  imports: [NumberValue, IconComponent],
+  imports: [Level, Separator],
   templateUrl: './info.html',
   styleUrl: './info.scss'
 })
@@ -37,7 +37,11 @@ export class Info {
         value: this.decimalPipe.transform(this.statsService.AttackPower()) || this.PLACEHOLDER
       },
       {
-        label: 'DPS',
+        label: 'Damage per Attack',
+        value: this.decimalPipe.transform(this.statsService.DamagePerHit()) || this.PLACEHOLDER
+      },
+      {
+        label: 'Damage per Second',
         value: this.decimalPipe.transform(this.statsService.DamagePerSecond()) || this.PLACEHOLDER
       }
     ];

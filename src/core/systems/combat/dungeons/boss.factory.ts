@@ -8,6 +8,8 @@ import {
   NoArmor
 } from '../../../models';
 
+import { DUNGEON_MIMIC_BOSS_CONFIG } from '../../../constants';
+
 function DefaultBoss(): Partial<Boss> {
   return {
     Life: InitialLife(0),
@@ -17,6 +19,16 @@ function DefaultBoss(): Partial<Boss> {
     State: InitialActorState(),
     IsElite: false,
     IsEndboss: false
+  };
+}
+
+export function Mimic(): Boss {
+  const boss = DefaultBoss() as Boss;
+  return {
+    ...boss,
+    Id: DUNGEON_MIMIC_BOSS_CONFIG.MIMIC_ID,
+    Name: 'Mimic',
+    BossIcon: BossIcon('mimicchest', true)
   };
 }
 

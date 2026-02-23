@@ -53,6 +53,12 @@ const ICON_CONFIGS = [
     outFile: path.join(workspaceRoot, "src", "shared", "components", "icon", "places.icons.ts"),
     typeName: "PlacesIconName",
     constName: "PLACES_ICONS"
+  },
+  {
+    folder: "skills",
+    outFile: path.join(workspaceRoot, "src", "shared", "components", "icon", "skills.icons.ts"),
+    typeName: "SkillsIconName",
+    constName: "SKILLS_ICONS"
   }
 ];
 

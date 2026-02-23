@@ -1,3 +1,4 @@
+import { GetItemVariant } from '../../core/systems/items';
 import { Item } from '../../core/models';
 import { Schema } from '../models/schema';
 
@@ -38,7 +39,8 @@ export function MigrateSchema_2_0_1_to_2_1_0(schema: Schema): Schema {
  * @returns The migrated item with downgraded affixes if necessary
  */
 function DowngradeEpicAffixesOnTierIItems(item: Item): Item {
-  if (item.Tier === 'I') {
+  const definition = GetItemVariant(item.DefinitionId);
+  if (definition.Tier === 'I') {
     for (const affix of item.Affixes) {
       if (affix && affix.Tier === 'Epic') {
         affix.Tier = 'Rare';

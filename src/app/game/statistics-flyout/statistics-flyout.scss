@@ -1,26 +1,6 @@
 @use "sass:color";
 @use "index" as *;
 
-.container {
-}
-
-.flyout-button {
-  @include button-text-font($shadow: false);
-  @include button-sizing($font-size: 0.9rem, $min-width: auto);
-  @include button-focus-visible-outline();
-  @include button-style(
-    $bg-color: color.scale($clr-ui-bg, $lightness: -20%),
-    $color: $clr-text-primary,
-    $border: 2px solid $clr-border
-  );
-  @include button-hover-active(
-    $bg-color: color.scale($clr-ui-bg, $lightness: 20%),
-    $bg-color-active: color.scale($clr-ui-bg, $lightness: 30%)
-  );
-
-  border-radius: calc($border-radius * 2);
-}
-
 .flyout {
   position: relative;
 
@@ -40,14 +20,19 @@
     display: none;
     position: absolute;
 
+    .header {
+      text-align: center;
+      color: $clr-highlight;
+    }
+
     .grid {
       @include disable-text-selection();
 
       .row {
         display: grid;
         grid-template-columns: auto 1fr;
-        gap: calc($gap / 2);
-        padding: calc($gap / 2);
+        gap: $gap 0;
+        padding: 2px 0;
 
         &:hover {
           cursor: pointer;
@@ -59,7 +44,7 @@
       .grid__label {
         text-align: left;
         font-weight: bold;
-        width: 270px;
+        width: 250px;
       }
 
       .grid__value {

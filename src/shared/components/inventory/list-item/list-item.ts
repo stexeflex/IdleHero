@@ -1,7 +1,7 @@
 import { Component, computed, input, output } from '@angular/core';
-import { Item, ItemRarity } from '../../../../core/models';
+import { GetItemRarity, GetItemVariant } from '../../../../core/systems/items';
+import { Item, ItemRarity, ItemVariantDefinition } from '../../../../core/models';
 
-import { GetItemRarity } from '../../../../core/systems/items';
 import { IconComponent } from '../../icon/icon.component';
 
 @Component({
@@ -18,6 +18,11 @@ export class ListItem {
   protected SelectItem(): void {
     this.onSelect.emit(this.item());
   }
+
+  protected readonly Variant = computed<ItemVariantDefinition>(() => {
+    const definition = GetItemVariant(this.item().DefinitionId);
+    return definition;
+  });
 
   protected readonly Rarity = computed<ItemRarity>(() => {
     const rarity = GetItemRarity(this.item().Level);

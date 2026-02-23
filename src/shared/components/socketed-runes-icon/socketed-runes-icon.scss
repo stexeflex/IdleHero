@@ -1,0 +1,14 @@
+@use "sass:color";
+@use "index" as *;
+
+.runes {
+  @include flexbox();
+  gap: $gap;
+}
+
+.rune {
+  &.empty {
+    opacity: 0.5;
+    color: $clr-mute;
+  }
+}

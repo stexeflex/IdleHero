@@ -1,0 +1,43 @@
+<div class="rewards-panel">
+  <div class="header">
+    <div class="title">
+      <h3>DUNGEON RUN {{ IsRunning() ? "" : "COMPLETED" }}</h3>
+      <div class="elapsed-time" title="Elapsed Time">{{ ElapsedTime() }}</div>
+    </div>
+    <separator class="ih-separator"></separator>
+  </div>
+
+  <div class="rewards">
+    <h3>Rewards</h3>
+    <div class="reward-item">
+      <app-gold [amount]="Gold()" size="sm" [fontSize]="'1.2rem'" title="Gold Rewards"></app-gold>
+    </div>
+
+    <div class="dot">•</div>
+
+    <div class="reward-item">
+      <app-exp
+        [exp]="Experience()"
+        size="sm"
+        [fontSize]="'1.2rem'"
+        title="Gained Experience"></app-exp>
+    </div>
+  </div>
+
+  @if (RuneCount() > 0) {
+    <div class="runes-header">
+      <h3>Runes</h3>
+      <p class="rune-count">[{{ RuneCount() }}]</p>
+    </div>
+    <div class="rewards-runes" title="Rune Rewards">
+      @for (rune of Runes(); track $index) {
+        <div class="reward-item">
+          <app-rune [rune]="rune" size="sm" [fontSize]="'1.2rem'"></app-rune>
+        </div>
+        @if (!$last) {
+          <div class="dot">•</div>
+        }
+      }
+    </div>
+  }
+</div>

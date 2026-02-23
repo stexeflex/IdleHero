@@ -16,7 +16,7 @@ export class GameTown {
     return [
       { id: 'inventory', label: 'INVENTORY', disabled: false },
       { id: 'crafting', label: 'BLACKSMITH', disabled: false },
-      { id: 'skills', label: 'SKILL TREE', disabled: true }
+      { id: 'skills', label: 'SKILL TREE', disabled: false }
     ];
   }
 

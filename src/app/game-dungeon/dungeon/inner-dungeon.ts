@@ -5,12 +5,22 @@ import { IconComponent, LoadingSpinner, PanelHeader } from '../../../shared/comp
 import { CombatLog } from './combat-log/combat-log';
 import { DELAYS } from '../../../core/constants';
 import { DungeonArena } from './dungeon-arena/dungeon-arena';
+import { DungeonRewardsScreen } from './dungeon-rewards/dungeon-rewards';
 import { DungeonRoomService } from '../../../core/services';
 import { DungeonType } from '../../../core/models';
+import { SkillBar } from './skill-bar/skill-bar';
 
 @Component({
   selector: 'app-inner-dungeon',
-  imports: [PanelHeader, IconComponent, DungeonArena, CombatLog, LoadingSpinner],
+  imports: [
+    PanelHeader,
+    IconComponent,
+    DungeonArena,
+    CombatLog,
+    LoadingSpinner,
+    DungeonRewardsScreen,
+    SkillBar
+  ],
   templateUrl: './inner-dungeon.html',
   styleUrl: './inner-dungeon.scss'
 })
@@ -27,9 +37,12 @@ export class InnerDungeon implements OnDestroy {
   public readonly CurrentDungeon = this.dungeonRoom.CurrentDungeon;
   public readonly CurrentStage = this.dungeonRoom.CurrentStage;
   public readonly InCombat = this.combat.InProgress;
+  public readonly CompletedDungeon = this.combat.Completed;
 
   // Derived view states
   public readonly IsInArena = computed<boolean>(() => this.InCombat());
+  public readonly ShowCompletion = computed<boolean>(() => this.CompletedDungeon());
+  
   public readonly IsBossRoom = computed<boolean>(() => this.CurrentDungeon()?.Type === DungeonType.Boss);
   public readonly HeaderTitle = computed<string>(() => {
     if (this.IsBossRoom()) {
@@ -40,16 +53,13 @@ export class InnerDungeon implements OnDestroy {
   });
 
   ngOnDestroy(): void {
-    if (this.restartTimer) {
-      clearTimeout(this.restartTimer);
-    }
+    if (this.restartTimer) clearTimeout(this.restartTimer);
+    this.engine.Stop();
   }
 
   // Actions
   public StartBattle(): void {
-    const current = this.CurrentDungeon();
-    if (!current) return;
-    this.combat.SetupCombat(current.Id);
+    this.combat.SetupCombat();
     this.engine.Start();
   }
 
@@ -59,10 +69,12 @@ export class InnerDungeon implements OnDestroy {
 
     // End fight and keep player in dungeon arena
     this.engine.Stop();
+    this.combat.Prestige();
   }
 
   public ExitDungeon(): void {
-    this.dungeonRoom.ExitDungeon();
+    this.engine.Stop();
+    this.combat.Leave();
   }
 
   private DelayRestart() {

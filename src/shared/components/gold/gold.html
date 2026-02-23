@@ -1,4 +1,15 @@
 <div class="gold-display" [style.fontSize]="fontSize()">
-  {{ amount() | number }}
-  <app-icon symbol="twocoins" [size]="size()"></app-icon>
+  <!-- <div class="gold-amount">{{ amount() | number }}</div> -->
+  <div class="gold-amount">
+    @for (character of splittedAmount(); track $index) {
+      @if (character === "," || character === "." || character === " ") {
+        <span class="thousands-separator">{{ character }}</span>
+      } @else {
+        <span>{{ character }}</span>
+      }
+    }
+  </div>
+  <div class="gold-icon">
+    <app-icon symbol="twocoins" [size]="size()"></app-icon>
+  </div>
 </div>

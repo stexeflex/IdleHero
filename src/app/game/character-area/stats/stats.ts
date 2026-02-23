@@ -1,11 +1,12 @@
-import { AttributesService, CombatStatsService, LevelService } from '../../../../core/services';
+import { AttributesService, CombatStatsService, GoldService } from '../../../../core/services';
 import { Component, LOCALE_ID, computed, inject, signal } from '@angular/core';
 import { DecimalPipe, PercentPipe } from '@angular/common';
+import { Gold, IconComponent } from '../../../../shared/components';
 
 import { ATTRIBUTES_CONFIG } from '../../../../core/constants';
 import { Attributes } from '../../../../core/models';
 import { CombatState } from '../../../../core/systems/combat';
-import { IconComponent } from '../../../../shared/components';
+import { HeroStatsStateService } from '../../../../shared/services';
 import { ToggleIcon } from './toggle-icon/toggle-icon';
 
 interface StatsItem {
@@ -21,25 +22,35 @@ interface StatsGrid {
 
 @Component({
   selector: 'app-stats',
-  imports: [IconComponent, ToggleIcon],
+  imports: [IconComponent, ToggleIcon, Gold],
   templateUrl: './stats.html',
   styleUrl: './stats.scss'
 })
 export class Stats {
   private readonly locale = inject(LOCALE_ID);
+  protected readonly statsState = inject(HeroStatsStateService);
   private readonly combatState = inject(CombatState);
   private readonly attributesService = inject(AttributesService);
-  private readonly levelService = inject(LevelService);
   private readonly statsService = inject(CombatStatsService);
+  private readonly goldService = inject(GoldService);
 
   private readonly decimalPipe: DecimalPipe = new DecimalPipe(this.locale);
   private readonly percentPipe: PercentPipe = new PercentPipe(this.locale);
 
-  // UI State
-  protected AttributesExpanded = signal<boolean>(true);
-  protected ChargingStrikeStatsExpanded = signal<boolean>(true);
-  protected OffenseStatsExpanded = signal<boolean>(true);
-  protected UtilityStatsExpanded = signal<boolean>(true);
+  protected IsRespecMode = signal<boolean>(false);
+  protected ToggleRespecMode() {
+    if (this.IsRespecMode()) {
+      this.goldService.Spend(this.RespecCost());
+      this.DecreasedPoints.set(0);
+    }
+
+    this.IsRespecMode.set(!this.IsRespecMode());
+  }
+  protected DecreasedPoints = signal<number>(0);
+  protected RespecCost = computed<number>(() => {
+    const decreasedPoints = this.DecreasedPoints();
+    return decreasedPoints * ATTRIBUTES_CONFIG.RESPEC_COST_PER_POINT_SPENT;
+  });
 
   //#region ATTRIBUTES
   protected readonly ShowAttributePoints = computed<boolean>(
@@ -48,20 +59,24 @@ export class Stats {
 
   protected readonly AttributePoints = computed<string>(() => {
     const unspent: number = this.attributesService.UnallocatedPoints();
-    // const total: number = AttributePointsForGainedLevels(this.levelService.Level() - 1);
-    // const spent: number = this.attributesService.AllocatedTotal();
-    // const unspentTotal: number = total - spent;
-    // return `${unspent} / ${unspentTotal}`;
     return `${unspent}`;
   });
 
   protected readonly CanIncreaseAttributes = computed<boolean>(() => {
+    if (this.IsRespecMode()) return false;
+
     const battleInProgress = this.combatState.InProgress();
     const hasUnspentPoints = this.attributesService.UnallocatedPoints() > 0;
     return !battleInProgress && hasUnspentPoints;
   });
 
   protected CanDecreaseAttribute(attribute: string): boolean {
+    if (!this.IsRespecMode()) return false;
+
+    const cost = this.RespecCost() + ATTRIBUTES_CONFIG.RESPEC_COST_PER_POINT_SPENT;
+    const canSpend = this.goldService.CanAfford(cost);
+    if (!canSpend) return false;
+
     const battleInProgress = this.combatState.InProgress();
     const canDeallocate = this.attributesService.CanDeallocate(
       attribute as 'Strength' | 'Intelligence' | 'Dexterity'
@@ -74,7 +89,12 @@ export class Stats {
   }
 
   protected decreaseAttribute(attribute: string) {
+    this.DecreasedPoints.set(this.DecreasedPoints() + 1);
     this.attributesService.Deallocate(attribute as 'Strength' | 'Intelligence' | 'Dexterity', 1);
+  }
+
+  protected ToggleAttributesExpanded() {
+    this.statsState.AttributesExpanded.set(!this.statsState.AttributesExpanded());
   }
   //#endregion ATTRIBUTES
 
@@ -83,17 +103,17 @@ export class Stats {
     {
       title: 'CHARGING STRIKE',
       items: this.ChargingStrikeStats(),
-      expanded: this.ChargingStrikeStatsExpanded()
+      expanded: this.statsState.ChargingStrikeStatsExpanded()
     },
     {
       title: 'OFFENSE',
       items: this.OffenseStats(),
-      expanded: this.OffenseStatsExpanded()
+      expanded: this.statsState.OffenseStatsExpanded()
     },
     {
       title: 'UTILITY',
       items: this.UtilityStats(),
-      expanded: this.UtilityStatsExpanded()
+      expanded: this.statsState.UtilityStatsExpanded()
     }
   ]);
 
@@ -128,6 +148,10 @@ export class Stats {
       {
         label: 'Charge Gain',
         value: this.decimalPipe.transform(combatStats.ChargeGain, '1.0-0') + ' / Hit'
+      },
+      {
+        label: 'Charge Loss',
+        value: this.percentPipe.transform(combatStats.ChargeLoss, '1.0-0') + ' / Miss'
       },
       {
         label: 'Charged Damage',
@@ -165,10 +189,6 @@ export class Stats {
         value: this.percentPipe.transform(combatStats.MultiHitChance, '1.0-0')
       },
       {
-        label: 'Multi Hit Chain',
-        value: this.percentPipe.transform(combatStats.MultiHitChainFactor, '1.0-0')
-      },
-      {
         label: 'Multi Hit Damage',
         value: this.percentPipe.transform(combatStats.MultiHitDamage, '1.0-0')
       }
@@ -186,15 +206,19 @@ export class Stats {
       {
         label: 'Accuracy',
         value: this.percentPipe.transform(combatStats.Accuracy, '1.0-0')
+      },
+      {
+        label: 'Bleeding Ticks',
+        value: this.decimalPipe.transform(combatStats.BleedingTicks, '1.0-0')
+      },
+      {
+        label: 'Multi Hit Chain',
+        value: this.decimalPipe.transform(combatStats.MultiHitChain, '1.0-0')
+      },
+      {
+        label: 'Multi Hit Chain Factor',
+        value: this.percentPipe.transform(combatStats.MultiHitChainFactor, '1.0-0')
       }
-      // {
-      //   label: 'Armor Penetration',
-      //   value: this.percentPipe.transform(combatStats.ArmorPenetration, '1.0-0')
-      // },
-      // {
-      //   label: 'Resistance Penetration',
-      //   value: this.percentPipe.transform(combatStats.ResistancePenetration, '1.0-0')
-      // }
     ];
   });
   //#endregion STATS

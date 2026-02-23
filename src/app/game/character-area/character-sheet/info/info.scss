@@ -3,32 +3,30 @@
 
 /* Header */
 .header {
-  display: grid;
-  grid-template-columns: 1fr auto;
-
   @include disable-text-selection();
-  // margin-bottom: $gap;
-}
+  @include flexbox(row, space-between, center);
 
-.header__name,
-.header__level {
-  @include divider($clr-ui-bg-invert, $margin: 0 0 0.5rem 0, $padding: 0);
-  margin-bottom: 40px;
-}
-
-.header__name {
-  color: $clr-highlight;
-  font-family: $font-family-title;
-  font-size: $font-size-info-header;
-}
-
-.header__level {
-  display: inline-flex;
-  align-items: center;
-
-  .level-icon {
+  .header__name {
     color: $clr-highlight;
-    margin: 0 0 calc($gap / 4) calc($gap / 2);
+    font-family: $font-family-title;
+    font-size: $font-size-info-header;
+  }
+
+  .header__level {
+    display: flex;
+    align-items: baseline;
+    gap: $gap;
+
+    .level_title {
+      color: $clr-text-primary;
+      font-family: $font-family-header;
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+
+    .level_value {
+      // width: 35px;
+    }
   }
 }
 
@@ -36,14 +34,11 @@
 $padding-attributes-summary: $gap 0;
 
 .summary {
-  @include divider($clr-ui-bg-invert, $margin: 0, $padding: $padding-attributes-summary);
-  @include flexbox(row, space-around, center);
-
-  padding: $padding-attributes-summary;
-  gap: $gap;
+  @include flexbox(column, space-around, center);
 
   .summary__item {
-    @include flexbox(column, center, center);
+    @include flexbox(row, space-between, center);
+    width: 100%;
 
     .item__label {
       font-family: $font-family-header;

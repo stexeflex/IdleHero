@@ -5,7 +5,6 @@ import { ItemSlot } from './item-slot.enum';
 import { ItemTier } from './item-tier.type';
 import { ItemType } from './item-type.type';
 import { Label } from '../labels/label';
-import { Rune } from '../runes/rune';
 import { StatSource } from '../../combat/stats/stat-source.type';
 
 /**
@@ -59,17 +58,8 @@ export interface Item {
   /** References the ItemVariantDefinition this item is based on. */
   DefinitionId: string;
 
-  Name: string;
-  Icon: GearSlotIconName;
-
-  Slot: ItemSlot;
-  Type: ItemType;
-  Tier: ItemTier;
   Level: ItemLevel;
 
   /** Rolled/enchanted affixes currently on the item */
   Affixes: Affix[];
-
-  /** Socketed Rune */
-  Rune?: Rune | null;
 }

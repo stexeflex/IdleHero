@@ -1,11 +1,4 @@
-import {
-  AffixInfo,
-  AffixTier,
-  Label,
-  Item,
-  ItemRarity,
-  ItemVariantDefinition
-} from '../../../../core/models';
+import { AffixInfo, AffixTier, Label, Item, ItemRarity, ItemVariantDefinition } from '../../../../core/models';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -22,11 +15,12 @@ import {
   GetItemRarity,
   GetItemRarityRule,
   GetItemVariant,
-  GetMaxAffixTier,
   IsMaxTier,
   ItemAffixService,
   GetAffixPool,
-  ItemLevelService
+  ItemLevelService,
+  MaxLevelForRarity,
+  NextItemRarity
 } from '../../../../core/systems/items';
 import { Gold, IconComponent, ItemPreview } from '../../../../shared/components';
 
@@ -64,14 +58,12 @@ export class Enchanting {
   protected readonly Rarity = computed<ItemRarity>(() => GetItemRarity(this.Item().Level));
   protected readonly Rules = computed(() => GetItemRarityRule(this.Rarity()));
 
+  protected readonly MaxItemLevel = computed<number>(() => MaxLevelForRarity(this.Rarity()));
   protected readonly EnchantedAffixes = computed<number>(
     () => this.Item().Affixes.filter((a) => a.Improved).length
   );
-  protected readonly MaxEnchantedAffixes = computed<number>(
-    () => this.Rules().MaxEnchantableAffixes
-  );
   protected readonly MaxAffixSlots = computed<number>(() => this.Rules().MaxAffixes);
-  protected readonly MaxAffixTier = computed<AffixTier>(() => GetMaxAffixTier(this.Rarity()));
+  protected readonly NextItemRarity = computed<ItemRarity>(() => NextItemRarity(this.Item()));
 
   protected readonly VisibleSlotIndices = computed<number[]>(() => {
     const item = this.Item();

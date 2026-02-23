@@ -1,25 +1,26 @@
 <div class="container">
   <div class="tiers">
-    @for (tier of SkillTree; track tier.Id) {
-      @let tierState = getTierState(tier);
+    @for (tier of SkillTreeState(); track $index) {
       <app-skill-tier-area
         [tier]="tier"
-        [isUnlocked]="tierState.isUnlocked"
-        [canUnlock]="tierState.canUnlock"
-        (unlockTier)="unlockTier($event)">
+        [isUnlocked]="tier.IsUnlocked"
+        [canUnlock]="tier.CanUnlock"
+        (unlockTier)="UnlockTier($event)">
         <div class="skills">
-          @for (skill of tier.Skills; track skill.Id) {
-            @let skillState = getSkillState(skill);
+          @for (skill of tier.Skills; track skill.Definition.Id) {
             <app-skill-area
               [skill]="skill"
-              [unlockable]="skillState.available"
-              [canUnlock]="skillState.canUnlock"
-              [canLevel]="skillState.canLevel"
-              (unlockSkill)="unlockSkill($event)"
-              (upgradeSkill)="upgradeSkill($event)"></app-skill-area>
+              [unlockable]="tier.IsUnlocked"
+              [canUnlock]="skill.CanUnlock"
+              [canLevel]="skill.CanUpgrade"
+              (unlockSkill)="UnlockSkill($event)"
+              (upgradeSkill)="UpgradeSkill($event)"></app-skill-area>
           }
         </div>
       </app-skill-tier-area>
+      @if (!$last) {
+        <separator class="ih-separator"></separator>
+      }
     }
   </div>
 </div>

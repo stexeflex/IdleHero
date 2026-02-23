@@ -3,12 +3,12 @@ import {
   ExceedsMaxTierForItemLevel,
   ExceedsMaximumEnchantableAffixes,
   GetAffixTierSpec,
-  NextTier,
-  RandomInRange
+  NextTier
 } from './affix.utils';
-import { GetAffixPool, GetItemRarity, GetItemRarityRule } from './item.utils';
+import { GetAffixPool, GetItemRarity, GetItemRarityRule, GetItemVariant } from './item.utils';
 
 import { Injectable } from '@angular/core';
+import { RandomInRange } from '../stats';
 
 @Injectable({ providedIn: 'root' })
 export class ItemAffixService {
@@ -68,7 +68,8 @@ export class ItemAffixService {
   public AddAffix(item: Item): Item {
     if (!this.CanAddAffix(item)) return item;
 
-    const pool = GetAffixPool(item.Slot);
+    const itemDefinition = GetItemVariant(item.DefinitionId);
+    const pool = GetAffixPool(itemDefinition.Slot);
     const definition = this.PickRandomDefinition(pool);
     if (!definition) return item;
 
@@ -154,7 +155,8 @@ export class ItemAffixService {
   }
 
   private AllowedAffixPool(item: Item): AffixDefinition[] {
-    return GetAffixPool(item.Slot);
+    const itemDefinition = GetItemVariant(item.DefinitionId);
+    return GetAffixPool(itemDefinition.Slot);
   }
 
   private PickRandomDefinition(pool: AffixDefinition[]): AffixDefinition | null {

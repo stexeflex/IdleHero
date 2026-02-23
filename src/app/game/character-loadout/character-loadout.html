@@ -1,29 +1,51 @@
 <div class="loadout">
-  <!-- GEAR SLOTS -->
+  <!-- LOADOUT -->
   <div class="gear-slots">
+    <!-- ITEM SLOTS -->
     @for (itemSlot of ItemSlots; track itemSlot.slot) {
-      @let itemSlotInfo = ItemInfo(itemSlot.slot);
-      <button
-        class="gear-slot"
-        [class]="itemSlot.class"
-        (click)="SelectItemSlot($event, itemSlot.slot)"
-        [class.selected]="itemSlotInfo.IsSelected"
-        [class.empty]="!itemSlotInfo.IsEquipped"
-        [class.equipped]="itemSlotInfo.IsEquipped"
-        [class.common--border]="itemSlotInfo.IsCommon"
-        [class.magic--border]="itemSlotInfo.IsMagic"
-        [class.rare--border]="itemSlotInfo.IsRare"
-        [class.epic--border]="itemSlotInfo.IsEpic"
-        [class.legendary--border]="itemSlotInfo.IsLegendary">
-        <app-icon class="gear-slot__icon" [gear]="itemSlotInfo.Icon" size="2x"></app-icon>
+      @let amuletInfo = AmuletInfo();
+      @if (itemSlot.slot === "Amulet") {
+        <button
+          class="gear-slot"
+          [class]="itemSlot.class"
+          (click)="SelectAmulet()"
+          [class.selected]="amuletInfo.IsSelected"
+          [class.empty]="!amuletInfo.IsUnlocked"
+          [class.equipped]="amuletInfo.IsUnlocked"
+          [class.common--border]="amuletInfo.IsCommon"
+          [class.magic--border]="amuletInfo.IsMagic"
+          [class.rare--border]="amuletInfo.IsRare"
+          [class.epic--border]="amuletInfo.IsEpic"
+          [class.legendary--border]="amuletInfo.IsLegendary">
+          <app-icon class="gear-slot__icon" [gear]="itemSlot.icon" size="2x"></app-icon>
+          @if (amuletInfo.IsUnlocked) {
+            <app-socketed-runes-icon [runes]="Runes()"></app-socketed-runes-icon>
+          }
+        </button>
+      } @else {
+        @let itemSlotInfo = ItemInfo(itemSlot.slot);
+        <button
+          class="gear-slot"
+          [class]="itemSlot.class"
+          (click)="SelectItemSlot(itemSlot.slot)"
+          [class.selected]="itemSlotInfo.IsSelected"
+          [class.empty]="!itemSlotInfo.IsEquipped"
+          [class.equipped]="itemSlotInfo.IsEquipped"
+          [class.common--border]="itemSlotInfo.IsCommon"
+          [class.magic--border]="itemSlotInfo.IsMagic"
+          [class.rare--border]="itemSlotInfo.IsRare"
+          [class.epic--border]="itemSlotInfo.IsEpic"
+          [class.legendary--border]="itemSlotInfo.IsLegendary">
+          <app-icon class="gear-slot__icon" [gear]="itemSlotInfo.Icon" size="2x"></app-icon>
 
-        <div class="item-tier-info">
-          <span class="item-tier">{{ itemSlotInfo.Tier }}</span>
-        </div>
+          <div class="item-tier-info">
+            <span class="item-tier">{{ itemSlotInfo.Tier }}</span>
+          </div>
 
-        @let affixes = AffixInfo(itemSlot.slot);
-        <app-affix-slot-icon [affixes]="affixes" size="12"></app-affix-slot-icon>
-      </button>
+          @let affixes = AffixInfo(itemSlot.slot);
+          <app-affix-slot-icon [affixes]="affixes"></app-affix-slot-icon>
+        </button>
+      }
     }
   </div>
 
@@ -32,6 +54,13 @@
     <separator class="ih-separator"></separator>
     <div class="selected-item">
       <app-item-preview [Item]="SelectedItem()!" [Variant]="SelectedVariant()!"></app-item-preview>
+    </div>
+  } @else if (SelectedAmulet()) {
+    <separator class="ih-separator"></separator>
+    <div class="selected-item">
+      <app-amulet-preview
+        [Amulet]="SelectedAmulet()!"
+        [AllowUnsocketRunes]="false"></app-amulet-preview>
     </div>
   }
 </div>

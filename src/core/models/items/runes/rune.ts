@@ -1,4 +1,4 @@
-import { ItemSlot } from '../items/item-slot.enum';
+import { Label } from '../labels/label';
 import { RuneQuality } from './rune-quality.enum';
 import { StatSource } from '../../combat/stats/stat-source.type';
 
@@ -17,11 +17,11 @@ export interface RuneQualitySpec {
 
 /**
  * Describes how a rune applies stats when a concrete value is chosen.
- * For example, a "+X% Critical Hit Chance" rune maps its rolled value X into StatSource.CriticalHit.MultiplierChance.
+ * For example, a "+X% Critical Hit Chance" rune maps its rolled value X into StatSource.CriticalHit.Chance.
  */
 export interface RuneEffectMapping {
-  /** Human-readable description of the effect */
-  Description: string;
+  /** Human-readable label */
+  ToLabel: (value: number) => Label;
 
   /**
    * Maps a rolled numeric value to a StatSource contribution.
@@ -34,9 +34,6 @@ export interface RuneEffectMapping {
 export interface RuneDefinition {
   Id: string;
   Name: string;
-
-  /** Allowed item slots for this rune */
-  AllowedSlots: ItemSlot[];
 
   /** Quality tiers available for this rune */
   Qualities: RuneQualitySpec[];
@@ -55,6 +52,6 @@ export interface Rune {
   /** The quality this rune rolled into */
   Quality: RuneQuality;
 
-  /** The numeric value rolled within the quality range */
-  RolledValue: number;
+  /** The percentage rolled within the quality range */
+  ValueRangePercentage: number;
 }

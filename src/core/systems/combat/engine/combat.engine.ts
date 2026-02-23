@@ -37,7 +37,6 @@ export class CombatEngine {
   public Stop(): void {
     if (!this.Running) return;
     this.Running = false;
-    this.CombatState.Prestige();
 
     if (this.TimerId !== null) {
       clearTimeout(this.TimerId);

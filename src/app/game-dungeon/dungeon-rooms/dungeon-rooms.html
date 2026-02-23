@@ -1,53 +1,90 @@
 <section>
   <div class="dungeon-list">
-    <div class="dungeon-group">
-      <h3 class="group-title">DUNGEONS</h3>
-      @for (dungeon of NormalDungeons(); track dungeon.Id) {
-        <div class="dungeon-card">
-          <app-icon [creatures]="dungeon.Icon" size="lg"></app-icon>
-          <div class="dungeon-info">
-            <div class="dungeon-title">{{ dungeon.Id }} • {{ dungeon.Title.toUpperCase() }}</div>
-            <div class="dungeon-desc">{{ dungeon.Description }}</div>
-            <div class="dungeon-meta">
-              <span>Stages: {{ dungeon.StagesBase }} - {{ dungeon.StagesMax }}</span>
-            </div>
-            <div class="dungeon-meta">
-              <span>Elites: {{ dungeon.MidStages.join(" | ") }}</span>
-            </div>
-          </div>
-          <button
-            class="ih-button"
-            [disabled]="!CanEnter(dungeon.Id)"
-            (click)="EnterDungeon(dungeon.Id)">
-            ENTER
-          </button>
-        </div>
-      }
-    </div>
+    @for (group of DungeonGroups(); track group.Type) {
+      <div class="dungeon-group">
+        <h3 class="group-title">{{ group.Title }}</h3>
+        @for (dungeon of group.Dungeons; track dungeon.Id) {
+          @let prerequisiteKey = GetDungeonPrerequisiteKey(dungeon);
+          <div class="dungeon-card">
+            <app-icon [creatures]="dungeon.Icon" size="lg"></app-icon>
+            <div class="dungeon-info">
+              <h3 class="dungeon-title">{{ dungeon.Id }} • {{ dungeon.Title.toUpperCase() }}</h3>
+              <div class="dungeon-desc">{{ dungeon.Description }}</div>
 
-    <div class="dungeon-group">
-      <h3 class="group-title">CAPSTONE DUNGEONS</h3>
-      @for (dungeon of CapstoneDungeons(); track dungeon.Id) {
-        <div class="dungeon-card">
-          <app-icon [creatures]="dungeon.Icon" size="lg"></app-icon>
-          <div class="dungeon-info">
-            <div class="dungeon-title">{{ dungeon.Id }} • {{ dungeon.Title.toUpperCase() }}</div>
-            <div class="dungeon-desc">{{ dungeon.Description }}</div>
-            <div class="dungeon-meta">
-              <span>Stages: {{ dungeon.StagesBase }} - {{ dungeon.StagesMax }}</span>
+              <div class="dungeon-meta">
+                <span>Stages: {{ dungeon.StagesBase }} - {{ dungeon.StagesMax }}</span>
+              </div>
+              <div class="dungeon-meta">
+                <span>Elites: {{ dungeon.MidStages.join(" | ") }}</span>
+              </div>
+
+              <!-- KEYS REWARDS -->
+              <!-- @if (GetUnlocks(dungeon.Id).length > 0) {
+                <div class="dungeon-rewards unlocks">
+                  @for (unlock of GetUnlocks(dungeon.Id); track unlock.Label) {
+                    <div
+                      class="rewards-icon-item unlock-item"
+                      [class.met]="HasUnlockKey(unlock)"
+                      [title]="unlock.Label">
+                      <app-icon
+                        [symbol]="unlock.Symbol"
+                        size="mini"
+                        [class]="unlock.ColorClass ?? ''"></app-icon>
+                      <div [class]="unlock.ColorClass ?? ''">{{ unlock.Label }}</div>
+                      <div class="unlock-state" [class.met]="HasUnlockKey(unlock)">
+                        {{ HasUnlockKey(unlock) ? "OWNED" : "NOT OWNED" }}
+                      </div>
+                    </div>
+                  }
+                </div>
+              } -->
+
+              <!-- RUNE DROPS -->
+              <div class="dungeon-rewards runes">
+                @for (runeDrop of GetRuneDrops(dungeon); track runeDrop.Quality) {
+                  <div class="rewards-icon-item rune-drop-item" [title]="runeDrop.Quality">
+                    <app-icon
+                      class="rune-drop-icon"
+                      symbol="runestone"
+                      size="mini"
+                      [class]="GetRuneQualityClass(runeDrop.Quality)"></app-icon>
+                    <div class="rune-drop-quality" [class]="GetRuneQualityClass(runeDrop.Quality)">
+                      {{ runeDrop.Quality }}
+                    </div>
+                    <!-- <div class="rune-drop-chance">
+                      {{ GetRuneDropChanceLabel(runeDrop.Chance) }}
+                    </div> -->
+                  </div>
+                }
+              </div>
             </div>
-            <div class="dungeon-meta">
-              <span>Elites: {{ dungeon.MidStages.join(" | ") }}</span>
+
+            <!-- ENTER -->
+            <div class="entry-button-area">
+              @if (
+                group.Type === "Capstone" && prerequisiteKey && !HasDungeonPrerequisiteKey(dungeon)
+              ) {
+                <div class="rewards-icon-item prerequisite-item">
+                  <app-icon
+                    symbol="skeletonkey"
+                    size="mini"
+                    [class]="GetDungeonKeyColorClass(prerequisiteKey)"></app-icon>
+                  <div [class]="GetDungeonKeyColorClass(prerequisiteKey)">
+                    {{ prerequisiteKey }}
+                  </div>
+                </div>
+              } @else {
+                <button
+                  class="ih-button"
+                  [disabled]="!CanEnter(dungeon.Id)"
+                  (click)="EnterDungeon(dungeon.Id)">
+                  ENTER
+                </button>
+              }
             </div>
           </div>
-          <button
-            class="ih-button"
-            [disabled]="!CanEnter(dungeon.Id)"
-            (click)="EnterDungeon(dungeon.Id)">
-            ENTER
-          </button>
-        </div>
-      }
-    </div>
+        }
+      </div>
+    }
   </div>
 </section>

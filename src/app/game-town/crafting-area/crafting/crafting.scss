@@ -12,6 +12,7 @@
   @include flexbox($justify: space-between, $align: center);
   border-bottom: 1px solid $clr-border;
   padding: calc($gap / 2);
+  min-height: 50px;
 }
 
 .actions {
@@ -21,7 +22,6 @@
 
 .action {
   font-size: 1.1rem;
-  min-height: 35px;
   min-width: 80px;
 }
 
@@ -75,11 +75,31 @@ $slot-size: 80px;
   display: inline-flex;
   align-items: center;
   gap: $gap;
-  height: 44px;
+  height: 45px;
 }
 
 .tier {
+  @include flexbox($dir: row, $justify: center, $align: center);
+  gap: calc($gap / 2);
   min-width: 80px;
+  align-items: baseline;
+
+  .tier-id {
+    font-family: $font-family-title;
+  }
+}
+
+.tier-lock-info {
+  @include flexbox($align: center);
+  color: $clr-mute;
+  font-family: $font-family-header;
+  font-size: 1rem;
+  font-weight: 500;
+  gap: 4px;
+
+  .tier-stages {
+    font-size: 0.9rem;
+  }
 }
 
 .variants {
@@ -88,6 +108,6 @@ $slot-size: 80px;
   @include scrollbar($size: 0.8rem);
   flex-wrap: wrap;
   align-content: flex-start;
-  gap: $gap;
-  padding: $gap;
+  gap: calc($gap / 2);
+  padding: calc($gap / 3);
 }

@@ -1,11 +1,21 @@
-<div class="experience-labels">
-  <span>{{ currentLevel() }}</span>
-  <span>{{ experience() | number }} / {{ expToNextLevel() | number }} XP</span>
-  <span>{{ currentLevel() + 1 }}</span>
-</div>
-<div class="experience-bar-bg">
-  <div
-    class="experience-bar-fill"
-    [class.no-transition]="!isAnimating()"
-    [style.width.%]="progress()"></div>
-</div>
+@if (isMax()) {
+  <div class="experience-labels">
+    <span>{{ currentLevel() }}</span>
+    <span>MAX</span>
+  </div>
+  <div class="experience-bar-bg">
+    <div class="experience-bar-fill" [class.no-transition]="true" [style.width.%]="100"></div>
+  </div>
+} @else {
+  <div class="experience-labels">
+    <span>{{ currentLevel() }}</span>
+    <span>{{ experience() | number }} / {{ expToNextLevel() | number }} XP</span>
+    <span>{{ currentLevel() + 1 }}</span>
+  </div>
+  <div class="experience-bar-bg">
+    <div
+      class="experience-bar-fill"
+      [class.no-transition]="!isAnimating()"
+      [style.width.%]="progress()"></div>
+  </div>
+}

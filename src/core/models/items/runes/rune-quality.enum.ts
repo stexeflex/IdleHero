@@ -1,1 +1,1 @@
-export type RuneQuality = 'Magic' | 'Rare' | 'Epic' | 'Legendary';
+export type RuneQuality = 'Common' | 'Magic' | 'Rare' | 'Epic' | 'Legendary';

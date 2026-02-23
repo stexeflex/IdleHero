@@ -54,6 +54,8 @@ export class DungeonArena implements OnDestroy {
   protected readonly isCrit = signal(false);
   protected readonly isMulti = signal(false);
   protected readonly isCritMulti = signal(false);
+  protected readonly isBleed = signal(false);
+  protected readonly isSplash = signal(false);
   protected readonly isBossTakingHit = signal(false);
   protected readonly isBossDefeated = signal(false);
 
@@ -61,6 +63,8 @@ export class DungeonArena implements OnDestroy {
   private critTimer: any = null;
   private multiTimer: any = null;
   private critMultiTimer: any = null;
+  private bleedTimer: any = null;
+  private splashTimer: any = null;
   private isBossTakingHitTimer: any = null;
   private bossDefeatedTimer: any = null;
 
@@ -95,18 +99,35 @@ export class DungeonArena implements OnDestroy {
         if (this.isBossTakingHitTimer) clearTimeout(this.isBossTakingHitTimer);
         this.isBossTakingHitTimer = setTimeout(() => this.isBossTakingHit.set(false), 500);
 
+        // Splash Damage Animation
+        if (this.DamageIsSplash(damageEvent)) {
+          this.isSplash.set(true);
+          if (this.splashTimer) clearTimeout(this.splashTimer);
+          this.splashTimer = setTimeout(() => this.isSplash.set(false), 500);
+        }
+        // Critical Multi Hit Animation
+        else if (this.DamageIsCritMultiHit(damageEvent)) {
+          this.isCritMulti.set(true);
+          if (this.critMultiTimer) clearTimeout(this.critMultiTimer);
+          this.critMultiTimer = setTimeout(() => this.isCritMulti.set(false), 500);
+        }
+        // Multi Hit Animation
+        else if (this.DamageIsMultiHit(damageEvent)) {
+          this.isMulti.set(true);
+          if (this.multiTimer) clearTimeout(this.multiTimer);
+          this.multiTimer = setTimeout(() => this.isMulti.set(false), 500);
+        }
         // Critical Hit Animation
-        if (damageEvent.Damage.some((d) => d.IsCritical)) {
+        else if (this.DamageIsCrit(damageEvent)) {
           this.isCrit.set(true);
           if (this.critTimer) clearTimeout(this.critTimer);
           this.critTimer = setTimeout(() => this.isCrit.set(false), 500);
         }
-
-        // Multi Hit Animation
-        if (damageEvent.IsMultiHit) {
-          this.isMulti.set(true);
-          if (this.multiTimer) clearTimeout(this.multiTimer);
-          this.multiTimer = setTimeout(() => this.isMulti.set(false), 500);
+        // Bleed Animation
+        else if (this.DamageIsBleed(damageEvent)) {
+          this.isBleed.set(true);
+          if (this.bleedTimer) clearTimeout(this.bleedTimer);
+          this.bleedTimer = setTimeout(() => this.isBleed.set(false), 500);
         }
       }
 
@@ -132,7 +153,34 @@ export class DungeonArena implements OnDestroy {
     if (this.critTimer) clearTimeout(this.critTimer);
     if (this.multiTimer) clearTimeout(this.multiTimer);
     if (this.critMultiTimer) clearTimeout(this.critMultiTimer);
+    if (this.bleedTimer) clearTimeout(this.bleedTimer);
+    if (this.splashTimer) clearTimeout(this.splashTimer);
     if (this.isBossTakingHitTimer) clearTimeout(this.isBossTakingHitTimer);
     if (this.bossDefeatedTimer) clearTimeout(this.bossDefeatedTimer);
+  }
+
+  private DamageIsBleed(event: DamageEvent): boolean {
+    return (
+      event.Damage.some((d) => d.IsBleeding) &&
+      !event.Damage.some((d) => d.IsCritical) &&
+      !event.IsMultiHit &&
+      !event.Damage.some((d) => d.IsSplash)
+    );
+  }
+
+  private DamageIsSplash(event: DamageEvent): boolean {
+    return event.Damage.some((d) => d.IsSplash);
+  }
+
+  private DamageIsCrit(event: DamageEvent): boolean {
+    return event.Damage.some((d) => d.IsCritical) && !event.IsMultiHit;
+  }
+
+  private DamageIsMultiHit(event: DamageEvent): boolean {
+    return event.IsMultiHit && !event.Damage.some((d) => d.IsCritical);
+  }
+
+  private DamageIsCritMultiHit(event: DamageEvent): boolean {
+    return event.IsMultiHit && event.Damage.some((d) => d.IsCritical);
   }
 }
