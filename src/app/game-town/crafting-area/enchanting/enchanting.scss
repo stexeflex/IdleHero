@@ -119,9 +119,23 @@
 .auto-reroll-row {
   @include flexbox($justify: flex-start, $align: center);
   gap: calc($gap / 2);
+  flex-wrap: wrap;
 
   label {
     min-width: 92px;
+  }
+
+  input {
+    @include button-focus-visible-outline();
+
+    flex: 1 1 auto;
+    min-width: 180px;
+
+    background: color.scale($clr-ui-bg, $lightness: 10%);
+    border: 1px solid $clr-border;
+    color: $clr-text-primary;
+    padding: 6px 10px;
+    border-radius: 6px;
   }
 
   select {
@@ -136,6 +150,10 @@
     padding: 6px 10px;
     border-radius: 6px;
   }
+}
+
+.auto-reroll-range {
+  font-size: 0.85rem;
 }
 
 .auto-reroll-actions {

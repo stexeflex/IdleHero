@@ -213,11 +213,31 @@
             </select>
           </div>
 
+          <div class="auto-reroll-row">
+            <label class="muted">Min value</label>
+            <input
+              type="number"
+              [disabled]="AutoRerollRunning()"
+              [value]="AutoRerollMinValueRaw()"
+              step="1"
+              [attr.min]="AutoRerollMinValueUiMin()"
+              [attr.max]="AutoRerollMinValueUiMax()"
+              inputmode="numeric"
+              placeholder="optional"
+              title="Optional. Whole numbers only. For % stats, type percent (e.g. 8 for 8%)."
+              (keydown)="BlockNonNumericInNumberInput($event)"
+              (input)="SetAutoRerollMinValueRaw($any($event.target).value)"
+              (blur)="ClampAutoRerollMinValueToRange()" />
+            @if (AutoRerollTargetRangeLabel()) {
+              <span class="auto-reroll-range muted">Range: {{ AutoRerollTargetRangeLabel() }}</span>
+            }
+          </div>
+
           <div class="auto-reroll-actions">
             <button
               class="ih-button-secondary"
               [disabled]="AutoRerollRunning() || !AutoRerollTargetId()"
-              title="Auto reroll until target stat (or until you run out of gold)"
+              title="Auto reroll until target stat (and min value, if set) or until you run out of gold"
               (click)="StartAutoReroll()">
               <app-icon ui="cycle" size="sm"></app-icon>
               START AUTO

@@ -12,6 +12,10 @@ import {
 import { CraftingService, GoldCostProvider } from '../../../../core/services';
 import {
   GetAffixInfo,
+  GetAffixDefinition,
+  GetAffixTierSpec,
+  GetAffixMinMaxRoll,
+  GetAffixValue,
   GetItemRarity,
   GetItemRarityRule,
   GetItemVariant,
@@ -24,7 +28,7 @@ import {
 } from '../../../../core/systems/items';
 import { Gold, IconComponent, ItemPreview } from '../../../../shared/components';
 
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, PercentPipe } from '@angular/common';
 
 type AutoRerollOption = {
   Id: string;
@@ -83,12 +87,14 @@ export class Enchanting {
     this.SelectedAffixIndex.set(index);
     this.AutoRerollOpen.set(false);
     this.AutoRerollTargetId.set('');
+    this.AutoRerollMinValueRaw.set('');
     this.AutoRerollAttempts.set(0);
     this.AutoRerollStatus.set('');
   }
 
   private autoRerollToken = 0;
   protected readonly AutoRerollTargetId = signal<string>('');
+  protected readonly AutoRerollMinValueRaw = signal<string>('');
   protected readonly AutoRerollRunning = signal<boolean>(false);
   protected readonly AutoRerollOpen = signal<boolean>(false);
   protected readonly AutoRerollAttempts = signal<number>(0);
@@ -110,7 +116,105 @@ export class Enchanting {
 
   protected SetAutoRerollTargetId(id: string): void {
     this.AutoRerollTargetId.set(id);
+    this.AutoRerollMinValueRaw.set('');
   }
+
+  protected SetAutoRerollMinValueRaw(raw: string): void {
+    this.AutoRerollMinValueRaw.set(raw);
+  }
+
+  protected ClampAutoRerollMinValueToRange(): void {
+    const raw = this.AutoRerollMinValueRaw().trim();
+    if (!raw) return;
+
+    const target = this.getAutoRerollTargetSpec();
+    if (!target) return;
+
+    const normalized = raw.replace(',', '.');
+    let n = Number(normalized);
+    if (!Number.isFinite(n)) return;
+    n = Math.trunc(n);
+
+    // UI expects percent-points for percent stats (e.g. "8" means 8%).
+    if (target.type === 'Percent') {
+      const minUi = Math.ceil(target.min * 100);
+      const maxUi = Math.floor(target.max * 100);
+      n = Math.min(maxUi, Math.max(minUi, n));
+      this.AutoRerollMinValueRaw.set(String(Math.round(n)));
+      return;
+    }
+
+    n = Math.min(Math.floor(target.max), Math.max(Math.ceil(target.min), n));
+    this.AutoRerollMinValueRaw.set(String(Math.round(n)));
+  }
+
+  protected BlockNonNumericInNumberInput(event: KeyboardEvent): void {
+    // Browsers allow e/E/+/- in type="number". This blocks them for nicer UX.
+    // We also block "." and "," so users can only type whole numbers.
+    if (
+      event.key === 'e' ||
+      event.key === 'E' ||
+      event.key === '+' ||
+      event.key === '-' ||
+      event.key === '.' ||
+      event.key === ','
+    ) {
+      event.preventDefault();
+    }
+  }
+
+  protected readonly AutoRerollTargetValueType = computed<'Flat' | 'Percent' | null>(() => {
+    const slotIndex = this.SelectedAffixIndex();
+    if (slotIndex === null) return null;
+    if (!this.HasAffix(slotIndex)) return null;
+
+    const targetId = this.AutoRerollTargetId();
+    if (!targetId) return null;
+
+    const tier: AffixTier = this.Item().Affixes[slotIndex].Tier;
+    const definition = GetAffixDefinition(targetId);
+    const spec = GetAffixTierSpec(definition, tier);
+    return spec.Value.Type;
+  });
+
+  protected readonly AutoRerollMinValueUiMin = computed<number | null>(() => {
+    const target = this.getAutoRerollTargetSpec();
+    if (!target) return null;
+    return target.type === 'Percent' ? Math.ceil(target.min * 100) : Math.ceil(target.min);
+  });
+
+  protected readonly AutoRerollMinValueUiMax = computed<number | null>(() => {
+    const target = this.getAutoRerollTargetSpec();
+    if (!target) return null;
+    return target.type === 'Percent' ? Math.floor(target.max * 100) : Math.floor(target.max);
+  });
+
+  protected readonly AutoRerollTargetRangeLabel = computed<string>(() => {
+    const slotIndex = this.SelectedAffixIndex();
+    if (slotIndex === null) return '';
+    if (!this.HasAffix(slotIndex)) return '';
+
+    const targetId = this.AutoRerollTargetId();
+    if (!targetId) return '';
+
+    const tier: AffixTier = this.Item().Affixes[slotIndex].Tier;
+    const definition = GetAffixDefinition(targetId);
+    const spec = GetAffixTierSpec(definition, tier);
+    const minMax = GetAffixMinMaxRoll(spec);
+
+    const decimalPipe = new DecimalPipe(this.locale);
+    const percentPipe = new PercentPipe(this.locale);
+
+    if (spec.Value.Type === 'Percent') {
+      const min = percentPipe.transform(minMax.min, '1.0-0') ?? `${minMax.min}`;
+      const max = percentPipe.transform(minMax.max, '1.0-0') ?? `${minMax.max}`;
+      return `${min} - ${max}`;
+    }
+
+    const min = decimalPipe.transform(minMax.min, '1.0-0') ?? `${minMax.min}`;
+    const max = decimalPipe.transform(minMax.max, '1.0-0') ?? `${minMax.max}`;
+    return `${min} - ${max}`;
+  });
 
   protected StopAutoReroll(message: string = 'Stopped by user.'): void {
     this.autoRerollToken++;
@@ -141,6 +245,12 @@ export class Enchanting {
       return;
     }
 
+    const minValue = this.parseAutoRerollMinValue();
+    if (minValue === undefined) {
+      this.AutoRerollStatus.set('Min value is invalid.');
+      return;
+    }
+
     this.autoRerollToken++;
     const token = this.autoRerollToken;
 
@@ -149,10 +259,15 @@ export class Enchanting {
     this.AutoRerollAttempts.set(0);
     this.AutoRerollStatus.set('Auto reroll running...');
 
-    void this.RunAutoReroll(token, slotIndex, targetId);
+    void this.RunAutoReroll(token, slotIndex, targetId, minValue ?? null);
   }
 
-  private async RunAutoReroll(token: number, slotIndex: number, targetId: string): Promise<void> {
+  private async RunAutoReroll(
+    token: number,
+    slotIndex: number,
+    targetId: string,
+    minValue: number | null
+  ): Promise<void> {
     let item = this.Item();
 
     // Allow running even if it currently matches the target: we will reroll at least once and
@@ -194,7 +309,11 @@ export class Enchanting {
       const nextAttempts = this.AutoRerollAttempts() + 1;
       this.AutoRerollAttempts.set(nextAttempts);
 
-      if (item.Affixes[slotIndex]?.DefinitionId === targetId) {
+      const affix = item.Affixes[slotIndex];
+      const matchesType = affix?.DefinitionId === targetId;
+      const matchesValue =
+        minValue === null || !affix ? true : GetAffixValue(affix) >= minValue;
+      if (matchesType && matchesValue) {
         this.AutoRerollStatus.set(`Found after ${nextAttempts} rerolls.`);
         break;
       }
@@ -205,6 +324,46 @@ export class Enchanting {
     if (token === this.autoRerollToken) {
       this.AutoRerollRunning.set(false);
     }
+  }
+
+  /**
+   * Returns:
+   * - null: no min value set (type-only target)
+   * - number: parsed min value
+   * - undefined: invalid input
+   */
+  private parseAutoRerollMinValue(): number | null | undefined {
+    const raw = this.AutoRerollMinValueRaw().trim();
+    if (!raw) return null;
+
+    // Accept both comma and dot decimals (e.g. "7,5").
+    const normalized = raw.replace(',', '.');
+    const n = Number(normalized);
+    if (!Number.isFinite(n)) return undefined;
+    if (!Number.isInteger(n)) return undefined;
+
+    const target = this.getAutoRerollTargetSpec();
+    if (!target) return undefined;
+
+    // Percent stats: UI is percent-points, internal is decimal fraction.
+    const internal = target.type === 'Percent' ? n / 100 : n;
+    if (internal < target.min || internal > target.max) return undefined;
+    return internal;
+  }
+
+  private getAutoRerollTargetSpec(): { min: number; max: number; type: 'Flat' | 'Percent' } | null {
+    const slotIndex = this.SelectedAffixIndex();
+    if (slotIndex === null) return null;
+    if (!this.HasAffix(slotIndex)) return null;
+
+    const targetId = this.AutoRerollTargetId();
+    if (!targetId) return null;
+
+    const tier: AffixTier = this.Item().Affixes[slotIndex].Tier;
+    const definition = GetAffixDefinition(targetId);
+    const spec = GetAffixTierSpec(definition, tier);
+    const minMax = GetAffixMinMaxRoll(spec);
+    return { min: minMax.min, max: minMax.max, type: spec.Value.Type };
   }
 
   protected UpgradeCost(): number {
