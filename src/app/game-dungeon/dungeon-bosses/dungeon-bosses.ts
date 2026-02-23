@@ -6,13 +6,12 @@ import { DungeonRoom } from '../../../core/models';
 import { GetDungeonById, GetScalingParamsForDungeon } from '../../../core/constants';
 
 interface BossCard {
-  Id: string;
-  Name: string;
+  DungeonId: string;
+  Title: string;
   Description: string;
   Icon: DungeonRoom['Icon'];
   Hp: number;
   HpText: string;
-  DungeonId: string;
 }
 
 @Component({
@@ -34,19 +33,16 @@ export class DungeonBosses {
 
     const hp = demonScaling.BossBaseHealth;
 
-    return demonDungeon
-      ? [
-          {
-            Id: 'DB1',
-            Name: 'Demon Overlord',
-            Description: 'A brutal demon commander ruling over the abyss.',
-            Icon: demonDungeon.Icon,
-            Hp: hp,
-            HpText: hp.toLocaleString('en-US'),
-            DungeonId: demonDungeon.Id
-          }
-        ]
-      : [];
+    return [
+      {
+        DungeonId: demonDungeon.Id,
+        Title: demonDungeon.Title,
+        Description: demonDungeon.Description,
+        Icon: demonDungeon.Icon,
+        Hp: hp,
+        HpText: hp.toLocaleString('en-US')
+      }
+    ];
   });
 
   public readonly AngelBosses = computed<BossCard[]>(() => {
@@ -59,19 +55,16 @@ export class DungeonBosses {
 
     const hp = angelScaling.BossBaseHealth;
 
-    return angelDungeon
-      ? [
-          {
-            Id: 'AB1',
-            Name: 'Angel Paragon',
-            Description: 'A celestial guardian forged from divine light.',
-            Icon: angelDungeon.Icon,
-            Hp: hp,
-            HpText: hp.toLocaleString('en-US'),
-            DungeonId: angelDungeon.Id
-          }
-        ]
-      : [];
+    return [
+      {
+        DungeonId: angelDungeon.Id,
+        Title: angelDungeon.Title,
+        Description: angelDungeon.Description,
+        Icon: angelDungeon.Icon,
+        Hp: hp,
+        HpText: hp.toLocaleString('en-US')
+      }
+    ];
   });
 
   public EnterDungeon(id: string): void {

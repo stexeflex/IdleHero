@@ -1,13 +1,12 @@
 import {
+  AnyDungeonRoom,
+  BossDungeonRoom,
   CapstoneDungeonRoom,
   DungeonRoom,
   DungeonRoomKey,
   DungeonType,
-  NormalDungeonRoom,
-  AnyDungeonRoom
+  NormalDungeonRoom
 } from '../../models/combat/dungeon-room';
-
-import { BOSS_ROOMS } from './dungeon-boss.config';
 
 export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
   {
@@ -157,6 +156,47 @@ export const CAPSTONE_DUNGEONS: CapstoneDungeonRoom[] = [
     Prerequisites: { Key: 'Golden Key' as DungeonRoomKey },
 
     Locked: true
+  }
+];
+
+export const BOSS_ROOMS: BossDungeonRoom[] = [
+  {
+    Id: 'B1',
+    Title: 'Demon Overlord',
+    Description: 'A brutal demon commander ruling over the abyss.',
+    Icon: 'demonoverlord',
+    Type: DungeonType.Boss,
+    StagesBase: 1,
+    MidStages: [],
+    StagesMax: 1,
+    
+    Rewards: {
+      XpBase: 20, // currently unused, but if multible bosses are added, this could still be of use
+      GoldBase: 40,
+      RuneDropChances: { Common: 0.1, Magic: 0.05, Rare: 0.01, Epic: 0.001, Legendary: 0.0001 },
+      Key: null
+    },
+
+    Locked: false
+  },
+  {
+    Id: 'B2',
+    Title: 'Angel Paragon',
+    Description: 'A celestial guardian forged from divine light.',
+    Icon: 'angelparagon',
+    Type: DungeonType.Boss,
+    StagesBase: 1,
+    MidStages: [],
+    StagesMax: 1,
+    
+    Rewards: {
+      XpBase: 20,
+      GoldBase: 40,
+      RuneDropChances: { Common: 0.1, Magic: 0.05, Rare: 0.01, Epic: 0.001, Legendary: 0.0001 },
+      Key: null
+    },
+
+    Locked: false
   }
 ];
 

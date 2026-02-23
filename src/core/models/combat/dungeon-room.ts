@@ -52,8 +52,6 @@ export interface CapstoneDungeonRoom extends DungeonRoom {
 }
 
 export interface BossDungeonRoom extends DungeonRoom {
-  // aktuell sind bosse und dungeons so halb von einander getrennt, gleiche config, zählt als DungenRoom, ...
-  // falls bosse nicht wieder komplett rausgenommen wird, könnte man bosse vl. komplett trennen von Dungeons, oder man lässt es wie gerade und verwendet einige Dungeon komponenten wieder
   Type: DungeonType.Boss;
 }
 

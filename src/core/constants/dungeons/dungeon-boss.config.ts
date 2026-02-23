@@ -25,38 +25,8 @@ import {
   ViperSnake
 } from '../../systems/combat/dungeons/boss.factory';
 
-import { BossDungeonRoom, DungeonType } from '../models/combat/dungeon-room';
-import { Boss } from '../models/combat/actors/boss.';
-import { Rewards } from '../models/economy/rewards';
-
-export const BOSS_ROOMS: BossDungeonRoom[] = [
-  {
-    Id: 'B1',
-    Title: 'Demon Boss',
-    Description: 'A single demon boss encounter.',
-    Icon: 'demonoverlord',
-    Type: DungeonType.Boss,
-    StagesBase: 1,
-    MidStages: [],
-    StagesMax: 1,
-    XpBase: 0,
-    GoldBase: 0,
-    Locked: false
-  },
-  {
-    Id: 'B2',
-    Title: 'Angel Boss',
-    Description: 'A single angel boss encounter.',
-    Icon: 'angelparagon',
-    Type: DungeonType.Boss,
-    StagesBase: 1,
-    MidStages: [],
-    StagesMax: 1,
-    XpBase: 0,
-    GoldBase: 0,
-    Locked: false
-  }
-];
+import { Boss } from '../../models/combat/actors/boss.';
+import { Rewards } from '../../models/economy/rewards';
 
 export type BossFactory = () => Boss;
 
@@ -221,22 +191,22 @@ export const DUNGEON_BOSS_SCALING: Record<string, DungeonBossScalingParams> = {
     EndBossMultiplier: 6
   },
   B1: {
-    BossBaseHealth: 1000_000,
+    BossBaseHealth: 1_000_000,
     r: 1,
     a: 0,
     b: 1,
     MidBossMultiplier: 1,
     EndBossMultiplier: 1,
-    Rewards: { Gold: 50_000, Experience: 2000 }
+    Rewards: { Gold: 10_000, Experience: 0 }
   },
   B2: {
-    BossBaseHealth: 1000000,
+    BossBaseHealth: 1_000_000,
     r: 1,
     a: 0,
     b: 1,
     MidBossMultiplier: 1,
     EndBossMultiplier: 1,
-    Rewards: { Gold: 50_000, Experience: 20_000 }
+    Rewards: { Gold: 10_000, Experience: 0 }
   }
 };
 

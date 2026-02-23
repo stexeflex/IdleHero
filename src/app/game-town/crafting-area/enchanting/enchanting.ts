@@ -95,8 +95,7 @@ export class Enchanting {
   protected readonly AutoRerollStatus = signal<string>('');
 
   protected readonly AutoRerollOptions = computed<AutoRerollOption[]>(() => {
-    const item = this.Item();
-    const pool = GetAffixPool(item.Slot);
+    const pool = GetAffixPool(this.Variant().Slot);
 
     const options: AutoRerollOption[] = pool.map((definition) => {
       // We only want the stat name/type for selection, not the actual rolled value.
