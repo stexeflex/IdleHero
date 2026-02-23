@@ -39,6 +39,7 @@ export const ITEM_LEVEL_CONFIG = {
 };
 
 export interface ItemTierRule {
+  PlayerLevelRequirement?: number;
   MinItemLevel: ItemLevel;
   MaxItemLevel: ItemLevel;
   MinRarity: ItemRarity;
@@ -47,18 +48,21 @@ export interface ItemTierRule {
 
 export const ITEM_TIER_RULES: Record<ItemTier, ItemTierRule> = {
   I: {
+    PlayerLevelRequirement: 1,
     MinItemLevel: ITEM_LEVEL_CONFIG.LEVEL.COMMON.MIN,
     MaxItemLevel: ITEM_LEVEL_CONFIG.LEVEL.MAGIC.MAX,
     MinRarity: 'Common',
     MaxRarity: 'Magic'
   },
   II: {
+    PlayerLevelRequirement: 15,
     MinItemLevel: ITEM_LEVEL_CONFIG.LEVEL.RARE.MIN,
     MaxItemLevel: ITEM_LEVEL_CONFIG.LEVEL.EPIC.MAX,
     MinRarity: 'Rare',
     MaxRarity: 'Epic'
   },
   III: {
+    PlayerLevelRequirement: 35,
     MinItemLevel: ITEM_LEVEL_CONFIG.LEVEL.LEGENDARY.MIN,
     MaxItemLevel: ITEM_LEVEL_CONFIG.LEVEL.LEGENDARY.MAX,
     MinRarity: 'Legendary',

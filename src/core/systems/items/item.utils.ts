@@ -23,6 +23,11 @@ import {
 import { TierIndex } from './affix.utils';
 import { TimestampUtils } from '../../../shared/utils';
 
+export function GetRequiredLevelForCrafting(tier: ItemTier): number {
+  const rules = ITEM_TIER_RULES[tier];
+  return rules.PlayerLevelRequirement ?? 0;
+}
+
 export function GetItemVariant(definitionId: string): ItemVariantDefinition {
   return ITEM_VARIANTS.find((v) => v.Id === definitionId)!;
 }

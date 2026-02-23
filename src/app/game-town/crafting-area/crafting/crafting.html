@@ -8,11 +8,12 @@
     @if (SelectedTierRequirement(); as requirement) {
       @if (!requirement.IsUnlocked) {
         <span class="tier-lock-info">
-          Unlocked by clearing
-          <app-icon [creatures]="requirement.DungeonIcon" size="mini"></app-icon>
-          <span class="tier-stages">
-            [{{ requirement.ClearedStage }} / {{ requirement.RequiredStage }}]
-          </span>
+          Unlocked by reaching
+          <app-level
+            [level]="requirement.RequiredLevel"
+            fontSize="1.2rem"
+            size="sm"
+            title="Level Requirement"></app-level>
         </span>
       } @else {
         <!-- ACTIONS -->
