@@ -24,6 +24,10 @@ export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
       Key: null
     },
 
+    Prerequisites: {
+      Level: 1
+    },
+
     Locked: false
   },
   {
@@ -42,6 +46,10 @@ export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
       GoldBase: 50,
       RuneDropChances: { Common: 0.08, Magic: 0.04, Rare: 0.005, Epic: 0.0, Legendary: 0.0 },
       Key: null
+    },
+
+    Prerequisites: {
+      Level: 10
     },
 
     Locked: false
@@ -64,6 +72,10 @@ export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
       Key: null
     },
 
+    Prerequisites: {
+      Level: 20
+    },
+
     Locked: false
   },
   {
@@ -82,6 +94,10 @@ export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
       GoldBase: 100,
       RuneDropChances: { Common: 0.0, Magic: 0.0, Rare: 0.1, Epic: 0.06, Legendary: 0.02 },
       Key: 'Silver Key' as DungeonRoomKey
+    },
+
+    Prerequisites: {
+      Level: 30
     },
 
     Locked: false
