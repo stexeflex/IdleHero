@@ -72,15 +72,40 @@ $grid-header-padding: calc($gap / 2);
 }
 
 .respec {
-  @include flexbox($dir: row, $align: center, $justify: flex-start);
+  display: grid;
+  grid-template-columns: 30px 150px 110px 120px;
+  align-items: center;
   gap: $gap;
-  min-width: 250px;
+  min-width: 450px;
+
+  .button-cancel {
+    color: $clr-text-primary;
+    width: 30px;
+    text-align: end;
+  }
+
+  .button-respec--hidden,
+  .button-cancel--hidden {
+    visibility: hidden;
+    pointer-events: none;
+  }
 
   .button-respec {
     width: 150px;
   }
 
+  .respec-cost {
+    @include flexbox($dir: row, $align: center, $justify: flex-end);
+    width: 110px;
+  }
+
+  .respec-cost--hidden {
+    visibility: hidden;
+  }
+
   .skill-points {
+    @include flexbox($dir: row, $align: center, $justify: flex-end);
+    width: 120px;
     font-family: $font-family-header;
     font-size: 1.4rem;
     font-weight: bold;
@@ -96,6 +121,10 @@ $grid-header-padding: calc($gap / 2);
       vertical-align: top;
       margin: 0 0.25rem;
     }
+  }
+
+  .skill-points--hidden {
+    visibility: hidden;
   }
 }
 
