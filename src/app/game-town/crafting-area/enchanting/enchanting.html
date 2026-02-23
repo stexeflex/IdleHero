@@ -47,8 +47,9 @@
         @if (Item().Level === MaxItemLevel()) {
           <div class="item-rarity-upgrade">
             <button
-              class="ih-button-icon ih-button-icon-border"
+              class="ih-button-icon ih-button-icon-border rarity-upgrade-button"
               (click)="UpgradeItem()"
+              [disabled]="!EnoughGoldForUpgrade()"
               title="Upgrade Item Rarity">
               <app-icon class="rotate-180" ui="arrow" size="sm"></app-icon>
             </button>
@@ -63,7 +64,7 @@
                 [class.legendary--font]="currentRarity === 'Legendary'">
                 {{ currentRarity.toUpperCase() }}
               </span>
-              >
+              <span class="rarrow">➜</span>
               <span
                 [class.common--font]="nextRarity === 'Common'"
                 [class.magic--font]="nextRarity === 'Magic'"
@@ -78,7 +79,8 @@
           <button
             class="ih-button-tertiary"
             [disabled]="!EnoughGoldForUpgrade()"
-            (click)="UpgradeItem()">
+            (click)="UpgradeItem()"
+            title="Upgrade Item">
             UPGRADE ITEM
           </button>
         }
