@@ -1,4 +1,4 @@
-import { Boss } from './actors/boss.';
+import { Boss } from './actors/boss';
 import { DamageResult } from '../../systems/combat';
 import { Hero } from './actors/hero';
 
