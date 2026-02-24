@@ -56,7 +56,8 @@ export class InfoArea {
           DungeonId: dungeonId,
           DungeonIcon: dungeon?.Icon ?? 'slime',
           Type: dungeon?.Type ?? DungeonType.Normal,
-          Stage: stage
+          Stage: stage,
+          Cleared: stage >= (dungeon?.StagesMax ?? 1)
         };
       })
       .filter((dungeonStage) => dungeonStage.Type === dungeonType)
@@ -73,4 +74,5 @@ interface DungeonStageProgress {
   DungeonIcon: CreaturesIconName;
   Type: DungeonType;
   Stage: number;
+  Cleared: boolean;
 }
