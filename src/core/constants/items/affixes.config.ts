@@ -28,7 +28,7 @@ const OFFENSE_AFFIX_DEFINITIONS: AffixDefinition[] = [
     AllowedSlots: ['Weapon'],
     Tiers: DAMAGE_FLAT_TIERS,
     Effect: {
-      ToLabel: (value: number) => FlatAdditiveLabel('Damage', value),
+      ToLabel: (value: number) => FlatAdditiveLabel('Attack Power', value),
       MapToStatSource: (source: string, value: number) => {
         const s = EmptyStatSource(source + `_affix_damage_${TimestampUtils.GetTimestampNow()}`);
         s.Damage.Value = value;

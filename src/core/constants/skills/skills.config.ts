@@ -25,7 +25,7 @@ const ATTACK_POWER_I_SKILL: StatSkillDefinition = {
     { Level: 3, Value: 30, Type: 'Flat' }
   ],
   Effect: {
-    ToLabel: (value: number) => FlatAdditiveLabel('Damage', value),
+    ToLabel: (value: number) => FlatAdditiveLabel('Attack Power', value),
     MapToStatSource: (source: string, value: number) => {
       const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
       s.Damage.Value = value;
@@ -46,7 +46,7 @@ const ATTACK_POWER_II_SKILL: StatSkillDefinition = {
     { Level: 3, Value: 50, Type: 'Flat' }
   ],
   Effect: {
-    ToLabel: (value: number) => FlatAdditiveLabel('Damage', value),
+    ToLabel: (value: number) => FlatAdditiveLabel('Attack Power', value),
     MapToStatSource: (source: string, value: number) => {
       const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
       s.Damage.Value = value;
@@ -67,7 +67,7 @@ const ATTACK_POWER_III_SKILL: StatSkillDefinition = {
     { Level: 3, Value: 100, Type: 'Flat' }
   ],
   Effect: {
-    ToLabel: (value: number) => FlatAdditiveLabel('Damage', value),
+    ToLabel: (value: number) => FlatAdditiveLabel('Attack Power', value),
     MapToStatSource: (source: string, value: number) => {
       const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
       s.Damage.Value = value;
