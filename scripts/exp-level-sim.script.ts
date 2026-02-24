@@ -1,11 +1,11 @@
 #!/usr/bin/env ts-node
 
-// npm run exp:sim
-// npm run exp:sim -- --dungeon D1
-// npm run exp:sim -- --dungeon D1 --targetLevel 50
-// npm run exp:sim -- --dungeon D1 --targetLevel 10 --maxKills 50000
-// npm run exp:sim -- --dungeon D1 --startLevel 10 --targetLevel 20
-// npm run exp:sim -- --dungeon D1 --noPrestige
+// npm run level:sim
+// npm run level:sim -- --dungeon D1
+// npm run level:sim -- --dungeon D1 --targetLevel 50
+// npm run level:sim -- --dungeon D1 --targetLevel 10 --maxKills 50000
+// npm run level:sim -- --dungeon D1 --startLevel 10 --targetLevel 20
+// npm run level:sim -- --dungeon D1 --noPrestige
 //
 // Notes
 // - Simulates boss kills stage-by-stage.

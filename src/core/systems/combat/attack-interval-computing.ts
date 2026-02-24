@@ -38,6 +38,10 @@ export function ComputeAttackInterval(
   };
 }
 
+export function ComputeBossRespawnDelayMs(attackInterval: AttackInterval | undefined): number {
+  return Math.max(0.4, attackInterval?.AttackIntervalMs ?? 1000);
+}
+
 function ComputeCooldown(
   prevAttackInterval: number,
   nextAttackInterval: number,

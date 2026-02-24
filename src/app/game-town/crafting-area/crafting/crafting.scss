@@ -90,7 +90,7 @@ $slot-size: 80px;
 }
 
 .tier-lock-info {
-  @include flexbox($align: center);
+  @include flexbox($align: baseline);
   color: $clr-mute;
   font-family: $font-family-header;
   font-size: 1.2rem;

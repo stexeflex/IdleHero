@@ -206,12 +206,14 @@ export class AmuletService {
 
     const targetSlotRune = this.State().Slots[slotIndex];
 
-    if (targetSlotRune == null) {
+    if (targetSlotRune === null) {
       // Slot is empty, check if the same rune is not already socketed
       if (this.HasRuneEquipped(rune.DefinitionId)) return false;
     } else {
       // Slot is occupied, check if the new rune has the same id as the currently socketed rune
-      if (targetSlotRune.DefinitionId === rune.DefinitionId) return true;
+      if (targetSlotRune.DefinitionId === rune.DefinitionId) {
+        return this.GoldService.CanAfford(this.GetSocketCost());
+      }
     }
 
     return this.GoldService.CanAfford(this.GetSocketCost());

@@ -1,5 +1,5 @@
 <div class="bar-bg" [class.charged]="charged()">
-  <div class="bar-fill" [style.width]="progress + '%'"></div>
+  <div class="bar-fill" [style.width]="displayProgress() + '%'"></div>
 </div>
 @if (showValues()) {
   @if (charged()) {

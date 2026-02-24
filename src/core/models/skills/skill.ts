@@ -47,16 +47,25 @@ export interface StatSkillDefinition extends SkillDefinition {
 
 export interface PassiveSkillDefinition extends SkillDefinition {
   /**
+   * Min/Max ranges per level for upgrading this skill.
+   * Note: Not all passive skills will necessarily have multiple levels or even a range of values.
+   */
+  Levels: SkillLevelSpec[];
+
+  /** Human-readable label */
+  ToLabel?: (value: number) => Label;
+
+  /**
    * A function that maps a value to a Passives contribution.
    */
-  MapToPassiveEffect: (passives: Passives) => Passives;
+  MapToPassiveEffect: (passives: Passives, value: number | undefined) => Passives;
 }
 
 export interface BuffSkillDefinition extends SkillDefinition {
-  // Duration of the active skill effect in seconds
+  /** Duration of the active skill effect in seconds */
   Duration: number;
 
-  // Cooldown of the active skill in seconds
+  /** Cooldown of the active skill in seconds */
   Cooldown: number;
 
   Icon: SkillsIconName;

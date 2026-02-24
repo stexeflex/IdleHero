@@ -22,6 +22,7 @@ export class DungeonRewardsScreen {
   protected readonly DungeonId = this.dungeonRun.DungeonId;
   protected readonly StageReached = this.dungeonRun.StageReached;
   protected readonly MimicsDefeated = this.dungeonRun.MimicsDefeated;
+  protected readonly DjinnsEncountered = this.dungeonRun.DjinnsEncountered;
 
   // Dungeon Run Rewards
   protected readonly Gold = this.dungeonRun.Gold;
@@ -34,6 +35,8 @@ export class DungeonRewardsScreen {
   protected readonly ElapsedTime = this.dungeonRun.ElapsedFormatted;
 
   protected Show(): boolean {
-    return this.CurrentDungeonId() === this.DungeonId();
+    return (
+      this.CurrentDungeonId() === this.DungeonId() && (this.IsRunning() || this.StageReached() > 0)
+    );
   }
 }

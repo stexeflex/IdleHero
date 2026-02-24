@@ -19,8 +19,8 @@ export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
 
     Rewards: {
       XpBase: 10,
-      GoldBase: 20,
-      RuneDropChances: { Common: 0.06, Magic: 0.005, Rare: 0.0, Epic: 0.0, Legendary: 0.0 },
+      GoldBase: 25,
+      RuneDropChances: { Common: 0.06, Magic: 0.008, Rare: 0.0, Epic: 0.0, Legendary: 0.0 },
       Key: null
     },
 
@@ -42,9 +42,9 @@ export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
     StagesMax: 100,
 
     Rewards: {
-      XpBase: 30,
-      GoldBase: 50,
-      RuneDropChances: { Common: 0.08, Magic: 0.04, Rare: 0.005, Epic: 0.0, Legendary: 0.0 },
+      XpBase: 50,
+      GoldBase: 100,
+      RuneDropChances: { Common: 0.1, Magic: 0.06, Rare: 0.008, Epic: 0.0, Legendary: 0.0 },
       Key: null
     },
 
@@ -66,9 +66,9 @@ export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
     StagesMax: 100,
 
     Rewards: {
-      XpBase: 50,
-      GoldBase: 70,
-      RuneDropChances: { Common: 0.0, Magic: 0.1, Rare: 0.06, Epic: 0.005, Legendary: 0.0 },
+      XpBase: 250,
+      GoldBase: 500,
+      RuneDropChances: { Common: 0.0, Magic: 0.1, Rare: 0.06, Epic: 0.01, Legendary: 0.0 },
       Key: null
     },
 
@@ -90,9 +90,9 @@ export const NORMAL_DUNGEONS: NormalDungeonRoom[] = [
     StagesMax: 100,
 
     Rewards: {
-      XpBase: 70,
-      GoldBase: 100,
-      RuneDropChances: { Common: 0.0, Magic: 0.0, Rare: 0.1, Epic: 0.06, Legendary: 0.02 },
+      XpBase: 1000,
+      GoldBase: 2000,
+      RuneDropChances: { Common: 0.0, Magic: 0.0, Rare: 0.1, Epic: 0.06, Legendary: 0.01 },
       Key: 'Silver Key' as DungeonRoomKey
     },
 

@@ -30,7 +30,9 @@
           <button
             class="ih-button-icon amulet-slot unsocketing"
             [disabled]="!CanUnsocketRune()"
-            (click)="UnsocketSelectedRune()">
+            (click)="UnsocketSelectedRune()"
+            (mouseenter)="SetHoveredIndex($index)"
+            (mouseleave)="SetHoveredIndex(null)">
             <app-icon ui="lobarrow" size="lg"></app-icon>
           </button>
         } @else {
@@ -42,7 +44,9 @@
             [class.rare--border]="slot?.Quality === 'Rare'"
             [class.epic--border]="slot?.Quality === 'Epic'"
             [class.legendary--border]="slot?.Quality === 'Legendary'"
-            (click)="SelectSlot($index)">
+            (click)="SelectSlot($index)"
+            (mouseenter)="SetHoveredIndex($index)"
+            (mouseleave)="SetHoveredIndex(null)">
             @if (!SlotIsEmpty($index)) {
               <app-icon symbol="runestone" size="lg"></app-icon>
             }
@@ -53,20 +57,20 @@
   }
 
   <div class="rune-effects">
-    @for (affix of Effects(); track $index) {
-      <div class="rune-effect">
+    @for (effect of Effects(); track effect.SlotIndex) {
+      <div class="rune-effect" [class.highlighted]="HoveredIndex() === effect.SlotIndex">
         <span
           class="icon"
-          [class.common--font]="affix.Quality === 'Common'"
-          [class.magic--font]="affix.Quality === 'Magic'"
-          [class.rare--font]="affix.Quality === 'Rare'"
-          [class.epic--font]="affix.Quality === 'Epic'"
-          [class.legendary--font]="affix.Quality === 'Legendary'">
+          [class.common--font]="effect.Info.Quality === 'Common'"
+          [class.magic--font]="effect.Info.Quality === 'Magic'"
+          [class.rare--font]="effect.Info.Quality === 'Rare'"
+          [class.epic--font]="effect.Info.Quality === 'Epic'"
+          [class.legendary--font]="effect.Info.Quality === 'Legendary'">
           <app-icon symbol="polarstar" size="mini"></app-icon>
         </span>
         <span class="label">
-          {{ affix.Label }}
-          <span class="min-max-roll">[{{ affix.MinRoll }} - {{ affix.MaxRoll }}]</span>
+          {{ effect.Info.Label }}
+          <span class="min-max-roll">[{{ effect.Info.MinRoll }} - {{ effect.Info.MaxRoll }}]</span>
         </span>
       </div>
     }

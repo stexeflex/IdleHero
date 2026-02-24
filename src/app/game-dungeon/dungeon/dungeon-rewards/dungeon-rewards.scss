@@ -72,6 +72,18 @@
   }
 }
 
+.djinns {
+  display: flex;
+  flex-direction: row;
+  gap: calc($gap / 2);
+  color: $clr-exp-blue;
+
+  .djinns-count {
+    font-size: 1rem;
+    color: $clr-mute;
+  }
+}
+
 .dot {
   align-self: center;
 }

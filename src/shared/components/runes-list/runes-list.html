@@ -37,6 +37,7 @@
           @if (ShowSocketButton(runeSlot.DefinitionId)) {
             <button
               class="ih-button-tertiary"
+              [class.upgrade-available]="UpgradeAvailable(runeSlot.DefinitionId)"
               (click)="SocketRune(runeSlot.DefinitionId)"
               [disabled]="!CanSocket(runeSlot.DefinitionId)">
               SOCKET

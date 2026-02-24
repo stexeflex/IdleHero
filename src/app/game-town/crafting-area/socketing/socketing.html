@@ -23,26 +23,37 @@
         [UnsockableRuneSlots]="UnsockableRuneSlots()"
         (OnUnsocket)="UnsocketRune($event)"></app-amulet-preview>
       @if (ShowUpgradeAmuletButton()) {
-        <div class="amulet_upgrade">
-          <button
-            class="ih-button-tertiary"
-            [disabled]="!CanUpgradeAmulet()"
-            (click)="UpgradeAmulet()">
-            @if (Unlocked()) {
-              UPGRADE AMULET
-            } @else {
-              UNLOCK AMULET
-            }
-          </button>
-          <div class="amulet_upgrade_cost">
-            @if (Unlocked()) {
-              <h3>UPGRADE COST</h3>
-            } @else {
-              <h3>UNLOCK COST</h3>
-            }
-            <app-gold [amount]="AmuletUpgradeCost()"></app-gold>
+        @if (UpgradeRequirementMet()) {
+          <div class="amulet_upgrade">
+            <button
+              class="ih-button-tertiary"
+              [disabled]="!CanUpgradeAmulet()"
+              (click)="UpgradeAmulet()">
+              @if (Unlocked()) {
+                UPGRADE AMULET
+              } @else {
+                UNLOCK AMULET
+              }
+            </button>
+            <div class="amulet_upgrade_cost">
+              @if (Unlocked()) {
+                <h3>UPGRADE COST</h3>
+              } @else {
+                <h3>UNLOCK COST</h3>
+              }
+              <app-gold [amount]="AmuletUpgradeCost()"></app-gold>
+            </div>
           </div>
-        </div>
+        } @else {
+          <span class="amulet-lock-info">
+            Upgrade available at
+            <app-level
+              [level]="RequiredLevelForNextUpgrade()"
+              fontSize="1.2rem"
+              size="sm"
+              title="Level Requirement"></app-level>
+          </span>
+        }
       }
     </div>
 

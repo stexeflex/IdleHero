@@ -22,3 +22,11 @@ export const AMULET_QUALITY_ORDER: AmuletQuality[] = [
   'Epic',
   'Legendary'
 ];
+
+export const AMULET_UNLOCK_RULES = {
+  Common: { RequiredPlayerLevel: 1 },
+  Magic: { RequiredPlayerLevel: 5 },
+  Rare: { RequiredPlayerLevel: 10 },
+  Epic: { RequiredPlayerLevel: 15 },
+  Legendary: { RequiredPlayerLevel: 20 }
+};

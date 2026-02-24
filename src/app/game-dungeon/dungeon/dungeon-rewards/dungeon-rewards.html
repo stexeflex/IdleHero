@@ -1,7 +1,7 @@
 <div class="rewards-panel" [class.hidden]="!Show()">
   <div class="header">
     <div class="title">
-      <h3>DUNGEON RUN {{ IsRunning() ? "" : "COMPLETED" }}</h3>
+      <h3>{{ IsRunning() ? "" : "COMPLETED " }}DUNGEON RUN</h3>
       <div [class.hidden]="IsRunning() || StageReached() === 0">
         <h4>Reached Stage {{ StageReached() }}</h4>
       </div>
@@ -32,6 +32,15 @@
       <div class="mimics" title="Mimics Defeated">
         <app-icon creatures="mimicchest" size="sm" [rotate]="true"></app-icon>
         <span class="mimics-count"> [x{{ MimicsDefeated() }}] </span>
+      </div>
+    }
+
+    @if (DjinnsEncountered() > 0) {
+      <div class="dot">•</div>
+
+      <div class="djinns" title="Djinns Encountered">
+        <app-icon creatures="djinn" size="sm" [rotate]="false"></app-icon>
+        <span class="djinns-count"> [x{{ DjinnsEncountered() }}] </span>
       </div>
     }
   </div>

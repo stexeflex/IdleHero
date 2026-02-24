@@ -25,7 +25,7 @@ const ATTACK_POWER_I_SKILL: StatSkillDefinition = {
     { Level: 3, Value: 30, Type: 'Flat' }
   ],
   Effect: {
-    ToLabel: (value: number) => FlatAdditiveLabel('Damage', value),
+    ToLabel: (value: number) => FlatAdditiveLabel('Attack Power', value),
     MapToStatSource: (source: string, value: number) => {
       const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
       s.Damage.Value = value;
@@ -46,7 +46,7 @@ const ATTACK_POWER_II_SKILL: StatSkillDefinition = {
     { Level: 3, Value: 50, Type: 'Flat' }
   ],
   Effect: {
-    ToLabel: (value: number) => FlatAdditiveLabel('Damage', value),
+    ToLabel: (value: number) => FlatAdditiveLabel('Attack Power', value),
     MapToStatSource: (source: string, value: number) => {
       const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
       s.Damage.Value = value;
@@ -67,7 +67,7 @@ const ATTACK_POWER_III_SKILL: StatSkillDefinition = {
     { Level: 3, Value: 100, Type: 'Flat' }
   ],
   Effect: {
-    ToLabel: (value: number) => FlatAdditiveLabel('Damage', value),
+    ToLabel: (value: number) => FlatAdditiveLabel('Attack Power', value),
     MapToStatSource: (source: string, value: number) => {
       const s = EmptyStatSource(source + `_${TimestampUtils.GetTimestampNow()}`);
       s.Damage.Value = value;
@@ -83,11 +83,11 @@ const ATTACK_SPEED_SKILL: StatSkillDefinition = {
   Tier: 'II',
   Type: 'StatBoost',
   Levels: [
-    { Level: 1, Value: 0.05, Type: 'Percent' },
-    { Level: 2, Value: 0.1, Type: 'Percent' },
-    { Level: 3, Value: 0.15, Type: 'Percent' },
-    { Level: 4, Value: 0.2, Type: 'Percent' },
-    { Level: 5, Value: 0.25, Type: 'Percent' }
+    { Level: 1, Value: 0.1, Type: 'Percent' },
+    { Level: 2, Value: 0.2, Type: 'Percent' },
+    { Level: 3, Value: 0.3, Type: 'Percent' },
+    { Level: 4, Value: 0.4, Type: 'Percent' },
+    { Level: 5, Value: 0.5, Type: 'Percent' }
   ],
   Effect: {
     ToLabel: (value: number) => PercentageAdditiveLabel('Attack Speed', value),
@@ -207,27 +207,63 @@ const MULTI_HIT_CRIT_SKILL: PassiveSkillDefinition = {
   Description: 'Your multi hit attacks have a chance to critically strike on each hit.',
   Tier: 'II',
   Type: 'Passive',
-  MapToPassiveEffect: (passives: Passives) => {
+  Levels: [],
+  MapToPassiveEffect: (passives: Passives, value: number | undefined) => {
     passives.CriticalMultiHit = true;
     return passives;
   }
 };
 
-const SPLASH_DAMAGE_SKILL: PassiveSkillDefinition = {
+const SPLASH_DAMAGE_I_SKILL: PassiveSkillDefinition = {
   Id: 'PASSIVE_SPLASH_DAMAGE',
   Name: 'Overflowing Splashes',
   Description: 'Your damage overflow from attacks hits the next enemy.',
   Tier: 'II',
   Type: 'Passive',
-  MapToPassiveEffect: (passives: Passives) => {
-    passives.SplashDamage = true;
+  Levels: [
+    { Level: 1, Value: 0.1, Type: 'Percent' },
+    { Level: 2, Value: 0.2, Type: 'Percent' },
+    { Level: 3, Value: 0.3, Type: 'Percent' },
+    { Level: 4, Value: 0.4, Type: 'Percent' },
+    { Level: 5, Value: 0.5, Type: 'Percent' }
+  ],
+  ToLabel: (value: number) => PercentageAdditiveLabel('Splash Damage', value),
+  MapToPassiveEffect: (passives: Passives, value: number | undefined) => {
+    passives.SplashDamage = {
+      Enabled: true,
+      DamagePercent: value!
+    };
+    return passives;
+  }
+};
+
+const SPLASH_DAMAGE_II_SKILL: PassiveSkillDefinition = {
+  Id: 'PASSIVE_SPLASH_DAMAGE_II',
+  Name: 'Overflowing Splashes+',
+  Description: 'Upgrades your Splash Damage to hit with even greater force.',
+  Tier: 'III',
+  Type: 'Passive',
+  Levels: [
+    { Level: 1, Value: 0.6, Type: 'Percent' },
+    { Level: 2, Value: 0.7, Type: 'Percent' },
+    { Level: 3, Value: 0.8, Type: 'Percent' },
+    { Level: 4, Value: 0.9, Type: 'Percent' },
+    { Level: 5, Value: 1.0, Type: 'Percent' }
+  ],
+  ToLabel: (value: number) => PercentageAdditiveLabel('Splash Damage', value),
+  MapToPassiveEffect: (passives: Passives, value: number | undefined) => {
+    passives.SplashDamage = {
+      Enabled: true,
+      DamagePercent: value!
+    };
     return passives;
   }
 };
 
 export const PASSIVE_SKILL_DEFINITIONS: PassiveSkillDefinition[] = [
   MULTI_HIT_CRIT_SKILL,
-  SPLASH_DAMAGE_SKILL
+  SPLASH_DAMAGE_I_SKILL,
+  SPLASH_DAMAGE_II_SKILL
 ];
 //#endregion Passive Skill Definitions
 
