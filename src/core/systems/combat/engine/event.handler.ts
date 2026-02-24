@@ -535,7 +535,7 @@ export class EventHandler {
   }
 
   private CanSplash(hero: Hero): boolean {
-    return !!hero?.Passives?.SplashDamage;
+    return !!hero?.Passives?.SplashDamage?.Enabled && hero.Passives.SplashDamage.DamagePercent > 0;
   }
 
   private ApplySplashDamage(hero: Hero, damages: DamageResult[]): DamageResult[] {
@@ -558,10 +558,11 @@ export class EventHandler {
   }
 
   private UpdateSplashDamage(hero: Hero, overflowDamage: number, damages: DamageResult[]): void {
-    let overflowSplashDamage = overflowDamage;
-    const remainingDamages = damages.reduce((sum, damageResult) => sum + damageResult.Amount, 0);
-    overflowSplashDamage += remainingDamages;
-    this.SetSplashDamage(hero, overflowSplashDamage);
+    const overflowAndRemainingDamage =
+      overflowDamage + damages.reduce((sum, damageResult) => sum + damageResult.Amount, 0);
+    const splashDamageFactor = hero.Passives.SplashDamage.DamagePercent;
+    const splashDamage = Math.round(overflowAndRemainingDamage * splashDamageFactor);
+    this.SetSplashDamage(hero, splashDamage);
   }
 
   private UpdateDamageStatistics(damage: DamageResult[]): void {
