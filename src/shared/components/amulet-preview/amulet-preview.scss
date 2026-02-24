@@ -88,6 +88,13 @@
 
   .rune-effect {
     display: flex;
+    border-radius: $border-radius;
+    padding: 2px 4px;
+
+    &.highlighted {
+      background-color: rgba($clr-highlight, 0.12);
+      outline: 1px solid rgba($clr-highlight, 0.35);
+    }
 
     .icon {
       margin-right: calc($gap / 2);
