@@ -216,7 +216,8 @@ export class EventHandler {
       const chargeEvent = CreateChargeEvent(
         event.AtMs + this.EventDelayMs,
         hero,
-        hero.Stats.ChargeGain
+        hero.Stats.ChargeGain,
+        'Hit'
       );
       this.CombatState.Queue.Push(chargeEvent);
     }
@@ -243,7 +244,7 @@ export class EventHandler {
     // Lose Charge on Miss
     if (!actor.Charge.Charged) {
       const amount = Math.round(actor.Stats.ChargeGain * actor.Stats.ChargeLoss);
-      const chargeEvent = CreateChargeEvent(event.AtMs + this.EventDelayMs, actor, -amount);
+      const chargeEvent = CreateChargeEvent(event.AtMs + this.EventDelayMs, actor, -amount, 'Miss');
       this.CombatState.Queue.Push(chargeEvent);
     }
 
@@ -328,6 +329,8 @@ export class EventHandler {
     if (!actor) return;
     if (!actor.Life.Alive) return;
 
+    if (actor.Charge.Charged) return;
+
     actor.Charge.Current = ClampUtils.clamp(
       actor.Charge.Current + event.Amount,
       0,
@@ -336,24 +339,11 @@ export class EventHandler {
 
     // Max Charge
     if (actor.Charge.Current >= actor.Charge.Max) {
+      actor.Charge.Current = actor.Charge.Max;
       actor.Charge.Charged = true;
 
-      const factor = 4;
-      const ticks = actor.Stats.ChargeDuration * factor;
-      const chargeDecreasePerSecond = actor.Charge.Max / actor.Stats.ChargeDuration;
-
-      for (let i = 1; i <= ticks; i++) {
-        const clearChargeEvent = CreateChargeEvent(
-          event.AtMs + (i * 1000) / factor,
-          actor,
-          Math.floor(-chargeDecreasePerSecond / factor)
-        );
-        this.CombatState.Queue.Push(clearChargeEvent);
-      }
-    }
-    // Clear Charge
-    else if (actor.Charge.Current === 0) {
-      const clearEvent = CreateClearEvent(event.AtMs + 1000, actor, 'Charge');
+      const chargeDurationMs = Math.max(Math.round(actor.Stats.ChargeDuration * 1000), 1);
+      const clearEvent = CreateClearEvent(event.AtMs + chargeDurationMs, actor, 'Charge');
       this.CombatState.Queue.Push(clearEvent);
     }
 

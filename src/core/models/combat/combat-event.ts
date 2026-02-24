@@ -53,6 +53,7 @@ export type ChargeEvent = {
   AtMs: number;
   Actor: Actor;
   Amount: number;
+  Source: 'Hit' | 'Miss';
 };
 
 export type ClearEvent = {

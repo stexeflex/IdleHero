@@ -71,12 +71,18 @@ export function CreateDamageOverTimeEvent(
   };
 }
 
-export function CreateChargeEvent(atMs: number, actor: Actor, amount: number): ChargeEvent {
+export function CreateChargeEvent(
+  atMs: number,
+  actor: Actor,
+  amount: number,
+  source: ChargeEvent['Source']
+): ChargeEvent {
   return {
     Type: 'Charge',
     AtMs: atMs,
     Actor: actor,
-    Amount: amount
+    Amount: amount,
+    Source: source
   };
 }
 
