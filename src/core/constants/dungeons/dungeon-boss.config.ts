@@ -43,10 +43,14 @@ export interface DungeonBossConfig {
   BossPools: Map<number, BossFactory[]>;
 }
 
-export const DUNGEON_MIMIC_BOSS_CONFIG = {
+export const DUNGEON_SPECIAL_BOSS_CONFIG = {
   MIMIC_ID: 'Mimic',
   MIMIC_SPAWN_RATE: 0.01, // 1% Chance, dass ein Mimic statt eines regulären Bosses spawnt
-  MIMIC_GOLD_REWARD_MULTIPLIER: 10 // Mimics geben das 10-fache an Gold im Vergleich zu regulären Bossen
+  MIMIC_GOLD_REWARD_MULTIPLIER: 10, // Mimics geben das 10-fache an Gold im Vergleich zu regulären Bossen
+
+  DJINN_ID: 'Djinn',
+  DJINN_SPAWN_RATE: 0.0075, // 0.75% Chance, dass ein Djinn statt eines regulären Bosses spawnt
+  DJINN_EXP_REWARD_MULTIPLIER: 5 // Djinns geben das 5-fache an Erfahrung im Vergleich zu regulären Bossen
 };
 
 export const DUNGEON_BOSS_CONFIGS: Record<string, DungeonBossConfig> = {

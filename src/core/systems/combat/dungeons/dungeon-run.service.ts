@@ -6,6 +6,7 @@ export interface DungeonRunState {
   Experience: number;
   Runes: Rune[];
   MimicsDefeated: number;
+  DjinnsEncountered: number;
 }
 
 interface DungeonRunInfo {
@@ -21,7 +22,8 @@ function CreateEmptyDungeonRunState(): DungeonRunState {
     Gold: 0,
     Experience: 0,
     Runes: [],
-    MimicsDefeated: 0
+    MimicsDefeated: 0,
+    DjinnsEncountered: 0
   };
 }
 
@@ -72,6 +74,11 @@ export class DungeonRunService implements OnDestroy {
   public readonly MimicsDefeated = computed<number>(() => {
     const runInfo = this.CurrentRunInfo();
     return runInfo ? runInfo.Rewards.MimicsDefeated : 0;
+  });
+
+  public readonly DjinnsEncountered = computed<number>(() => {
+    const runInfo = this.CurrentRunInfo();
+    return runInfo ? (runInfo.Rewards.DjinnsEncountered ?? 0) : 0;
   });
 
   public readonly IsRunning = computed<boolean>(() => {
@@ -198,6 +205,22 @@ export class DungeonRunService implements OnDestroy {
   }
 
   /**
+   * Increments the count of encountered Djinns in the current dungeon run totals.
+   */
+  public AddDjinnEncounter(): void {
+    const currentDungeonId = this.CurrentDungeonIdState();
+    if (!currentDungeonId) return;
+
+    this.UpdateRunInfo(currentDungeonId, (runInfo) => ({
+      ...runInfo,
+      Rewards: {
+        ...runInfo.Rewards,
+        DjinnsEncountered: (runInfo.Rewards.DjinnsEncountered ?? 0) + 1
+      }
+    }));
+  }
+
+  /**
    * Returns a snapshot of the current dungeon run state.
    * @returns a cloned dungeon run state
    */
@@ -209,7 +232,8 @@ export class DungeonRunService implements OnDestroy {
       Gold: state.Gold,
       Experience: state.Experience,
       Runes: [...state.Runes],
-      MimicsDefeated: state.MimicsDefeated
+      MimicsDefeated: state.MimicsDefeated,
+      DjinnsEncountered: state.DjinnsEncountered ?? 0
     };
   }
 
@@ -227,7 +251,8 @@ export class DungeonRunService implements OnDestroy {
         Gold: Math.max(0, Math.floor(state.Gold)),
         Experience: Math.max(0, Math.floor(state.Experience)),
         Runes: [...state.Runes],
-        MimicsDefeated: Math.max(0, Math.floor(state.MimicsDefeated))
+        MimicsDefeated: Math.max(0, Math.floor(state.MimicsDefeated)),
+        DjinnsEncountered: Math.max(0, Math.floor(state.DjinnsEncountered ?? 0))
       }
     }));
   }

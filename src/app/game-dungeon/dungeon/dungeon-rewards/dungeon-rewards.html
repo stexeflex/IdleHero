@@ -34,6 +34,15 @@
         <span class="mimics-count"> [x{{ MimicsDefeated() }}] </span>
       </div>
     }
+
+    @if (DjinnsEncountered() > 0) {
+      <div class="dot">•</div>
+
+      <div class="djinns" title="Djinns Encountered">
+        <app-icon creatures="djinn" size="sm" [rotate]="false"></app-icon>
+        <span class="djinns-count"> [x{{ DjinnsEncountered() }}] </span>
+      </div>
+    }
   </div>
 
   @if (RuneCount() > 0) {
