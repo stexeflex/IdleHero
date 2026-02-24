@@ -1,7 +1,7 @@
 <div class="rewards-panel" [class.hidden]="!Show()">
   <div class="header">
     <div class="title">
-      <h3>DUNGEON RUN {{ IsRunning() ? "" : "COMPLETED" }}</h3>
+      <h3>{{ IsRunning() ? "" : "COMPLETED " }}DUNGEON RUN</h3>
       <div [class.hidden]="IsRunning() || StageReached() === 0">
         <h4>Reached Stage {{ StageReached() }}</h4>
       </div>

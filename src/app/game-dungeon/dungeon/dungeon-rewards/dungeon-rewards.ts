@@ -34,6 +34,8 @@ export class DungeonRewardsScreen {
   protected readonly ElapsedTime = this.dungeonRun.ElapsedFormatted;
 
   protected Show(): boolean {
-    return this.CurrentDungeonId() === this.DungeonId();
+    return (
+      this.CurrentDungeonId() === this.DungeonId() && (this.IsRunning() || this.StageReached() > 0)
+    );
   }
 }

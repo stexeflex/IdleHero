@@ -92,6 +92,7 @@ export class DungeonRoomService {
     }
 
     this.CurrentDungeonIdState.set(dungeonId);
+    this.DungeonRun.SetCurrentDungeonRoom(dungeonId);
     this.CurrentStageState.set(1);
 
     return true;
