@@ -83,11 +83,11 @@ const ATTACK_SPEED_SKILL: StatSkillDefinition = {
   Tier: 'II',
   Type: 'StatBoost',
   Levels: [
-    { Level: 1, Value: 0.05, Type: 'Percent' },
-    { Level: 2, Value: 0.1, Type: 'Percent' },
-    { Level: 3, Value: 0.15, Type: 'Percent' },
-    { Level: 4, Value: 0.2, Type: 'Percent' },
-    { Level: 5, Value: 0.25, Type: 'Percent' }
+    { Level: 1, Value: 0.1, Type: 'Percent' },
+    { Level: 2, Value: 0.2, Type: 'Percent' },
+    { Level: 3, Value: 0.3, Type: 'Percent' },
+    { Level: 4, Value: 0.4, Type: 'Percent' },
+    { Level: 5, Value: 0.5, Type: 'Percent' }
   ],
   Effect: {
     ToLabel: (value: number) => PercentageAdditiveLabel('Attack Speed', value),
