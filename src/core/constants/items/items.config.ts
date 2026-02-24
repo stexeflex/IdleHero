@@ -1666,7 +1666,7 @@ const FEET_BOOTS_VARIANTS: ItemVariantDefinition[] = [
     Type: 'Boots',
     Tier: 'II',
     Innate: {
-      ToLabel: (value: number) => FlatAdditiveLabel('Charge Gain', value),
+      ToLabel: (value: number) => FlatAdditiveLabel('Charge Gain per Hit', value),
       ValuesByLevel: INNATE_CS_GAIN_T2,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_feet_boots_3_innate');
@@ -1717,7 +1717,7 @@ const FEET_BOOTS_VARIANTS: ItemVariantDefinition[] = [
     Type: 'Boots',
     Tier: 'III',
     Innate: {
-      ToLabel: (value: number) => FlatAdditiveLabel('Charge Gain', value),
+      ToLabel: (value: number) => FlatAdditiveLabel('Charge Gain per Hit', value),
       ValuesByLevel: INNATE_CS_GAIN_T3,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t3_feet_boots_3_innate');
