@@ -33,8 +33,10 @@ npm run start
 ## Useful scripts
 
 - Generate/update icon assets: `npm run icons`
-- Generate boss HP table: `npm run boss:hp-table`
-- Run XP/level simulation: `npm run exp:sim`
+- Run Boss HP simulation: `npm run boss-hp:sim`
+- Run Level simulation: `npm run level:sim`
+- Run XP simulation: `npm run exp:sim`
+- Run Gold simulation: `npm run gold:sim`
 
 ## Deploy (GitHub Pages)
 
