@@ -1,6 +1,6 @@
 #!/usr/bin/env ts-node
 
-// npm run xp:sim
+// npm run exp:sim
 
 import { NORMAL_DUNGEONS } from '../src/core/constants/dungeons/dungeons.config';
 import { REWARDS_CONFIG } from '../src/core/constants/dungeons/rewards.config';
