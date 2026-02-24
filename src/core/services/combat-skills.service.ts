@@ -146,11 +146,15 @@ export class CombatSkillsService implements OnDestroy {
         .map((skillState) => skillState.DefinitionId)
     );
 
-    return this.Skills.SkillTree()
-      .flatMap((tier) => tier.Skills)
-      .map((skill) => skill.Definition)
-      .filter((definition) => unlockedSkillIds.has(definition.Id))
-      .filter((definition): definition is BuffSkillDefinition => IsBuffSkillDefinition(definition));
+    const unlockedBuffDefinitions: BuffSkillDefinition[] = [];
+
+    for (const skillId of unlockedSkillIds) {
+      const definition = SkillDefinitionsById.get(skillId);
+      if (!definition || !IsBuffSkillDefinition(definition)) continue;
+      unlockedBuffDefinitions.push(definition);
+    }
+
+    return unlockedBuffDefinitions;
   }
 
   private GetUnlockedBuffsById(skillId: string): BuffSkillDefinition | null {
