@@ -57,9 +57,9 @@ export const RUNE_MULTI_HIT_CHAIN: RuneQualitySpec[] = [
 ];
 
 export const RUNE_ATTACK_POWER: RuneQualitySpec[] = [
-  { Quality: 'Common', Value: { Min: 1, Max: 5, Type: 'Flat' } },
-  { Quality: 'Magic', Value: { Min: 5, Max: 20, Type: 'Flat' } },
-  { Quality: 'Rare', Value: { Min: 20, Max: 50, Type: 'Flat' } },
+  { Quality: 'Common', Value: { Min: 1, Max: 10, Type: 'Flat' } },
+  { Quality: 'Magic', Value: { Min: 10, Max: 25, Type: 'Flat' } },
+  { Quality: 'Rare', Value: { Min: 25, Max: 50, Type: 'Flat' } },
   { Quality: 'Epic', Value: { Min: 50, Max: 100, Type: 'Flat' } },
   { Quality: 'Legendary', Value: { Min: 100, Max: 150, Type: 'Flat' } }
 ];
