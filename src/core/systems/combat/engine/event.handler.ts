@@ -129,10 +129,7 @@ export class EventHandler {
     // Hit-Event
     else {
       const hero = event.Actor as Hero;
-
-      if (hero) {
-        this.HandleHeroHitEvent(hero, event);
-      }
+      if (hero) this.HandleHeroHitEvent(hero, event);
     }
 
     // Nächsten Angriff des Actors planen
@@ -249,6 +246,12 @@ export class EventHandler {
       const chargeEvent = CreateChargeEvent(event.AtMs + this.EventDelayMs, actor, -amount);
       this.CombatState.Queue.Push(chargeEvent);
     }
+
+    // Lose Splash Damage on Miss
+    if (this.CanSplash(actor)) {
+      const pendingSplashDamage = actor.SplashDamage || 0;
+      if (pendingSplashDamage > 0) this.SetSplashDamage(actor, 0);
+    }
   }
 
   /** DEAL DAMAGE */
@@ -263,11 +266,8 @@ export class EventHandler {
 
     let damages: DamageResult[] = [...event.Damage];
 
-    if (canApplySplash) {
-      damages = this.ApplySplashDamage(hero, damages);
-    } else {
-      this.SetSplashDamage(hero, 0);
-    }
+    if (canApplySplash) damages = this.ApplySplashDamage(hero, damages);
+    else this.SetSplashDamage(hero, 0);
 
     this.UpdateDamageStatistics(damages);
 
