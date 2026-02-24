@@ -1,6 +1,28 @@
-import { AMULET_COST_CONFIG, AMULET_QUALITY_ORDER, AMULET_SLOT_RULES } from '../../constants';
+import {
+  AMULET_COST_CONFIG,
+  AMULET_QUALITY_ORDER,
+  AMULET_SLOT_RULES,
+  AMULET_UNLOCK_RULES
+} from '../../constants';
 
 import { AmuletQuality } from '../../models';
+
+export function FulfillsAmuletUnlockRequirement(
+  quality: AmuletQuality,
+  playerLevel: number
+): boolean {
+  const nextQuality = GetNextAmuletQuality(quality);
+  if (!nextQuality) return false;
+  const unlockRule = AMULET_UNLOCK_RULES[nextQuality];
+  return playerLevel >= unlockRule.RequiredPlayerLevel;
+}
+
+export function RequiredLevelForNextUpgrade(quality: AmuletQuality): number | null {
+  const nextQuality = GetNextAmuletQuality(quality);
+  if (!nextQuality) return null;
+  const unlockRule = AMULET_UNLOCK_RULES[nextQuality];
+  return unlockRule.RequiredPlayerLevel;
+}
 
 export function AmuletQualityIndex(quality: AmuletQuality): number {
   const idx = AMULET_QUALITY_ORDER.indexOf(quality);

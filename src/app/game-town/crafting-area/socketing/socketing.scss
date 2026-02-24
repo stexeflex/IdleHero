@@ -69,6 +69,15 @@
       gap: $gap;
     }
   }
+
+  .amulet-lock-info {
+    @include flexbox($align: baseline);
+    color: $clr-mute;
+    font-family: $font-family-header;
+    font-size: 1.2rem;
+    font-weight: 500;
+    gap: calc($gap / 2);
+  }
 }
 
 .runes_list {
