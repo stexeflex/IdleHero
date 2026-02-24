@@ -24,6 +24,7 @@ import {
 } from '../../../models';
 import { ChanceUtils, ClampUtils } from '../../../../shared/utils';
 import { CombatLogService, StatisticsService } from '../../../services';
+import { ComputeBossRespawnDelayMs, ComputeNextIntervalMs } from '../attack-interval-computing';
 import {
   GetDirectDamageAmount,
   GetHitCount,
@@ -42,7 +43,6 @@ import { HealLife, TakeDamage } from '../life.utils';
 import { Injectable, inject } from '@angular/core';
 
 import { CombatState } from './combat.state';
-import { ComputeNextIntervalMs } from '../attack-interval-computing';
 import { DELAYS } from '../../../constants';
 import { DamageResult } from './models/damage-result';
 
@@ -404,17 +404,18 @@ export class EventHandler {
   private HandleDeathEvent(event: DeathEvent): void {
     // Boss besiegt
     if (!!(event.Actor as Boss)) {
+      const hero = this.CombatState.Hero();
+      const bossRespawnDelayMs = ComputeBossRespawnDelayMs(hero?.AttackInterval);
+
       this.CombatState.PrepareStageAdvance();
-      const stageAdvanceEvent = CreateStageAdvanceEvent(
-        event.AtMs + DELAYS.BOSS_RESPAWN_ANIMATION_MS
-      );
+      const stageAdvanceEvent = CreateStageAdvanceEvent(event.AtMs + bossRespawnDelayMs);
       this.CombatState.Queue.Push(stageAdvanceEvent);
     }
   }
 
   /** STAGE ADVANCE */
   private HandleStageAdvanceEvent(event: StageAdvanceEvent): void {
-    this.CombatState.AdvanceToNextBoss();
+    this.CombatState.AdvanceToNextBoss(event.AtMs);
   }
 
   //#region Helpers
