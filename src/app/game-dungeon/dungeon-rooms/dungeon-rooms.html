@@ -1,4 +1,6 @@
 <section>
+  <app-panel-header [title]="'DUNGEONS'"></app-panel-header>
+  
   <div class="dungeon-list">
     @for (group of DungeonGroups(); track group.Type) {
       <div class="dungeon-group">

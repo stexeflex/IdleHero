@@ -13,7 +13,7 @@ import { IconComponent, Level, PanelHeader } from '../../../shared/components';
 
 @Component({
   selector: 'app-dungeon-rooms',
-  imports: [IconComponent, Level],
+  imports: [PanelHeader, IconComponent, Level],
   templateUrl: './dungeon-rooms.html',
   styleUrl: './dungeon-rooms.scss'
 })

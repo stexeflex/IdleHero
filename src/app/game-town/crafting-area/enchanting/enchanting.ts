@@ -1,4 +1,4 @@
-import { AffixInfo, AffixTier, Label, Item, ItemRarity, ItemVariantDefinition } from '../../../../core/models';
+import { AffixInfo,   , Label, Item, ItemRarity, ItemVariantDefinition } from '../../../../core/models';
 import {
   ChangeDetectionStrategy,
   Component,

@@ -131,6 +131,7 @@ export class DungeonRoomService {
     }
     // At final stage: grant completion rewards and capstone key reward if any
     else {
+      this.Rewards.GrantCompletionRewards(dungeon);
       // already at max; no further advancement
       return false;
     }
