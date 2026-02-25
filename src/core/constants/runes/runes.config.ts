@@ -164,7 +164,7 @@ export const RUNE_DEFINITIONS: RuneDefinition[] = [
     Name: 'Attack Power Rune',
     Qualities: RUNE_ATTACK_POWER,
     Effect: {
-      ToLabel: (value: number) => FlatAdditiveLabel('Damage', value),
+      ToLabel: (value: number) => FlatAdditiveLabel('Attack Power', value),
       MapToStatSource: (source: string, value: number): StatSource => {
         const s = EmptyStatSource(
           source + '_rune_attack_power' + `_${TimestampUtils.GetTimestampNow()}`

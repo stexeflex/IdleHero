@@ -90,16 +90,12 @@ $slot-size: 80px;
 }
 
 .tier-lock-info {
-  @include flexbox($align: center);
+  @include flexbox($align: baseline);
   color: $clr-mute;
   font-family: $font-family-header;
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 500;
-  gap: 4px;
-
-  .tier-stages {
-    font-size: 0.9rem;
-  }
+  gap: calc($gap / 2);
 }
 
 .variants {

@@ -90,7 +90,7 @@ export function GetSkillMaxLevel(skillId: string): number {
   } else if (IsBuffSkillDefinition(definition)) {
     return 1; // Buff-Skills haben nur 1 Level
   } else if (IsPassiveSkillDefinition(definition)) {
-    return 1; // Passive-Skills haben nur 1 Level
+    return definition.Levels?.length ?? 1; // Passive-Skills können optional mehrere Level haben, standardmäßig 1
   } else if (IsEffectSkillDefinition(definition)) {
     return definition.Levels.length;
   }
@@ -132,9 +132,9 @@ export function GetSkillEffect(skillId: string, level: number, locale: string): 
   switch (definition.Type) {
     case 'StatBoost':
       const statSkillDefinition = definition as StatSkillDefinition;
-      const value = statSkillDefinition.Levels[level > 0 ? level - 1 : 0]?.Value;
-      if (value === undefined) return [];
-      const label = statSkillDefinition.Effect.ToLabel(value);
+      const statValue = statSkillDefinition.Levels[level > 0 ? level - 1 : 0]?.Value;
+      if (statValue === undefined) return [];
+      const label = statSkillDefinition.Effect.ToLabel(statValue);
       const labelString = LabelToString(label, decimalPipe);
       skillEffects.push(labelString);
       break;
@@ -146,6 +146,18 @@ export function GetSkillEffect(skillId: string, level: number, locale: string): 
         const labelString = LabelToString(label, decimalPipe);
         skillEffects.push(labelString);
       });
+      break;
+
+    case 'Passive':
+      const passiveSkillDefinition = definition as PassiveSkillDefinition;
+      const passiveValue = passiveSkillDefinition.Levels[level > 0 ? level - 1 : 0]?.Value;
+      if (passiveValue === undefined) return [];
+
+      if (passiveSkillDefinition.ToLabel) {
+        const passiveLabel = passiveSkillDefinition.ToLabel(passiveValue);
+        const passiveLabelString = LabelToString(passiveLabel, decimalPipe);
+        skillEffects.push(passiveLabelString);
+      }
       break;
   }
 

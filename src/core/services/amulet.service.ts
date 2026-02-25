@@ -6,12 +6,18 @@ import {
   Rune,
   StatSource
 } from '../models';
-import { GetNextQuality, GetSlotAmountForQuality, QualityIndex } from '../systems/runes';
+import {
+  GetAmuletSocketCost,
+  GetAmuletUnlockCost,
+  GetAmuletUnsocketCost,
+  GetAmuletUpgradeCost,
+  GetNextAmuletQuality,
+  GetSlotAmountForQuality
+} from '../systems/runes';
 import { Injectable, computed, inject, signal } from '@angular/core';
 
 import { GoldService } from './gold.service';
 import { MapRuneToStatSources } from '../systems/stats';
-import { RUNES_COST_CONFIG } from '../constants/runes/runes-cost.config';
 
 @Injectable({ providedIn: 'root' })
 export class AmuletService {
@@ -64,7 +70,7 @@ export class AmuletService {
    * @returns unlock cost
    */
   public GetUnlockCost(): number {
-    return RUNES_COST_CONFIG.AMULET_COST;
+    return GetAmuletUnlockCost();
   }
 
   /**
@@ -72,7 +78,7 @@ export class AmuletService {
    * @returns upgrade cost
    */
   public GetUpgradeCost(): number {
-    return RUNES_COST_CONFIG.AMULET_COST_PER_UPGRADE * (QualityIndex(this.Quality()) + 1);
+    return GetAmuletUpgradeCost(this.Quality());
   }
 
   /**
@@ -80,7 +86,7 @@ export class AmuletService {
    * @returns socket cost
    */
   public GetSocketCost(): number {
-    return RUNES_COST_CONFIG.SOCKET_COST;
+    return GetAmuletSocketCost(this.Quality());
   }
 
   /**
@@ -88,7 +94,7 @@ export class AmuletService {
    * @returns unsocket cost
    */
   public GetUnsocketCost(): number {
-    return RUNES_COST_CONFIG.UNSOCKET_COST;
+    return GetAmuletUnsocketCost(this.Quality());
   }
 
   /**
@@ -121,7 +127,7 @@ export class AmuletService {
    */
   public CanUpgrade(): boolean {
     if (!this.IsUnlocked()) return false;
-    if (GetNextQuality(this.Quality()) == null) return false;
+    if (GetNextAmuletQuality(this.Quality()) == null) return false;
     return this.GoldService.CanAfford(this.GetUpgradeCost());
   }
 
@@ -132,7 +138,7 @@ export class AmuletService {
   public Upgrade(): boolean {
     if (!this.CanUpgrade()) return false;
 
-    const nextQuality = GetNextQuality(this.Quality());
+    const nextQuality = GetNextAmuletQuality(this.Quality());
     if (nextQuality == null) return false;
 
     const didSpend = this.GoldService.Spend(this.GetUpgradeCost());
@@ -200,12 +206,14 @@ export class AmuletService {
 
     const targetSlotRune = this.State().Slots[slotIndex];
 
-    if (targetSlotRune == null) {
+    if (targetSlotRune === null) {
       // Slot is empty, check if the same rune is not already socketed
       if (this.HasRuneEquipped(rune.DefinitionId)) return false;
     } else {
       // Slot is occupied, check if the new rune has the same id as the currently socketed rune
-      if (targetSlotRune.DefinitionId === rune.DefinitionId) return true;
+      if (targetSlotRune.DefinitionId === rune.DefinitionId) {
+        return this.GoldService.CanAfford(this.GetSocketCost());
+      }
     }
 
     return this.GoldService.CanAfford(this.GetSocketCost());

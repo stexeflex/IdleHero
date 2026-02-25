@@ -11,8 +11,7 @@ import {
   MissEvent,
   Target
 } from './combat-event';
-
-import { DamageResult } from '../../systems/combat';
+import { DamageResult, GetRawDamages, HasMultiHits } from '../../systems/combat';
 
 export function CreateEvent(overrides: Partial<CombatEvent>): CombatEvent {
   return {
@@ -44,14 +43,14 @@ export function CreateDamageEvent(
   target: Target,
   damage: DamageResult[]
 ): DamageEvent {
-  const rawDamages = damage.filter((d) => !d.IsBleeding && !d.IsSplash);
+  const rawDamages = GetRawDamages(damage);
   return {
     Type: 'Damage',
     AtMs: atMs,
     Actor: actor,
     Target: target,
     Damage: damage,
-    IsMultiHit: rawDamages.length > 1
+    IsMultiHit: HasMultiHits(damage)
   };
 }
 
@@ -72,12 +71,18 @@ export function CreateDamageOverTimeEvent(
   };
 }
 
-export function CreateChargeEvent(atMs: number, actor: Actor, amount: number): ChargeEvent {
+export function CreateChargeEvent(
+  atMs: number,
+  actor: Actor,
+  amount: number,
+  source: ChargeEvent['Source']
+): ChargeEvent {
   return {
     Type: 'Charge',
     AtMs: atMs,
     Actor: actor,
-    Amount: amount
+    Amount: amount,
+    Source: source
   };
 }
 

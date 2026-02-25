@@ -4,22 +4,35 @@
     <div class="grid-header" [class.grid-header--expanded]="statsState.AttributesExpanded()">
       <h3>ATTRIBUTES</h3>
       <div class="respec">
-        <button class="ih-button-quaternary button-respec" (click)="ToggleRespecMode()">
+        <button
+          class="ih-button-icon button-cancel"
+          [class.button-cancel--hidden]="!IsRespecMode()"
+          [disabled]="!IsRespecMode()"
+          (click)="CancelRespecMode()"
+          title="Cancel Respec">
+          <app-icon ui="cancel" size="sm"></app-icon>
+        </button>
+        <button
+          class="ih-button-quaternary button-respec"
+          [class.button-respec--hidden]="HideRespecButton()"
+          [disabled]="RespecButtonDisabled()"
+          [title]="RespecButtonTooltip()"
+          (click)="IsRespecMode() ? ConfirmRespec() : StartRespecMode()">
           @if (IsRespecMode()) {
             CONFIRM
           } @else {
             RESPEC
           }
         </button>
-        @if (IsRespecMode()) {
+        <div class="respec-cost" [class.respec-cost--hidden]="!IsRespecMode()" title="Respec Cost">
           <app-gold [amount]="RespecCost()"></app-gold>
-        }
-        @if (ShowAttributePoints() && !IsRespecMode()) {
-          <div class="skill-points">
-            {{ AttributePoints() }}
-            <app-icon class="skill-points__icon" symbol="orb" size="sm"></app-icon>
-          </div>
-        }
+        </div>
+        <div
+          class="skill-points"
+          [class.skill-points--hidden]="IsRespecMode() || !ShowAttributePoints()">
+          {{ AttributePoints() }}
+          <app-icon class="skill-points__icon" symbol="orb" size="sm"></app-icon>
+        </div>
       </div>
       <button class="ih-button-icon grid-header__toggle" (click)="ToggleAttributesExpanded()">
         <app-toggle-icon
@@ -33,14 +46,14 @@
           <div class="grid__value">
             <button
               class="attribute-modifier-button"
-              (click)="decreaseAttribute(attribute.label)"
+              (click)="DecreaseAttribute(attribute.label)"
               [disabled]="!CanDecreaseAttribute(attribute.label)">
               -
             </button>
             <div class="attribute-value">{{ attribute.value }}</div>
             <button
               class="attribute-modifier-button"
-              (click)="increaseAttribute(attribute.label)"
+              (click)="IncreaseAttribute(attribute.label)"
               [disabled]="!CanIncreaseAttributes()">
               +
             </button>

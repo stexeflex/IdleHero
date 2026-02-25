@@ -4,7 +4,6 @@
       <div class="dungeon-group">
         <h3 class="group-title">{{ group.Title }}</h3>
         @for (dungeon of group.Dungeons; track dungeon.Id) {
-          @let prerequisiteKey = GetDungeonPrerequisiteKey(dungeon);
           <div class="dungeon-card">
             <app-icon [creatures]="dungeon.Icon" size="lg"></app-icon>
             <div class="dungeon-info">
@@ -61,6 +60,8 @@
 
             <!-- ENTER -->
             <div class="entry-button-area">
+              @let prerequisiteLevel = GetDungeonPrerequisiteLevel(dungeon);
+              @let prerequisiteKey = GetDungeonPrerequisiteKey(dungeon);
               @if (
                 group.Type === "Capstone" && prerequisiteKey && !HasDungeonPrerequisiteKey(dungeon)
               ) {
@@ -72,6 +73,14 @@
                   <div [class]="GetDungeonKeyColorClass(prerequisiteKey)">
                     {{ prerequisiteKey }}
                   </div>
+                </div>
+              } @else if (
+                group.Type === "Normal" &&
+                prerequisiteLevel &&
+                !FulfillsDungeonLevelPrerequisite(dungeon)
+              ) {
+                <div class="rewards-icon-item prerequisite-item">
+                  <app-level [level]="prerequisiteLevel" size="mini" fontSize="1rem"></app-level>
                 </div>
               } @else {
                 <button

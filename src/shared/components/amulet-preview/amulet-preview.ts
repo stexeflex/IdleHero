@@ -14,6 +14,11 @@ import { GetRuneInfo } from '../../../core/systems/runes';
 import { IconComponent } from '../icon/icon.component';
 import { Separator } from '../separator/separator';
 
+interface AmuletRuneEffect {
+  readonly SlotIndex: number;
+  readonly Info: RuneInfo;
+}
+
 @Component({
   selector: 'app-amulet-preview',
   imports: [IconComponent, Separator],
@@ -42,10 +47,19 @@ export class AmuletPreview implements OnDestroy {
     return this.Amulet().Slots.map((rune) => (rune ? rune : null));
   });
 
-  protected readonly Effects = computed<RuneInfo[]>(() => {
+  protected readonly Effects = computed<AmuletRuneEffect[]>(() => {
     return this.Slots()
-      .filter((rune): rune is Rune => rune != null)
-      .map((rune) => GetRuneInfo(rune, this.locale));
+      .map((rune, slotIndex) => {
+        if (rune == null) {
+          return null;
+        }
+
+        return {
+          SlotIndex: slotIndex,
+          Info: GetRuneInfo(rune, this.locale)
+        } satisfies AmuletRuneEffect;
+      })
+      .filter((effect): effect is AmuletRuneEffect => effect != null);
   });
 
   protected get SlotIsEmpty(): (index: number) => boolean {
@@ -58,6 +72,11 @@ export class AmuletPreview implements OnDestroy {
   // Unsocket
   private timeout: number = 0;
   protected readonly SelectedIndex = signal<number | null>(null);
+  protected readonly HoveredIndex = signal<number | null>(null);
+
+  protected SetHoveredIndex(index: number | null): void {
+    this.HoveredIndex.set(index);
+  }
 
   protected SelectSlot(index: number): void {
     if (!this.AllowUnsocketRunes()) return;

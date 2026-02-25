@@ -23,6 +23,11 @@
       &.thousands-separator {
         width: 7px;
       }
+
+      &.million-suffix {
+        font-size: 0.8em;
+        margin-right: calc($gap / 3);
+      }
     }
   }
 

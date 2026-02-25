@@ -39,7 +39,10 @@
       <div class="dungeon-stage-list">
         @for (dungeonStage of DungeonStages; track dungeonStage.DungeonId) {
           <div class="dungeon-stage">
-            <app-icon [creatures]="dungeonStage.DungeonIcon" size="sm"></app-icon>
+            <app-icon
+              [class.dungeon-completed]="dungeonStage.Cleared"
+              [creatures]="dungeonStage.DungeonIcon"
+              size="sm"></app-icon>
             <h3>{{ dungeonStage.Stage }}</h3>
           </div>
           @if (!$last) {
@@ -56,7 +59,10 @@
       <div class="dungeon-stage-list">
         @for (dungeonStage of CapstoneStages; track dungeonStage.DungeonId) {
           <div class="dungeon-stage">
-            <app-icon [creatures]="dungeonStage.DungeonIcon" size="sm"></app-icon>
+            <app-icon
+              [class.dungeon-completed]="dungeonStage.Cleared"
+              [creatures]="dungeonStage.DungeonIcon"
+              size="sm"></app-icon>
             <h3>{{ dungeonStage.Stage }}</h3>
           </div>
           @if (!$last) {

@@ -84,7 +84,7 @@ export class CombatState {
 
   private ClearedDungeon() {
     this.Completed.set(true);
-    this.DungeonRun.StopRun();
+    this.DungeonRun.StopRun(this.DungeonRoom.CurrentStage());
 
     this.Log.Info(`${this.DungeonRoom.CurrentDungeon()?.Title.toUpperCase()}: Dungeon Cleared!`);
 
@@ -99,7 +99,7 @@ export class CombatState {
     this.InProgress.set(false);
     this.Completed.set(false);
     this.CombatSkills.Reset();
-    this.DungeonRun.StopRun();
+    this.DungeonRun.StopRun(this.DungeonRoom.CurrentStage());
     this.Queue.Clear();
     this.Log.Clear();
     this.ClearActors();
@@ -120,7 +120,7 @@ export class CombatState {
     this.Reset();
     this.InProgress.set(true);
     this.GameSaver.SaveGame();
-    this.DungeonRun.StartRun();
+    this.DungeonRun.StartRun(this.DungeonRoom.CurrentDungeonId()!);
 
     // Set Combat Actors
     const hero: Hero = this.SetupHero();
@@ -165,7 +165,7 @@ export class CombatState {
   /**
    * Advance to the next Boss in the Dungeon Room
    */
-  public AdvanceToNextBoss(): void {
+  public AdvanceToNextBoss(atMs: number): void {
     if (this.Boss()?.Life.Alive) return;
 
     const advanced: boolean = this.DungeonRoom.AdvanceStage();
@@ -178,10 +178,10 @@ export class CombatState {
     const nextBoss = this.DungeonRoom.CurrentBoss();
     if (!nextBoss) return;
 
-    const now = TimestampUtils.GetTimestamp();
-    this.SetFirstEvent(this.Hero()!, nextBoss, now);
     nextBoss.Life = ResetLife(nextBoss.Life);
     this.Boss.set(nextBoss);
+
+    this.SetFirstEvent(this.Hero()!, nextBoss, atMs);
     this.PublishState();
   }
 

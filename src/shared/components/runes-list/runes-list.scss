@@ -11,7 +11,7 @@
     border-style: solid;
     border-radius: $border-radius;
 
-    background: $grad-ui-bg-lighten-revert;
+    background: $clr-ui-bg;
 
     padding: calc($gap / 2);
 
@@ -89,6 +89,11 @@
 
       .actions {
         grid-area: actions;
+
+        .upgrade-available {
+          border-color: $clr-highlight;
+          background: color.scale($clr-highlight, $lightness: -10%);
+        }
       }
     }
   }

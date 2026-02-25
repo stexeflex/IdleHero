@@ -1,9 +1,11 @@
 <div class="gold-display" [style.fontSize]="fontSize()">
   <!-- <div class="gold-amount">{{ amount() | number }}</div> -->
   <div class="gold-amount">
-    @for (character of splittedAmount(); track $index) {
+    @for (character of displayAmount(); track $index) {
       @if (character === "," || character === "." || character === " ") {
         <span class="thousands-separator">{{ character }}</span>
+      } @else if (character === "M") {
+        <span class="million-suffix">{{ character }}</span>
       } @else {
         <span>{{ character }}</span>
       }

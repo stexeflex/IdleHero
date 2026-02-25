@@ -1,10 +1,10 @@
+import { GetDungeonById } from '../../../constants/dungeons/dungeons.config';
 import {
   DungeonBossScalingParams,
-  GetDungeonById,
   GetScalingParamsForDungeon
-} from '../../../constants';
+} from '../../../constants/dungeons/dungeon-boss-scaling.config';
 
-import { Boss } from '../../../models';
+import type { Boss } from '../../../models';
 
 export function SetHealth(boss: Boss, health: number): Boss {
   return {

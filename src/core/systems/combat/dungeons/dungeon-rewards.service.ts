@@ -9,7 +9,7 @@ import {
 import { Injectable, inject } from '@angular/core';
 
 import { BossSelectionService } from './boss-selection.service';
-import { DUNGEON_MIMIC_BOSS_CONFIG } from '../../../constants';
+import { DUNGEON_SPECIAL_BOSS_CONFIG } from '../../../constants';
 import { DropRandomRuneForDungeon } from '../../runes';
 import { DungeonKeyService } from '../../../services/dungeon-key.service';
 import { DungeonRunService } from './dungeon-run.service';
@@ -33,13 +33,23 @@ export class DungeonRewardsService {
    * @param dungeon The dungeon definition containing base reward values.
    * @param stageId The stage number for which to compute rewards.
    * @param isMimic Whether the stage was completed by defeating a Mimic boss, which affects gold rewards.
+   * @param isDjinn Whether the stage was completed by defeating a Djinn boss, which affects experience rewards.
    * @returns The computed rewards (gold, experience, and rune).
    */
-  public ComputeStageRewards(dungeon: DungeonRoom, stageId: number, isMimic: boolean): Rewards {
+  public ComputeStageRewards(
+    dungeon: DungeonRoom,
+    stageId: number,
+    isMimic: boolean,
+    isDjinn: boolean
+  ): Rewards {
     const f = StageFactor(stageId);
     const mimicGoldMultiplier = this.GetMimicGoldMultiplier(isMimic);
+    const djinnExpMultiplier = this.GetDjinnExperienceMultiplier(isDjinn);
     const gold = Math.round(dungeon.Rewards.GoldBase * f * mimicGoldMultiplier);
-    const xp = ComputeDampedExperience(dungeon, stageId, this.Statistics.DungeonStatistics());
+    const xp = Math.round(
+      ComputeDampedExperience(dungeon, stageId, this.Statistics.DungeonStatistics()) *
+        djinnExpMultiplier
+    );
     const rune = stageId === 1 ? null : DropRandomRuneForDungeon(dungeon.Id);
     const runeIsUpgrade = rune ? this.Runes.IsUpgrade(rune) : false;
 
@@ -55,10 +65,16 @@ export class DungeonRewardsService {
    * @param dungeon The dungeon definition containing base reward values.
    * @param stageId The stage number to grant rewards for.
    * @param isMimic Whether the stage was completed by defeating a Mimic boss, which affects gold rewards.
+   * @param isDjinn Whether the stage was completed by defeating a Djinn boss, which affects experience rewards.
    * @returns The granted rewards (gold, experience, and rune).
    */
-  public GrantStageRewards(dungeon: DungeonRoom, stageId: number, isMimic: boolean): Rewards {
-    const rewards = this.ComputeStageRewards(dungeon, stageId, isMimic);
+  public GrantStageRewards(
+    dungeon: DungeonRoom,
+    stageId: number,
+    isMimic: boolean,
+    isDjinn: boolean
+  ): Rewards {
+    const rewards = this.ComputeStageRewards(dungeon, stageId, isMimic, isDjinn);
     this.Log.Rewards(stageId, rewards);
     this.Gold.Add(rewards.Gold);
     this.Level.AddExperience(rewards.Experience);
@@ -74,7 +90,7 @@ export class DungeonRewardsService {
    * @returns The computed rewards (gold, experience, and rune).
    */
   public ComputeMidBossRewards(dungeon: DungeonRoom, stageId: number): Rewards {
-    const base = this.ComputeStageRewards(dungeon, stageId, false);
+    const base = this.ComputeStageRewards(dungeon, stageId, false, false);
 
     const mGold = MidBossFactor('GOLD');
     const mExp = MidBossFactor('EXPERIENCE');
@@ -114,7 +130,7 @@ export class DungeonRewardsService {
    */
   public ComputeCompletionRewards(dungeon: DungeonRoom): Rewards {
     const finalStage = Math.max(dungeon.StagesBase, dungeon.StagesMax);
-    const base = this.ComputeStageRewards(dungeon, finalStage, false);
+    const base = this.ComputeStageRewards(dungeon, finalStage, false, false);
 
     const cGold = CompletionFactor('GOLD');
     const cExp = CompletionFactor('EXPERIENCE');
@@ -162,6 +178,10 @@ export class DungeonRewardsService {
   }
 
   private GetMimicGoldMultiplier(isMimic: boolean): number {
-    return isMimic ? DUNGEON_MIMIC_BOSS_CONFIG.MIMIC_GOLD_REWARD_MULTIPLIER : 1;
+    return isMimic ? DUNGEON_SPECIAL_BOSS_CONFIG.MIMIC_GOLD_REWARD_MULTIPLIER : 1;
+  }
+
+  private GetDjinnExperienceMultiplier(isDjinn: boolean): number {
+    return isDjinn ? DUNGEON_SPECIAL_BOSS_CONFIG.DJINN_EXP_REWARD_MULTIPLIER : 1;
   }
 }

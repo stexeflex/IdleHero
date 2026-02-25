@@ -1,16 +1,16 @@
 import {
   BossFactory,
-  DUNGEON_MIMIC_BOSS_CONFIG,
+  DUNGEON_SPECIAL_BOSS_CONFIG,
   DungeonBossConfig,
   GetBossConfigForDungeon,
   GetDungeonById
 } from '../../../constants';
 import { ChanceUtils, RandomUtils } from '../../../../shared/utils';
+import { Djinn, Mimic } from './boss.factory';
 import { GetHealthForBossAtStage, SetHealth } from './boss-health.utils';
 
 import { Boss } from '../../../models';
 import { Injectable } from '@angular/core';
-import { Mimic } from './boss.factory';
 
 @Injectable({ providedIn: 'root' })
 export class BossSelectionService {
@@ -38,12 +38,20 @@ export class BossSelectionService {
         boss.IsEndboss = true;
       }
     }
-    // Mimic Spawn
-    else if (this.IsMimicStageBoss(dungeonId, stageId)) {
-      boss = Mimic();
-    }
-    // Random Boss from Pool
+    // Weighted special boss spawn
     else {
+      const specialBoss = this.ResolveSpecialBossForStage();
+      if (specialBoss) {
+        boss = specialBoss;
+      } else {
+        const pool = this.ResolvePoolForStage(dungeonBossConfig, stageId);
+        const idx = RandomUtils.stableIndex(`${dungeonId}:${stageId}`, pool.length);
+        boss = pool[idx]();
+      }
+    }
+
+    // Random Boss from Pool
+    if (!boss) {
       const pool = this.ResolvePoolForStage(dungeonBossConfig, stageId);
       const idx = RandomUtils.stableIndex(`${dungeonId}:${stageId}`, pool.length);
       boss = pool[idx]();
@@ -56,16 +64,26 @@ export class BossSelectionService {
     return boss;
   }
 
-  private IsMimicStageBoss(dungeonId: string, stageId: number): boolean {
-    const dungeonBossConfig = GetBossConfigForDungeon(dungeonId);
-    if (dungeonBossConfig.StageSpecific.has(stageId)) return false;
+  private ResolveSpecialBossForStage(): Boss | null {
+    const mimicRate = this.NormalizeSpawnRate(DUNGEON_SPECIAL_BOSS_CONFIG.MIMIC_SPAWN_RATE);
+    const djinnRate = this.NormalizeSpawnRate(DUNGEON_SPECIAL_BOSS_CONFIG.DJINN_SPAWN_RATE);
 
-    const spawnRate = DUNGEON_MIMIC_BOSS_CONFIG.MIMIC_SPAWN_RATE;
-    if (spawnRate <= 0) return false;
-    if (spawnRate >= 1) return true;
+    const combinedRate = Math.min(1, mimicRate + djinnRate);
+    if (combinedRate <= 0) return null;
 
-    const success = ChanceUtils.success(spawnRate);
-    return success;
+    const roll = ChanceUtils.Roll();
+    if (roll >= combinedRate) return null;
+
+    const mimicThreshold = Math.min(mimicRate, combinedRate);
+
+    if (roll < mimicThreshold) return Mimic();
+    else return Djinn();
+  }
+
+  private NormalizeSpawnRate(spawnRate: number): number {
+    if (spawnRate <= 0) return 0;
+    if (spawnRate >= 1) return 1;
+    return spawnRate;
   }
 
   private ResolvePoolForStage(config: DungeonBossConfig, stageId: number): BossFactory[] {

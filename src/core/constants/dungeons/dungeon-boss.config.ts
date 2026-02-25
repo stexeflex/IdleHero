@@ -29,6 +29,8 @@ import { Boss } from '../../models/combat/actors/boss.';
 import { Rewards } from '../../models/economy/rewards';
 
 export type BossFactory = () => Boss;
+export { DUNGEON_BOSS_SCALING, GetScalingParamsForDungeon } from './dungeon-boss-scaling.config';
+export type { DungeonBossScalingParams } from './dungeon-boss-scaling.config';
 
 export interface DungeonBossConfig {
   /**
@@ -44,10 +46,14 @@ export interface DungeonBossConfig {
   BossPools: Map<number, BossFactory[]>;
 }
 
-export const DUNGEON_MIMIC_BOSS_CONFIG = {
+export const DUNGEON_SPECIAL_BOSS_CONFIG = {
   MIMIC_ID: 'Mimic',
   MIMIC_SPAWN_RATE: 0.01, // 1% Chance, dass ein Mimic statt eines regulären Bosses spawnt
-  MIMIC_GOLD_REWARD_MULTIPLIER: 10 // Mimics geben das 10-fache an Gold im Vergleich zu regulären Bossen
+  MIMIC_GOLD_REWARD_MULTIPLIER: 10, // Mimics geben das 10-fache an Gold im Vergleich zu regulären Bossen
+
+  DJINN_ID: 'Djinn',
+  DJINN_SPAWN_RATE: 0.0075, // 0.75% Chance, dass ein Djinn statt eines regulären Bosses spawnt
+  DJINN_EXP_REWARD_MULTIPLIER: 5 // Djinns geben das 5-fache an Erfahrung im Vergleich zu regulären Bossen
 };
 
 export const DUNGEON_BOSS_CONFIGS: Record<string, DungeonBossConfig> = {
@@ -152,9 +158,6 @@ export interface DungeonBossScalingParams {
   b: number; // polynomial exponent (e.g., 1.5 – 2.5)
   MidBossMultiplier: number; // multiplier for mid-boss stages (e.g., ×3–×6)
   EndBossMultiplier: number; // multiplier for end-boss stages (e.g., ×8–×20)
-
-  // Optional completion rewards for single-stage boss rooms (e.g. B1/B2).
-  Rewards?: Rewards;
 }
 
 export const DUNGEON_BOSS_SCALING: Record<string, DungeonBossScalingParams> = {
@@ -189,24 +192,6 @@ export const DUNGEON_BOSS_SCALING: Record<string, DungeonBossScalingParams> = {
     b: 1.45,
     MidBossMultiplier: 3,
     EndBossMultiplier: 6
-  },
-  B1: {
-    BossBaseHealth: 1_000_000,
-    r: 1,
-    a: 0,
-    b: 1,
-    MidBossMultiplier: 1,
-    EndBossMultiplier: 1,
-    Rewards: { Gold: 10_000, Experience: 0 }
-  },
-  B2: {
-    BossBaseHealth: 1_000_000,
-    r: 1,
-    a: 0,
-    b: 1,
-    MidBossMultiplier: 1,
-    EndBossMultiplier: 1,
-    Rewards: { Gold: 10_000, Experience: 0 }
   }
 };
 
@@ -216,15 +201,4 @@ export function GetBossConfigForDungeon(dungeonId: string): DungeonBossConfig {
 
 export function GetScalingParamsForDungeon(dungeonId: string): DungeonBossScalingParams {
   return DUNGEON_BOSS_SCALING[dungeonId];
-}
-
-export function GetBossRoomRewards(bossRoomId: string): Rewards {
-  const scaling = GetScalingParamsForDungeon(bossRoomId);
-  const rewards = scaling?.Rewards;
-
-  if (!rewards) {
-    throw new Error(`No boss room rewards configured for id=${bossRoomId}`);
-  }
-
-  return rewards;
 }

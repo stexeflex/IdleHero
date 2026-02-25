@@ -38,8 +38,13 @@ export interface DungeonRoom {
   Locked: boolean;
 }
 
+export interface NormalDungeonRoomPrerequisites {
+  Level: number;
+}
+
 export interface NormalDungeonRoom extends DungeonRoom {
   Type: DungeonType.Normal;
+  Prerequisites: NormalDungeonRoomPrerequisites;
 }
 
 export interface CapstoneDungeonRoomPrerequisites {

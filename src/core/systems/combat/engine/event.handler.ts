@@ -24,11 +24,25 @@ import {
 } from '../../../models';
 import { ChanceUtils, ClampUtils } from '../../../../shared/utils';
 import { CombatLogService, StatisticsService } from '../../../services';
+import { ComputeBossRespawnDelayMs, ComputeNextIntervalMs } from '../attack-interval-computing';
+import {
+  GetDirectDamageAmount,
+  GetHitCount,
+  GetRawDamages,
+  GetTotalDamageAmount,
+  IsChargeHit,
+  IsChargedCriticalMultiHit,
+  IsChargedCriticalSingleHit,
+  IsChargedMultiHit,
+  IsChargedSingleHit,
+  IsCriticalMultiHit,
+  IsCriticalSingleHit,
+  IsSingleHit
+} from '../damage.utils';
 import { HealLife, TakeDamage } from '../life.utils';
 import { Injectable, inject } from '@angular/core';
 
 import { CombatState } from './combat.state';
-import { ComputeNextIntervalMs } from '../attack-interval-computing';
 import { DELAYS } from '../../../constants';
 import { DamageResult } from './models/damage-result';
 
@@ -115,10 +129,7 @@ export class EventHandler {
     // Hit-Event
     else {
       const hero = event.Actor as Hero;
-
-      if (hero) {
-        this.HandleHeroHitEvent(hero, event);
-      }
+      if (hero) this.HandleHeroHitEvent(hero, event);
     }
 
     // Nächsten Angriff des Actors planen
@@ -205,7 +216,8 @@ export class EventHandler {
       const chargeEvent = CreateChargeEvent(
         event.AtMs + this.EventDelayMs,
         hero,
-        hero.Stats.ChargeGain
+        hero.Stats.ChargeGain,
+        'Hit'
       );
       this.CombatState.Queue.Push(chargeEvent);
     }
@@ -232,8 +244,14 @@ export class EventHandler {
     // Lose Charge on Miss
     if (!actor.Charge.Charged) {
       const amount = Math.round(actor.Stats.ChargeGain * actor.Stats.ChargeLoss);
-      const chargeEvent = CreateChargeEvent(event.AtMs + this.EventDelayMs, actor, -amount);
+      const chargeEvent = CreateChargeEvent(event.AtMs + this.EventDelayMs, actor, -amount, 'Miss');
       this.CombatState.Queue.Push(chargeEvent);
+    }
+
+    // Lose Splash Damage on Miss
+    if (this.CanSplash(actor)) {
+      const pendingSplashDamage = actor.SplashDamage || 0;
+      if (pendingSplashDamage > 0) this.SetSplashDamage(actor, 0);
     }
   }
 
@@ -249,11 +267,8 @@ export class EventHandler {
 
     let damages: DamageResult[] = [...event.Damage];
 
-    if (canApplySplash) {
-      damages = this.ApplySplashDamage(hero, damages);
-    } else {
-      this.SetSplashDamage(hero, 0);
-    }
+    if (canApplySplash) damages = this.ApplySplashDamage(hero, damages);
+    else this.SetSplashDamage(hero, 0);
 
     this.UpdateDamageStatistics(damages);
 
@@ -314,6 +329,8 @@ export class EventHandler {
     if (!actor) return;
     if (!actor.Life.Alive) return;
 
+    if (actor.Charge.Charged) return;
+
     actor.Charge.Current = ClampUtils.clamp(
       actor.Charge.Current + event.Amount,
       0,
@@ -322,24 +339,11 @@ export class EventHandler {
 
     // Max Charge
     if (actor.Charge.Current >= actor.Charge.Max) {
+      actor.Charge.Current = actor.Charge.Max;
       actor.Charge.Charged = true;
 
-      const factor = 4;
-      const ticks = actor.Stats.ChargeDuration * factor;
-      const chargeDecreasePerSecond = actor.Charge.Max / actor.Stats.ChargeDuration;
-
-      for (let i = 1; i <= ticks; i++) {
-        const clearChargeEvent = CreateChargeEvent(
-          event.AtMs + (i * 1000) / factor,
-          actor,
-          Math.floor(-chargeDecreasePerSecond / factor)
-        );
-        this.CombatState.Queue.Push(clearChargeEvent);
-      }
-    }
-    // Clear Charge
-    else if (actor.Charge.Current === 0) {
-      const clearEvent = CreateClearEvent(event.AtMs + 1000, actor, 'Charge');
+      const chargeDurationMs = Math.max(Math.round(actor.Stats.ChargeDuration * 1000), 1);
+      const clearEvent = CreateClearEvent(event.AtMs + chargeDurationMs, actor, 'Charge');
       this.CombatState.Queue.Push(clearEvent);
     }
 
@@ -390,17 +394,18 @@ export class EventHandler {
   private HandleDeathEvent(event: DeathEvent): void {
     // Boss besiegt
     if (!!(event.Actor as Boss)) {
+      const hero = this.CombatState.Hero();
+      const bossRespawnDelayMs = ComputeBossRespawnDelayMs(hero?.AttackInterval);
+
       this.CombatState.PrepareStageAdvance();
-      const stageAdvanceEvent = CreateStageAdvanceEvent(
-        event.AtMs + DELAYS.BOSS_RESPAWN_ANIMATION_MS
-      );
+      const stageAdvanceEvent = CreateStageAdvanceEvent(event.AtMs + bossRespawnDelayMs);
       this.CombatState.Queue.Push(stageAdvanceEvent);
     }
   }
 
   /** STAGE ADVANCE */
   private HandleStageAdvanceEvent(event: StageAdvanceEvent): void {
-    this.CombatState.AdvanceToNextBoss();
+    this.CombatState.AdvanceToNextBoss(event.AtMs);
   }
 
   //#region Helpers
@@ -520,7 +525,7 @@ export class EventHandler {
   }
 
   private CanSplash(hero: Hero): boolean {
-    return !!hero?.Passives?.SplashDamage;
+    return !!hero?.Passives?.SplashDamage?.Enabled && hero.Passives.SplashDamage.DamagePercent > 0;
   }
 
   private ApplySplashDamage(hero: Hero, damages: DamageResult[]): DamageResult[] {
@@ -543,62 +548,65 @@ export class EventHandler {
   }
 
   private UpdateSplashDamage(hero: Hero, overflowDamage: number, damages: DamageResult[]): void {
-    let overflowSplashDamage = overflowDamage;
-    const remainingDamages = damages.reduce((sum, damageResult) => sum + damageResult.Amount, 0);
-    overflowSplashDamage += remainingDamages;
-    this.SetSplashDamage(hero, overflowSplashDamage);
+    const overflowAndRemainingDamage =
+      overflowDamage + damages.reduce((sum, damageResult) => sum + damageResult.Amount, 0);
+    const splashDamageFactor = hero.Passives.SplashDamage.DamagePercent;
+    const splashDamage = Math.round(overflowAndRemainingDamage * splashDamageFactor);
+    this.SetSplashDamage(hero, splashDamage);
   }
 
   private UpdateDamageStatistics(damage: DamageResult[]): void {
-    const damages = damage.filter((d) => !d.IsSplash).reduce((sum, d) => sum + d.Amount, 0);
-    const rawDamages = damage.filter((d) => !d.IsBleeding && !d.IsSplash);
-    const rawTotalDamage = rawDamages.reduce((sum, d) => sum + d.Amount, 0);
+    const damageAmount = GetDirectDamageAmount(damage);
+    const rawDamages = GetRawDamages(damage);
+    const rawTotalDamageAmount = GetTotalDamageAmount(rawDamages);
     const bleedingDamage = damage.filter((d) => d.IsBleeding);
     const splashDamage = damage.filter((d) => d.IsSplash);
-    const totalDamage = damage.reduce((sum, d) => sum + d.Amount, 0);
+    const totalDamage = GetTotalDamageAmount(damage);
 
     // Total Hit Statistics
     this.Statistics.UpdateDamage({ HighestTotalHit: totalDamage });
 
     // Single Hit Statistics
-    if (rawDamages.length === 1) {
-      if (rawDamages[0].IsCharged && rawDamages[0].IsCritical) {
-        this.Statistics.UpdateDamage({ HighestChargedCriticalHit: rawTotalDamage });
-        this.Statistics.UpdateDamage({ HighestChargedHit: damages });
-      } else if (rawDamages[0].IsCharged) {
-        this.Statistics.UpdateDamage({ HighestChargedSingleHit: rawTotalDamage });
-        this.Statistics.UpdateDamage({ HighestChargedHit: damages });
-      } else if (rawDamages[0].IsCritical) {
-        this.Statistics.UpdateDamage({ HighestCriticalHit: rawTotalDamage });
-        this.Statistics.UpdateDamage({ HighestHit: damages });
+    if (IsSingleHit(damage)) {
+      const singleHitDamage = rawDamages[0];
+      if (IsChargedCriticalSingleHit(singleHitDamage)) {
+        this.Statistics.UpdateDamage({ HighestChargedCriticalHit: rawTotalDamageAmount });
+        this.Statistics.UpdateDamage({ HighestChargedHit: damageAmount });
+      } else if (IsChargedSingleHit(singleHitDamage)) {
+        this.Statistics.UpdateDamage({ HighestChargedSingleHit: rawTotalDamageAmount });
+        this.Statistics.UpdateDamage({ HighestChargedHit: damageAmount });
+      } else if (IsCriticalSingleHit(singleHitDamage)) {
+        this.Statistics.UpdateDamage({ HighestCriticalHit: rawTotalDamageAmount });
+        this.Statistics.UpdateDamage({ HighestHit: damageAmount });
       } else {
-        this.Statistics.UpdateDamage({ HighestSingleHit: rawTotalDamage });
-        this.Statistics.UpdateDamage({ HighestHit: damages });
+        this.Statistics.UpdateDamage({ HighestSingleHit: rawTotalDamageAmount });
+        this.Statistics.UpdateDamage({ HighestHit: damageAmount });
       }
     }
     // Multi-Hit Statistics
     else {
-      this.Statistics.UpdateDamage({ HighestMultiHitChain: rawDamages.length });
+      const hitCount = GetHitCount(damage);
+      this.Statistics.UpdateDamage({ HighestMultiHitChain: hitCount });
 
-      if (rawDamages.some((d) => d.IsCharged && d.IsCritical)) {
-        this.Statistics.UpdateDamage({ HighestChargedCriticalMultiHit: rawTotalDamage });
-        this.Statistics.UpdateDamage({ HighestChargedHit: damages });
-      } else if (rawDamages.some((d) => d.IsCharged)) {
-        this.Statistics.UpdateDamage({ HighestChargedMultiHit: rawTotalDamage });
-        this.Statistics.UpdateDamage({ HighestChargedHit: damages });
-      } else if (rawDamages.some((d) => d.IsCritical)) {
-        this.Statistics.UpdateDamage({ HighestCriticalMultiHit: rawTotalDamage });
-        this.Statistics.UpdateDamage({ HighestHit: damages });
+      if (IsChargedCriticalMultiHit(rawDamages)) {
+        this.Statistics.UpdateDamage({ HighestChargedCriticalMultiHit: rawTotalDamageAmount });
+        this.Statistics.UpdateDamage({ HighestChargedHit: damageAmount });
+      } else if (IsChargedMultiHit(rawDamages)) {
+        this.Statistics.UpdateDamage({ HighestChargedMultiHit: rawTotalDamageAmount });
+        this.Statistics.UpdateDamage({ HighestChargedHit: damageAmount });
+      } else if (IsCriticalMultiHit(rawDamages)) {
+        this.Statistics.UpdateDamage({ HighestCriticalMultiHit: rawTotalDamageAmount });
+        this.Statistics.UpdateDamage({ HighestHit: damageAmount });
       } else {
-        this.Statistics.UpdateDamage({ HighestMultiHit: rawTotalDamage });
-        this.Statistics.UpdateDamage({ HighestHit: damages });
+        this.Statistics.UpdateDamage({ HighestMultiHit: rawTotalDamageAmount });
+        this.Statistics.UpdateDamage({ HighestHit: damageAmount });
       }
     }
 
     // Bleeding Tick Statistics
     const bleedingDamageAmount = bleedingDamage.reduce((sum, d) => sum + d.Amount, 0);
 
-    if (rawDamages.some((d) => d.IsCharged)) {
+    if (IsChargeHit(rawDamages)) {
       this.Statistics.UpdateDamage({ HighestChargedBleedingTick: bleedingDamageAmount });
     } else {
       this.Statistics.UpdateDamage({ HighestBleedingTick: bleedingDamageAmount });

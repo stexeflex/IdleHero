@@ -1,11 +1,11 @@
 #!/usr/bin/env ts-node
 
-// npm run exp:sim
-// npm run exp:sim -- --dungeon D1
-// npm run exp:sim -- --dungeon D1 --targetLevel 50
-// npm run exp:sim -- --dungeon D1 --targetLevel 10 --maxKills 50000
-// npm run exp:sim -- --dungeon D1 --startLevel 10 --targetLevel 20
-// npm run exp:sim -- --dungeon D1 --noPrestige
+// npm run level:sim
+// npm run level:sim -- --dungeon D1
+// npm run level:sim -- --dungeon D1 --targetLevel 50
+// npm run level:sim -- --dungeon D1 --targetLevel 10 --maxKills 50000
+// npm run level:sim -- --dungeon D1 --startLevel 10 --targetLevel 20
+// npm run level:sim -- --dungeon D1 --noPrestige
 //
 // Notes
 // - Simulates boss kills stage-by-stage.
@@ -13,7 +13,7 @@
 // - Can optionally "prestige" after each full run to record highest stage reached,
 //   which activates experience damping below mid-stages.
 
-import { CAPSTONE_DUNGEONS, NORMAL_DUNGEONS } from '../src/core/constants/dungeons.config';
+import { CAPSTONE_DUNGEONS, NORMAL_DUNGEONS } from '../src/core/constants/dungeons/dungeons.config';
 import {
   CompletionFactor,
   ComputeProgressFromTotalXP,
@@ -163,7 +163,7 @@ function PrintHeader(dungeon: DungeonRoom, args: ParsedArgs): void {
   );
   console.log(`Dungeon: ${dungeon.Title}`);
   console.log(
-    `XpBase: ${dungeon.XpBase}, StagesMax: ${dungeon.StagesMax}, MidStages: [${dungeon.MidStages.join(', ')}]`
+    `XpBase: ${dungeon.Rewards.XpBase}, StagesMax: ${dungeon.StagesMax}, MidStages: [${dungeon.MidStages.join(', ')}]`
   );
   console.log(
     `Level curve: BASE_XP_TO_NEXT=${LEVELING_CONFIG.BASE_XP_TO_NEXT}, TOTAL_XP_EXPONENT=${LEVELING_CONFIG.TOTAL_XP_EXPONENT}`

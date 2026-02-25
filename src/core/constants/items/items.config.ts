@@ -1626,7 +1626,7 @@ const FEET_BOOTS_VARIANTS: ItemVariantDefinition[] = [
   },
   {
     Id: 't2_feet_boots_1',
-    Name: 'Armored Boots',
+    Name: 'Armored Greaves',
     Icon: 'legarmor',
     Slot: 'Feet',
     Type: 'Boots',
@@ -1660,13 +1660,13 @@ const FEET_BOOTS_VARIANTS: ItemVariantDefinition[] = [
   },
   {
     Id: 't2_feet_boots_3',
-    Name: 'Leather Boots',
+    Name: 'Heavy Boots',
     Icon: 'steeltoeboots',
     Slot: 'Feet',
     Type: 'Boots',
     Tier: 'II',
     Innate: {
-      ToLabel: (value: number) => FlatAdditiveLabel('Charge Gain', value),
+      ToLabel: (value: number) => FlatAdditiveLabel('Charge Gain per Hit', value),
       ValuesByLevel: INNATE_CS_GAIN_T2,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t2_feet_boots_3_innate');
@@ -1677,7 +1677,7 @@ const FEET_BOOTS_VARIANTS: ItemVariantDefinition[] = [
   },
   {
     Id: 't3_feet_boots_1',
-    Name: 'Armored Boots',
+    Name: 'Chain Greaves',
     Icon: 'legarmor',
     Slot: 'Feet',
     Type: 'Boots',
@@ -1694,7 +1694,7 @@ const FEET_BOOTS_VARIANTS: ItemVariantDefinition[] = [
   },
   {
     Id: 't3_feet_boots_2',
-    Name: 'Leather Boots',
+    Name: 'Valor Treads',
     Icon: 'boots',
     Slot: 'Feet',
     Type: 'Boots',
@@ -1711,13 +1711,13 @@ const FEET_BOOTS_VARIANTS: ItemVariantDefinition[] = [
   },
   {
     Id: 't3_feet_boots_3',
-    Name: 'Leather Boots',
+    Name: 'Iron Boots',
     Icon: 'steeltoeboots',
     Slot: 'Feet',
     Type: 'Boots',
     Tier: 'III',
     Innate: {
-      ToLabel: (value: number) => FlatAdditiveLabel('Charge Gain', value),
+      ToLabel: (value: number) => FlatAdditiveLabel('Charge Gain per Hit', value),
       ValuesByLevel: INNATE_CS_GAIN_T3,
       MapToStatSource: (value: number): StatSource => {
         const s = EmptyStatSource('t3_feet_boots_3_innate');
@@ -1730,7 +1730,7 @@ const FEET_BOOTS_VARIANTS: ItemVariantDefinition[] = [
 const FEET_SHOES_VARIANTS: ItemVariantDefinition[] = [
   {
     Id: 't1_feet_shoes_1',
-    Name: 'Leather Shoes',
+    Name: 'Simple Shoes',
     Icon: 'sonicshoes',
     Slot: 'Feet',
     Type: 'Shoes',
@@ -1764,7 +1764,7 @@ const FEET_SHOES_VARIANTS: ItemVariantDefinition[] = [
   },
   {
     Id: 't3_feet_shoes_1',
-    Name: 'Leather Shoes',
+    Name: 'Silk Shoes',
     Icon: 'sonicshoes',
     Slot: 'Feet',
     Type: 'Shoes',

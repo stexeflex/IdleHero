@@ -5,35 +5,97 @@ export interface DungeonRunState {
   Gold: number;
   Experience: number;
   Runes: Rune[];
+  MimicsDefeated: number;
+  DjinnsEncountered: number;
+}
+
+interface DungeonRunInfo {
+  Rewards: DungeonRunState;
+  StageReached: number;
+  IsRunning: boolean;
+  StartedAtMs: number | null;
+  ElapsedMilliseconds: number;
 }
 
 function CreateEmptyDungeonRunState(): DungeonRunState {
   return {
     Gold: 0,
     Experience: 0,
-    Runes: []
+    Runes: [],
+    MimicsDefeated: 0,
+    DjinnsEncountered: 0
+  };
+}
+
+function CreateEmptyDungeonRunInfo(): DungeonRunInfo {
+  return {
+    Rewards: CreateEmptyDungeonRunState(),
+    StageReached: 0,
+    IsRunning: false,
+    StartedAtMs: null,
+    ElapsedMilliseconds: 0
   };
 }
 
 @Injectable({ providedIn: 'root' })
 export class DungeonRunService implements OnDestroy {
-  private readonly State = signal<DungeonRunState>(CreateEmptyDungeonRunState());
-  private readonly IsRunningState = signal<boolean>(false);
-  private readonly StartedAtMsState = signal<number | null>(null);
-  private readonly ElapsedMillisecondsState = signal<number>(0);
+  private readonly RunsByDungeonIdState = signal<Record<string, DungeonRunInfo>>({});
+  private readonly CurrentDungeonIdState = signal<string>('');
 
-  public readonly Gold = computed<number>(() => this.State().Gold);
-  public readonly Experience = computed<number>(() => this.State().Experience);
-  public readonly Runes = computed<Rune[]>(() => [...this.State().Runes]);
-  public readonly RuneCount = computed<number>(() => this.State().Runes.length);
+  // Current Run Info
+  public readonly DungeonId = computed<string>(() => this.CurrentDungeonIdState());
 
-  public readonly IsRunning = computed<boolean>(() => this.IsRunningState());
-  public readonly ElapsedMilliseconds = computed<number>(() => this.ElapsedMillisecondsState());
+  public readonly StageReached = computed<number>(() => {
+    const runInfo = this.CurrentRunInfo();
+    return runInfo ? runInfo.StageReached : 0;
+  });
+
+  // Current Run Rewards
+  public readonly Gold = computed<number>(() => {
+    const runInfo = this.CurrentRunInfo();
+    return runInfo ? runInfo.Rewards.Gold : 0;
+  });
+
+  public readonly Experience = computed<number>(() => {
+    const runInfo = this.CurrentRunInfo();
+    return runInfo ? runInfo.Rewards.Experience : 0;
+  });
+
+  public readonly Runes = computed<Rune[]>(() => {
+    const runInfo = this.CurrentRunInfo();
+    return runInfo ? [...runInfo.Rewards.Runes] : [];
+  });
+
+  public readonly RuneCount = computed<number>(() => {
+    const runInfo = this.CurrentRunInfo();
+    return runInfo ? runInfo.Rewards.Runes.length : 0;
+  });
+
+  public readonly MimicsDefeated = computed<number>(() => {
+    const runInfo = this.CurrentRunInfo();
+    return runInfo ? runInfo.Rewards.MimicsDefeated : 0;
+  });
+
+  public readonly DjinnsEncountered = computed<number>(() => {
+    const runInfo = this.CurrentRunInfo();
+    return runInfo ? (runInfo.Rewards.DjinnsEncountered ?? 0) : 0;
+  });
+
+  public readonly IsRunning = computed<boolean>(() => {
+    const runInfo = this.CurrentRunInfo();
+    return runInfo ? runInfo.IsRunning : false;
+  });
+
+  public readonly ElapsedMilliseconds = computed<number>(() => {
+    const runInfo = this.CurrentRunInfo();
+    return runInfo ? runInfo.ElapsedMilliseconds : 0;
+  });
+
   public readonly ElapsedSeconds = computed<number>(() =>
-    Math.floor(this.ElapsedMillisecondsState() / 1000)
+    Math.floor(this.ElapsedMilliseconds() / 1000)
   );
   public readonly ElapsedFormatted = computed<string>(() =>
-    this.FormatDuration(this.ElapsedMillisecondsState())
+    this.FormatDuration(this.ElapsedMilliseconds())
   );
 
   private TimerId: ReturnType<typeof setInterval> | null = null;
@@ -42,46 +104,68 @@ export class DungeonRunService implements OnDestroy {
    * Cleans up active timers when service is destroyed.
    */
   ngOnDestroy(): void {
-    this.StopRun();
+    this.StopRun(0);
   }
 
   /**
    * Starts a new dungeon run timer and resets the tracked run totals.
    */
-  public StartRun(): void {
+  public StartRun(dungeonId: string): void {
+    this.SetCurrentDungeonRoom(dungeonId);
     this.Reset();
 
     this.StopTicker();
-    this.IsRunningState.set(true);
 
     const now = Date.now();
-    this.StartedAtMsState.set(now);
-    this.ElapsedMillisecondsState.set(0);
+    this.UpdateRunInfo(dungeonId, (runInfo) => ({
+      ...runInfo,
+      StageReached: 0,
+      IsRunning: true,
+      StartedAtMs: now,
+      ElapsedMilliseconds: 0
+    }));
 
     this.TimerId = setInterval(() => {
-      const startedAtMs = this.StartedAtMsState();
-      if (startedAtMs === null) return;
+      const currentDungeonId = this.CurrentDungeonIdState();
+      const runInfo = this.GetRunInfo(currentDungeonId);
 
-      this.ElapsedMillisecondsState.set(Math.max(0, Date.now() - startedAtMs));
+      if (!runInfo || runInfo.StartedAtMs === null || !runInfo.IsRunning) return;
+
+      this.UpdateRunInfo(currentDungeonId, (currentRunInfo) => ({
+        ...currentRunInfo,
+        ElapsedMilliseconds: Math.max(0, Date.now() - (currentRunInfo.StartedAtMs ?? Date.now()))
+      }));
     }, 250);
   }
 
   /**
    * Stops the current dungeon run timer and keeps the last measured duration.
    */
-  public StopRun(): void {
-    if (!this.IsRunningState()) {
+  public StopRun(stageReached: number): void {
+    const currentDungeonId = this.CurrentDungeonIdState();
+    const runInfo = this.GetRunInfo(currentDungeonId);
+
+    if (!runInfo || !runInfo.IsRunning) {
       this.StopTicker();
       return;
     }
 
-    const startedAtMs = this.StartedAtMsState();
-    if (startedAtMs !== null) {
-      this.ElapsedMillisecondsState.set(Math.max(0, Date.now() - startedAtMs));
-    }
+    this.UpdateRunInfo(currentDungeonId, (currentRunInfo) => {
+      const startedAtMs = currentRunInfo.StartedAtMs;
+      const elapsedMilliseconds =
+        startedAtMs !== null
+          ? Math.max(0, Date.now() - startedAtMs)
+          : currentRunInfo.ElapsedMilliseconds;
 
-    this.IsRunningState.set(false);
-    this.StartedAtMsState.set(null);
+      return {
+        ...currentRunInfo,
+        StageReached: Math.max(0, Math.floor(stageReached)),
+        ElapsedMilliseconds: elapsedMilliseconds,
+        IsRunning: false,
+        StartedAtMs: null
+      };
+    });
+
     this.StopTicker();
   }
 
@@ -90,10 +174,49 @@ export class DungeonRunService implements OnDestroy {
    * @param rewards the rewards to aggregate into the current run
    */
   public AddRewards(rewards: Rewards): void {
-    this.State.update((state) => ({
-      Gold: state.Gold + Math.max(0, Math.floor(rewards.Gold ?? 0)),
-      Experience: state.Experience + Math.max(0, Math.floor(rewards.Experience ?? 0)),
-      Runes: rewards.Rune ? [...state.Runes, rewards.Rune] : state.Runes
+    const currentDungeonId = this.CurrentDungeonIdState();
+    if (!currentDungeonId) return;
+
+    this.UpdateRunInfo(currentDungeonId, (runInfo) => ({
+      ...runInfo,
+      Rewards: {
+        ...runInfo.Rewards,
+        Gold: runInfo.Rewards.Gold + Math.max(0, Math.floor(rewards.Gold ?? 0)),
+        Experience: runInfo.Rewards.Experience + Math.max(0, Math.floor(rewards.Experience ?? 0)),
+        Runes: rewards.Rune ? [...runInfo.Rewards.Runes, rewards.Rune] : runInfo.Rewards.Runes
+      }
+    }));
+  }
+
+  /**
+   * Increments the count of defeated Mimics in the current dungeon run totals.
+   */
+  public AddMimicDefeat(): void {
+    const currentDungeonId = this.CurrentDungeonIdState();
+    if (!currentDungeonId) return;
+
+    this.UpdateRunInfo(currentDungeonId, (runInfo) => ({
+      ...runInfo,
+      Rewards: {
+        ...runInfo.Rewards,
+        MimicsDefeated: runInfo.Rewards.MimicsDefeated + 1
+      }
+    }));
+  }
+
+  /**
+   * Increments the count of encountered Djinns in the current dungeon run totals.
+   */
+  public AddDjinnEncounter(): void {
+    const currentDungeonId = this.CurrentDungeonIdState();
+    if (!currentDungeonId) return;
+
+    this.UpdateRunInfo(currentDungeonId, (runInfo) => ({
+      ...runInfo,
+      Rewards: {
+        ...runInfo.Rewards,
+        DjinnsEncountered: (runInfo.Rewards.DjinnsEncountered ?? 0) + 1
+      }
     }));
   }
 
@@ -102,11 +225,15 @@ export class DungeonRunService implements OnDestroy {
    * @returns a cloned dungeon run state
    */
   public GetState(): DungeonRunState {
-    const state = this.State();
+    const runInfo = this.CurrentRunInfo();
+    const state = runInfo?.Rewards ?? CreateEmptyDungeonRunState();
+
     return {
       Gold: state.Gold,
       Experience: state.Experience,
-      Runes: [...state.Runes]
+      Runes: [...state.Runes],
+      MimicsDefeated: state.MimicsDefeated,
+      DjinnsEncountered: state.DjinnsEncountered ?? 0
     };
   }
 
@@ -115,19 +242,68 @@ export class DungeonRunService implements OnDestroy {
    * @param state the new dungeon run state
    */
   public SetState(state: DungeonRunState): void {
-    this.State.set({
-      Gold: Math.max(0, Math.floor(state.Gold)),
-      Experience: Math.max(0, Math.floor(state.Experience)),
-      Runes: [...state.Runes]
-    });
+    const currentDungeonId = this.CurrentDungeonIdState();
+    if (!currentDungeonId) return;
+
+    this.UpdateRunInfo(currentDungeonId, (runInfo) => ({
+      ...runInfo,
+      Rewards: {
+        Gold: Math.max(0, Math.floor(state.Gold)),
+        Experience: Math.max(0, Math.floor(state.Experience)),
+        Runes: [...state.Runes],
+        MimicsDefeated: Math.max(0, Math.floor(state.MimicsDefeated)),
+        DjinnsEncountered: Math.max(0, Math.floor(state.DjinnsEncountered ?? 0))
+      }
+    }));
   }
 
   /**
    * Resets all tracked rewards for the current dungeon run.
    */
   public Reset(): void {
-    this.State.set(CreateEmptyDungeonRunState());
-    this.ElapsedMillisecondsState.set(0);
+    const currentDungeonId = this.CurrentDungeonIdState();
+    if (!currentDungeonId) return;
+
+    this.UpdateRunInfo(currentDungeonId, (runInfo) => ({
+      ...runInfo,
+      Rewards: CreateEmptyDungeonRunState(),
+      StageReached: 0,
+      ElapsedMilliseconds: 0
+    }));
+  }
+
+  /**
+   * Sets the currently selected dungeon room for exposing run data.
+   * @param dungeonId the dungeon room identifier
+   */
+  public SetCurrentDungeonRoom(dungeonId: string): void {
+    this.CurrentDungeonIdState.set(dungeonId);
+  }
+
+  private CurrentRunInfo(): DungeonRunInfo | null {
+    const currentDungeonId = this.CurrentDungeonIdState();
+    return this.GetRunInfo(currentDungeonId);
+  }
+
+  private GetRunInfo(dungeonId: string): DungeonRunInfo | null {
+    if (!dungeonId) return null;
+    const runsByDungeonId = this.RunsByDungeonIdState();
+    return runsByDungeonId[dungeonId] ?? null;
+  }
+
+  private UpdateRunInfo(
+    dungeonId: string,
+    updater: (runInfo: DungeonRunInfo) => DungeonRunInfo
+  ): void {
+    if (!dungeonId) return;
+
+    this.RunsByDungeonIdState.update((runsByDungeonId) => {
+      const currentRunInfo = runsByDungeonId[dungeonId] ?? CreateEmptyDungeonRunInfo();
+      return {
+        ...runsByDungeonId,
+        [dungeonId]: updater(currentRunInfo)
+      };
+    });
   }
 
   private StopTicker(): void {

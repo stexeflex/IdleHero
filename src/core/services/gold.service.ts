@@ -1,9 +1,11 @@
 import { GoldState, InitialGoldState } from '../models/economy/gold-state';
 import { Injectable, computed, signal } from '@angular/core';
+import { CURRENCY_CONFIG } from '../constants/currency.config';
 
 @Injectable({ providedIn: 'root' })
 export class GoldService {
   private readonly State = signal<GoldState>(InitialGoldState());
+  private readonly MaximumAmount = CURRENCY_CONFIG.GOLD.MAX_AMOUNT;
 
   public readonly Balance = computed<number>(() => this.State().Balance);
   public readonly TotalEarned = computed<number>(() => this.State().TotalEarned);
@@ -16,7 +18,7 @@ export class GoldService {
   public SetBalance(amount: number): void {
     if (!Number.isFinite(amount)) return;
 
-    const balance = Math.max(0, Math.floor(amount));
+    const balance = this.ClampBalance(amount);
     this.State.update((s) => ({ ...s, Balance: balance }));
   }
 
@@ -32,7 +34,7 @@ export class GoldService {
     let next = 0;
 
     this.State.update((current) => {
-      next = current.Balance + increaseAmount;
+      next = this.ClampBalance(current.Balance + increaseAmount);
       return {
         ...current,
         Balance: next,
@@ -78,7 +80,7 @@ export class GoldService {
    * @param initialBalance the balance to reset to
    */
   public Reset(initialBalance = 0): void {
-    this.State.set(InitialGoldState(initialBalance));
+    this.State.set(InitialGoldState(this.ClampBalance(initialBalance)));
   }
 
   public GetState(): GoldState {
@@ -86,6 +88,17 @@ export class GoldService {
   }
 
   public SetState(state: GoldState): void {
-    this.State.set({ ...state });
+    const normalizedState: GoldState = {
+      ...state,
+      Balance: this.ClampBalance(state.Balance),
+      TotalEarned: Math.max(0, Math.floor(state.TotalEarned)),
+      TotalSpent: Math.max(0, Math.floor(state.TotalSpent))
+    };
+
+    this.State.set(normalizedState);
+  }
+
+  private ClampBalance(amount: number): number {
+    return Math.min(this.MaximumAmount, Math.max(0, Math.floor(amount)));
   }
 }

@@ -70,9 +70,12 @@
     display: grid;
     grid-template-columns: auto 1fr;
     gap: $gap;
+    align-items: center;
 
-    > button {
+    .rarity-upgrade-button {
       color: $clr-highlight;
+      width: 42px;
+      height: 42px;
     }
 
     .item-rarity-upgrade-info {

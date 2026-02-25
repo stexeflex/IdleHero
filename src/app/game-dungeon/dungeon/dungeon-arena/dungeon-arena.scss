@@ -117,7 +117,7 @@
 
 /* Hero animations */
 .hero-icon.attack .icon {
-  animation: hero-attack 240ms ease-out;
+  animation: hero-attack var(--hero-attack-animation-ms, 240ms) ease-out;
 }
 
 .hero-icon.crit .icon {
@@ -125,12 +125,12 @@
 }
 
 .hero-icon.multi .icon {
-  animation: hero-multi-attack 300ms ease-out;
+  animation: hero-multi-attack var(--hero-multi-animation-ms, 300ms) ease-out;
   filter: drop-shadow(0 0 15px $clr-log-multi);
 }
 
 .hero-icon.crit-multi .icon {
-  animation: hero-multi-attack 300ms ease-out;
+  animation: hero-multi-attack var(--hero-multi-animation-ms, 300ms) ease-out;
   filter: drop-shadow(0 0 20px $clr-log-crit-multi);
 }
 
@@ -139,7 +139,7 @@
 }
 
 .hero-icon.splash .icon {
-  animation: hero-multi-attack 300ms ease-out;
+  animation: hero-multi-attack var(--hero-multi-animation-ms, 300ms) ease-out;
   filter: drop-shadow(0 0 30px $clr-log-splash);
 }
 
@@ -172,12 +172,12 @@
 
 /* Boss animations */
 .boss-icon.taking-hit .icon {
-  animation: boss-hit 300ms ease-out;
+  animation: boss-hit var(--boss-hit-animation-ms, 300ms) ease-out;
   filter: drop-shadow(0 0 5px $clr-log-boss-defeat);
 }
 
 .boss-icon.defeated .icon {
-  animation: boss-defeat 600ms ease-in forwards;
+  animation: boss-defeat var(--boss-defeat-animation-ms, 600ms) ease-in forwards;
   filter: grayscale(100%) brightness(50%);
 }
 

@@ -8,7 +8,7 @@ import {
   NoArmor
 } from '../../../models';
 
-import { DUNGEON_MIMIC_BOSS_CONFIG } from '../../../constants';
+import { DUNGEON_SPECIAL_BOSS_CONFIG } from '../../../constants';
 
 function DefaultBoss(): Partial<Boss> {
   return {
@@ -26,9 +26,19 @@ export function Mimic(): Boss {
   const boss = DefaultBoss() as Boss;
   return {
     ...boss,
-    Id: DUNGEON_MIMIC_BOSS_CONFIG.MIMIC_ID,
+    Id: DUNGEON_SPECIAL_BOSS_CONFIG.MIMIC_ID,
     Name: 'Mimic',
     BossIcon: BossIcon('mimicchest', true)
+  };
+}
+
+export function Djinn(): Boss {
+  const boss = DefaultBoss() as Boss;
+  return {
+    ...boss,
+    Id: DUNGEON_SPECIAL_BOSS_CONFIG.DJINN_ID,
+    Name: 'Djinn',
+    BossIcon: BossIcon('djinn', false)
   };
 }
 

@@ -7,28 +7,20 @@ import {
   RuneQuality
 } from '../../../core/models';
 import { Component, computed, inject } from '@angular/core';
-import { DungeonKeyService, DungeonRoomService } from '../../../core/services';
-import { IconComponent, PanelHeader } from '../../../shared/components';
-
-import { GetAllDungeons } from '../../../core/constants';
+import { DungeonKeyService, DungeonRoomService, LevelService } from '../../../core/services';
+import { GetAllDungeons, RUNE_QUALITY_ORDER } from '../../../core/constants';
+import { IconComponent, Level, PanelHeader } from '../../../shared/components';
 
 @Component({
   selector: 'app-dungeon-rooms',
-  imports: [IconComponent],
+  imports: [PanelHeader, IconComponent, Level],
   templateUrl: './dungeon-rooms.html',
   styleUrl: './dungeon-rooms.scss'
 })
 export class DungeonRooms {
   private readonly dungeonRoom = inject(DungeonRoomService);
   private readonly dungeonKey = inject(DungeonKeyService);
-
-  public readonly RuneQualityOrder: RuneQuality[] = [
-    'Common',
-    'Magic',
-    'Rare',
-    'Epic',
-    'Legendary'
-  ];
+  private readonly level = inject(LevelService);
 
   // Data
   public readonly Dungeons = GetAllDungeons();
@@ -81,7 +73,7 @@ export class DungeonRooms {
   }
 
   public GetRuneDrops(dungeon: DungeonRoom): RuneDropInfo[] {
-    return this.RuneQualityOrder.map((quality) => ({
+    return RUNE_QUALITY_ORDER.map((quality) => ({
       Quality: quality,
       Chance: dungeon.Rewards.RuneDropChances[quality] ?? 0
     })).filter((runeDrop) => runeDrop.Chance > 0);
@@ -146,6 +138,21 @@ export class DungeonRooms {
 
   private IsCapstoneDungeon(dungeon: DungeonRoom): dungeon is CapstoneDungeonRoom {
     return dungeon.Type === DungeonType.Capstone;
+  }
+
+  private IsNormalDungeon(dungeon: DungeonRoom): dungeon is NormalDungeonRoom {
+    return dungeon.Type === DungeonType.Normal;
+  }
+
+  public GetDungeonPrerequisiteLevel(dungeon: DungeonRoom): number | null {
+    return this.IsNormalDungeon(dungeon) ? dungeon.Prerequisites.Level : null;
+  }
+
+  public FulfillsDungeonLevelPrerequisite(dungeon: DungeonRoom): boolean {
+    const playerLevel = this.level.Level();
+    const prerequisiteLevel = this.GetDungeonPrerequisiteLevel(dungeon);
+    if (!prerequisiteLevel) return true;
+    return playerLevel >= prerequisiteLevel;
   }
 }
 

@@ -1,17 +1,23 @@
-import { AmuletPreview, Gold, RunesList } from '../../../../shared/components';
-import { AmuletService, RuneService } from '../../../../core/services';
+import { AmuletPreview, Gold, Level, RunesList } from '../../../../shared/components';
+import { AmuletService, LevelService, RuneService } from '../../../../core/services';
 import { Component, LOCALE_ID, computed, inject } from '@angular/core';
-import { GetNextQuality, GetRuneSlotInfo } from '../../../../core/systems/runes';
+import {
+  FulfillsAmuletUnlockRequirement,
+  GetNextAmuletQuality,
+  GetRuneSlotInfo,
+  RequiredLevelForNextUpgrade
+} from '../../../../core/systems/runes';
 import { Rune, RuneSlotInfo } from '../../../../core/models';
 
 @Component({
   selector: 'app-socketing',
-  imports: [AmuletPreview, Gold, RunesList],
+  imports: [AmuletPreview, Gold, RunesList, Level],
   templateUrl: './socketing.html',
   styleUrl: './socketing.scss'
 })
 export class Socketing {
   private readonly locale = inject(LOCALE_ID);
+  private readonly Level = inject(LevelService);
   private readonly AmuletState = inject(AmuletService);
   private readonly RuneState = inject(RuneService);
 
@@ -29,8 +35,17 @@ export class Socketing {
 
   protected ShowUpgradeAmuletButton(): boolean {
     if (!this.Unlocked()) return true;
-    else if (GetNextQuality(this.Amulet().Quality) !== null) return true;
+    else if (GetNextAmuletQuality(this.Amulet().Quality) !== null) return true;
     return false;
+  }
+
+  protected UpgradeRequirementMet(): boolean {
+    if (!this.Unlocked()) return true;
+    return FulfillsAmuletUnlockRequirement(this.Amulet().Quality, this.Level.Level());
+  }
+
+  protected RequiredLevelForNextUpgrade(): number {
+    return RequiredLevelForNextUpgrade(this.Amulet().Quality) ?? 0;
   }
 
   protected CanUpgradeAmulet(): boolean {

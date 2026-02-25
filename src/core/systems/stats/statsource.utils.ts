@@ -117,5 +117,6 @@ export function MapSkillToPassiveEffect(skill: Skill, passives: Passives): Parti
   const definition = SkillDefinitionsById.get(skill.DefinitionId);
   if (!definition || !IsPassiveSkillDefinition(definition)) return {};
   const passiveDef = definition as PassiveSkillDefinition;
-  return passiveDef.MapToPassiveEffect(passives);
+  const levelSpec = passiveDef.Levels[skill.Level - 1];
+  return passiveDef.MapToPassiveEffect(passives, levelSpec ? levelSpec.Value : undefined);
 }

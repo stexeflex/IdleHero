@@ -1,9 +1,8 @@
-import { AnyDungeonRoom, Boss, CapstoneDungeonRoom, DungeonRoom, DungeonType } from '../models';
-import { DUNGEON_MIMIC_BOSS_CONFIG, GetDungeonById } from '../constants';
+import { Boss, CapstoneDungeonRoom, DungeonRoom, DungeonType } from '../models';
+import { BossSelectionService, DungeonRunService } from '../systems/combat';
+import { DUNGEON_SPECIAL_BOSS_CONFIG, GetDungeonById } from '../constants';
 import { Injectable, computed, inject, signal } from '@angular/core';
 
-import { BossSelectionService } from '../systems/combat';
-import { BossRewardsService } from '../systems/combat/bosses/boss-rewards.service';
 import { ClampUtils } from '../../shared/utils';
 import { DungeonKeyService } from './dungeon-key.service';
 import { DungeonRewardsService } from '../systems/combat/dungeons/dungeon-rewards.service';
@@ -16,6 +15,7 @@ export class DungeonRoomService {
   private readonly Rewards = inject(DungeonRewardsService);
   private readonly BossRewards = inject(BossRewardsService);
   private readonly Keys = inject(DungeonKeyService);
+  private readonly DungeonRun = inject(DungeonRunService);
 
   private readonly CurrentDungeonIdState = signal<string | null>(null);
   private readonly CurrentStageState = signal<number>(1);
@@ -93,6 +93,7 @@ export class DungeonRoomService {
     }
 
     this.CurrentDungeonIdState.set(dungeonId);
+    this.DungeonRun.SetCurrentDungeonRoom(dungeonId);
     this.CurrentStageState.set(1);
 
     return true;
@@ -116,7 +117,14 @@ export class DungeonRoomService {
         this.Rewards.GrantMidBossRewards(dungeon, stage);
       } else {
         const isMimic = this.CurrentBossIsMimic();
-        this.Rewards.GrantStageRewards(dungeon, stage, isMimic);
+        const isDjinn = this.CurrentBossIsDjinn();
+        if (isMimic) {
+          this.DungeonRun.AddMimicDefeat();
+        }
+        if (isDjinn) {
+          this.DungeonRun.AddDjinnEncounter();
+        }
+        this.Rewards.GrantStageRewards(dungeon, stage, isMimic, isDjinn);
       }
 
       this.CurrentStageState.set(stage + 1);
@@ -184,6 +192,12 @@ export class DungeonRoomService {
   private CurrentBossIsMimic(): boolean {
     const boss = this.CurrentBoss();
     if (!boss) return false;
-    return boss.Id === DUNGEON_MIMIC_BOSS_CONFIG.MIMIC_ID;
+    return boss.Id === DUNGEON_SPECIAL_BOSS_CONFIG.MIMIC_ID;
+  }
+
+  private CurrentBossIsDjinn(): boolean {
+    const boss = this.CurrentBoss();
+    if (!boss) return false;
+    return boss.Id === DUNGEON_SPECIAL_BOSS_CONFIG.DJINN_ID;
   }
 }

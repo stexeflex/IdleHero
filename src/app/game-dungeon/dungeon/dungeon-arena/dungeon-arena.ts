@@ -1,8 +1,17 @@
 import { Boss, DamageEvent, Hero } from '../../../../core/models';
 import { ChargeBar, HealthBar, IconComponent } from '../../../../shared/components';
+import {
+  CombatState,
+  ComputeBossRespawnDelayMs,
+  IsBleedingHit,
+  IsCriticalHit,
+  IsCriticalMultiHit,
+  IsMultiHit,
+  IsSplashHit
+} from '../../../../core/systems/combat';
 import { Component, OnDestroy, computed, inject, signal } from '@angular/core';
 
-import { CombatState } from '../../../../core/systems/combat';
+import { ClampUtils } from '../../../../shared/utils';
 import { DELAYS } from '../../../../core/constants';
 import { Subscription } from 'rxjs';
 
@@ -14,6 +23,12 @@ interface BleedingTick {
 @Component({
   selector: 'app-dungeon-arena',
   imports: [HealthBar, IconComponent, ChargeBar],
+  host: {
+    '[style.--hero-attack-animation-ms]': 'HeroAttackAnimationDurationCss()',
+    '[style.--hero-multi-animation-ms]': 'HeroMultiAnimationDurationCss()',
+    '[style.--boss-hit-animation-ms]': 'BossHitAnimationDurationCss()',
+    '[style.--boss-defeat-animation-ms]': 'BossDefeatAnimationDurationCss()'
+  },
   templateUrl: './dungeon-arena.html',
   styleUrl: './dungeon-arena.scss'
 })
@@ -59,14 +74,27 @@ export class DungeonArena implements OnDestroy {
   protected readonly isBossTakingHit = signal(false);
   protected readonly isBossDefeated = signal(false);
 
-  private attackTimer: any = null;
-  private critTimer: any = null;
-  private multiTimer: any = null;
-  private critMultiTimer: any = null;
-  private bleedTimer: any = null;
-  private splashTimer: any = null;
-  private isBossTakingHitTimer: any = null;
-  private bossDefeatedTimer: any = null;
+  protected readonly HeroAttackAnimationDurationCss = computed(
+    () => `${this.GetHeroAttackAnimationDurationMs()}ms`
+  );
+  protected readonly HeroMultiAnimationDurationCss = computed(
+    () => `${this.GetHeroMultiAnimationDurationMs()}ms`
+  );
+  protected readonly BossHitAnimationDurationCss = computed(
+    () => `${this.GetBossHitAnimationDurationMs()}ms`
+  );
+  protected readonly BossDefeatAnimationDurationCss = computed(
+    () => `${this.GetBossDefeatedAnimationDurationMs()}ms`
+  );
+
+  private attackTimer: ReturnType<typeof setTimeout> | null = null;
+  private critTimer: ReturnType<typeof setTimeout> | null = null;
+  private multiTimer: ReturnType<typeof setTimeout> | null = null;
+  private critMultiTimer: ReturnType<typeof setTimeout> | null = null;
+  private bleedTimer: ReturnType<typeof setTimeout> | null = null;
+  private splashTimer: ReturnType<typeof setTimeout> | null = null;
+  private isBossTakingHitTimer: ReturnType<typeof setTimeout> | null = null;
+  private bossDefeatedTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
     this.heroSub = this.combat.Hero$.subscribe((s) => {
@@ -89,7 +117,10 @@ export class DungeonArena implements OnDestroy {
       if (event.Type === 'Attack') {
         this.isAttacking.set(true);
         if (this.attackTimer) clearTimeout(this.attackTimer);
-        this.attackTimer = setTimeout(() => this.isAttacking.set(false), 300);
+        this.attackTimer = setTimeout(
+          () => this.isAttacking.set(false),
+          this.GetHeroAttackAnimationDurationMs()
+        );
       }
 
       if (event.Type === 'Damage') {
@@ -97,37 +128,55 @@ export class DungeonArena implements OnDestroy {
 
         this.isBossTakingHit.set(true);
         if (this.isBossTakingHitTimer) clearTimeout(this.isBossTakingHitTimer);
-        this.isBossTakingHitTimer = setTimeout(() => this.isBossTakingHit.set(false), 500);
+        this.isBossTakingHitTimer = setTimeout(
+          () => this.isBossTakingHit.set(false),
+          this.GetBossHitAnimationDurationMs()
+        );
 
         // Splash Damage Animation
-        if (this.DamageIsSplash(damageEvent)) {
+        if (IsSplashHit(damageEvent.Damage)) {
           this.isSplash.set(true);
           if (this.splashTimer) clearTimeout(this.splashTimer);
-          this.splashTimer = setTimeout(() => this.isSplash.set(false), 500);
+          this.splashTimer = setTimeout(
+            () => this.isSplash.set(false),
+            this.GetHeroEffectAnimationDurationMs()
+          );
         }
         // Critical Multi Hit Animation
-        else if (this.DamageIsCritMultiHit(damageEvent)) {
+        else if (IsCriticalMultiHit(damageEvent.Damage)) {
           this.isCritMulti.set(true);
           if (this.critMultiTimer) clearTimeout(this.critMultiTimer);
-          this.critMultiTimer = setTimeout(() => this.isCritMulti.set(false), 500);
+          this.critMultiTimer = setTimeout(
+            () => this.isCritMulti.set(false),
+            this.GetHeroEffectAnimationDurationMs()
+          );
         }
         // Multi Hit Animation
-        else if (this.DamageIsMultiHit(damageEvent)) {
+        else if (IsMultiHit(damageEvent.Damage)) {
           this.isMulti.set(true);
           if (this.multiTimer) clearTimeout(this.multiTimer);
-          this.multiTimer = setTimeout(() => this.isMulti.set(false), 500);
+          this.multiTimer = setTimeout(
+            () => this.isMulti.set(false),
+            this.GetHeroEffectAnimationDurationMs()
+          );
         }
         // Critical Hit Animation
-        else if (this.DamageIsCrit(damageEvent)) {
+        else if (IsCriticalHit(damageEvent.Damage)) {
           this.isCrit.set(true);
           if (this.critTimer) clearTimeout(this.critTimer);
-          this.critTimer = setTimeout(() => this.isCrit.set(false), 500);
+          this.critTimer = setTimeout(
+            () => this.isCrit.set(false),
+            this.GetHeroEffectAnimationDurationMs()
+          );
         }
         // Bleed Animation
-        else if (this.DamageIsBleed(damageEvent)) {
+        else if (IsBleedingHit(damageEvent.Damage)) {
           this.isBleed.set(true);
           if (this.bleedTimer) clearTimeout(this.bleedTimer);
-          this.bleedTimer = setTimeout(() => this.isBleed.set(false), 500);
+          this.bleedTimer = setTimeout(
+            () => this.isBleed.set(false),
+            this.GetHeroEffectAnimationDurationMs()
+          );
         }
       }
 
@@ -137,11 +186,54 @@ export class DungeonArena implements OnDestroy {
           if (this.bossDefeatedTimer) clearTimeout(this.bossDefeatedTimer);
           this.bossDefeatedTimer = setTimeout(
             () => this.isBossDefeated.set(false),
-            DELAYS.BOSS_RESPAWN_ANIMATION_MS * 1.5
+            this.GetBossDefeatedAnimationDurationMs()
           );
         }
       }
     });
+  }
+
+  private GetBossDefeatedAnimationDurationMs(): number {
+    const bossRespawnDelayMs = this.GetBossRespawnDelayMs();
+    const durationMs = Math.round(bossRespawnDelayMs);
+    return ClampUtils.clamp(
+      durationMs,
+      DELAYS.BOSS_RESPAWN_ANIMATION_MIN_MS,
+      DELAYS.BOSS_RESPAWN_ANIMATION_MAX_MS
+    );
+  }
+
+  private GetBossHitAnimationDurationMs(): number {
+    return this.GetScaledDurationByAttackInterval(300, 140, 420);
+  }
+
+  private GetHeroAttackAnimationDurationMs(): number {
+    return this.GetScaledDurationByAttackInterval(240, 120, 360);
+  }
+
+  private GetHeroMultiAnimationDurationMs(): number {
+    return this.GetScaledDurationByAttackInterval(300, 140, 420);
+  }
+
+  private GetHeroEffectAnimationDurationMs(): number {
+    const durationMs = this.GetScaledDurationByAttackInterval(500, 180, 700);
+    return durationMs;
+  }
+
+  private GetBossRespawnDelayMs(): number {
+    const hero = this.Hero();
+    return ComputeBossRespawnDelayMs(hero?.AttackInterval);
+  }
+
+  private GetScaledDurationByAttackInterval(
+    baseDurationMs: number,
+    minimumDurationMs: number,
+    maximumDurationMs: number
+  ): number {
+    const hero = this.Hero();
+    const attackIntervalMs = hero?.AttackInterval.AttackIntervalMs ?? 1000;
+    const scaledDuration = Math.round((baseDurationMs * attackIntervalMs) / 1000);
+    return ClampUtils.clamp(scaledDuration, minimumDurationMs, maximumDurationMs);
   }
 
   ngOnDestroy(): void {
@@ -157,30 +249,5 @@ export class DungeonArena implements OnDestroy {
     if (this.splashTimer) clearTimeout(this.splashTimer);
     if (this.isBossTakingHitTimer) clearTimeout(this.isBossTakingHitTimer);
     if (this.bossDefeatedTimer) clearTimeout(this.bossDefeatedTimer);
-  }
-
-  private DamageIsBleed(event: DamageEvent): boolean {
-    return (
-      event.Damage.some((d) => d.IsBleeding) &&
-      !event.Damage.some((d) => d.IsCritical) &&
-      !event.IsMultiHit &&
-      !event.Damage.some((d) => d.IsSplash)
-    );
-  }
-
-  private DamageIsSplash(event: DamageEvent): boolean {
-    return event.Damage.some((d) => d.IsSplash);
-  }
-
-  private DamageIsCrit(event: DamageEvent): boolean {
-    return event.Damage.some((d) => d.IsCritical) && !event.IsMultiHit;
-  }
-
-  private DamageIsMultiHit(event: DamageEvent): boolean {
-    return event.IsMultiHit && !event.Damage.some((d) => d.IsCritical);
-  }
-
-  private DamageIsCritMultiHit(event: DamageEvent): boolean {
-    return event.IsMultiHit && event.Damage.some((d) => d.IsCritical);
   }
 }
