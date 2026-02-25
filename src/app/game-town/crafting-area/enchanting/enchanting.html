@@ -190,7 +190,7 @@
               class="ih-button-icon ih-button-icon-border"
               title="Close auto reroll"
               (click)="CloseAutoRerollPanel()">
-              <app-icon ui="close" size="sm"></app-icon>
+              <app-icon ui="cancel" size="sm"></app-icon>
             </button>
           </div>
 
@@ -247,7 +247,7 @@
 
             @if (AutoRerollRunning()) {
               <button class="ih-button-tertiary" title="Stop auto reroll" (click)="StopAutoReroll()">
-                <app-icon ui="close" size="sm"></app-icon>
+                <app-icon ui="cancel" size="sm"></app-icon>
                 STOP
               </button>
             }

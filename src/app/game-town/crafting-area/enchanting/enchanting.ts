@@ -1,4 +1,4 @@
-import { AffixInfo,   , Label, Item, ItemRarity, ItemVariantDefinition } from '../../../../core/models';
+import { AffixInfo, Label, Item, ItemRarity, ItemVariantDefinition, AffixTier } from '../../../../core/models';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -79,7 +79,6 @@ export class Enchanting {
 
   protected readonly SelectedAffixIndex = signal<number | null>(null);
   protected SelectSlot(index: number): void {
-    // If the user changes selection mid auto-reroll, stop immediately so we never reroll the wrong slot.
     if (this.AutoRerollRunning()) {
       this.StopAutoReroll();
     }
@@ -104,7 +103,6 @@ export class Enchanting {
     const pool = GetAffixPool(this.Variant().Slot);
 
     const options: AutoRerollOption[] = pool.map((definition) => {
-      // We only want the stat name/type for selection, not the actual rolled value.
       const label: Label = definition.Effect.ToLabel(1);
       const suffix = label.ValueType === 'Percentage' ? ' (%)' : '';
       return { Id: definition.Id, Label: `${label.Stat}${suffix}` };
@@ -132,7 +130,9 @@ export class Enchanting {
 
     const normalized = raw.replace(',', '.');
     let n = Number(normalized);
-    if (!Number.isFinite(n)) return;
+    if (!Number.isFinite(n)) {
+      return;
+    }
     n = Math.trunc(n);
 
     // UI expects percent-points for percent stats (e.g. "8" means 8%).
@@ -272,7 +272,6 @@ export class Enchanting {
 
     // Allow running even if it currently matches the target: we will reroll at least once and
     // stop as soon as it lands on the target again.
-
     while (token === this.autoRerollToken) {
       if (this.SelectedAffixIndex() !== slotIndex) {
         this.AutoRerollStatus.set('Stopped: selected slot changed.');
