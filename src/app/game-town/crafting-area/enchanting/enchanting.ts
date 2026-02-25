@@ -1,4 +1,4 @@
-import { AffixInfo, Label, Item, ItemRarity, ItemVariantDefinition, AffixTier } from '../../../../core/models';
+import { AffixInfo, AffixTier, Item, ItemRarity, ItemVariantDefinition, Label } from '../../../../core/models';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -24,15 +24,21 @@ import {
   GetAffixPool,
   ItemLevelService,
   MaxLevelForRarity,
-  NextItemRarity
+  NextItemRarity as ComputeNextItemRarity
 } from '../../../../core/systems/items';
 import { Gold, IconComponent, ItemPreview } from '../../../../shared/components';
 
-import { DecimalPipe, PercentPipe } from '@angular/common';
+
 
 type AutoRerollOption = {
   Id: string;
   Label: string;
+};
+
+type AutoRerollTargetSpec = {
+  min: number;
+  max: number;
+  type: 'Flat' | 'Percent';
 };
 
 @Component({
@@ -67,7 +73,7 @@ export class Enchanting {
     () => this.Item().Affixes.filter((a) => a.Improved).length
   );
   protected readonly MaxAffixSlots = computed<number>(() => this.Rules().MaxAffixes);
-  protected readonly NextItemRarity = computed<ItemRarity>(() => NextItemRarity(this.Item()));
+  protected readonly NextItemRarity = computed<ItemRarity>(() => ComputeNextItemRarity(this.Item()));
 
   protected readonly VisibleSlotIndices = computed<number[]>(() => {
     const item = this.Item();
@@ -84,11 +90,7 @@ export class Enchanting {
     }
 
     this.SelectedAffixIndex.set(index);
-    this.AutoRerollOpen.set(false);
-    this.AutoRerollTargetId.set('');
-    this.AutoRerollMinValueRaw.set('');
-    this.AutoRerollAttempts.set(0);
-    this.AutoRerollStatus.set('');
+    this.resetAutoRerollUiState();
   }
 
   private autoRerollToken = 0;
@@ -98,6 +100,17 @@ export class Enchanting {
   protected readonly AutoRerollOpen = signal<boolean>(false);
   protected readonly AutoRerollAttempts = signal<number>(0);
   protected readonly AutoRerollStatus = signal<string>('');
+
+  private readonly autoRerollTargetSpec = computed<AutoRerollTargetSpec | null>(() => {
+    const slotIndex = this.SelectedAffixIndex();
+    if (slotIndex === null) return null;
+    if (!this.HasAffix(slotIndex)) return null;
+
+    const targetId = this.AutoRerollTargetId();
+    if (!targetId) return null;
+
+    return this.computeAutoRerollTargetSpec(slotIndex, targetId);
+  });
 
   protected readonly AutoRerollOptions = computed<AutoRerollOption[]>(() => {
     const pool = GetAffixPool(this.Variant().Slot);
@@ -118,34 +131,31 @@ export class Enchanting {
   }
 
   protected SetAutoRerollMinValueRaw(raw: string): void {
-    this.AutoRerollMinValueRaw.set(raw);
+    // Enforce whole-number input even when the browser allows pasting "7.5" etc.
+    const trimmed = raw.trim();
+    if (!trimmed) {
+      this.AutoRerollMinValueRaw.set('');
+      return;
+    }
+
+    const digitsOnly = trimmed.replace(/[^\d]/g, '');
+    this.AutoRerollMinValueRaw.set(digitsOnly);
   }
 
   protected ClampAutoRerollMinValueToRange(): void {
     const raw = this.AutoRerollMinValueRaw().trim();
     if (!raw) return;
 
-    const target = this.getAutoRerollTargetSpec();
-    if (!target) return;
+    const n = this.parseWholeNumber(raw);
+    this.AutoRerollMinValueRaw.set(n === null ? '' : String(n));
+    if (n === null) return;
 
-    const normalized = raw.replace(',', '.');
-    let n = Number(normalized);
-    if (!Number.isFinite(n)) {
-      return;
-    }
-    n = Math.trunc(n);
+    const spec = this.autoRerollTargetSpec();
+    if (!spec) return;
 
-    // UI expects percent-points for percent stats (e.g. "8" means 8%).
-    if (target.type === 'Percent') {
-      const minUi = Math.ceil(target.min * 100);
-      const maxUi = Math.floor(target.max * 100);
-      n = Math.min(maxUi, Math.max(minUi, n));
-      this.AutoRerollMinValueRaw.set(String(Math.round(n)));
-      return;
-    }
-
-    n = Math.min(Math.floor(target.max), Math.max(Math.ceil(target.min), n));
-    this.AutoRerollMinValueRaw.set(String(Math.round(n)));
+    const bounds = this.getAutoRerollUiBounds(spec);
+    const clamped = Math.min(bounds.max, Math.max(bounds.min, n));
+    this.AutoRerollMinValueRaw.set(String(clamped));
   }
 
   protected BlockNonNumericInNumberInput(event: KeyboardEvent): void {
@@ -164,56 +174,25 @@ export class Enchanting {
   }
 
   protected readonly AutoRerollTargetValueType = computed<'Flat' | 'Percent' | null>(() => {
-    const slotIndex = this.SelectedAffixIndex();
-    if (slotIndex === null) return null;
-    if (!this.HasAffix(slotIndex)) return null;
-
-    const targetId = this.AutoRerollTargetId();
-    if (!targetId) return null;
-
-    const tier: AffixTier = this.Item().Affixes[slotIndex].Tier;
-    const definition = GetAffixDefinition(targetId);
-    const spec = GetAffixTierSpec(definition, tier);
-    return spec.Value.Type;
+    return this.autoRerollTargetSpec()?.type ?? null;
   });
 
   protected readonly AutoRerollMinValueUiMin = computed<number | null>(() => {
-    const target = this.getAutoRerollTargetSpec();
-    if (!target) return null;
-    return target.type === 'Percent' ? Math.ceil(target.min * 100) : Math.ceil(target.min);
+    const spec = this.autoRerollTargetSpec();
+    if (!spec) return null;
+    return this.getAutoRerollUiBounds(spec).min;
   });
 
   protected readonly AutoRerollMinValueUiMax = computed<number | null>(() => {
-    const target = this.getAutoRerollTargetSpec();
-    if (!target) return null;
-    return target.type === 'Percent' ? Math.floor(target.max * 100) : Math.floor(target.max);
+    const spec = this.autoRerollTargetSpec();
+    if (!spec) return null;
+    return this.getAutoRerollUiBounds(spec).max;
   });
 
   protected readonly AutoRerollTargetRangeLabel = computed<string>(() => {
-    const slotIndex = this.SelectedAffixIndex();
-    if (slotIndex === null) return '';
-    if (!this.HasAffix(slotIndex)) return '';
-
-    const targetId = this.AutoRerollTargetId();
-    if (!targetId) return '';
-
-    const tier: AffixTier = this.Item().Affixes[slotIndex].Tier;
-    const definition = GetAffixDefinition(targetId);
-    const spec = GetAffixTierSpec(definition, tier);
-    const minMax = GetAffixMinMaxRoll(spec);
-
-    const decimalPipe = new DecimalPipe(this.locale);
-    const percentPipe = new PercentPipe(this.locale);
-
-    if (spec.Value.Type === 'Percent') {
-      const min = percentPipe.transform(minMax.min, '1.0-0') ?? `${minMax.min}`;
-      const max = percentPipe.transform(minMax.max, '1.0-0') ?? `${minMax.max}`;
-      return `${min} - ${max}`;
-    }
-
-    const min = decimalPipe.transform(minMax.min, '1.0-0') ?? `${minMax.min}`;
-    const max = decimalPipe.transform(minMax.max, '1.0-0') ?? `${minMax.max}`;
-    return `${min} - ${max}`;
+    const spec = this.autoRerollTargetSpec();
+    if (!spec) return '';
+    return this.formatAutoRerollRangeLabel(spec);
   });
 
   protected StopAutoReroll(message: string = 'Stopped by user.'): void {
@@ -317,7 +296,7 @@ export class Enchanting {
         break;
       }
 
-      await new Promise((resolve) => setTimeout(resolve, Enchanting.AUTO_REROLL_DELAY_MS));
+      await this.sleep(Enchanting.AUTO_REROLL_DELAY_MS);
     }
 
     if (token === this.autoRerollToken) {
@@ -335,34 +314,87 @@ export class Enchanting {
     const raw = this.AutoRerollMinValueRaw().trim();
     if (!raw) return null;
 
-    // Accept both comma and dot decimals (e.g. "7,5").
-    const normalized = raw.replace(',', '.');
-    const n = Number(normalized);
-    if (!Number.isFinite(n)) return undefined;
-    if (!Number.isInteger(n)) return undefined;
+    const n = this.parseWholeNumber(raw);
+    this.AutoRerollMinValueRaw.set(n === null ? '' : String(n));
+    if (n === null) return;
 
-    const target = this.getAutoRerollTargetSpec();
-    if (!target) return undefined;
+    const spec = this.autoRerollTargetSpec();
+    if (!spec) return undefined;
 
-    // Percent stats: UI is percent-points, internal is decimal fraction.
-    const internal = target.type === 'Percent' ? n / 100 : n;
-    if (internal < target.min || internal > target.max) return undefined;
-    return internal;
+    const bounds = this.getAutoRerollUiBounds(spec);
+    if (n < bounds.min || n > bounds.max) return undefined;
+
+    return this.autoRerollUiValueToInternalMinValue(n, spec);
   }
 
-  private getAutoRerollTargetSpec(): { min: number; max: number; type: 'Flat' | 'Percent' } | null {
-    const slotIndex = this.SelectedAffixIndex();
-    if (slotIndex === null) return null;
-    if (!this.HasAffix(slotIndex)) return null;
+  private parseWholeNumber(raw: unknown): number | null {
+    if (raw === null || raw === undefined) return null;
 
-    const targetId = this.AutoRerollTargetId();
-    if (!targetId) return null;
+    if (typeof raw === 'number') {
+      return Number.isSafeInteger(raw) ? raw : null;
+    }
 
-    const tier: AffixTier = this.Item().Affixes[slotIndex].Tier;
+    if (typeof raw !== 'string') return null;
+
+    const s = raw.trim();
+    if (s === '') return null;
+    if (!/^[+-]?\d+$/.test(s)) return null;
+
+    const n = Number(s);
+    return Number.isSafeInteger(n) ? n : null;
+  }
+
+  private computeAutoRerollTargetSpec(
+    slotIndex: number,
+    targetId: string
+  ): AutoRerollTargetSpec | null {
+    const item = this.Item();
+    if (slotIndex < 0 || slotIndex >= item.Affixes.length) return null;
+
+    const tier: AffixTier = item.Affixes[slotIndex].Tier;
     const definition = GetAffixDefinition(targetId);
-    const spec = GetAffixTierSpec(definition, tier);
-    const minMax = GetAffixMinMaxRoll(spec);
-    return { min: minMax.min, max: minMax.max, type: spec.Value.Type };
+    const tierSpec = GetAffixTierSpec(definition, tier);
+    const minMax = GetAffixMinMaxRoll(tierSpec);
+
+    return { min: minMax.min, max: minMax.max, type: tierSpec.Value.Type };
+  }
+
+  private getAutoRerollUiBounds(spec: AutoRerollTargetSpec): { min: number; max: number } {
+    // Percent stats: UI uses percent points (e.g. 8 means 8%).
+    if (spec.type === 'Percent') {
+      return { min: Math.ceil(spec.min * 100), max: Math.floor(spec.max * 100) };
+    }
+
+    // Flat stats: UI uses whole numbers.
+    return { min: Math.ceil(spec.min), max: Math.floor(spec.max) };
+  }
+
+  private autoRerollUiValueToInternalMinValue(uiValue: number, spec: AutoRerollTargetSpec): number {
+    return spec.type === 'Percent' ? uiValue / 100 : uiValue;
+  }
+
+  private formatAutoRerollRangeLabel(spec: AutoRerollTargetSpec): string {
+    if (spec.type === 'Percent') {
+      const min = Math.round(spec.min * 100);
+      const max = Math.round(spec.max * 100);
+      return `${min}% - ${max}%`;
+    }
+
+    const min = Math.round(spec.min);
+    const max = Math.round(spec.max);
+    return `${min} - ${max}`;
+  }
+
+  private sleep(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  private resetAutoRerollUiState(): void {
+    this.AutoRerollOpen.set(false);
+    this.AutoRerollTargetId.set('');
+    this.AutoRerollMinValueRaw.set('');
+    this.AutoRerollAttempts.set(0);
+    this.AutoRerollStatus.set('');
   }
 
   protected UpgradeCost(): number {
