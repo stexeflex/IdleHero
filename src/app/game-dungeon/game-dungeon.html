@@ -1,21 +1,5 @@
 @if (IsInDungeon()) {
   <app-inner-dungeon></app-inner-dungeon>
 } @else {
-  <div class="dungeon-area">
-    <app-tab-strip
-      [tabs]="Tabs"
-      [selected]="SelectedTab()"
-      (selectedChange)="onTabSelected($event)"></app-tab-strip>
-
-    <div class="tab-content">
-      @switch (SelectedTab()) {
-        @case (TabIds.Dungeons) {
-          <app-dungeon-rooms></app-dungeon-rooms>
-        }
-        @case (TabIds.Bosses) {
-          <app-dungeon-bosses></app-dungeon-bosses>
-        }
-      }
-    </div>
-  </div>
+  <app-dungeon-rooms></app-dungeon-rooms>
 }

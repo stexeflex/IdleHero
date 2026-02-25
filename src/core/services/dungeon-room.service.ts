@@ -13,7 +13,6 @@ export class DungeonRoomService {
   private readonly Statistics = inject<StatisticsService>(StatisticsService);
   private readonly Bosses = inject(BossSelectionService);
   private readonly Rewards = inject(DungeonRewardsService);
-  private readonly BossRewards = inject(BossRewardsService);
   private readonly Keys = inject(DungeonKeyService);
   private readonly DungeonRun = inject(DungeonRunService);
 
@@ -23,7 +22,7 @@ export class DungeonRoomService {
   // Current Dungeon ID
   public readonly CurrentDungeonId = computed<string | null>(() => this.CurrentDungeonIdState());
   // Current Dungeon Room
-  public readonly CurrentDungeon = computed<AnyDungeonRoom | null>(() => {
+  public readonly CurrentDungeon = computed<DungeonRoom | null>(() => {
     const id = this.CurrentDungeonIdState();
     return id !== null ? GetDungeonById(id) : null;
   });
@@ -132,11 +131,6 @@ export class DungeonRoomService {
     }
     // At final stage: grant completion rewards and capstone key reward if any
     else {
-      if (dungeon.Type === DungeonType.Boss) {
-        this.BossRewards.GrantCompletionRewards(dungeon);
-      } else {
-        this.Rewards.GrantCompletionRewards(dungeon);
-      }
       // already at max; no further advancement
       return false;
     }
@@ -179,11 +173,10 @@ export class DungeonRoomService {
     };
 
     switch (currentDungeon.Type) {
-      case DungeonType.Normal:
-      case DungeonType.Boss:
+      case 'Normal':
         this.Statistics.UpdateDungeon({ Dungeon: dungeonRoomStat });
         break;
-      case DungeonType.Capstone:
+      case 'Capstone':
         this.Statistics.UpdateDungeon({ Capstone: dungeonRoomStat });
         break;
     }

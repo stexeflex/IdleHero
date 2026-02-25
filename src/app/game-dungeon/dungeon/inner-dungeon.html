@@ -1,4 +1,4 @@
-<app-panel-header [title]="HeaderTitle()"></app-panel-header>
+<app-panel-header [title]="IsInArena() ? 'DUNGEON ARENA' : 'DUNGEON ENTRANCE'"></app-panel-header>
 
 <main class="dungeon">
   @let dungeonRoom = CurrentDungeon();
@@ -10,7 +10,7 @@
         <div class="room-value">{{ dungeonRoom.Title }}</div>
       </div>
       <div class="room-info">
-        @if (IsInArena() && dungeonRoom.StagesMax > 1) {
+        @if (IsInArena()) {
           <div class="room-label">STAGE</div>
           <div class="room-value">{{ CurrentStage() }}</div>
         }
